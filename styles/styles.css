@@ -22,7 +22,7 @@ body {
    
   /* Handle */
   ::-webkit-scrollbar-thumb {
-	background: #ff0066; 
+	background: #1cb5f1; 
 	border-radius: 20px;
   }
   
@@ -45,8 +45,7 @@ body {
 	position: fixed;
 	z-index: 9999999;
 	width: 100%;
-	background: rgb(65,63,88);
-	background: radial-gradient(circle at 50% 50%, rgb(40, 38, 53) 15%, rgb(20, 26, 26) 60%);
+	background: none;
 	justify-content: center;
 	border-bottom: 0px solid #000;
 	border-top: 0px solid #000;
@@ -55,7 +54,7 @@ body {
 
 .sub-menu1 {
 	
-	background-color: black;
+	background-color: white;
 	position: absolute;
 	width: 10%;
 	display: none;
@@ -69,7 +68,7 @@ body {
 	position: absolute;
 	display: block;
 	border: .3px solid white;
-	border-radius: 20px;
+	border-radius: none;
 	opacity: 1; /* This keeps the opacity at 1 after the animation has run (e.g. could be considered as the final or default stage of the element) */
    animation: opacity 700ms ease-in-out normal;
    -moz-animation: opacity 700ms ease-in-out normal;
@@ -129,13 +128,14 @@ font-weight: bold;
 	margin-bottom: 20px;
 }
 .title a{
+	letter-spacing: 1rem;
 	text-decoration: none;
-	color: white;
+	color: black;
 }
 
 
 .title a:hover{
-	color: white;
+	color: #1cb5f1;
 	
 }
 
@@ -198,18 +198,18 @@ font-weight: bold;
 
 .items a{
 	text-decoration: none;
-	color: white;}
+	color: black;}
 	
 
 .items a:hover{
-	color: #ff0066;
+	color: #1cb5f1;
 	transform: scale(1.2);
 	
 }
 
 
 .items .currents {
-	color:#ff0066;
+	color:#1cb5f1;
 	
 }
 .currents li{
@@ -232,23 +232,23 @@ font-weight: bold;
 	list-style: none;}
 
 .social-icon a{
-	color: white;}
+	color: black;}
 
 #instagram:hover i{	
 	transform: scale(1.3);
-	color: #ff0066;}
+	color: #1cb5f1;}
 
 #facebook:hover i{	
 	transform: scale(1.3);
-	color: #ff0066;}
+	color: #1cb5f1;}
 
 #linkedin:hover i{
 	transform: scale(1.3);
-	color: #ff0066;}
+	color: #1cb5f1;}
 
 #github:hover i{
 	transform: scale(1.3);
-	color: #ff0066;}
+	color: #1cb5f1;}
 
 .languagegap {
 	display: flex;
@@ -264,13 +264,37 @@ font-weight: bold;
 }
 
 
+
+
+/*--parametros generales del cuerpo de supervideo--*/
+
+.supervideo {
+	height: 100vh;
+	width: 100%;
+	
+}
+.videoloch {
+	height: 100vh;
+	object-fit: cover;
+	width: 100%;
+	
+}
+
+
+
+
+
+
+
 /*--parametros generales del cuerpo de imagenes--*/
 
-
+.archvizsection{
+	margin-top: 1vh ;
+}
 .hes-gallery {
 	
 	left: 1vh;
-	margin-top: 160px;
+	
 	position: relative;
 	height: 100%;
 	width: 99.1%;
@@ -650,7 +674,7 @@ footer p {
 	grid-gap: 1vh;}
 
 	.currentsphone .currents {
-		color:#ff0066;;
+		color:#1cb5f1;;
 	}
 }
 
@@ -666,7 +690,7 @@ footer p {
 	
 	font-family: century-gothic, sans-serif;}
 	.currentsphone .currents {
-		color:#ff0066;;
+		color:#1cb5f1;;
 	}
 .titlephone {
 	margin-top: 5px;

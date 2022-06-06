@@ -1,13 +1,19 @@
-let lastScrollTop = 100;
+let lastScrollTop = 100; 
+		
 			navbar = document.getElementById("navbar-noboots");
 			window.addEventListener("scroll", function () {
 				var scrollTop = window.pageYOffset || document
 					.documentElement.scrollTop;
 				if (scrollTop > lastScrollTop) {
 					navbar.style.top = "-100px";
+					navbar.style.background = "white";
+					
 					
 				} else {
 					navbar.style.top = "0";
+					navbar.style.background = "none";
+				
+					
 					
 				}
 				lastScrollTop = scrollTop;
