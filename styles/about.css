@@ -1,0 +1,252 @@
+/*--parametros generales about--*/
+
+.main-artist {
+	width: 100%;
+}
+.map-container {
+	height: 400px;
+	margin-top: 40px;
+	width: 50%;
+	margin-left: 25%;
+
+}
+
+.photos-artist {
+	
+	left: 1vh;
+	margin-top: 100px;
+	position: relative;
+	height: 100%;
+	width: 99.1%;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	grid-template-rows: repeat(3, 1fr);
+	grid-gap: 1vh;	
+}
+.box-img img{
+	height:auto;
+	width: 100%;
+	object-fit: cover;
+	cursor: auto;
+	-khtml-user-select: none;
+    -o-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+	user-select: none;
+	
+	filter: grayscale(100%);
+	
+}
+
+.box-img img:hover{
+	height:auto;
+	width: 100%;
+	object-fit: cover;
+	cursor: auto;
+	-khtml-user-select: none;
+    -o-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+	user-select: none;
+	transition: all .3s;
+	filter: grayscale(0%);
+	
+}
+
+.top-about2{
+	margin-top: 100px;
+	width: 100%;
+	text-align: center;
+}
+
+.autores {
+	position: relative;
+	margin-top: 150px;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	justify-content: space-between;
+}
+.insidebox{
+	width: 100%;
+	display: flex;
+	justify-content: space-around;	
+}
+.fotoyo{
+	margin-left: 10%;
+}
+svg {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+}
+  .country {
+	fill: #ccc;
+	stroke: #999;
+}
+.textoyo {
+	width: 100%;
+	margin-top: 5%;
+	margin-left: 20%;
+}
+
+.textoyo h2{
+	color: #ff0066;
+}
+.top-about{
+	margin-top: 250px;
+	width: 100%;
+	text-align: center;
+}
+.top-about h1{
+	margin-top: 50px;
+}
+.top-about p{
+	margin-top: 40px;
+	margin-left: 25%;
+	width: 50%;
+	text-align: justify;
+}
+.rodrigo {
+	display: flex;
+	height: auto;
+	width: 100%;
+	background: rgb(65,63,88);
+	background: radial-gradient(circle at 25% 70%, rgb(55, 53, 75) 2%, rgba(15,21,22,1) 35%);
+}
+.icons{
+	
+
+	
+	margin-top: 40px;
+	margin-bottom: 20px;
+}
+.icons i{
+
+	margin-left: 25px;
+	margin-right: 25px;
+	color: white
+}
+.icons i:hover {
+	transform: scale(1.2);
+}
+.rodrigo p{
+	min-width: 200px;
+	width:50%;
+	position: relative;
+	margin-top: 30px;
+	color: white;
+	font-size: 15px;
+	font-weight: .2px;
+	text-align: justify;
+}
+.rodrigo h2{
+	letter-spacing: 4px;
+	margin-top: 20px;
+	
+	font-weight: 1px;
+	text-align: justify;
+}
+
+/*--tablet responsive--*/
+
+/*--mobile responsive--*/
+
+@media only screen and (max-width: 1200px) {
+
+
+
+	.photos-artist {
+	
+		display: flex;
+		flex-direction: column;
+		margin-top: 90px;
+		width: 96.5%;
+		height: 100%;	
+	}
+	.box-img img{
+		height:300px;
+		width: 100%;
+		object-fit: cover;
+		cursor: pointer;
+		-khtml-user-select: none;
+		-o-user-select: none;
+		-moz-user-select: none;
+		-webkit-user-select: none;
+		user-select: none;
+		transition: all 2s;
+	}
+
+.insidebox{
+		width: 100%;
+		display: flex;
+		flex-direction: column-reverse;
+		justify-content: space-around;
+	}
+.fotoyo{
+	margin-left: 0%;
+}
+.fotoyo img{
+	width: 100%;
+}
+.textoyo {
+	width: 100%;
+	margin-top: 5%;
+	margin-left: 0%;
+	text-align: center;
+	align-items: center;
+}
+
+.textoyo h2{
+	text-align: center;
+	width: 100%;
+}
+.textoyo p{
+	width:80%;
+	
+	margin-left: 10%;
+}
+
+.top-about h2{
+	text-align: center;
+	width: 100%;
+}
+.top-about p{
+	width:80%;
+	text-align: justify;
+	margin-left: 10%;
+}
+
+.firstchild p{
+	text-align: center;
+}
+.map-container {
+	height: auto;
+}
+.map-container iframe{
+	height:auto;
+	margin-top: 20px;
+	width: 150%;
+	margin-left: -25%;
+}
+.top-about{
+	margin-top: 150px;
+	width: 100%;
+	text-align: center;
+}
+
+.icons{
+	margin-top: 40px;
+	margin-bottom: 20px;
+}
+.icons i{
+	margin-left: 25px;
+	margin-right: 25px;
+	color: white
+}
+.icons i:hover {
+	transform: scale(1.2);
+}
+
+}

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+
+<html lang="eng">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+		<meta charset="UTF-8"/> 
+		<title>Imago Rendering Studio</title>
+
+		<meta name="description" content="Imago was founded in 2018 by Andres Baptista and Rodrigo Figueredo. We are a Rendering and 3dart imaging studio based in Montevideo, Uruguay."/>
+		<meta name="keywords" content="imago - Rendering Visualization Studio"/>
+		<meta name="author" content="Rodrigo Figueredo"/>
+		<meta name="viewport" content="=width=device-width, initial-scale=1.0, user-scalable=no"/>
+		<meta property="og:type" content="website"/>
+		<meta property="og:title" content="Imago Rendering Studio"/>
+		<meta name="google-site-verification" content="E0SpeRDXnyyyYe_az7hMb6PirOHIawPyVZi6EA_HKSc" />
+		<meta property="og:description" content="Imago was founded in 2018 by Andres Baptista and Rodrigo Figueredo. We are a Rendering and 3dart imaging studio based in Montevideo, Uruguay."/>
+		<meta property="og:url" content="https://imago.uy"/>
+		<meta name="description" content="contact form example">
+		<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="styles/styles.css">
+		<link rel="stylesheet" type="text/css" href="styles/reviews.css">
+		<link rel="stylesheet" href="https://use.typekit.net/oov2wcw.css">
+		<link rel="shortcut icon" type="image/png" href="favicon.png"/>
+       
+		<script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-178424914-1"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+	
+			gtag('config', 'UA-178424914-1');
+		</script>
+ 	
+ 		
+	</head>
+ 
+            
+
+				<!-- Load Facebook SDK for JavaScript -->
+     
+      <script>
+        window.fbAsyncInit = function() {
+          FB.init({
+            xfbml            : true,
+            version          : 'v6.0'
+          });
+        };
+
+        (function(d, s, id) {
+        let js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));</script>
+      <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+      <div id="fb-root"></div>
+      <!-- Your customer chat code -->
+      <div class="fb-customerchat"
+        attribution=setup_tool
+        page_id="108697060701498"
+  theme_color="#ff0066"
+  logged_in_greeting="Hi! How can we help you?"
+  logged_out_greeting="Hi! How can we help you?">
+      </div>
+      
+<!--barra fija arriba desktop-->
+<header class="navbar-noboots" id="navbar-noboots">
+	<div class="wrapper-1">
+		<h1 class="title"><a href="/">imago</h1></a>
+	</div>
+	<div class="wrapper-2">
+		<ul class="menu">
+			<li class="items"><a href="#" id="link-font">works</a>
+				<div class="sub-menu1">
+					<ul>
+						<li class="items dropdown-content"><a href="https://imagouy.com/index.html" id="portfolio-translate">Arch Viz</a></li>
+                        <li class="items dropdown-content"><a href="https://imagouy.com/360.html" id="360-translate">360º Viz</a></li>
+                        <li class="items dropdown-content"><a href="https://imagouy.com/vr.html" id="vr-translate">Ps V.R</a></li>
+						
+                        
+					</ul>
+				</div>
+			</li>
+			<li class="items"><a href="#" id="link-font-about" class="currents">about us</a>
+				<div class="sub-menu1">
+					<ul >
+						<li class="items dropdown-content"><a href="https://imagouy.com/artists.html" id="artist-translate">artists</a></li>
+						<li class="items dropdown-content"><a href="https://imagouy.com/process.html" id="process-translate">process</a></li>
+						<li class="items dropdown-content"><a href="https://imagouy.com/pricing.html" id="prices-translate">prices</a></li>
+						<li class="items dropdown-content"><a href="https://imagouy.com/reviews.html" id="references-translate" class="currents">references</a></li>
+					</ul>
+				</div>
+			</li>	
+			<li class="items"><a href="https://imagouy.com/contact.html" id="contactid">contact</a></li>
+			
+			<li class="items"><a href="#eng" onclick="timedRefresh()">eng <a>|</a></a> <a href="#esp" onclick="timedRefresh()">esp</a></li>	
+		</ul>
+		<ul class="social-menu">
+			<li class="social-icon" id="instagram"><a href="https://www.instagram.com/imago_uy" target="_blank"><i
+						class="fa fa-instagram"></i></a></li>
+			<li class="social-icon" id="linkedin"><a href="https://www.linkedin.com/company/imagouy" target="_blank"><i
+						class="fa fa-linkedin"></i></a></li>
+			<li class="social-icon" id="facebook"><a href="https://www.facebook.com/Imago-Rendering-Studio-108697060701498" target="_blank"><i
+						class="fa fa-facebook"></i></a></li>
+		</ul>
+	</div>
+		</header>
+
+<!--barra fija arriba telefono navbar-->
+
+		<section class="phonenavbar" id="phonenavbarid">
+
+			<h1 class="titlephone"><a href="/">imago</h1></a>
+			<input type="checkbox" id="nav-toggle" class="nav-toggle">
+			<nav class="navphone-3">
+				<ul>
+					<li class="currentsphone"><a href="https://imagouy.com/index.html" id="portfolio-translate-phone">Arch Viz</a></li>
+                    
+					<li class="currentsphone"><a href="https://imagouy.com/360.html" id="360-translate-phone">360º Viz</a></li>
+                    <li class="currentsphone"><a href="https://imagouy.com/vr.html" id="psvr-translate-phone">Ps V.R</a></li>
+					<hr></hr>
+					<li class="currentsphone"><a href="https://imagouy.com/artists.html" id="artist-translate-phone">artists</a></li>
+					<li class="currentsphone"><a href="https://imagouy.com/process.html" id="process-translate-phone">process</a></li>
+					<li class="currentsphone"><a href="https://imagouy.com/pricing.html" id="prices-translate-phone">prices</a></li>
+					<li class="currentsphone"><a href="https://imagouy.com/reviews.html" class="currents" id="references-translate-phone">references</a></li>
+					<li class="currentsphone"><a href="https://imagouy.com/contact.html" id="contact-translate-phone">contact</a></li>
+					<hr></hr>
+					<li><a href="#eng" onclick="timedRefresh()">eng <a>|</a></a> <a href="#esp" onclick="timedRefresh()">esp</a></li>	
+					<hr></hr>
+				</ul>
+				<ul class="flex-icon">
+					<li class="social-icon" id="instagram"><a href="https://www.instagram.com/imago_uy" target="_blank"><i class="fa fa-instagram"></i></a></li>
+					<li class="social-icon" id="linkedin"><a href="https://www.linkedin.com/company/imagouy" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+					<li class="social-icon" id="facebook"><a href="https://www.facebook.com/Imago-Rendering-Studio-108697060701498" target="_blank"><i class="fa fa-facebook"></i></a></li>
+				</ul>
+			</nav>
+				<label for="nav-toggle" class="nav-toggle-label">
+					<span></span>
+				</label>
+		</section>
+
+        <div class="toptext">
+            <h1 id="clientesid">Clients</h1>
+        </div>
+                    <div class="slideshow-container">
+                        
+                            <div class="comments">   
+                                <div class="comments-1">           
+                                   <blockquote> <p class="paragraph-quote" id="paragraphidsofia">Excellent work! Always predisposed and open to what we wanted to transmit, in addition to delivering before the agreed date.</p></blockquote>
+                                   <p class="paragraph-author"><a href="https://www.facebook.com/Sofia.Gallo.Fassi/posts/4046291588728062"  target="_blank" class="paragraph-quote" id="sofiagallofassi"> Architect Sofía Gallo Fassi</a></p>
+                                </div> 
+                            </div>     
+                          
+                            <div class="comments"> 
+                                <div class="comments-1">     
+                                    <blockquote> <p class="paragraph-quote" id="paragraphirodrigo">Excellent work, they understood the project and the materiality, they produced a spectacular image against the clock,
+                                        of very good quality. I am more than grateful to them.</p> </blockquote>
+                                    <p class="paragraph-author"><a href="https://www.facebook.com/rmarinelarena/posts/10224211872549973" target="_blank" class="paragraph-quote" id="marinalarena"> Architect Rodrigo Mariñelarena</a> </p>
+                                </div> 
+                            </div>
+
+                            <div class="comments"> 
+                                <div class="comments-1"> 
+                                    <blockquote><p class="paragraph-quote" id="paragraphiclauida">Really good work, excellent predisposition at all times and delivered on time!.</p> </blockquote>
+                                    <p class="paragraph-author"><a href="https://www.facebook.com/claudia.curbelo.58/posts/10158008627583428" target="_blank" class="paragraph-quote" id="claudiaid"> Architect Claudia Curbelo</a> </p>
+                                </div> 
+                            </div> 
+                       
+
+                            <div class="comments"> 
+                                <div class="comments-1"> 
+                                    <blockquote> <p class="paragraph-quote" id="paragraphisoledad"> The professionalism and seriousness which they work is reflected in each of their products that prove to be excellent architectural visualizations,
+                                         achieving an atmosphere such that it penetrates the paper or the screen. I recommend them!.</p></blockquote> 
+                                    <p class="paragraph-author"><a href="https://www.facebook.com/solci.anondecaprio/posts/10217606222641366" target="_blank" class="paragraph-quote" id="soledadid"> Architect Soledad Añón</a> </p>
+                                </div> 
+                            </div> 
+
+                            <div class="comments"> 
+                                <div class="comments-1"> 
+                                    <blockquote>  <p class="paragraph-quote" id="paragraphiguillermo">Excellent work, they knew how to interpret what I needed. Very professional and delivered on time, very satisfied with the result!.</p> </blockquote> 
+                                    <p class="paragraph-author"><a href="https://www.facebook.com/guillermoferna/posts/10221796635450581" target="_blank" class="paragraph-quote" id="guillermoid"> Architect Guillermo Fernandez</a> </p>
+                                </div> 
+                            </div> 
+
+                            <div class="comments"> 
+                                <div class="comments-1"> 
+                                    <blockquote>  <p class="paragraph-quote"  id="paragraphiluciana">We are very satisfied with the work done! Always open to what we wanted to generate.</p> </blockquote> 
+                                    <p class="paragraph-author"><a href="https://www.facebook.com/luciana.cano.cairo/posts/10217706913131409" target="_blank" class="paragraph-quote" id="lucianaid"> Architect Luciana Cano</a> </p>
+                                </div> 
+                            </div> 
+
+                            <div class="comments"> 
+                                <div class="comments-1"> 
+                                    <blockquote>  <p class="paragraph-quote" id="paragraphisantiago">Superb service! Much better than any other I have paid for. The renders look really neat, following my requirements. 
+                                        They have worked professionally and delivered on time.</p> </blockquote> 
+                                    <p class="paragraph-author"><a href="https://www.facebook.com/santi.1410/posts/10221097299721257" target="_blank" class="paragraph-quote" id="santaigoid"> Engineer Santiago Castro</a> </p>
+                                </div> 
+                            </div>
+
+                            <div class="comments"> 
+                                <div class="comments-1"> 
+                                    <blockquote>  <p class="paragraph-quote" id="paragraphijuan">We are very satisfied with the visualization work. We will continue working with Imago for future visualizations</p> </blockquote> 
+                                    <p class="paragraph-author"><a href="https://www.facebook.com/juanmateo.montans/posts/10219369669212029" target="_blank" class="paragraph-quote" id="juanid"> Architect Juan Montans</a> </p>
+                                </div> 
+                            </div>
+
+                            <div class="comments"> 
+                                <div class="comments-1"> 
+                                    <blockquote>  <p class="paragraph-quote" id="paragraphiximena">An excellent job, the boys took care to understand the project in order to transmit it. Delivered on time.
+                                         We are very grateful, we will continue working with them again.</p> </blockquote> 
+                                    <p class="paragraph-author"><a href="https://www.facebook.com/xime.mattiauda/posts/3329084163819147" target="_blank" class="paragraph-quote" id="ximenaid"> Architect Ximena Mattiauda </a> </p>
+                                </div> 
+                            </div>
+
+                            
+                            <div class="comments"> 
+                                <div class="comments-1"> 
+                                    <blockquote>  <p class="paragraph-quote" id="paragraphitatiana">They gave us an incredible result and before what was requested, clearly understanding the essence of the project, some geniuses!
+                                        We will definitely work with them again next time.</p> </blockquote> 
+                                    <p class="paragraph-author"><a href="https://www.facebook.com/tati.fabres/posts/4708953009118414" target="_blank" class="paragraph-quote" id="tatianaid"> Architect Tatiana Fabres </a> </p>
+                                </div> 
+                            </div>
+
+                            <div class="comments"> 
+                                <div class="comments-1"> 
+                                    <blockquote>  <p class="paragraph-quote" id="paragraphilorena">Excellent work! I recommend, they delivered on time, they are predisposed to evacuate doubts at all times, 
+                                        and they managed to generate the spirit of the project!.</p> </blockquote> 
+                                    <p class="paragraph-author"><a href="https://www.facebook.com/lorena.silvaalbano/posts/10218877129655257" target="_blank" class="paragraph-quote" id="lorenaid"> Architect Lorena Silva </a> </p>
+                                </div> 
+                            </div>
+
+                            <div class="comments"> 
+                                <div class="comments-1"> 
+                                    <blockquote>  <p class="paragraph-quote" id="paragraphimaria">
+                                        They were attentive to all the details of the project, they met the deadlines and the results were excellent!.</p> </blockquote> 
+                                    <p class="paragraph-author"><a href="https://www.facebook.com/mariapia.gonzalezgomez.1/posts/1659745197509556" target="_blank" class="paragraph-quote" id="mariagonid"> Architect Maria Gonzalez </a> </p>
+                                </div> 
+                            </div>
+
+                            <div class="comments"> 
+                                <div class="comments-1"> 
+                                    <blockquote>  <p class="paragraph-quote" id="paragraphgustavo">
+                                        They managed to transmit 100% the concept I wanted to show! We were in constant communication, showing me evidence and seeing progress. Excellent quality of work and on time. I am very satisfied! Highly recommended!.</p> </blockquote> 
+                                    <p class="paragraph-author" ><a href="https://www.facebook.com/gustavo.gonzalezclaudio/posts/10225119242036947" target="_blank" class="paragraph-quote" id="gustavoid"> Architect Gustavo Gonzalez </a> </p>
+                                </div> 
+                            </div>
+
+                        </div>
+                        
+                    
+                   
+                        <a class="prev" onclick="plusSlides(-1)">❮</a>     
+                        <a class="next" onclick="plusSlides(1)">❯</a>
+                   
+
+
+                    <div class="dot-container">
+                        <span class="dot" onclick="currentSlide(1)"></span> 
+                        <span class="dot" onclick="currentSlide(2)"></span> 
+                        <span class="dot" onclick="currentSlide(3)"></span> 
+                        <span class="dot" onclick="currentSlide(4)"></span> 
+                        <span class="dot" onclick="currentSlide(5)"></span>
+                        <span class="dot" onclick="currentSlide(6)"></span>
+                        <span class="dot" onclick="currentSlide(7)"></span>
+                        <span class="dot" onclick="currentSlide(8)"></span>
+                        <span class="dot" onclick="currentSlide(9)"></span>
+                        <span class="dot" onclick="currentSlide(10)"></span>
+                        <span class="dot" onclick="currentSlide(11)"></span>
+                        <span class="dot" onclick="currentSlide(12)"></span>
+                        <span class="dot" onclick="currentSlide(13)"></span>
+                      </div>
+
+                      <div class="toptext">
+                        <h1 id="thankstrans">Thanks</h1>
+                    </div>
+
+                    <div class="clients">
+                        <div class="clientes-flex">
+                            <a href="http://www.fadu.edu.uy/" target="_blank"><img src="img/FD.jpg"></a>
+                            <a href="https://udelar.edu.uy/portal/" target="_blank"><img src="img/UD.jpg"></a>
+                            <a href="https://www.mfarchitects.design/firma" target="_blank"><img src="img/FM.jpg"></a>
+                            
+                         </div>
+                         <div class="clientes-flex">
+                            <a href="https://www.linkedin.com/company/gfsarquitectura/" target="_blank"><img src="img/GF.jpg"></a>
+                            <a href="https://dcsarquitectos.com/" target="_blank"><img src="img/DCS.jpg"></a>
+                            <a href="https://www.hospitalbritanico.org.uy/" target="_blank"><img src="img/HB.jpg"></a>  
+                         </div>
+                    </div>
+
+                <footer>
+                    <hr>
+                    <p  id="rights-reserved">&copy; 2021 Imago Rendering Studio. All rights reserved</p>
+                </footer>
+	
+                <script src="js/navbarmove.js"></script><!--navbar move-->
+                <script src="js/translate.js"></script><!--navbar move-->
+                <script src="js/translate-reviews.js"></script><!--navbar move-->
+        <script>
+
+            let slideIndex = 1;
+                showSlides(slideIndex);
+
+                function plusSlides(n) {
+                showSlides(slideIndex += n);
+                }
+
+                function currentSlide(n) {
+                showSlides(slideIndex = n);
+                }
+
+                function showSlides(n) {
+                let i;
+                let paragraph = document.getElementsByClassName("paragraph-quote");
+                let slides = document.getElementsByClassName("comments");
+                let dots = document.getElementsByClassName("dot");
+                if (n > slides.length) {slideIndex = 1}    
+                if (n < 1) {slideIndex = slides.length}
+                for (i = 0; i < slides.length; i++) {
+                    slides[i].style.display = "none"; 
+                  
+                }
+                for (i = 0; i < dots.length; i++) {
+                    dots[i].className = dots[i].className.replace(" active", "");
+                }
+                slides[slideIndex-1].style.display = "block";  
+                dots[slideIndex-1].className += " active";
+                }
+             
+        </script>
+      
+           
+
+
+           
+	</body>
+</html>

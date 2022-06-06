@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        * {
+            font-family: "Arial", "Book Antiqua", Palatino, serif
+        }
+        .country {
+            margin-top:180px ;
+            color: #ffffff;
+            font-weight: 100;
+        }
+
+        path {
+            stroke: white;
+            stroke-width: 0.3px;
+            fill: black;
+        }
+        .details {
+            top: 0px;
+            visibility: hidden;
+            width: 100px;
+            padding: 30px;
+            height: 100%;
+            opacity: 0.4;
+            position: absolute;
+            background-color: rgb(182, 182, 182);
+            font-size: 15px;
+        }
+        .center {
+            text-align: center;
+        }
+    </style>
+   
+</head>
+<body>
+<div class="details">
+    <h2 class="country"></h2>
+    <p class="females"></p>
+    <p class="males"></p>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.11.0/d3.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.js"></script>
+<script src="js/maps.js"></script>
+</body>
+</html>

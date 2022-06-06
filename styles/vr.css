@@ -1,0 +1,127 @@
+/*--parametros generales del cuerpo de imagenes 360--*/
+
+.main {
+	display: flex;
+	flex-direction: column;
+	margin-top: 60px;
+	width: 100%;
+	height: auto;
+	display: flex;
+	height: auto;
+	background-color: red;
+	justify-content: center;
+	background: white;
+
+}
+
+
+
+
+.imagevirtual {
+	margin-top: 60px;
+	display: flex;
+	
+	justify-content: space-evenly;
+}
+.box-img {
+	display: flex;
+}
+.box-img img{
+	margin-top: 40px;
+	width: 95%;
+	margin-left: 2.5%;
+}
+.header-vr {
+	margin-top: 250px;
+	width: 100%;
+	text-align: center;
+}
+
+.header-vr img {
+	margin-top: 40px;
+	width: 4%;
+
+	text-align: center;
+}
+
+.caption {
+	color: black;
+	margin-top: 50px;
+	text-align: center;
+	margin-bottom: 40px;
+	
+	
+}
+
+.caption a{
+	
+	text-decoration: none;
+	list-style-type: none;
+	font-weight: bold;
+	color: white;
+	
+	
+}
+
+			
+
+/*--tablet responsive--*/
+
+
+/*--mobile responsive--*/
+
+@media only screen and (max-width: 850px) {
+
+	.main {
+	background:none;
+	background: none;
+	}
+	.imagevirtual {
+		margin-top: 60px;
+		display: flex;
+		justify-content: space-evenly;
+		flex-direction: row;
+	}
+	.header-vr {
+		margin-top: 150px;
+		width: 90%;
+		margin-left: 5%;
+	}
+	.header-vr h1{
+		font-size: 1.3rem;
+	}
+
+	.header-vr img {
+		margin-top: 10px;
+		width: 14%;
+		text-align: center;
+	}
+
+	.box-img {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.box-img img{
+		margin-top: 40px;
+		width: 90%;
+		margin-left: 5%;
+	}
+
+	.caption {
+		color: black;
+		margin-top: 50px;
+		text-align: center;
+		margin-bottom: 40px;
+	}
+	
+	.caption a{
+		text-decoration: none;
+		list-style-type: none;
+		font-weight: bold;
+		color: black;
+		
+		
+	}
+
+}

@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="eng">
+
+<head>
+	
+
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+	<meta charset="UTF-8"/> 
+	<title>Imago Rendering Studio</title>
+
+	<meta name="description" content="Imago was founded in 2018 by Andres Baptista and Rodrigo Figueredo. We are a Rendering and 3dart imaging studio based in Montevideo, Uruguay."/>
+	<meta name="keywords" content="imago - Rendering Visualization Studio"/>
+	<meta name="author" content="Rodrigo Figueredo"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+	<meta property="og:type" content="website"/>
+	<meta property="og:title" content="Imago Rendering Studio"/>
+	<meta name="google-site-verification" content="E0SpeRDXnyyyYe_az7hMb6PirOHIawPyVZi6EA_HKSc" />
+	<meta property="og:description" content="Imago was founded in 2018 by Andres Baptista and Rodrigo Figueredo. We are a Rendering and 3dart imaging studio based in Montevideo, Uruguay."/>
+	<meta property="og:url" content="https://imagouy.com"/>
+
+	<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="shortcut icon" type="image/png" href="favicon.png"/>
+	<link rel="stylesheet" type="text/css" href="styles/styles.css">
+	
+	<link rel="stylesheet" href="https://use.typekit.net/oov2wcw.css">	
+	<script type="text/javascript" src="books/extras/jquery.min.1.7.js"></script>
+	<script type="text/javascript" src="books/extras/modernizr.2.5.3.min.js"></script>
+	<script type="text/javascript" src="books/lib/hash.js"></script>
+
+	
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-178424914-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-178424914-1');
+	</script>
+
+</head>
+
+				<!-- Load Facebook SDK for JavaScript -->
+      <script>
+        window.fbAsyncInit = function() {
+          FB.init({
+            xfbml            : true,
+            version          : 'v6.0'
+          });
+        };
+
+        (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));</script>
+	  	  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+
+			<div id="fb-root"></div>
+
+      <!-- Your customer chat code -->
+
+			
+			<div class="fb-customerchat"
+				attribution=setup_tool
+				page_id="108697060701498"
+				theme_color="#ff0066"
+				logged_in_greeting="Hi! How can we help you?"
+				logged_out_greeting="Hi! How can we help you?">
+			</div>
+
+<!--barra fija arriba desktop-->
+<header class="navbar-noboots" id="navbar-noboots">
+	<div class="wrapper-1">
+		<h1 class="title"><a href="/">imago</h1></a>
+	</div>
+	<div class="wrapper-2">
+		<ul class="menu">
+			<li class="items"><a href="#" id="link-font" class="currents">works</a>
+				<div class="sub-menu1">
+					<ul class="activenavbar">
+						<li class="items dropdown-content "><a href="https://imagouy.com/index.html" id="portfolio-translate">Arch Viz</a></li>
+						<li class="items dropdown-content"><a href="https://imagouy.com/360.html" class="currents" id="360-translate">360º Viz</a></li>
+						<li class="items dropdown-content"><a href="https://imagouy.com/vr.html" id="vr-translate">Ps V.R</a></li>
+						
+					</ul>
+				</div>
+			</li>
+			<li class="items"><a href="#" id="link-font-about" >about us</a>
+				<div class="sub-menu1">
+					<ul class="activenavbar" >
+						<li class="items dropdown-content"><a href="https://imagouy.com/artists.html" id="artist-translate">artists</a></li>
+						<li class="items dropdown-content"><a href="https://imagouy.com/process.html" id="process-translate">process</a></li>
+						<li class="items dropdown-content"><a href="https://imagouy.com/pricing.html" id="prices-translate">prices</a></li>
+						<li class="items dropdown-content"><a href="https://imagouy.com/reviews.html" id="references-translate">references</a></li>
+					</ul>
+				</div>
+			</li>	
+			<li class="items"><a href="https://imagouy.com/contact.html"  id="contactid">contact</a></li>
+			
+			<li class="items"><a href="#eng" onclick="timedRefresh()">eng <a>|</a></a> <a href="#esp" onclick="timedRefresh()">esp</a></li>	
+		</ul>
+		<ul class="social-menu">
+			<li class="social-icon" id="instagram"><a href="https://www.instagram.com/imago_uy" target="_blank"><i
+						class="fa fa-instagram"></i></a></li>
+			<li class="social-icon" id="linkedin"><a href="https://www.linkedin.com/company/imagouy" target="_blank"><i
+						class="fa fa-linkedin"></i></a></li>
+			<li class="social-icon" id="facebook"><a href="https://www.facebook.com/Imago-Rendering-Studio-108697060701498" target="_blank"><i
+						class="fa fa-facebook"></i></a></li>
+		</ul>
+	</div>
+		</header>
+
+<!--barra fija arriba telefono navbar-->
+
+		<section class="phonenavbar" id="phonenavbarid">
+
+			<h1 class="titlephone"><a href="/">imago</h1></a>
+			<input type="checkbox" id="nav-toggle" class="nav-toggle">
+			<nav class="navphone-3">
+				<ul>
+					<li class="currentsphone"><a href="https://imagouy.com/index.html" id="portfolio-translate-phone">Arch Viz</a></li>
+					<li class="currentsphone"><a href="https://imagouy.com/360.html" class="currents" id="360-translate-phone">360º Viz</a></li>
+					<li class="currentsphone"><a href="https://imagouy.com/vr.html" id="psvr-translate-phone">Ps V.R</a></li>
+					<hr></hr>
+					<li class="currentsphone"><a href="https://imagouy.com/artists.html" id="artist-translate-phone">artists</a></li>
+					<li class="currentsphone"><a href="https://imagouy.com/process.html" id="process-translate-phone">process</a></li>
+					<li class="currentsphone"><a href="https://imagouy.com/pricing.html" id="prices-translate-phone">prices</a></li>
+					<li class="currentsphone"><a href="https://imagouy.com/reviews.html" id="references-translate-phone">references</a></li>
+					<li class="currentsphone"><a href="https://imagouy.com/contact.html" id="contact-translate-phone">contact</a></li>
+					<hr></hr>
+					<li><a href="#eng" onclick="timedRefresh()">eng <a>|</a></a> <a href="#esp" onclick="timedRefresh()">esp</a></li>	
+					<hr></hr>
+				</ul>
+				<ul class="flex-icon">
+					<li class="social-icon" id="instagram"><a href="https://www.instagram.com/imago_uy" target="_blank"><i class="fa fa-instagram"></i></a></li>
+					<li class="social-icon" id="linkedin"><a href="https://www.linkedin.com/company/imagouy" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+					<li class="social-icon" id="facebook"><a href="https://www.facebook.com/Imago-Rendering-Studio-108697060701498" target="_blank"><i class="fa fa-facebook"></i></a></li>
+				</ul>
+			</nav>
+				<label for="nav-toggle" class="nav-toggle-label">
+					<span></span>
+				</label>
+		</section>
+<body>
+
+<div id="canvas">
+
+<div class="zoom-icon zoom-icon-in"></div>
+
+<div class="magazine-viewport">
+	<div class="container">
+		<div class="magazine">
+			<!-- Next button -->
+			<div ignore="1" class="next-button"></div>
+			<!-- Previous button -->
+			<div ignore="1" class="previous-button"></div>
+		</div>
+	</div>
+</div></div>
+
+<!-- Thumbnails
+<div class="thumbnails">
+	<div>
+		<ul>
+			<li class="i">
+				<img src="pages/arch/1-thumb.jpg" width="76" height="100" class="page-1">
+				<span>0</span>
+			</li>
+			<li class="d">
+				<img src="pages/arch/2-thumb.jpg" width="76" height="100" class="page-2">
+				<img src="pages/arch/3-thumb.jpg" width="76" height="100" class="page-3">
+				<span>1</span>
+			</li>
+			<li class="d">
+				<img src="pages/arch/4-thumb.jpg" width="76" height="100" class="page-4">
+				<img src="pages/arch/5-thumb.jpg" width="76" height="100" class="page-5">
+				<span>2-3</span>
+			</li>
+			<li class="d">
+				<img src="pages/arch/6-thumb.jpg" width="76" height="100" class="page-6">
+				<img src="pages/arch/7-thumb.jpg" width="76" height="100" class="page-7">
+				<span>4-5</span>
+			</li>
+			<li class="d">
+				<img src="pages/arch/8-thumb.jpg" width="76" height="100" class="page-8">
+				<img src="pages/arch/9-thumb.jpg" width="76" height="100" class="page-9">
+				<span>6-7</span>
+			</li>
+			<li class="d">
+				<img src="pages/arch/10-thumb.jpg" width="76" height="100" class="page-10">
+				<img src="pages/arch/11-thumb.jpg" width="76" height="100" class="page-11">
+				<span>8-9</span>
+			</li>
+			<li class="d">
+				<img src="pages/arch/12-thumb.jpg" width="76" height="100" class="page-10">
+				<img src="pages/arch/13-thumb.jpg" width="76" height="100" class="page-11">
+				<span>10-11</span>
+			</li>
+			<li class="d">
+				<img src="pages/arch/14-thumb.jpg" width="76" height="100" class="page-10">
+				<img src="pages/arch/15-thumb.jpg" width="76" height="100" class="page-11">
+				<span>12-13</span>
+			</li>
+			<li class="d">
+				<img src="pages/arch/16-thumb.jpg" width="76" height="100" class="page-10">
+				<img src="pages/arch/17-thumb.jpg" width="76" height="100" class="page-11">
+				<span>14-15</span>
+			</li>
+			<li class="d">
+				<img src="pages/arch/18-thumb.jpg" width="76" height="100" class="page-10">
+				<img src="pages/arch/19-thumb.jpg" width="76" height="100" class="page-11">
+				<span>16-7</span>
+			</li>
+			<li class="d">
+				<img src="pages/arch/20-thumb.jpg" width="76" height="100" class="page-10">
+				<img src="pages/arch/21-thumb.jpg" width="76" height="100" class="page-11">
+				<span>18-19</span>
+			</li>
+			<li class="d">
+				<img src="pages/arch/22-thumb.jpg" width="76" height="100" class="page-10">
+				<img src="pages/arch/23-thumb.jpg" width="76" height="100" class="page-11">
+				<span>20-21</span>
+			</li>
+			<li class="i">
+				<img src="pages/arch/14-thumb.jpg" width="76" height="100" class="page-12">
+				<span>22</span>
+			</li>
+		</ul>
+	</div>	
+</div> -->
+
+<footer>
+	<hr>
+	<p  id="rights-reserved">&copy; 2021 Imago Rendering Studio. All rights reserved</p>
+</footer>
+
+<script type="text/javascript">
+
+function loadApp() {
+
+ 	$('#canvas').fadeIn(1000);
+
+ 	var flipbook = $('.magazine');
+
+ 	// Check if the CSS was already loaded
+	
+	if (flipbook.width()==0 || flipbook.height()==0) {
+		setTimeout(loadApp, 10);
+		return;
+	}
+	
+	// Create the flipbook
+
+	flipbook.turn({
+			
+			// Magazine width
+
+			width: 1200,
+
+			// Magazine height
+
+			height: 600,
+
+			// Duration in millisecond
+
+			duration: 1000,
+
+			// Hardware acceleration
+
+			acceleration: !isChrome(),
+
+			// Enables gradients
+
+			gradients: true,
+			
+			// Auto center this flipbook
+
+			autoCenter: true,
+
+			// Elevation from the edge of the flipbook when turning a page
+
+			elevation: 50,
+
+			// The number of pages
+
+			pages: 24,
+
+			// Events
+
+			when: {
+				turning: function(event, page, view) {
+					
+					var book = $(this),
+					currentPage = book.turn('page'),
+					pages = book.turn('pages');
+			
+					// Update the current URI
+
+					Hash.go('page/' + page).update();
+
+					// Show and hide navigation buttons
+
+					disableControls(page);
+					
+
+					$('.thumbnails .page-'+currentPage).
+						parent().
+						removeClass('current');
+
+					$('.thumbnails .page-'+page).
+						parent().
+						addClass('current');
+
+				},
+
+				turned: function(event, page, view) {
+
+					disableControls(page);
+
+					$(this).turn('center');
+
+					if (page==1) { 
+						$(this).turn('peel', 'br');
+					}
+
+				},
+
+				missing: function (event, pages) {
+
+					// Add pages that aren't in the magazine
+
+					for (var i = 0; i < pages.length; i++)
+						addPage(pages[i], $(this));
+
+				}
+			}
+
+	});
+
+	// Zoom.js
+
+	$('.magazine-viewport').zoom({
+		flipbook: $('.magazine'),
+
+		max: function() { 
+			
+			return largeMagazineWidth()/$('.magazine').width();
+
+		}, 
+
+		when: {
+
+			swipeLeft: function() {
+
+				$(this).zoom('flipbook').turn('next');
+
+			},
+
+			swipeRight: function() {
+				
+				$(this).zoom('flipbook').turn('previous');
+
+			},
+
+			resize: function(event, scale, page, pageElement) {
+
+				if (scale==1)
+					loadSmallPage(page, pageElement);
+				else
+					loadLargePage(page, pageElement);
+
+			},
+
+			zoomIn: function () {
+
+				$('.thumbnails').hide();
+				$('.made').hide();
+				$('.magazine').removeClass('animated').addClass('zoom-in');
+				$('.zoom-icon').removeClass('zoom-icon-in').addClass('zoom-icon-out');
+				
+				if (!window.escTip && !$.isTouch) {
+					escTip = true;
+
+					$('<div />', {'class': 'exit-message'}).
+						html('<div>Press ESC to exit</div>').
+							appendTo($('body')).
+							delay(2000).
+							animate({opacity:0}, 500, function() {
+								$(this).remove();
+							});
+				}
+			},
+
+			zoomOut: function () {
+
+				$('.exit-message').hide();
+				$('.thumbnails').fadeIn();
+				$('.made').fadeIn();
+				$('.zoom-icon').removeClass('zoom-icon-out').addClass('zoom-icon-in');
+
+				setTimeout(function(){
+					$('.magazine').addClass('animated').removeClass('zoom-in');
+					resizeViewport();
+				}, 0);
+
+			}
+		}
+	});
+
+	// Zoom event
+
+	if ($.isTouch)
+		$('.magazine-viewport').bind('zoom.doubleTap', zoomTo);
+	else
+		$('.magazine-viewport').bind('zoom.tap', zoomTo);
+
+
+	// Using arrow keys to turn the page
+
+	$(document).keydown(function(e){
+
+		var previous = 37, next = 39, esc = 27;
+
+		switch (e.keyCode) {
+			case previous:
+
+				// left arrow
+				$('.magazine').turn('previous');
+				e.preventDefault();
+
+			break;
+			case next:
+
+				//right arrow
+				$('.magazine').turn('next');
+				e.preventDefault();
+
+			break;
+			case esc:
+				
+				$('.magazine-viewport').zoom('zoomOut');	
+				e.preventDefault();
+
+			break;
+		}
+	});
+
+	// URIs - Format #/page/1 
+
+	Hash.on('^page\/([0-9]*)$', {
+		yep: function(path, parts) {
+			var page = parts[1];
+
+			if (page!==undefined) {
+				if ($('.magazine').turn('is'))
+					$('.magazine').turn('page', page);
+			}
+
+		},
+		nop: function(path) {
+
+			if ($('.magazine').turn('is'))
+				$('.magazine').turn('page', 1);
+		}
+	});
+
+
+	$(window).resize(function() {
+		resizeViewport();
+	}).bind('orientationchange', function() {
+		resizeViewport();
+	});
+
+	// Events for thumbnails
+
+	$('.thumbnails').click(function(event) {
+		
+		var page;
+
+		if (event.target && (page=/page-([0-9]+)/.exec($(event.target).attr('class'))) ) {
+		
+			$('.magazine').turn('page', page[1]);
+		}
+	});
+
+	$('.thumbnails li').
+		bind($.mouseEvents.over, function() {
+			
+			$(this).addClass('thumb-hover');
+
+		}).bind($.mouseEvents.out, function() {
+			
+			$(this).removeClass('thumb-hover');
+
+		});
+
+	if ($.isTouch) {
+	
+		$('.thumbnails').
+			addClass('thumbanils-touch').
+			bind($.mouseEvents.move, function(event) {
+				event.preventDefault();
+			});
+
+	} else {
+
+		$('.thumbnails ul').mouseover(function() {
+
+			$('.thumbnails').addClass('thumbnails-hover');
+
+		}).mousedown(function() {
+
+			return false;
+
+		}).mouseout(function() {
+
+			$('.thumbnails').removeClass('thumbnails-hover');
+
+		});
+
+	}
+
+
+	// Regions
+
+	if ($.isTouch) {
+		$('.magazine').bind('touchstart', regionClick);
+	} else {
+		$('.magazine').click(regionClick);
+	}
+
+	// Events for the next button
+
+	$('.next-button').bind($.mouseEvents.over, function() {
+		
+		$(this).addClass('next-button-hover');
+
+	}).bind($.mouseEvents.out, function() {
+		
+		$(this).removeClass('next-button-hover');
+
+	}).bind($.mouseEvents.down, function() {
+		
+		$(this).addClass('next-button-down');
+
+	}).bind($.mouseEvents.up, function() {
+		
+		$(this).removeClass('next-button-down');
+
+	}).click(function() {
+		
+		$('.magazine').turn('next');
+
+	});
+
+	// Events for the next button
+	
+	$('.previous-button').bind($.mouseEvents.over, function() {
+		
+		$(this).addClass('previous-button-hover');
+
+	}).bind($.mouseEvents.out, function() {
+		
+		$(this).removeClass('previous-button-hover');
+
+	}).bind($.mouseEvents.down, function() {
+		
+		$(this).addClass('previous-button-down');
+
+	}).bind($.mouseEvents.up, function() {
+		
+		$(this).removeClass('previous-button-down');
+
+	}).click(function() {
+		
+		$('.magazine').turn('previous');
+
+	});
+
+
+	resizeViewport();
+
+	$('.magazine').addClass('animated');
+
+}
+
+// Zoom icon
+
+ $('.zoom-icon').bind('mouseover', function() { 
+ 	
+ 	if ($(this).hasClass('zoom-icon-in'))
+ 		$(this).addClass('zoom-icon-in-hover');
+
+ 	if ($(this).hasClass('zoom-icon-out'))
+ 		$(this).addClass('zoom-icon-out-hover');
+ 
+ }).bind('mouseout', function() { 
+ 	
+ 	 if ($(this).hasClass('zoom-icon-in'))
+ 		$(this).removeClass('zoom-icon-in-hover');
+ 	
+ 	if ($(this).hasClass('zoom-icon-out'))
+ 		$(this).removeClass('zoom-icon-out-hover');
+
+ }).bind('click', function() {
+
+ 	if ($(this).hasClass('zoom-icon-in'))
+ 		$('.magazine-viewport').zoom('zoomIn');
+ 	else if ($(this).hasClass('zoom-icon-out'))	
+		$('.magazine-viewport').zoom('zoomOut');
+
+ });
+
+ $('#canvas').hide();
+
+
+// Load the HTML4 version if there's not CSS transform
+yepnope({
+	test : Modernizr.csstransforms,
+	yep: ['/books/lib/turn.js'],
+	nope: ['/books/lib/turn.html4.min.js'],
+	both: ['/books/lib/zoom.min.js', '/books/samples/magazine/js/magazine-arch.js', '/books/samples/magazine/css/magazine.css'],
+	complete: loadApp
+});
+
+</script>
+<script src="js/navbarmove.js"></script><!--navbar move-->
+<script src="js/translate.js"></script>
+
+
+
+</body>
+</html>

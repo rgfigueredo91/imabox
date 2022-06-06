@@ -1,0 +1,137 @@
+/*--parametros generales del cuerpo de imagenes--*/
+
+
+.buttons-students{
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	margin-top: 40px;
+}
+
+.buttons-students a{
+	
+	margin-top: 40px;
+
+}
+
+.buttons-students button{
+	cursor: pointer;
+	background-color: #ff0066;
+	border: 1px solid;
+	width: 10%;
+	height: 40px;
+	
+
+}
+
+#downloaddocument {
+	margin-top: 20px;
+}
+
+.stages{
+	margin-top: 20px;
+	width: 100%;
+	text-align: center;
+}
+
+.arrow{
+	margin-top: 40px;
+}
+
+.stages p {
+	text-align: justify;
+	margin-top: 25px;
+	width: 40%;
+	margin-left: 30%;
+}
+
+.title-stage p{
+	text-align: center;
+	font-weight: bold;
+}
+
+.stages h2 {
+	margin-top: 40px;
+	color: #ff0066;
+}
+
+.arrow img{
+	height: 50px;
+}
+.toptext{
+	margin-top: 200px;
+	width: 100%;
+	text-align: center;
+}
+
+  
+footer{
+	margin-top: 15vh;
+}
+
+.student-process{
+	width: 100%;
+	margin-top: 120px;
+}
+
+.student-paragraph{
+	font-size: 15px;
+	text-align: center;
+}
+
+/*--tablet responsive--*/
+@media only screen and (max-width: 1200px) and (min-width: 700px)  {
+	.toptext{
+		margin-top: 120px;
+		width: 100%;
+
+		text-align: center;
+	}
+
+}
+
+
+
+.buttons-students button{
+	color: white;
+	cursor: pointer;
+	background-color: #ff0066;
+	border: 1px solid;
+	width: 15%;
+	height: 40px;
+	
+
+}
+
+/*--mobile responsive--*/
+@media only screen and (max-width: 850px) {
+
+	.toptext{
+		margin-top: 120px;
+		width: 100%;
+
+		text-align: center;
+	}
+	
+	.stages p {
+		text-align: justify;
+		margin-top: 25px;
+		width: 70%;
+		margin-left: 15%;
+	}
+
+	.title-stage p{
+		text-align: center;
+	}
+	  .buttons-students button{
+		color: white;
+	cursor: pointer;
+	background-color: #ff0066;
+	border: 1px solid;
+	width: 40%;
+	height: 40px;
+	
+
+}
+
+}

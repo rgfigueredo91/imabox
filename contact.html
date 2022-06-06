@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+
+<html lang="eng">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+		<meta charset="UTF-8"/> 
+		<title>Imago Rendering Studio</title>
+
+		<meta name="description" content="Imago was founded in 2018 by Andres Baptista and Rodrigo Figueredo. We are a Rendering and 3dart imaging studio based in Montevideo, Uruguay."/>
+		<meta name="keywords" content="imago - Rendering Visualization Studio"/>
+		<meta name="author" content="Rodrigo Figueredo"/>
+		<meta name="viewport" content="=width=device-width, initial-scale=1.0, user-scalable=no"/>
+		<meta property="og:type" content="website"/>
+		<meta property="og:title" content="Imago Rendering Studio"/>
+		<meta name="google-site-verification" content="E0SpeRDXnyyyYe_az7hMb6PirOHIawPyVZi6EA_HKSc" />
+		<meta property="og:description" content="Imago was founded in 2018 by Andres Baptista and Rodrigo Figueredo. We are a Rendering and 3dart imaging studio based in Montevideo, Uruguay."/>
+		<meta property="og:url" content="https://imago.uy"/>
+		<meta name="description" content="contact form example">
+		<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="styles/styles.css">
+		<link rel="stylesheet" type="text/css" href="styles/contact.css">
+		<link rel="stylesheet" href="https://use.typekit.net/oov2wcw.css">
+		<link rel="shortcut icon" type="image/png" href="favicon.png"/>
+		<script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
+		<!-- The core Firebase JS SDK is always required and must be listed first -->
+	
+		
+		
+		
+		
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-178424914-1"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+	
+			gtag('config', 'UA-178424914-1');
+		</script>
+ 	
+ 		
+	</head>
+
+
+				<!-- Load Facebook SDK for JavaScript -->
+     
+      <script>
+        window.fbAsyncInit = function() {
+          FB.init({
+            xfbml            : true,
+            version          : 'v6.0'
+          });
+        };
+
+        (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));</script>
+
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+<div id="fb-root"></div>
+
+      <!-- Your customer chat code -->
+      <div class="fb-customerchat"
+        attribution=setup_tool
+        page_id="108697060701498"
+  theme_color="#ff0066"
+  logged_in_greeting="Hi! How can we help you?"
+  logged_out_greeting="Hi! How can we help you?">
+      </div>
+      
+<!--barra fija arriba desktop-->
+<header class="navbar-noboots" id="navbar-noboots">
+	<div class="wrapper-1">
+		<h1 class="title"><a href="/">imago</h1></a>
+	</div>
+	<div class="wrapper-2">
+		<ul class="menu">
+			<li class="items"><a href="#" id="link-font">works</a>
+				<div class="sub-menu1">
+					<ul class="activenavbar">
+						<li class="items dropdown-content "><a href="https://imagouy.com/index.html" id="portfolio-translate" >Arch Viz</a></li>
+						<li class="items dropdown-content"><a href="https://imagouy.com/360.html" id="360-translate">360º Viz</a></li>
+						<li class="items dropdown-content"><a href="https://imagouy.com/vr.html" id="vr-translate">Ps V.R</a></li>
+						
+					</ul>
+				</div>
+			</li>
+			<li class="items"><a href="#" id="link-font-about" >about us</a>
+				<div class="sub-menu1">
+					<ul class="activenavbar" >
+						<li class="items dropdown-content"><a href="https://imagouy.com/artists.html" id="artist-translate">artists</a></li>
+						<li class="items dropdown-content"><a href="https://imagouy.com/process.html" id="process-translate">process</a></li>
+						<li class="items dropdown-content"><a href="https://imagouy.com/pricing.html" id="prices-translate">prices</a></li>
+						<li class="items dropdown-content"><a href="https://imagouy.com/reviews.html" id="references-translate">references</a></li>
+					</ul>
+				</div>
+			</li>	
+			<li class="items"><a href="https://imagouy.com/contact.html"  id="contactid" class="currents">contact</a></li>
+			
+			<li class="items"><a href="#eng" onclick="timedRefresh()">eng <a>|</a></a> <a href="#esp" onclick="timedRefresh()">esp</a></li>	
+		</ul>
+		<ul class="social-menu">
+			<li class="social-icon" id="instagram"><a href="https://www.instagram.com/imago_uy" target="_blank"><i
+						class="fa fa-instagram"></i></a></li>
+			<li class="social-icon" id="linkedin"><a href="https://www.linkedin.com/company/imagouy" target="_blank"><i
+						class="fa fa-linkedin"></i></a></li>
+			<li class="social-icon" id="facebook"><a href="https://www.facebook.com/Imago-Rendering-Studio-108697060701498" target="_blank"><i
+						class="fa fa-facebook"></i></a></li>
+		</ul>
+	</div>
+		</header>
+
+<!--barra fija arriba telefono navbar-->
+
+		<section class="phonenavbar" id="phonenavbarid">
+
+			<h1 class="titlephone"><a href="/">imago</h1></a>
+			<input type="checkbox" id="nav-toggle" class="nav-toggle">
+			<nav class="navphone-3">
+				<ul>
+					<li class="currentsphone"><a href="https://imagouy.com/index.html" id="portfolio-translate-phone">Arch Viz</a></li>
+					
+					<li class="currentsphone"><a href="https://imagouy.com/360.html" id="360-translate-phone">360º Viz</a></li>
+					<li class="currentsphone"><a href="https://imagouy.com/vr.html" id="psvr-translate-phone">Ps V.R</a></li>
+					<hr></hr>
+					<li class="currentsphone"><a href="https://imagouy.com/artists.html" id="artist-translate-phone">artists</a></li>
+					<li class="currentsphone"><a href="https://imagouy.com/process.html" id="process-translate-phone">process</a></li>
+					<li class="currentsphone"><a href="https://imagouy.com/pricing.html" id="prices-translate-phone">prices</a></li>
+					<li class="currentsphone"><a href="https://imagouy.com/reviews.html" id="references-translate-phone">references</a></li>
+					<li class="currentsphone"><a href="https://imagouy.com/contact.html" id="contact-translate-phone"  class="currents">contact</a></li>
+					<hr></hr>
+					<li><a href="#eng" onclick="timedRefresh()">eng <a>|</a></a> <a href="#esp" onclick="timedRefresh()">esp</a></li>	
+					<hr></hr>
+				</ul>
+				<ul class="flex-icon">
+					<li class="social-icon" id="instagram"><a href="https://www.instagram.com/imago_uy" target="_blank"><i class="fa fa-instagram"></i></a></li>
+					<li class="social-icon" id="linkedin"><a href="https://www.linkedin.com/company/imagouy" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+					<li class="social-icon" id="facebook"><a href="https://www.facebook.com/Imago-Rendering-Studio-108697060701498" target="_blank"><i class="fa fa-facebook"></i></a></li>
+				</ul>
+			</nav>
+				<label for="nav-toggle" class="nav-toggle-label">
+					<span></span>
+				</label>
+		</section>
+
+
+
+
+
+				<div class="main">
+
+					
+
+					<form class="formulario"
+							action="https://formsubmit.co/imago.rendering.studio@gmail.com"
+							method="POST"
+							enctype="multipart/form-data">
+						<div>	
+							<label class="label1">
+							<input type="name" class="name" name="name" placeholder="name" required id="nameid">
+							</label>
+						</div>
+						<div>	
+							<label class="label1">
+							<input type="text" class="text" name="studio" placeholder="architecture studio, business, etc." id="studioarchid">
+							</label>
+						</div>
+						<div>	
+							<label class="label1">
+							<input type="email" class="email" name="email" placeholder="e-mail" required>
+							</label>
+						</div>
+
+						
+						<div>
+							<label class="label1">
+							<input type="text" class="subject" name="subject" placeholder="subject" required id="subjectid">
+							</label>
+						</div>
+						<div class="uploads">
+							<br />
+							<input type="file" id="files" multiple class="input-file">
+							<br /><br />
+							<button class="send-button" id="send" type="button">Click here to Upload the file before send</button>
+							<p id="uploading"></p>
+	
+							
+							<progress value="0" max="100" id="progress"></progress>
+						</div>
+
+						<div>
+							<label class="label1">
+							<textarea class="message" name="textarea" placeholder="write your message" required id="textareaid"></textarea>
+							</label>
+						</div>
+						<button type="submit" class="submit" id="buttoncontact">
+						contact us
+						</button>
+					</form>
+
+
+			
+			
+					
+
+
+					<footer>
+						<hr>
+						<p  id="rights-reserved">&copy; 2021 Imago Rendering Studio. All rights reserved</p>
+					</footer>
+
+
+	
+		<script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-app.js"></script>
+
+		<!-- TODO: Add SDKs for Firebase products that you want to use -->
+		<script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-storage.js"></script>
+		<script src="js/contact.js"></script>
+
+
+<script>
+// Your web app's Firebase configuration
+
+</script>
+
+
+<script>
+	let jwtClaimSet =
+   {
+ "iss": "firebase-adminsdk-kxx5h@fir-30c9e.iam.gserviceaccount.com",
+ "scope": "https://www.googleapis.com/auth/userinfo.email",  
+ "aud": "https://www.googleapis.com/oauth2/v4/token",
+   };
+
+	
+	
+	
+	
+	
+	</script>
+		<script src="js/translate.js"></script><!--navbar move-->
+		<script src="js/translate-contact.js"></script><!--navbar move-->
+
+	</body>
+</html>

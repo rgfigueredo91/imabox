@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+
+<html lang="eng">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+		<meta charset="UTF-8"/> 
+		<title>Imago Rendering Studio</title>
+
+		<meta name="description" content="Imago was founded in 2018 by Andres Baptista and Rodrigo Figueredo. We are a Rendering and 3dart imaging studio based in Montevideo, Uruguay."/>
+		<meta name="keywords" content="imago - Rendering Visualization Studio"/>
+		<meta name="author" content="Rodrigo Figueredo"/>
+		<meta name="viewport" content="=width=device-width, initial-scale=1.0, user-scalable=no"/>
+		<meta property="og:type" content="website"/>
+		<meta property="og:title" content="Imago Rendering Studio"/>
+		<meta name="google-site-verification" content="E0SpeRDXnyyyYe_az7hMb6PirOHIawPyVZi6EA_HKSc" />
+		<meta property="og:description" content="Imago was founded in 2018 by Andres Baptista and Rodrigo Figueredo. We are a Rendering and 3dart imaging studio based in Montevideo, Uruguay."/>
+		<meta property="og:url" content="https://imago.uy"/>
+		<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+		<link rel="shortcut icon" type="image/png" href="favicon.png"/>
+		<link rel="stylesheet" type="text/css" href="styles/styles.css">
+		<link rel="stylesheet" type="text/css" href="styles/about.css">
+		<link rel="stylesheet" href="https://use.typekit.net/oov2wcw.css">
+
+		<!-- funciona al cambiar la página? -->
+		<!-- soportar cuando lenguaje del navegador es tipo "en-US" o "es-ES" -->
+		
+		<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	 	<script src="https://unpkg.com/scrollreveal"></script>
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-178424914-1"></script>
+		<script>
+			 window.dataLayer = window.dataLayer || [];
+			 function gtag(){dataLayer.push(arguments);}
+			 gtag('js', new Date());
+	 
+			 gtag('config', 'UA-178424914-1');
+		</script>
+ 		
+	</head>
+
+	<body>
+				<!-- Load Facebook SDK for JavaScript -->
+  
+      <script>
+        window.fbAsyncInit = function() {
+          FB.init({
+            xfbml            : true,
+            version          : 'v6.0'
+          });
+        };
+
+        (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));</script>
+	  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+
+	  <div id="fb-root"></div>
+      <!-- Your customer chat code -->
+      <div class="fb-customerchat"
+        attribution=setup_tool
+        page_id="108697060701498"
+  theme_color="#ff0066"
+  logged_in_greeting="Hi! How can we help you?"
+  logged_out_greeting="Hi! How can we help you?">
+      </div>
+      
+<!--barra fija arriba desktop-->
+<header class="navbar-noboots" id="navbar-noboots">
+	<div class="wrapper-1">
+		<h1 class="title"><a href="/">imago</h1></a>
+	</div>
+	<div class="wrapper-2">
+		<ul class="menu">
+			<li class="items"><a href="#" id="link-font">works</a>
+				<div class="sub-menu1">
+					<ul class="activenavbar">
+						<li class="items dropdown-content "><a href="https://imagouy.com/index.html" id="portfolio-translate" >Arch Viz</a></li>
+						<li class="items dropdown-content"><a href="https://imagouy.com/360.html" id="360-translate">360º Viz</a></li>
+						<li class="items dropdown-content"><a href="https://imagouy.com/vr.html" id="vr-translate">Ps V.R</a></li>
+				
+					</ul>
+				</div>
+			</li>
+			<li class="items"><a href="#" id="link-font-about" class="currents" >about us</a>
+				<div class="sub-menu1">
+					<ul class="activenavbar" >
+						<li class="items dropdown-content"><a href="https://imagouy.com/artists.html" id="artist-translate"  class="currents">artists</a></li>
+						<li class="items dropdown-content"><a href="https://imagouy.com/process.html" id="process-translate">process</a></li>
+						<li class="items dropdown-content"><a href="https://imagouy.com/pricing.html" id="prices-translate">prices</a></li>
+						<li class="items dropdown-content"><a href="https://imagouy.com/reviews.html" id="references-translate">references</a></li>
+					</ul>
+				</div>
+			</li>	
+			<li class="items"><a href="https://imagouy.com/contact.html"  id="contactid">contact</a></li>
+			
+			<li class="items"><a href="#eng" onclick="timedRefresh()">eng <a>|</a></a> <a href="#esp" onclick="timedRefresh()">esp</a></li>	
+		</ul>
+		<ul class="social-menu">
+			<li class="social-icon" id="instagram"><a href="https://www.instagram.com/imago_uy" target="_blank"><i
+						class="fa fa-instagram"></i></a></li>
+			<li class="social-icon" id="linkedin"><a href="https://www.linkedin.com/company/imagouy" target="_blank"><i
+						class="fa fa-linkedin"></i></a></li>
+			<li class="social-icon" id="facebook"><a href="https://www.facebook.com/Imago-Rendering-Studio-108697060701498" target="_blank"><i
+						class="fa fa-facebook"></i></a></li>
+		</ul>
+	</div>
+		</header>
+
+<!--barra fija arriba telefono navbar-->
+
+		<section class="phonenavbar" id="phonenavbarid">
+
+			<h1 class="titlephone"><a href="/">imago</h1></a>
+			<input type="checkbox" id="nav-toggle" class="nav-toggle">
+			<nav class="navphone-3">
+				<ul>
+					<li class="currentsphone"><a href="https://imagouy.com/index.html"  id="portfolio-translate-phone">Arch Viz</a></li>
+			
+					<li class="currentsphone"><a href="https://imagouy.com/360.html"  id="360-translate-phone">360º Viz</a></li>
+					<li class="currentsphone"><a href="https://imagouy.com/vr.html" id="psvr-translate-phone">Ps V.R</a></li>
+					<hr></hr>
+					<li class="currentsphone"><a href="https://imagouy.com/artists.html" id="artist-translate-phone" class="currents">artists</a></li>
+					<li class="currentsphone"><a href="https://imagouy.com/process.html" id="process-translate-phone">process</a></li>
+					<li class="currentsphone"><a href="https://imagouy.com/pricing.html" id="prices-translate-phone">prices</a></li>
+					<li class="currentsphone"><a href="https://imagouy.com/reviews.html" id="references-translate-phone">references</a></li>
+					<li class="currentsphone"><a href="https://imagouy.com/contact.html" id="contact-translate-phone">contact</a></li>
+					<hr></hr>
+					<li><a href="#eng" onclick="timedRefresh()">eng <a>|</a></a> <a href="#esp" onclick="timedRefresh()">esp</a></li>	
+					<hr></hr>
+				</ul>
+				<ul class="flex-icon">
+					<li class="social-icon" id="instagram"><a href="https://www.instagram.com/imago_uy" target="_blank"><i class="fa fa-instagram"></i></a></li>
+					<li class="social-icon" id="linkedin"><a href="https://www.linkedin.com/company/imagouy" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+					<li class="social-icon" id="facebook"><a href="https://www.facebook.com/Imago-Rendering-Studio-108697060701498" target="_blank"><i class="fa fa-facebook"></i></a></li>
+				</ul>
+			</nav>
+				<label for="nav-toggle" class="nav-toggle-label">
+					<span></span>
+				</label>
+		</section>
+<!--seccion imagenes-->
+		<div class="main-artists"> 
+
+			<div class="top-about">
+				<h1 id="title-translate">Let's get to know each other</h1>
+				<p id="paragraph-translate">Numerous journeys and extensive experience gained all over the world, have shaped our view of the architecture, gave a huge a dose of inspiration and driven us to action.
+					We founded Imago Rendering Studio with passion for evoking emotions and creating value.</p>
+					<h1 id="title2-translate">Our journey</h1>
+			</div>
+		
+			</style>
+			<div class="map-container">
+				<iframe width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0" src="maps.html" scrolling="no"></iframe>
+			</div>
+
+
+
+			<div class="autores">
+				<div class="rodrigo">
+						<div class=insidebox>
+							<div class="fotoyo">
+								<img src="img/rodrigo-figueredo.png" alt="Rodrigo Figueredo">
+							</div>
+							<div class="textoyo">
+								<h2>RODRIGO</h2>
+								<div class="firstchild">
+									<p id="title-translate-artist">FOUNDER - ARCHITECT - 3D ARTIST</p>
+								</div>
+								<p id="paragraph2-translate">Hi!, i'm an architect and 3D artist graduated from the college of Architecture, Design and Urban planning, Montevideo-Uruguay.  
+									My favorite form of spending time has been connected with art, architecture, technology, painting and phtography which later turned into a passion for creating images and animation in the computer. I have fervor for design and creation.
+									I'm specialized in developing Architectural Renderings, 3D Architecture, graphics designs,  
+									Images, Websites, brochures and everything you will need to improve your sales!.</p>
+								<ul class="icons">
+									<a href="https://rgf.uy" target="_blank"><i class="fa fa-chain-broken" aria-hidden="true"></i></a>
+									<a href="https://www.linkedin.com/in/rodrigo-figueredo/" target="_blank"><i class="fa fa-linkedin"></i></a>
+								</ul>
+							</div>
+						</div>	
+				</div>
+		</div>
+
+		<div class="top-about2">
+				<h1 id="photos-tittle-translate">Travel photos</h1>
+		</div>
+
+			<div class="photos-artist">
+
+				<div class="box-img"  id="iframe4">
+					<img  src="img/photos/China2.jpg">
+				</div>
+				
+				<div class="box-img"  id="iframe3">
+					<img  src="img/photos/POROTO.jpg">
+				</div>
+
+				<div class="box-img"  id="iframe7">
+					<img  src="img/photos/Italia.jpg">
+				</div>
+				
+				<div class="box-img"  id="iframe5">
+					<img  src="img/photos/Corea.jpg">
+				</div>
+				<div class="box-img"  id="iframe1">
+					<img  src="img/photos/Alemania.jpg">
+				</div>
+				
+				<div class="box-img"  id="iframe2">
+					<img  src="img/photos/Suiza2.jpg">
+				</div>
+				<div class="box-img"  id="iframe8">
+					<img  src="img/photos/Japon.jpg">
+				</div>
+				<div class="box-img"  id="iframe9">
+					<img  src="img/photos/Francia4.jpg">
+				</div>
+				<div class="box-img"  id="iframe10">
+					<img  src="img/photos/Colombia3.jpg">
+				</div>
+			</div>
+
+			<footer>
+				<hr>
+				<p  id="rights-reserved">&copy; 2021 Imago Rendering Studio. All rights reserved</p>
+			</footer>
+
+		<script>
+		$('.map-container')
+	.click(function(){
+			$(this).find('iframe').addClass('clicked')})
+	.mouseleave(function(){
+			$(this).find('iframe').removeClass('clicked')});
+
+			
+		</script>
+		<script src="js/navbarmove.js"></script><!--navbar move-->
+		<script src="js/translate.js"></script><!--navbar move-->
+		<script src="js/translate-artists.js"></script><!--navbar move-->
+
+	</body>
+
+</html>
