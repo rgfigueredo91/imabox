@@ -7,12 +7,14 @@ let lastScrollTop = 100;
 				if (scrollTop > lastScrollTop) {
 					navbar.style.top = "-100px";
 					navbar.style.background = "white";
+		
+					
 					
 					
 				} else {
 					navbar.style.top = "0";
 					navbar.style.background = "none";
-				
+					
 					
 					
 				}
@@ -35,6 +37,21 @@ let lastScrollTop2 = 100;
 				}
 				lastScrollTop2 = scrollTop;
 			})
+
+	
+			
+			const faders = document.querySelectorAll(".fade-in");
+	
+
+			setTimeout(function(){
+				faders[0].classList.remove("fade-in");
+				faders[0].classList.add("appear");
+				console.log(faders)
+			
+			}, 2500);
+			
+			
+			
 
 
 			
