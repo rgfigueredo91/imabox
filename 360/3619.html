@@ -44,7 +44,7 @@
 
 
 var lookAtPositions = [
-     new THREE.Vector3(0, -100, -3000),
+     new THREE.Vector3(0, 100, -3000),
     new THREE.Vector3(500, 500, 100)
     ];
    
@@ -59,9 +59,9 @@ const format = '.jpg';
 
 
 const panorama = new PANOLENS.CubePanorama( [
-    path + '18_px' + format, path + '18_nx' + format,
-    path + '18_py' + format, path + '18_ny' + format,
-    path + '18_pz' + format, path + '18_nz' + format
+    path + '05_px' + format, path + '05_nx' + format,
+    path + '05_py' + format, path + '05_ny' + format,
+    path + '05_pz' + format, path + '05_nz' + format
 ] );
     panorama.addEventListener( 'enter-fade-start', function(){
         viewer.tweenControlCenter(lookAtPositions[0],0)

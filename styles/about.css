@@ -61,7 +61,7 @@
 
 .autores {
 	position: relative;
-	margin-top: 150px;
+	margin-top: 0px;
 	display: flex;
 	flex-direction: column;
 	width: 100%;
@@ -74,6 +74,10 @@
 }
 .fotoyo{
 	margin-left: 10%;
+}
+
+.fotoyo img{
+	margin-top: 30%;
 }
 svg {
 	position: absolute;
@@ -92,7 +96,7 @@ svg {
 }
 
 .textoyo h2{
-	color: #ff0066;
+	color: #1cb5f1;
 }
 .top-about{
 	margin-top: 250px;
@@ -112,8 +116,7 @@ svg {
 	display: flex;
 	height: auto;
 	width: 100%;
-	background: rgb(65,63,88);
-	background: radial-gradient(circle at 25% 70%, rgb(55, 53, 75) 2%, rgba(15,21,22,1) 35%);
+	
 }
 .icons{
 	
@@ -126,7 +129,7 @@ svg {
 
 	margin-left: 25px;
 	margin-right: 25px;
-	color: white
+	color: black
 }
 .icons i:hover {
 	transform: scale(1.2);
@@ -136,7 +139,7 @@ svg {
 	width:50%;
 	position: relative;
 	margin-top: 30px;
-	color: white;
+	color: black;
 	font-size: 15px;
 	font-weight: .2px;
 	text-align: justify;
@@ -188,6 +191,7 @@ svg {
 	margin-left: 0%;
 }
 .fotoyo img{
+	margin-top: 0px;
 	width: 100%;
 }
 .textoyo {
@@ -243,7 +247,7 @@ svg {
 .icons i{
 	margin-left: 25px;
 	margin-right: 25px;
-	color: white
+	color: black
 }
 .icons i:hover {
 	transform: scale(1.2);

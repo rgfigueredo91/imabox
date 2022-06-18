@@ -67,35 +67,35 @@
 
       
 <!--barra fija arriba desktop-->
-<header class="navbar-noboots" id="navbar-noboots">
+<header class="navbar-noboots fade-in" id="navbar-noboots">
 	<div class="wrapper-1">
-		<h1 class="title"><a href="/">imago</h1></a>
+		<h1 class="title"><a href="/">IMABOX</h1></a>
 	</div>
 	<div class="wrapper-2">
 		<ul class="menu">
-			<li class="items"><a href="#" id="link-font" class="currents">works</a>
+			<li class="items"><a href="#" id="link-font" class="currents">#works ↓</a>
 				<div class="sub-menu1">
 					<ul class="activenavbar">
-						<li class="items dropdown-content "><a href="https://imagouy.com/index.html" id="portfolio-translate">Arch Viz</a></li>
-						<li class="items dropdown-content"><a href="https://imagouy.com/360.html" class="currents" id="360-translate">360º Viz</a></li>
-						<li class="items dropdown-content"><a href="https://imagouy.com/vr.html" id="vr-translate">Ps V.R</a></li>
-						
+						<li class="items dropdown-content "><a href="https://imagouy.com/index.html" class="currents" id="portfolio-translate">Arch Viz</a></li>
+						<li class="items dropdown-content"><a href="#" id="animation-translate" onclick="waitingForAnimation()">Animations</a></li>
+						<li class="items dropdown-content"><a href="https://imagouy.com/360.html" id="360-translate">360º</a></li>
+						<li class="items dropdown-content"><a href="https://imagouy.com/vr.html" id="vr-translate">Virtual Reality</a></li>	
 					</ul>
 				</div>
 			</li>
-			<li class="items"><a href="#" id="link-font-about" >about us</a>
+			<li class="items"><a href="#" id="link-font-about" >#about us ↓</a>
 				<div class="sub-menu1">
 					<ul class="activenavbar" >
 						<li class="items dropdown-content"><a href="https://imagouy.com/artists.html" id="artist-translate">artists</a></li>
+						<li class="items dropdown-content"><a href="https://imagouy.com/services.html" id="prices-translate">services</a></li>
 						<li class="items dropdown-content"><a href="https://imagouy.com/process.html" id="process-translate">process</a></li>
-						<li class="items dropdown-content"><a href="https://imagouy.com/pricing.html" id="prices-translate">prices</a></li>
-						<li class="items dropdown-content"><a href="https://imagouy.com/reviews.html" id="references-translate">references</a></li>
+						<li class="items dropdown-content"><a href="https://imagouy.com/reviews.html" id="references-translate">clients</a></li>
 					</ul>
 				</div>
 			</li>	
-			<li class="items"><a href="https://imagouy.com/contact.html"  id="contactid">contact</a></li>
+			<li class="items"><a href="https://imagouy.com/contact.html"  id="contactid">#contact</a></li>
 			
-			<li class="items"><a href="#eng" onclick="timedRefresh()">eng <a>|</a></a> <a href="#esp" onclick="timedRefresh()">esp</a></li>	
+			<li class="items"><a href="#eng" onclick="timedRefresh()">eng <a>|</a></a> <a href="#esp" onclick="timedRefresh(), changeChatLanguage()">esp</a></li>	
 		</ul>
 		<ul class="social-menu">
 			<li class="social-icon" id="instagram"><a href="https://www.instagram.com/imago_uy" target="_blank"><i
@@ -112,21 +112,22 @@
 
 		<section class="phonenavbar" id="phonenavbarid">
 
-			<h1 class="titlephone"><a href="/">imago</h1></a>
+			<h1 class="titlephone"><a href="/">IMABOX</h1></a>
 			<input type="checkbox" id="nav-toggle" class="nav-toggle">
 			<nav class="navphone-3">
 				<ul>
-					<li class="currentsphone"><a href="https://imagouy.com/index.html" id="portfolio-translate-phone">Arch Viz</a></li>
-					<li class="currentsphone"><a href="https://imagouy.com/360.html" class="currents" id="360-translate-phone">360º Viz</a></li>
-					<li class="currentsphone"><a href="https://imagouy.com/vr.html" id="psvr-translate-phone">Ps V.R</a></li>
+					<li class="currentsphone"><a href="https://imagouy.com/index.html" id="portfolio-translate-phone" class="currents">Arch Viz</a></li>
+					<li class="currentsphone"><a href="#" id="animation-translate-phone" onclick="waitingForAnimation()">Animations</a></li>
+					<li class="currentsphone"><a href="https://imagouy.com/360.html" id="360-translate-phone">360º</a></li>
+					<li class="currentsphone"><a href="https://imagouy.com/vr.html" id="psvr-translate-phone">Virtual Reality</a></li>
 					<hr></hr>
 					<li class="currentsphone"><a href="https://imagouy.com/artists.html" id="artist-translate-phone">artists</a></li>
 					<li class="currentsphone"><a href="https://imagouy.com/process.html" id="process-translate-phone">process</a></li>
-					<li class="currentsphone"><a href="https://imagouy.com/pricing.html" id="prices-translate-phone">prices</a></li>
-					<li class="currentsphone"><a href="https://imagouy.com/reviews.html" id="references-translate-phone">references</a></li>
+					<li class="currentsphone"><a href="https://imagouy.com/services.html" id="prices-translate-phone">services</a></li>
+					<li class="currentsphone"><a href="https://imagouy.com/reviews.html" id="references-translate-phone">clients</a></li>
 					<li class="currentsphone"><a href="https://imagouy.com/contact.html" id="contact-translate-phone">contact</a></li>
 					<hr></hr>
-					<li><a href="#eng" onclick="timedRefresh()">eng <a>|</a></a> <a href="#esp" onclick="timedRefresh()">esp</a></li>	
+					<li><a href="#eng" onclick="timedRefresh()">eng <a>|</a></a> <a href="#esp" onclick="timedRefresh(), changeChatLanguage() ">esp</a></li>	
 					<hr></hr>
 				</ul>
 				<ul class="flex-icon">
@@ -142,18 +143,26 @@
 		<!--seccion imagenes-->
 		<div class="main">
 			
+		
+		
+
 			<div class="box-img"  id="iframe1">
-				<iframe frameborder="0" src="360/3603.html"  allowfullscreen="allowfullscreen"
+				<iframe frameborder="0" src="360/3602.html"  allowfullscreen="allowfullscreen"
+				style="pointer-events:visiblePainted; border:0;"
+				seamless="seamless"
+				scrolling="no"
 				mozallowfullscreen="mozallowfullscreen" 
 				msallowfullscreen="msallowfullscreen" 
 				oallowfullscreen="oallowfullscreen" 
 				webkitallowfullscreen="webkitallowfullscreen" frameBorder="0">
 				</iframe>
 			</div>
-		
 
 			<div class="box-img"  id="iframe2">
-				<iframe frameborder="0" src="360/3602.html"  allowfullscreen="allowfullscreen"
+				<iframe frameborder="0" src="360/3603.html"  allowfullscreen="allowfullscreen"
+				style="pointer-events:visiblePainted; border:0;"
+				seamless="seamless"
+				scrolling="no"
 				mozallowfullscreen="mozallowfullscreen" 
 				msallowfullscreen="msallowfullscreen" 
 				oallowfullscreen="oallowfullscreen" 
@@ -163,6 +172,9 @@
 
 			<div class="box-img"  id="iframe3">
 				<iframe frameborder="0" src="360/3606.html"  allowfullscreen="allowfullscreen"
+				style="pointer-events:visiblePainted; border:0;"
+				seamless="seamless"
+				scrolling="no"
 				mozallowfullscreen="mozallowfullscreen" 
 				msallowfullscreen="msallowfullscreen" 
 				oallowfullscreen="oallowfullscreen" 
@@ -172,6 +184,9 @@
 
 			<div class="box-img"  id="iframe4">
 				<iframe frameborder="0" src="360/3605.html"
+				style="pointer-events:visiblePainted; border:0;"
+				seamless="seamless"
+				scrolling="no"
 				mozallowfullscreen="mozallowfullscreen" 
 				msallowfullscreen="msallowfullscreen" 
 				oallowfullscreen="oallowfullscreen" 
@@ -180,7 +195,10 @@
 			</div>
 
 			<div class="box-img"  id="iframe5">
-				<iframe frameborder="0" src="360/3604.html"  allowfullscreen="allowfullscreen"
+				<iframe frameborder="0" src="360/3619.html"  allowfullscreen="allowfullscreen"
+				style="pointer-events:visiblePainted; border:0;"
+				seamless="seamless"
+				scrolling="no"
 				mozallowfullscreen="mozallowfullscreen" 
 				msallowfullscreen="msallowfullscreen" 
 				oallowfullscreen="oallowfullscreen" 
@@ -190,6 +208,9 @@
 
 			<div class="box-img"  id="iframe6">
 				<iframe frameborder="0" src="360/3601.html"  allowfullscreen="allowfullscreen"
+				style="pointer-events:visiblePainted; border:0;"
+				seamless="seamless"
+				scrolling="no"
 				mozallowfullscreen="mozallowfullscreen" 
 				msallowfullscreen="msallowfullscreen" 
 				oallowfullscreen="oallowfullscreen" 
@@ -203,6 +224,9 @@
 
 			<div class="box-img"  id="iframe7">
 				<iframe frameborder="0" src="360/3609.html"
+				style="pointer-events:visiblePainted; border:0;"
+				seamless="seamless"
+				scrolling="no"
 				mozallowfullscreen="mozallowfullscreen" 
 				msallowfullscreen="msallowfullscreen" 
 				oallowfullscreen="oallowfullscreen" 
@@ -213,6 +237,9 @@
 			
 			<div class="box-img"  id="iframe8">
 				<iframe frameborder="0" src="360/3610.html"
+				style="pointer-events:visiblePainted; border:0;"
+				seamless="seamless"
+				scrolling="no"
 				mozallowfullscreen="mozallowfullscreen" 
 				msallowfullscreen="msallowfullscreen" 
 				oallowfullscreen="oallowfullscreen" 
@@ -228,7 +255,7 @@
 
 		<footer>
 			<hr>
-			<p  id="rights-reserved">&copy; 2021 Imago Rendering Studio. All rights reserved</p>
+			<p  id="rights-reserved">&copy; 2022 Imabox "Unboxing Possible Futures". All rights reserved</p>
 		</footer>
 
 	

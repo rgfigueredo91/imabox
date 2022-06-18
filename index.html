@@ -83,8 +83,8 @@
 				<div class="sub-menu1">
 					<ul class="activenavbar">
 						<li class="items dropdown-content "><a href="https://imagouy.com/index.html" class="currents" id="portfolio-translate">Arch Viz</a></li>
-						<li class="items dropdown-content"><a href="https://imagouy.com/360.html" id="360-translate">360º Viz</a></li>
-						<li class="items dropdown-content"><a href="https://imagouy.com/animations.html" id="animation-translate">Animations</a></li>
+						<li class="items dropdown-content"><a href="#" id="animation-translate" onclick="waitingForAnimation()">Animations</a></li>
+						<li class="items dropdown-content"><a href="https://imagouy.com/360.html" id="360-translate">360º</a></li>
 						<li class="items dropdown-content"><a href="https://imagouy.com/vr.html" id="vr-translate">Virtual Reality</a></li>	
 					</ul>
 				</div>
@@ -95,6 +95,7 @@
 						<li class="items dropdown-content"><a href="https://imagouy.com/artists.html" id="artist-translate">artists</a></li>
 						<li class="items dropdown-content"><a href="https://imagouy.com/services.html" id="prices-translate">services</a></li>
 						<li class="items dropdown-content"><a href="https://imagouy.com/process.html" id="process-translate">process</a></li>
+						<li class="items dropdown-content"><a href="https://imagouy.com/book.html" id="process-translate">book</a></li>
 						<li class="items dropdown-content"><a href="https://imagouy.com/reviews.html" id="references-translate">clients</a></li>
 					</ul>
 				</div>
@@ -118,13 +119,13 @@
 
 		<section class="phonenavbar" id="phonenavbarid">
 
-			<h1 class="titlephone"><a href="/">imago</h1></a>
+			<h1 class="titlephone"><a href="/">IMABOX</h1></a>
 			<input type="checkbox" id="nav-toggle" class="nav-toggle">
 			<nav class="navphone-3">
 				<ul>
 					<li class="currentsphone"><a href="https://imagouy.com/index.html" id="portfolio-translate-phone" class="currents">Arch Viz</a></li>
-					<li class="currentsphone"><a href="https://imagouy.com/360.html" id="360-translate-phone">360º Viz</a></li>
-					<li class="currentsphone"><a href="https://imagouy.com/animations.html" id="animation-translate-phone">Animations</a></li>
+					<li class="currentsphone"><a href="#" id="animation-translate-phone" onclick="waitingForAnimation()">Animations</a></li>
+					<li class="currentsphone"><a href="https://imagouy.com/360.html" id="360-translate-phone">360º</a></li>
 					<li class="currentsphone"><a href="https://imagouy.com/vr.html" id="psvr-translate-phone">Virtual Reality</a></li>
 					<hr></hr>
 					<li class="currentsphone"><a href="https://imagouy.com/artists.html" id="artist-translate-phone">artists</a></li>
@@ -163,90 +164,122 @@
 			<div class="hes-gallery" id="noselectgrid">
 				<!-- imagenes posta -->
 
-				<div class="img" id="imagen1" data-src=""><!--1x1 small-->
+				<div class="img" id="imagen1" data-src="">
 					<a href="img/img window/1-RenderExterior-CV-high.jpg" class="swipebox">
 						<img  class="lazy" src="img/lowquality/1-RenderExterior-CV-small.jpg" data-src="img/common/1-RenderExterior-CV-medium.jpg" alt=""/>
 					</a>
 				</div>
 
-				<div class="img" id="imagen2" data-src=""><!--1x1 small-->
+				<div class="img" id="imagen2" data-src="">
 					<a href="img/img window/2-RenderExterior-high.jpg" class="swipebox">
 						<img  class="lazy" src="img/lowquality/2-RenderExterior-small.jpg" data-src="img/common/2-RenderExterior-medium.jpg" alt=""/>
 					</a>
 				</div>
 
-				<div class="img" id="imagen3" data-src=""><!--1x1 small-->
+				<div class="img" id="imagen3" data-src="">
 					<a href="img/img window/3-RenderInterior-high.jpg" class="swipebox">
 						<img  class="lazy" src="img/lowquality/3-RenderInterior-small.jpg" data-src="img/common/3-RenderInterior-medium.jpg" alt=""/>
 					</a>
 				</div>
 
-				<div class="img" id="imagen4" data-src=""><!--1x1 small-->
+				<div class="img" id="imagen4" data-src="">
 					<a href="img/img window/4-Brickvisual-Model-high.jpg" class="swipebox">
 						<img  class="lazy" src="img/lowquality/4-Brickvisual-Model-small.jpg" data-src="img/common/4-Brickvisual-Model-medium.jpg" alt=""/>
 					</a>
 				</div>
 				
-				<div class="img" id="imagen5" data-src=""><!--1x1 small-->
+				<div class="img" id="imagen5" data-src="">
 					<a href="img/img window/5-BulevarComplex-high.jpg" class="swipebox">
 						<img  class="lazy" src="img/lowquality/5-BulevarComplex-small.jpg" data-src="img/common/5-BulevarComplex-medium.jpg" alt=""/>
 					</a>
 				</div>
 
-				<div class="img" id="imagen6" data-src=""><!--1x1 small-->
+				<div class="img" id="imagen6" data-src="">
 					<a href="img/img window/6-RenderInterior-Bricks-high.jpg" class="swipebox">
 						<img  class="lazy" src="img/lowquality/6-RenderInterior-Bricks-low.jpg" data-src="img/common/6-RenderInterior-Bricks-medium.jpg" alt=""/>
 					</a>
 				</div>
 
-				<div class="img" id="imagen7" data-src=""><!--1x1 small-->
+				<div class="img" id="imagen7" data-src="">
 					<a href="img/img window/7-Renderexterior-Bricks-high.jpg" class="swipebox">
 						<img  class="lazy" src="img/lowquality/7-Renderexterior-Bricks-small.jpg" data-src="img/common/7-Renderexterior-Bricks-medium.jpg" alt=""/>
 					</a>
 				</div>
 
-				<div class="img" id="imagen8" data-src=""><!--1x1 small-->
+				<div class="img" id="imagen8" data-src="">
 					<a href="img/img window/8-Renderexterior-night-high.jpg" class="swipebox">
 						<img  class="lazy" src="img/lowquality/8-Renderexterior-night-small.jpg" data-src="img/common/8-Renderexterior-night-medium.jpg" alt=""/>
 					</a>
 				</div>
 
-				<div class="img" id="imagen9" data-src=""><!--1x1 small-->
+				<div class="img" id="imagen9" data-src="">
 					<a href="img/img window/9-Renderexterior-night-high.jpg" class="swipebox">
 						<img  class="lazy" src="img/lowquality/9-Renderexterior-night-small.jpg" data-src="img/common/9-Renderexterior-night-medium.jpg" alt=""/>
 					</a>
 				</div>
 
-				<div class="img" id="imagen10" data-src=""><!--1x1 small-->
+				<div class="img" id="imagen10" data-src="">
 					<a href="img/img window/10-Renderexterior-night-high.jpg" class="swipebox">
 						<img  class="lazy" src="img/lowquality/10-Renderexterior-night-small.jpg" data-src="img/common/10-Renderexterior-night-medium.jpg" alt=""/>
 					</a>
 				</div>
 
-				<div class="img" id="imagen11" data-src=""><!--1x1 small-->
+				<div class="img" id="imagen11" data-src="">
 					<a href="img/img window/11-Renderexterior-cloudy-high.jpg" class="swipebox">
 						<img  class="lazy" src="img/lowquality/11-Renderexterior-cloudy-small.jpg" data-src="img/common/11-Renderexterior-cloudy-medium.jpg" alt=""/>
 					</a>
 				</div>
 
-				<div class="img" id="imagen12" data-src=""><!--1x1 small-->
+				<div class="img" id="imagen12" data-src="">
 					<a href="img/img window/12-Renderinterior-menaraone-high.jpg" class="swipebox">
 						<img  class="lazy" src="img/lowquality/12-Renderinterior-menaraone-small.jpg" data-src="img/common/12-Renderinterior-menaraone-medium.jpg" alt=""/>
 					</a>
 				</div>
 
 				
-				<div class="img" id="imagen13" data-src=""><!--1x1 small-->
+				<div class="img" id="imagen13" data-src="">
 					<a href="img/img window/13-Renderexterior-observatory-high.jpg" class="swipebox">
 						<img  class="lazy" src="img/lowquality/13-Renderexterior-observatory-small.jpg" data-src="img/common/13-Renderexterior-observatory-medium.jpg" alt=""/>
 					</a>
 				</div>
 
-				<div class="img" id="imagen14" data-src=""><!--1x1 small-->
+				<div class="img" id="imagen14" data-src="">
 					<a href="img/img window/14-Renderinterior-poetic-high.jpg" class="swipebox">
 						<img  class="lazy" src="img/lowquality/14-Renderinterior-poetic-small.jpg" data-src="img/common/14-Renderinterior-poetic-medium.jpg" alt=""/>
 					</a>
 				</div>
+
+				<div class="img" id="imagen15" data-src="">
+					<a href="img/img window/15-Renderinterior-laboratory-high.jpg" class="swipebox">
+						<img  class="lazy" src="img/lowquality/15-Renderinterior-laboratory-small.jpg" data-src="img/common/15-Renderinterior-laboratory-medium.jpg" alt=""/>
+					</a>
+				</div>
+
+				<div class="img" id="imagen16" data-src="">
+					<a href="img/img window/16-RenderAireview-talca-high.jpg" class="swipebox">
+						<img  class="lazy" src="img/lowquality/16-RenderAireview-talca-small.jpg" data-src="img/common/16-RenderAireview-talca-medium.jpg" alt=""/>
+					</a>
+				</div>
+
+				<div class="img" id="imagen17" data-src="">
+					<a href="img/img window/17-RenderInterior-restaurant-high.jpg" class="swipebox">
+						<img  class="lazy" src="img/lowquality/17-RenderInterior-restaurant-small.jpg" data-src="img/common/17-RenderInterior-restaurant-medium.jpg" alt=""/>
+					</a>
+				</div>
+
+				<div class="img" id="imagen18" data-src="">
+					<a href="img/img window/18-RenderInterior-gonchirodriguez-high.jpg" class="swipebox">
+						<img  class="lazy" src="img/lowquality/18-RenderInterior-gonchirodriguez-small.jpg" data-src="img/common/18-RenderInterior-gonchirodriguez-medium.jpg" alt=""/>
+					</a>
+				</div>
+
+				<div class="img" id="imagen19" data-src="">
+					<a href="img/img window/19-RenderExterior-SativaTour-high.jpg" class="swipebox">
+						<img  class="lazy" src="img/lowquality/19-RenderExterior-SativaTour-small.jpg" data-src="img/common/19-RenderExterior-SativaTour-medium.jpg" alt=""/>
+					</a>
+				</div>
+
+
 
 				
 
@@ -261,7 +294,7 @@
 
 		<footer>
 			<hr>
-			<p  id="rights-reserved">&copy; 2021 Imago Rendering Studio. All rights reserved</p>
+			<p  id="rights-reserved">&copy; 2021 Imabox - "Unboxing future ideas". All rights reserved</p>
 		</footer>
 
 	<script src="js/yall.min.js"></script>

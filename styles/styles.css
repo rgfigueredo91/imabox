@@ -282,6 +282,7 @@ font-weight: bold;
 /*--parametros generales del cuerpo de supervideo--*/
 
 .supervideo {
+	display: none;
 	height: 100vh;
 	width: 100%;
 	
@@ -430,6 +431,24 @@ font-weight: bold;
 #imagen14 {
 	grid-row: 13/15;
 	grid-column: 4/6;}
+#imagen15 {
+	grid-row: 15/16;
+	grid-column: 1/4;}
+#imagen16 {
+	grid-row: 15/18;
+	grid-column: 4/6;}						
+#imagen17 {
+	grid-row: 16/18;
+	grid-column: 1/4;}
+#imagen18 {
+	grid-row: 18/20;
+	grid-column: 1/4;}
+#imagen19 {
+	grid-row: 18/20;
+	grid-column: 4/6;}
+							
+											
+													
 					
 	
 

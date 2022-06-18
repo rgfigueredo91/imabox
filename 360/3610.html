@@ -24,7 +24,7 @@
 <body>
 
 
-    <p class="logo">.imago</p>
+    <p class="logo">IMABOX</p>
 	<div id="spinner-wrapper">
         <div class="lds-ring">
             <div> </div>
@@ -41,10 +41,10 @@
 
 <script>
     var lookAtPositions = [
-     new THREE.Vector3(-0.39, -1088.07, -9018.41),
+     new THREE.Vector3(100, 0, 0),
 
     ];
-    const panorama = new PANOLENS.ImagePanorama( 'img/3605.jpg' );
+    const panorama = new PANOLENS.ImagePanorama( 'img/3606.jpg' );
     panorama.addEventListener( 'enter-fade-start', function(){
         viewer.tweenControlCenter(lookAtPositions[0],0)
     });

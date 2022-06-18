@@ -13,7 +13,8 @@ document.addEventListener("DOMContentLoaded", function(e){
             pricess: " precios",
             references: " referencias",
             portfolio: " Vis Arq",
-            visualization: " Vis 360",
+            visualization: "360º",
+            animations: "Animaciones",
             rights: " © 2020 Imago Rendering Studio. Todos los derechos reservados.",
             vr: " Ps R.V",
             facebook1: "Hola!, como podemos ayudarte?",
@@ -42,6 +43,7 @@ document.addEventListener("DOMContentLoaded", function(e){
         document.getElementById("360-translate").textContent = language.esp.visualization;
         document.getElementById("rights-reserved").textContent = language.esp.rights;
         document.getElementById("vr-translate").textContent = language.esp.vr;
+        document.getElementById("animation-translate").textContent = language.esp.animations;
         
         
         //phone
@@ -52,6 +54,7 @@ document.addEventListener("DOMContentLoaded", function(e){
         document.getElementById("contact-translate-phone").textContent = language.esp.contact;
         document.getElementById("portfolio-translate-phone").textContent = language.esp.portfolio;
         document.getElementById("360-translate-phone").textContent = language.esp.visualization;
+        document.getElementById("animation-translate-phone").textContent = language.esp.animations;
         document.getElementById("psvr-translate-phone").textContent = language.esp.vr;
 
         //desktop mantener el #eng cuando hago click en los links 
@@ -65,6 +68,7 @@ document.addEventListener("DOMContentLoaded", function(e){
         document.getElementById("portfolio-translate").href = "index.html#esp";
         document.getElementById("360-translate").href = "360.html#esp";
         document.getElementById("vr-translate").href = "vr.html#esp";
+        document.getElementById("animation-translate").href = "animations.html#esp";
 
           //phone mantener el #eng cuando hago click en los links
         document.getElementById("contact-translate-phone").href = "contact.html#esp";
@@ -75,6 +79,8 @@ document.addEventListener("DOMContentLoaded", function(e){
         document.getElementById("portfolio-translate-phone").href = "index.html#esp";
         document.getElementById("360-translate-phone").href = "360.html#esp";
         document.getElementById("psvr-translate-phone").href = "vr.html#esp";
+        document.getElementById("animation-translate-phone").href = "animations.html#esp";
+
         
     }   
 

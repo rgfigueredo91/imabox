@@ -70,33 +70,33 @@
 <!--barra fija arriba desktop-->
 <header class="navbar-noboots" id="navbar-noboots">
 	<div class="wrapper-1">
-		<h1 class="title"><a href="/">imago</h1></a>
+		<h1 class="title"><a href="/">IMABOX</h1></a>
 	</div>
 	<div class="wrapper-2">
 		<ul class="menu">
-			<li class="items"><a href="#" id="link-font">works</a>
+			<li class="items"><a href="#" id="link-font" class="currents">#works ↓</a>
 				<div class="sub-menu1">
 					<ul class="activenavbar">
-						<li class="items dropdown-content "><a href="https://imagouy.com/index.html" id="portfolio-translate" >Arch Viz</a></li>
+						<li class="items dropdown-content "><a href="https://imagouy.com/index.html" class="currents" id="portfolio-translate">Arch Viz</a></li>
 						<li class="items dropdown-content"><a href="https://imagouy.com/360.html" id="360-translate">360º Viz</a></li>
-						<li class="items dropdown-content"><a href="https://imagouy.com/vr.html" id="vr-translate">Ps V.R</a></li>
-				
+						<li class="items dropdown-content"><a href="https://imagouy.com/animations.html" id="animation-translate">Animations</a></li>
+						<li class="items dropdown-content"><a href="https://imagouy.com/vr.html" id="vr-translate">Virtual Reality</a></li>	
 					</ul>
 				</div>
 			</li>
-			<li class="items"><a href="#" id="link-font-about" class="currents" >about us</a>
+			<li class="items"><a href="#" id="link-font-about" >#about us ↓</a>
 				<div class="sub-menu1">
 					<ul class="activenavbar" >
-						<li class="items dropdown-content"><a href="https://imagouy.com/artists.html" id="artist-translate"  class="currents">artists</a></li>
+						<li class="items dropdown-content"><a href="https://imagouy.com/artists.html" id="artist-translate">artists</a></li>
+						<li class="items dropdown-content"><a href="https://imagouy.com/services.html" id="prices-translate">services</a></li>
 						<li class="items dropdown-content"><a href="https://imagouy.com/process.html" id="process-translate">process</a></li>
-						<li class="items dropdown-content"><a href="https://imagouy.com/pricing.html" id="prices-translate">prices</a></li>
-						<li class="items dropdown-content"><a href="https://imagouy.com/reviews.html" id="references-translate">references</a></li>
+						<li class="items dropdown-content"><a href="https://imagouy.com/reviews.html" id="references-translate">clients</a></li>
 					</ul>
 				</div>
 			</li>	
-			<li class="items"><a href="https://imagouy.com/contact.html"  id="contactid">contact</a></li>
+			<li class="items"><a href="https://imagouy.com/contact.html"  id="contactid">#contact</a></li>
 			
-			<li class="items"><a href="#eng" onclick="timedRefresh()">eng <a>|</a></a> <a href="#esp" onclick="timedRefresh()">esp</a></li>	
+			<li class="items"><a href="#eng" onclick="timedRefresh()">eng <a>|</a></a> <a href="#esp" onclick="timedRefresh(), changeChatLanguage()">esp</a></li>	
 		</ul>
 		<ul class="social-menu">
 			<li class="social-icon" id="instagram"><a href="https://www.instagram.com/imago_uy" target="_blank"><i
@@ -113,22 +113,22 @@
 
 		<section class="phonenavbar" id="phonenavbarid">
 
-			<h1 class="titlephone"><a href="/">imago</h1></a>
+			<h1 class="titlephone"><a href="/">IMABOX</h1></a>
 			<input type="checkbox" id="nav-toggle" class="nav-toggle">
 			<nav class="navphone-3">
 				<ul>
-					<li class="currentsphone"><a href="https://imagouy.com/index.html"  id="portfolio-translate-phone">Arch Viz</a></li>
-			
-					<li class="currentsphone"><a href="https://imagouy.com/360.html"  id="360-translate-phone">360º Viz</a></li>
-					<li class="currentsphone"><a href="https://imagouy.com/vr.html" id="psvr-translate-phone">Ps V.R</a></li>
+					<li class="currentsphone"><a href="https://imagouy.com/index.html" id="portfolio-translate-phone" class="currents">Arch Viz</a></li>
+					<li class="currentsphone"><a href="https://imagouy.com/360.html" id="360-translate-phone">360º Viz</a></li>
+					<li class="currentsphone"><a href="https://imagouy.com/animations.html" id="animation-translate-phone">Animations</a></li>
+					<li class="currentsphone"><a href="https://imagouy.com/vr.html" id="psvr-translate-phone">Virtual Reality</a></li>
 					<hr></hr>
-					<li class="currentsphone"><a href="https://imagouy.com/artists.html" id="artist-translate-phone" class="currents">artists</a></li>
+					<li class="currentsphone"><a href="https://imagouy.com/artists.html" id="artist-translate-phone">artists</a></li>
 					<li class="currentsphone"><a href="https://imagouy.com/process.html" id="process-translate-phone">process</a></li>
-					<li class="currentsphone"><a href="https://imagouy.com/pricing.html" id="prices-translate-phone">prices</a></li>
-					<li class="currentsphone"><a href="https://imagouy.com/reviews.html" id="references-translate-phone">references</a></li>
+					<li class="currentsphone"><a href="https://imagouy.com/services.html" id="prices-translate-phone">services</a></li>
+					<li class="currentsphone"><a href="https://imagouy.com/reviews.html" id="references-translate-phone">clients</a></li>
 					<li class="currentsphone"><a href="https://imagouy.com/contact.html" id="contact-translate-phone">contact</a></li>
 					<hr></hr>
-					<li><a href="#eng" onclick="timedRefresh()">eng <a>|</a></a> <a href="#esp" onclick="timedRefresh()">esp</a></li>	
+					<li><a href="#eng" onclick="timedRefresh()">eng <a>|</a></a> <a href="#esp" onclick="timedRefresh(), changeChatLanguage() ">esp</a></li>	
 					<hr></hr>
 				</ul>
 				<ul class="flex-icon">
@@ -165,9 +165,9 @@
 								<img src="img/rodrigo-figueredo.png" alt="Rodrigo Figueredo">
 							</div>
 							<div class="textoyo">
-								<h2>RODRIGO</h2>
+								<h2>RODRIGO FIGUEREDO</h2>
 								<div class="firstchild">
-									<p id="title-translate-artist">FOUNDER - ARCHITECT - 3D ARTIST</p>
+									<p id="title-translate-artist"><b>CO-FOUNDER - ARCHITECT - SR. 3D ARTIST</b></p>
 								</div>
 								<p id="paragraph2-translate">Hi!, i'm an architect and 3D artist graduated from the college of Architecture, Design and Urban planning, Montevideo-Uruguay.  
 									My favorite form of spending time has been connected with art, architecture, technology, painting and phtography which later turned into a passion for creating images and animation in the computer. I have fervor for design and creation.
@@ -180,12 +180,32 @@
 							</div>
 						</div>	
 				</div>
-		</div>
-
+			</div>
+			<div class="autores">
+				<div class="rodrigo">
+						<div class=insidebox>
+							<div class="fotoyo">
+								<img src="img/juan-delgado.png" alt="Rodrigo Figueredo">
+							</div>
+							<div class="textoyo">
+								<h2>JUAN DELGADO</h2>
+								<div class="firstchild">
+									<p id="title-translate-artist"><b>CO-FOUNDER - ARCHITECT - SR. 3D ARTIST</b></p>
+								</div>
+								<p id="paragraph2-translate">Hola soy pobre, me dan laburo?.</p>
+								<ul class="icons">
+									<a href="https://rgf.uy" target="_blank"><i class="fa fa-chain-broken" aria-hidden="true"></i></a>
+									<a href="https://www.linkedin.com/in/rodrigo-figueredo/" target="_blank"><i class="fa fa-linkedin"></i></a>
+								</ul>
+							</div>
+						</div>	
+				</div>
+			</div>
+<!--
 		<div class="top-about2">
 				<h1 id="photos-tittle-translate">Travel photos</h1>
 		</div>
-
+		
 			<div class="photos-artist">
 
 				<div class="box-img"  id="iframe4">
@@ -220,10 +240,10 @@
 					<img  src="img/photos/Colombia3.jpg">
 				</div>
 			</div>
-
+		-->
 			<footer>
 				<hr>
-				<p  id="rights-reserved">&copy; 2021 Imago Rendering Studio. All rights reserved</p>
+				<p  id="rights-reserved">&copy; 2022 Imabox "Unboxing Possible Futures". All rights reserved</p>
 			</footer>
 
 		<script>

@@ -39,10 +39,12 @@ let lastScrollTop2 = 100;
 			})
 
 	
-			
-			const faders = document.querySelectorAll(".fade-in");
-	
+			function waitingForAnimation(){
+				alert("We are still working on this part of the website")
+			}
 
+
+			const faders = document.querySelectorAll(".fade-in");
 			setTimeout(function(){
 				faders[0].classList.remove("fade-in");
 				faders[0].classList.add("appear");
