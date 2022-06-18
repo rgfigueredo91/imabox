@@ -16,7 +16,7 @@
 
 .buttons-students button{
 	cursor: pointer;
-	background-color: #ff0066;
+	background-color: #1cb5f1;
 	border: 1px solid;
 	width: 10%;
 	height: 40px;
@@ -52,7 +52,7 @@
 
 .stages h2 {
 	margin-top: 40px;
-	color: #ff0066;
+	color: #1cb5f1;
 }
 
 .arrow img{
@@ -95,7 +95,7 @@ footer{
 .buttons-students button{
 	color: white;
 	cursor: pointer;
-	background-color: #ff0066;
+	background-color: #1cb5f1;
 	border: 1px solid;
 	width: 15%;
 	height: 40px;
@@ -126,7 +126,7 @@ footer{
 	  .buttons-students button{
 		color: white;
 	cursor: pointer;
-	background-color: #ff0066;
+	background-color: #1cb5f1;
 	border: 1px solid;
 	width: 40%;
 	height: 40px;

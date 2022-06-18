@@ -33,7 +33,7 @@
 	font-size: 1.2rem;
 	margin-top: 20px;
 	
-	color: white;
+	color: black;
 
 }
 
@@ -53,13 +53,13 @@ blockquote {
 		content: open-quote;
 		font-weight: bold;
 		font-size:50px;
-		color:#ff0066;
+		color:black;
 	} 
 	blockquote p:after { 
 		content: close-quote;
 		font-weight: bold;
 		font-size:50px;
-		color:#ff0066;
+		color:black;
 	}
 
 .clients {
@@ -86,7 +86,7 @@ blockquote {
 	height: auto;
 }
 .comments-1 a{
-	color: #ff0066;
+	color: #1cb5f1;
 	text-decoration: none;
 
 }
@@ -95,8 +95,7 @@ blockquote {
  .slideshow-container{
 
 	 margin-top: 50px;
-	 background: rgb(65,63,88);
-	 background: radial-gradient(circle at 50% 70%, rgb(55, 53, 75) 2%, rgba(15,21,22,1) 100%);
+
  }
   /* Slides */
   .mySlides {
@@ -113,7 +112,7 @@ blockquote {
 	width: auto;
 	margin-top: -30px;
 	padding: 16px;
-	color: white;
+	color: #1cb5f1;
 	font-weight: bold;
 	font-size: 30px;
 	border-radius: 0 3px 3px 0;
@@ -147,7 +146,7 @@ blockquote {
 	height: 15px;
 	width: 15px;
 	margin: 0 2px;
-	background-color: #bbb;
+	background-color: #1cb5f1;
 	border-radius: 50%;
 	display: inline-block;
 	transition: background-color 0.6s ease;
@@ -155,7 +154,7 @@ blockquote {
   
   /* Add a background color to the active dot/circle */
   .active, .dot:hover {
-	background-color: #717171;
+	background-color: black;
   }
   
 footer{
