@@ -8,24 +8,99 @@
 
 
 <url>
-  <loc>https://imagouy.com/</loc>
-  <lastmod>2020-04-14T01:01:03+00:00</lastmod>
+  <loc>https://imabox.uy/</loc>
+  <lastmod>2022-06-19T14:51:01+00:00</lastmod>
   <priority>1.00</priority>
 </url>
 <url>
-  <loc>https://imagouy.com/about.html</loc>
-  <lastmod>2020-04-14T01:01:03+00:00</lastmod>
+  <loc>https://imabox.uy/index.html</loc>
+  <lastmod>2022-06-19T14:51:01+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://imagouy.com/360.html</loc>
-  <lastmod>2020-04-14T01:01:03+00:00</lastmod>
+  <loc>https://imabox.uy/360.html</loc>
+  <lastmod>2022-06-19T14:51:00+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://imagouy.com/contact.html</loc>
-  <lastmod>2020-04-14T01:01:03+00:00</lastmod>
+  <loc>https://imabox.uy/vr.html</loc>
+  <lastmod>2022-06-19T14:51:03+00:00</lastmod>
   <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://imabox.uy/artists.html</loc>
+  <lastmod>2022-06-19T14:51:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://imabox.uy/services.html</loc>
+  <lastmod>2022-06-19T14:51:03+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://imabox.uy/process.html</loc>
+  <lastmod>2022-06-19T14:51:01+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://imabox.uy/book.html</loc>
+  <lastmod>2022-06-19T14:51:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://imabox.uy/reviews.html</loc>
+  <lastmod>2022-06-19T14:51:03+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://imabox.uy/contact.html</loc>
+  <lastmod>2022-06-19T14:51:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://imabox.uy/360/3602.html</loc>
+  <lastmod>2022-06-19T14:51:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://imabox.uy/360/3603.html</loc>
+  <lastmod>2022-06-19T14:51:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://imabox.uy/360/3606.html</loc>
+  <lastmod>2022-06-19T14:51:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://imabox.uy/360/3605.html</loc>
+  <lastmod>2022-06-19T14:51:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://imabox.uy/360/3619.html</loc>
+  <lastmod>2022-06-19T14:51:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://imabox.uy/360/3601.html</loc>
+  <lastmod>2022-06-19T14:51:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://imabox.uy/360/3609.html</loc>
+  <lastmod>2022-06-19T14:51:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://imabox.uy/360/3610.html</loc>
+  <lastmod>2022-06-19T14:51:00+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://imabox.uy/maps.html</loc>
+  <lastmod>2022-06-19T14:51:01+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 
 
