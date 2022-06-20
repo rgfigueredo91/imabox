@@ -53,6 +53,10 @@
 	
 }
 
+.firstchild p{
+	margin-top: 30px;
+	text-align: center;
+}
 .top-about2{
 	margin-top: 100px;
 	width: 100%;
@@ -61,22 +65,62 @@
 
 .autores {
 	position: relative;
-	margin-top: 0px;
-	display: flex;
-	flex-direction: column;
+	margin-top: 150px;
+	
 	width: 100%;
 	justify-content: space-between;
 }
+
+
 .insidebox{
+	background-color: rgb(238, 238, 238);
 	width: 100%;
 	display: flex;
-	justify-content: space-around;	
+	flex-direction: row;
+	justify-content: space-between;	
+}
+
+.insidebox img{
+	width: auto;
+	
+}
+
+.insidebox2 img{
+	
+	width: auto;
+	
+}
+.insidebox2{
+	margin-top: 1vh;
+	background-color: rgb(238, 238, 238);
+	width: 100%;
+	display: flex;
+	flex-direction: row-reverse;
+	justify-content: space-between;		
 }
 .fotoyo{
-	margin-left: 10%;
+	width: 30%;
+	height: auto;
+	
+}
+
+.textoyo {
+	margin-top: 4%;
+	width: 50%;
+	margin-right: 20vh;
+	text-align: center;
+
+}
+
+.textoyo2 {
+	margin-top: 4%;
+	width: 50%;
+	margin-left: 20vh;
+	text-align: center;
 }
 
 .fotoyo img{
+	width: 20vh;
 	margin-top: 30%;
 }
 svg {
@@ -89,13 +133,28 @@ svg {
 	fill: #ccc;
 	stroke: #999;
 }
-.textoyo {
-	width: 100%;
-	margin-top: 5%;
-	margin-left: 20%;
+
+
+
+
+.textoyo p{
+	
+	margin-top: 20px;
 }
 
+.textoyo2 p{
+	
+	margin-top: 20px;
+}
+
+
 .textoyo h2{
+	text-align: center;
+	color: #1cb5f1;
+}
+
+.textoyo2 h2{
+	text-align: center;
 	color: #1cb5f1;
 }
 .top-about{
@@ -103,6 +162,13 @@ svg {
 	width: 100%;
 	text-align: center;
 }
+
+.bottom-about{
+	margin-top: 50px;
+	width: 100%;
+	text-align: center;
+}
+
 .top-about h1{
 	margin-top: 50px;
 }
@@ -112,19 +178,15 @@ svg {
 	width: 50%;
 	text-align: justify;
 }
-.rodrigo {
-	display: flex;
-	height: auto;
-	width: 100%;
-	
+
+.bottom-about p{
+	margin-top: 40px;
+	margin-left: 25%;
+	width: 50%;
+	text-align: justify;
 }
 
-.juan {
-	display: flex;
-	height: auto;
-	width: 100%;
-	
-}
+
 
 
 
@@ -144,43 +206,10 @@ svg {
 .icons i:hover {
 	transform: scale(1.2);
 }
-.rodrigo p{
-	min-width: 200px;
-	width:50%;
-	position: relative;
-	margin-top: 30px;
-	color: black;
-	font-size: 15px;
-	font-weight: .2px;
-	text-align: justify;
-}
-
-.juan p{
-	min-width: 200px;
-	width:50%;
-	position: relative;
-	margin-top: 30px;
-	color: black;
-	font-size: 15px;
-	font-weight: .2px;
-	text-align: justify;
-}
-.rodrigo h2{
-	letter-spacing: 4px;
-	margin-top: 20px;
-	
-	font-weight: 1px;
-	text-align: justify;
-}
 
 
-.juan h2{
-	letter-spacing: 4px;
-	margin-top: 20px;
-	
-	font-weight: 1px;
-	text-align: justify;
-}
+
+
 /*--tablet responsive--*/
 
 /*--mobile responsive--*/
@@ -227,8 +256,14 @@ svg {
 	width: 100%;
 	margin-top: 5%;
 	margin-left: 0%;
-	text-align: center;
-	align-items: center;
+	
+}
+
+.textoyo2 {
+	width: 100%;
+	margin-top: 5%;
+	margin-left: 0%;
+
 }
 
 .textoyo h2{
@@ -236,6 +271,16 @@ svg {
 	width: 100%;
 }
 .textoyo p{
+	width:80%;
+	
+	margin-left: 10%;
+}
+
+.textoyo2 h2{
+	text-align: center;
+	width: 100%;
+}
+.textoyo2 p{
 	width:80%;
 	
 	margin-left: 10%;

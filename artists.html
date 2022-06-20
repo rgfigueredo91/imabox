@@ -54,24 +54,24 @@
 	</div>
 	<div class="wrapper-2">
 		<ul class="menu">
-			<li class="items"><a href="#" id="link-font" class="currents">#works ↓</a>
+			<li class="items"><a href="#" id="link-font" >#works ↓</a>
 				<div class="sub-menu1">
 					<ul class="activenavbar">
-						<li class="items dropdown-content "><a href="https://imabox.uy/index.html" class="currents" id="portfolio-translate">Arch Viz</a></li>
-						<li class="items dropdown-content"><a href="#" id="animation-translate" onclick="waitingForAnimation()">Animations</a></li>
-						<li class="items dropdown-content"><a href="https://imabox.uy/360.html" id="360-translate">360º</a></li>
+						<li class="items dropdown-content "><a href="https://imabox.uy/index.html"  id="portfolio-translate">Arch Viz</a></li>
+						<li class="items dropdown-content"><a href="https://imabox.uy/360.html" id="360-translate" >360º</a></li>
 						<li class="items dropdown-content"><a href="https://imabox.uy/vr.html" id="vr-translate">Virtual Reality</a></li>	
+						<li class="items dropdown-content"><a href="#" id="animation-translate" onclick="waitingForAnimation()">Animations</a></li>
 					</ul>
 				</div>
 			</li>
-			<li class="items"><a href="#" id="link-font-about" >#about us ↓</a>
+			<li class="items"><a href="#" id="link-font-about" class="currents">#about us ↓</a>
 				<div class="sub-menu1">
 					<ul class="activenavbar" >
-						<li class="items dropdown-content"><a href="https://imabox.uy/artists.html" id="artist-translate">artists</a></li>
+						<li class="items dropdown-content"><a href="https://imabox.uy/artists.html" id="artist-translate" class="currents">artists</a></li>
 						<li class="items dropdown-content"><a href="https://imabox.uy/services.html" id="prices-translate">services</a></li>
 						<li class="items dropdown-content"><a href="https://imabox.uy/process.html" id="process-translate">process</a></li>
-						<li class="items dropdown-content"><a href="https://imabox.uy/book.html" id="process-translate">book</a></li>
-						<li class="items dropdown-content"><a href="https://imabox.uy/reviews.html" id="references-translate">clients</a></li>
+						<!--<li class="items dropdown-content"><a href="https://imabox.uy/book.html" id="process-translate">book</a></li>
+						<li class="items dropdown-content"><a href="https://imabox.uy/reviews.html" id="references-translate">clients</a></li>-->
 					</ul>
 				</div>
 			</li>	
@@ -98,16 +98,16 @@
 			<input type="checkbox" id="nav-toggle" class="nav-toggle">
 			<nav class="navphone-3">
 				<ul>
-					<li class="currentsphone"><a href="https://imabox.uy/index.html" id="portfolio-translate-phone" class="currents">Arch Viz</a></li>
+					<li class="currentsphone"><a href="https://imabox.uy/index.html" id="portfolio-translate-phone" >Arch Viz</a></li>
 					<li class="currentsphone"><a href="#" id="animation-translate-phone" onclick="waitingForAnimation()">Animations</a></li>
-					<li class="currentsphone"><a href="https://imabox.uy/360.html" id="360-translate-phone">360º</a></li>
+					<li class="currentsphone"><a href="https://imabox.uy/360.html" id="360-translate-phone" >360º</a></li>
 					<li class="currentsphone"><a href="https://imabox.uy/vr.html" id="psvr-translate-phone">Virtual Reality</a></li>
 					<hr></hr>
-					<li class="currentsphone"><a href="https://imabox.uy/artists.html" id="artist-translate-phone">artists</a></li>
+					<li class="currentsphone"><a href="https://imabox.uy/artists.html" id="artist-translate-phone" class="currents">artists</a></li>
 					<li class="currentsphone"><a href="https://imabox.uy/services.html" id="prices-translate-phone">services</a></li>
 					<li class="currentsphone"><a href="https://imabox.uy/process.html" id="process-translate-phone">process</a></li>
-					<li class="currentsphone"><a href="https://imabox.uy/book.html" id="book-translate-phone">book</a></li>
-					<li class="currentsphone"><a href="https://imabox.uy/reviews.html" id="references-translate-phone">clients</a></li>
+					<!--<li class="currentsphone"><a href="https://imabox.uy/book.html" id="book-translate-phone">book</a></li>
+					<li class="currentsphone"><a href="https://imabox.uy/reviews.html" id="references-translate-phone">clients</a></li>-->
 					<li class="currentsphone"><a href="https://imabox.uy/contact.html" id="contact-translate-phone">contact</a></li>
 					<hr></hr>
 					<li><a href="#eng" onclick="timedRefresh()">eng <a>|</a></a> <a href="#esp" onclick="timedRefresh(), changeChatLanguage() ">esp</a></li>	
@@ -128,8 +128,10 @@
 
 			<div class="top-about">
 				<h1 id="title-translate">Let's get to know each other</h1>
-				<p id="paragraph-translate">Numerous journeys and extensive experience gained all over the world, have shaped our view of the architecture, gave a huge a dose of inspiration and driven us to action.
-					We founded Imago Rendering Studio with passion for evoking emotions and creating value.</p>
+				<p id="paragraph-translate">Our small studio is located in Montevideo, Uruguay; the city where we grew up. Numerous journeys and extensive experience gained all over the world, have shaped our view of the architecture, gave a huge a dose of inspiration and driven us to action.
+					We founded <b style="color:#1cb5f1">IMABOX</b> with passion for evoking emotions and creating value. We are specialized in developing Architectural Renderings, 3D Architecture, Computer Graphics Images (CGIs) 
+					and any kind of Architectural Visualization in the field of architecture, urban planning and landscaping.
+					</p>
 					<h1 id="title2-translate">Our journey</h1>
 			</div>
 		
@@ -140,42 +142,41 @@
 
 
 
+
 			<div class="autores">
-				<div class="rodrigo">
+			
 						<div class=insidebox>
-							<div class="fotoyo">
+						
 								<img src="img/rodrigo-figueredo.png" alt="Rodrigo Figueredo">
-							</div>
+						
 							<div class="textoyo">
 								<h2>RODRIGO FIGUEREDO</h2>
 								<div class="firstchild">
 									<p id="title-translate-artist"><b>CO-FOUNDER - ARCHITECT - SR. 3D ARTIST</b></p>
 								</div>
-								<p id="paragraph2-translate">Hi!, i'm an architect and 3D artist graduated from the college of Architecture, Design and Urban planning, Montevideo-Uruguay.  
+								<p id="paragraph2-translate"> 
 									My favorite form of spending time has been connected with art, architecture, technology, painting and phtography which later turned into a passion for creating images and animation in the computer. I have fervor for design and creation.
-									I'm specialized in developing Architectural Renderings, 3D Architecture, graphics designs,  
-									Images, Websites, brochures and everything you will need to improve your sales!.</p>
+									</p>
 								<ul class="icons">
 									<a href="https://rgf.uy" target="_blank"><i class="fa fa-chain-broken" aria-hidden="true"></i></a>
 									<a href="https://www.linkedin.com/in/rodrigo-figueredo/" target="_blank"><i class="fa fa-linkedin"></i></a>
 								</ul>
 							</div>
 						</div>	
-				</div>
-			</div>
-			<div class="autores">
-				<div class="juan">
-						<div class=insidebox>
-							<div class="fotoyo">
+			
+		
+		
+				
+						<div class=insidebox2>
+							
 								<img src="img/juan-delgado.png" alt="Juan Delgado">
-							</div>
-							<div class="textoyo">
+							
+							<div class="textoyo2">
 								<h2>JUAN DELGADO</h2>
 								<div class="firstchild">
 									<p id="title-translate-artist2"><b>CO-FOUNDER - ARCHITECT - SR. 3D ARTIST</b></p>
 								</div>
-								<p id="paragraph3-translate">Hi!, i'm an architect and 3D artist graduated from the college of Architecture, Design and Urban planning, Montevideo-Uruguay.  
-									My favorite form of spending time has been connected with art, architecture, technology, painting and phtography which later turned into a passion for creating images and animation in the computer. I have fervor for design and creation.
+								<p id="paragraph3-translate">
 									I'm specialized in developing Architectural Renderings, 3D Architecture, graphics designs,  
 									Images, Websites, brochures and everything you will need to improve your sales!.</p>
 								<ul class="icons">
@@ -184,7 +185,7 @@
 								</ul>
 							</div>
 						</div>	
-				</div>
+			
 			</div>
 <!--
 		<div class="top-about2">
