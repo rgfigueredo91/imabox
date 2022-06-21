@@ -4,16 +4,21 @@
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="UTF-8" />
-		<title>IMABOX</title>
+		<title>imabox</title>
 		<meta name="description" content="IMABOX was founded in 2018 by Arch. Juan Delgado and Arch. Rodrigo Figueredo. We are a Rendering and 3dart imaging studio based in Montevideo, Uruguay." />
 		<meta name="keywords" content="Imabox - Rendering Visualization Studio" />
 		<meta name="author" content="Rodrigo Figueredo" />
 		<meta name="viewport" content="=width=device-width, initial-scale=1.0, user-scalable=no"/>
 		<meta property="og:type" content="website" />
 		<meta property="og:title" content="Imabox Rendering Studio" />
-		<!--<meta name="google-site-verification" content="E0SpeRDXnyyyYe_az7hMb6PirOHIawPyVZi6EA_HKSc" />-->
+	
 		<meta property="og:description" content="IMABOX was founded in 2018 by Arch. Juan Delgado and Arch. Rodrigo Figueredo. We are a Rendering and 3dart imaging studio based in Montevideo, Uruguay." />
 		<meta property="og:url" content="https://imabox.uy" />
+
+		
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
 
 		<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 		<link rel="shortcut icon" type="image/png" href="favicon.png"/>
@@ -45,7 +50,7 @@
 <!--barra fija arriba desktop-->
 <header class="navbar-noboots fade-in" id="navbar-noboots">
 	<div class="wrapper-1">
-		<h1 class="title"><a href="/">IMABOX</h1></a>
+		<h1 class="title"><a href="/">imabox</h1></a>
 	</div>
 	<div class="wrapper-2">
 		<ul class="menu">
@@ -59,16 +64,16 @@
 					</ul>
 				</div>
 			</li>
-			<li class="items"><a href="#" id="link-font-about" >#about us ↓</a>
-				<div class="sub-menu1">
+			<li class="items"><a href="https://imabox.uy/about.html" id="link-font-about" >#about us</a>
+				<!--<div class="sub-menu1">
 					<ul class="activenavbar" >
-						<li class="items dropdown-content"><a href="https://imabox.uy/artists.html" id="artist-translate">artists</a></li>
+						<li class="items dropdown-content"><a href="" id="artist-translate">artists</a></li>
 						<li class="items dropdown-content"><a href="https://imabox.uy/services.html" id="prices-translate">services</a></li>
 						<li class="items dropdown-content"><a href="https://imabox.uy/process.html" id="process-translate">process</a></li>
-						<!--<li class="items dropdown-content"><a href="https://imabox.uy/book.html" id="process-translate">book</a></li>
-						<li class="items dropdown-content"><a href="https://imabox.uy/reviews.html" id="references-translate">clients</a></li>-->
+						<li class="items dropdown-content"><a href="https://imabox.uy/book.html" id="process-translate">book</a></li>
+						<li class="items dropdown-content"><a href="https://imabox.uy/reviews.html" id="references-translate">clients</a></li>
 					</ul>
-				</div>
+				</div>-->
 			</li>	
 			<li class="items"><a href="https://imabox.uy/contact.html"  id="contactid">#contact</a></li>
 			
@@ -89,7 +94,7 @@
 
 		<section class="phonenavbar" id="phonenavbarid">
 
-			<h1 class="titlephone"><a href="/">IMABOX</h1></a>
+			<h1 class="titlephone"><a href="/">imabox</h1></a>
 			<input type="checkbox" id="nav-toggle" class="nav-toggle">
 			<nav class="navphone-3">
 				<ul>
@@ -98,10 +103,10 @@
 					<li class="currentsphone"><a href="https://imabox.uy/360.html" id="360-translate-phone" class="currents">360º</a></li>
 					<li class="currentsphone"><a href="https://imabox.uy/vr.html" id="psvr-translate-phone">Virtual Reality</a></li>
 					<hr></hr>
-					<li class="currentsphone"><a href="https://imabox.uy/artists.html" id="artist-translate-phone">artists</a></li>
-					<li class="currentsphone"><a href="https://imabox.uy/services.html" id="prices-translate-phone">services</a></li>
+					<li class="currentsphone"><a href="https://imabox.uy/about.html" id="artist-translate-phone">about us</a></li>
+					<!--<li class="currentsphone"><a href="https://imabox.uy/services.html" id="prices-translate-phone">services</a></li>
 					<li class="currentsphone"><a href="https://imabox.uy/process.html" id="process-translate-phone">process</a></li>
-					<!--<li class="currentsphone"><a href="https://imabox.uy/book.html" id="book-translate-phone">book</a></li>
+					<li class="currentsphone"><a href="https://imabox.uy/book.html" id="book-translate-phone">book</a></li>
 					<li class="currentsphone"><a href="https://imabox.uy/reviews.html" id="references-translate-phone">clients</a></li>-->
 					<li class="currentsphone"><a href="https://imabox.uy/contact.html" id="contact-translate-phone">contact</a></li>
 					<hr></hr>
@@ -238,7 +243,8 @@
 
 	
 		<script src="js/navbarmove.js"></script><!--navbar move-->
-		<script src="js/translate.js"></script><!--navbar move-->
+		<script src="js/indexAppearFunction.js"></script>
+		<script src="js/translate.js"></script>
 
 	</body>
 </html>

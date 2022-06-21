@@ -245,13 +245,14 @@ svg {
 		flex-direction: column-reverse;
 		justify-content: space-around;
 	}
-.fotoyo{
-	margin-left: 0%;
-}
-.fotoyo img{
-	margin-top: 0px;
-	width: 100%;
-}
+
+	.insidebox2{
+		width: 100%;
+		display: flex;
+		flex-direction: column-reverse;
+		justify-content: space-around;
+	}
+
 .textoyo {
 	width: 100%;
 	margin-top: 5%;

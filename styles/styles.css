@@ -1,7 +1,7 @@
 * {
 	margin-top: 0;
 	padding: 0;
-	font-family: century-gothic, sans-serif;
+	font-family: 'Poppins', sans-serif;
 	margin: 0;}
 
 body {
@@ -481,7 +481,7 @@ footer p {
 	font-size: 14px;
 	justify-content: space-between;
 	align-self: center;
-	width: 40%;
+	width: 65%;
 	letter-spacing: 1px;}
 
 .hes-gallery {
@@ -511,12 +511,12 @@ footer p {
 
 * {
 	
-	font-family: century-gothic, sans-serif;}
+	font-family: 'Poppins', sans-serif;}
 	.currentsphone .currents {
 		color:#1cb5f1;;
 	}
 .titlephone {
-	margin-top: 5px;
+	margin-top: 0px;
 	font-size: 50px;
 	text-align: left;
 	margin-left: 15px;
