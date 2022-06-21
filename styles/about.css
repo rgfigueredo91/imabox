@@ -212,6 +212,7 @@ svg {
 
 /*--tablet responsive--*/
 
+
 /*--mobile responsive--*/
 
 @media only screen and (max-width: 1200px) {
@@ -252,6 +253,18 @@ svg {
 		flex-direction: column-reverse;
 		justify-content: space-around;
 	}
+
+.insidebox img {
+	margin-left: 25%;
+	width: 50%;
+	height: auto;
+}
+
+.insidebox2 img {
+	margin-left: 25%;
+	width: 50%;
+	height: auto;
+}
 
 .textoyo {
 	width: 100%;
