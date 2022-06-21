@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", function(e){
             works: "#trabajos ↓",
             about: "#nosotros",
             contact: "#contacto",
+            contactphone: "contacto",
             portfolio: "Vis Arq",
             visualization: "360º",
             animations: "Animaciones",
@@ -34,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function(e){
         
         
         //phone
-        document.getElementById("contact-translate-phone").textContent = language.esp.contact;
+        document.getElementById("contact-translate-phone").textContent = language.esp.contactphone;
         document.getElementById("portfolio-translate-phone").textContent = language.esp.portfolio;
         document.getElementById("360-translate-phone").textContent = language.esp.visualization;
         document.getElementById("animation-translate-phone").textContent = language.esp.animations;
