@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", function(e){
         esp: {
             works: "#trabajos ↓",
             about: "#nosotros",
+            aboutPhone: "nosotros",
             contact: "#contacto",
             contactphone: "contacto",
             portfolio: "Vis Arq",
@@ -40,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function(e){
         document.getElementById("360-translate-phone").textContent = language.esp.visualization;
         document.getElementById("animation-translate-phone").textContent = language.esp.animations;
         document.getElementById("psvr-translate-phone").textContent = language.esp.vr;
-        document.getElementById("artist-translate-phone").textContent = language.esp.about;
+        document.getElementById("artist-translate-phone").textContent = language.esp.aboutPhone;
 
         //desktop mantener el #eng cuando hago click en los links 
 
