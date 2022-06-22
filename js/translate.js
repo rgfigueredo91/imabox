@@ -40,6 +40,7 @@ document.addEventListener("DOMContentLoaded", function(e){
         document.getElementById("360-translate-phone").textContent = language.esp.visualization;
         document.getElementById("animation-translate-phone").textContent = language.esp.animations;
         document.getElementById("psvr-translate-phone").textContent = language.esp.vr;
+        document.getElementById("artist-translate-phone").textContent = language.esp.about;
 
         //desktop mantener el #eng cuando hago click en los links 
 
