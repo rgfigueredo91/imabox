@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function(e){
             title2: " Nuestro viaje",
             title3: " FUNDADOR - ARQUITECTO - ARTISTA 3D",
             paragraph2: "Mi forma de pasar el tiempo siempre fue estar conectado con el arte, la arquitectura, la pintura, la tecnología y la fotografía. Transformándose luego en una pasión por crear imágenes y animaciones en la computadora. Tengo fervor por el diseño y la creación."  ,   
-            phototittle: " Fotos de viaje",
+            
 
         }
     };
@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function(e){
         document.getElementById("title2-translate").textContent = language.esp.title2;
         document.getElementById("title-translate-artist").textContent = language.esp.title3;
         document.getElementById("paragraph2-translate").textContent = language.esp.paragraph2;
-        document.getElementById("photos-tittle-translate").textContent = language.esp.phototittle;
+     
 
         
         

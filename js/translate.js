@@ -51,15 +51,16 @@ document.addEventListener("DOMContentLoaded", function(e){
         document.getElementById("portfolio-translate").href = "index.html#esp";
         document.getElementById("360-translate").href = "360.html#esp";
         document.getElementById("vr-translate").href = "vr.html#esp";
-        document.getElementById("animation-translate").href = "animations.html#esp";
+        //document.getElementById("animation-translate").href = "animations.html#esp";
 
           //phone mantener el #eng cuando hago click en los links
       
         document.getElementById("artist-translate-phone").href = "about.html#esp";
+        document.getElementById("contact-translate-phone").href = "contact.html#esp";
         document.getElementById("portfolio-translate-phone").href = "index.html#esp";
         document.getElementById("360-translate-phone").href = "360.html#esp";
         document.getElementById("psvr-translate-phone").href = "vr.html#esp";
-        document.getElementById("animation-translate-phone").href = "animations.html#esp";
+       // document.getElementById("animation-translate-phone").href = "animations.html#esp";
 
         
     }   
