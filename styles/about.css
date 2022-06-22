@@ -38,6 +38,32 @@
 	
 }
 
+.buttons-students{
+	margin-top: 100px;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	
+}
+
+.buttons-students a{
+	cursor: auto;
+
+
+	
+}
+
+
+.buttons-students button{
+	margin-left: 45%;
+	color: white;
+	cursor: pointer;
+	background-color: #1cb5f1;
+	border: none;
+	width: 10%;
+	height: 40px;
+}
+
 .box-img img:hover{
 	height:auto;
 	width: 100%;
@@ -217,7 +243,17 @@ svg {
 
 @media only screen and (max-width: 1200px) {
 
+	.buttons-students button{
+		margin-left: 40%;
+	color: white;
+	cursor: pointer;
+	background-color: #1cb5f1;
+	border: none;
+	width: 15%;
+	height: 40px;
+	
 
+}
 
 	.photos-artist {
 	
