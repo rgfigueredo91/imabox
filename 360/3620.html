@@ -41,10 +41,10 @@
 
 <script>
     var lookAtPositions = [
-     new THREE.Vector3(-90, 0, 0),
+     new THREE.Vector3(.4, 0, 0),
 
     ];
-    const panorama = new PANOLENS.ImagePanorama( 'img/3611.jpg' );
+    const panorama = new PANOLENS.ImagePanorama( 'img/3612.jpg' );
     panorama.addEventListener( 'enter-fade-start', function(){
         viewer.tweenControlCenter(lookAtPositions[0],0)
     });
