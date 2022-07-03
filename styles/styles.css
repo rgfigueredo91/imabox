@@ -456,8 +456,25 @@ font-weight: bold;
 		grid-row: 20/22;
 		grid-column: 3/6;}
 									
+#imagen22 {
+		grid-row: 22/24;
+		grid-column: 1/4;}
+#imagen23 {
+		grid-row: 22/24;
+		grid-column: 4/6;}
+		
+#imagen24 {
+		grid-row: 24/26;
+		grid-column: 1/4;}
+
+#imagen25 {
+		grid-row: 24/27;
+		grid-column: 4/6;}
+	
+#imagen26 {
+		grid-row: 26/27;
+		grid-column: 1/4;}
 								
-									
 											
 													
 					
