@@ -1,7 +1,3 @@
-
-
-
-
 document.addEventListener("DOMContentLoaded", function(e){
     let language = {
         esp: {
@@ -12,13 +8,14 @@ document.addEventListener("DOMContentLoaded", function(e){
             contactphone: "contacto",
             portfolio: "Vis Arq",
             visualization: "360º",
-            animations: "Animaciones",
             rights: `© 2022 Imabox "Unboxing Possible Futures". Todos los derechos reservados`,
             vr: " Ps R.V",
 
         }
     };
+    
     //define language via window hash
+
     if (window.location.hash === "#esp") {
 
 
@@ -32,14 +29,13 @@ document.addEventListener("DOMContentLoaded", function(e){
         document.getElementById("360-translate").textContent = language.esp.visualization;
         document.getElementById("rights-reserved").textContent = language.esp.rights;
         document.getElementById("vr-translate").textContent = language.esp.vr;
-        document.getElementById("animation-translate").textContent = language.esp.animations;
+    
         
         
         //phone
         document.getElementById("contact-translate-phone").textContent = language.esp.contactphone;
         document.getElementById("portfolio-translate-phone").textContent = language.esp.portfolio;
         document.getElementById("360-translate-phone").textContent = language.esp.visualization;
-        document.getElementById("animation-translate-phone").textContent = language.esp.animations;
         document.getElementById("psvr-translate-phone").textContent = language.esp.vr;
         document.getElementById("artist-translate-phone").textContent = language.esp.aboutPhone;
 
@@ -51,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function(e){
         document.getElementById("portfolio-translate").href = "index.html#esp";
         document.getElementById("360-translate").href = "360.html#esp";
         document.getElementById("vr-translate").href = "vr.html#esp";
-        //document.getElementById("animation-translate").href = "animations.html#esp";
+  
 
           //phone mantener el #eng cuando hago click en los links
       
@@ -60,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function(e){
         document.getElementById("portfolio-translate-phone").href = "index.html#esp";
         document.getElementById("360-translate-phone").href = "360.html#esp";
         document.getElementById("psvr-translate-phone").href = "vr.html#esp";
-       // document.getElementById("animation-translate-phone").href = "animations.html#esp";
+      
 
         
     }   
