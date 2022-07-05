@@ -134,14 +134,15 @@ font-weight: bold;
 .title {
 	width: 100%;
 	letter-spacing: 1px;
-	font-size: 65px;
+	font-size: 50px;
 	align-self: center;
 	font-weight: bold;	
 	cursor: pointer;
-	margin-bottom: 20px;
+	margin-top: 15px;
 }
 .title a{
-	letter-spacing: 1rem;
+	
+	letter-spacing: .3rem;
 	text-decoration: none;
 	color: black;
 }
@@ -191,7 +192,7 @@ font-weight: bold;
 	width: 40%;
 	letter-spacing: 1px;
 
-	margin-top: 0px;
+	margin-top: 25px;
 	margin-right: 0;
 }
 
@@ -331,6 +332,10 @@ font-weight: bold;
     -webkit-user-select: none;
 	user-select: none;
 	transition: all 1s;
+}
+
+.img img:hover{
+	-webkit-filter: opacity(.7);
 }
 	
 
@@ -550,7 +555,7 @@ footer p {
 .hes-gallery {
 
 	left: 1vh;
-	margin-top: 160px;
+	margin-top: 0px;
 	position: relative;
 	height: 100%;
 	width: 99.1%;
