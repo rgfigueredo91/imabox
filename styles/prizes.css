@@ -1,0 +1,25 @@
+.box-img-prizes {
+    
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around
+    
+    
+}
+
+.box-img-prizes img{
+    margin-left: 40%;
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around
+
+}
+
+.alignbox {
+    margin-top: 50px;
+    justify-items: center;
+    text-align: center;
+}
+
