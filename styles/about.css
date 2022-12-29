@@ -176,12 +176,12 @@ svg {
 
 .textoyo h2{
 	text-align: center;
-	color: #1cb5f1;
+	color: #f01f50;
 }
 
 .textoyo2 h2{
 	text-align: center;
-	color: #1cb5f1;
+	color: #f01f50;
 }
 .top-about{
 	margin-top: 250px;
@@ -244,7 +244,7 @@ svg {
 		margin-left: 35%;
 	color: white;
 	cursor: pointer;
-	background-color: #1cb5f1;
+	background-color: #f01f50;
 	border: none;
 	width: 30%;
 	height: 40px;
@@ -457,7 +457,7 @@ svg {
 			margin-left: 25%;
 			color: white;
 			cursor: pointer;
-			background-color: #1cb5f1;
+			background-color: #f01f50;
 			border: none;
 			width: 50%;
 			height: 40px;

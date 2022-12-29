@@ -16,7 +16,7 @@
 
 .buttons-students button{
 	cursor: pointer;
-	background-color: #1cb5f1;
+	background-color: #f01f50;
 	border: 1px solid;
 	width: 10%;
 	height: 40px;
@@ -95,7 +95,7 @@ footer{
 .buttons-students button{
 	color: white;
 	cursor: pointer;
-	background-color: #1cb5f1;
+	background-color: #f01f50;
 	border: 1px solid;
 	width: 15%;
 	height: 40px;
@@ -126,7 +126,7 @@ footer{
 	  .buttons-students button{
 		color: white;
 	cursor: pointer;
-	background-color: #1cb5f1;
+	background-color: #f01f50;
 	border: 1px solid;
 	width: 40%;
 	height: 40px;

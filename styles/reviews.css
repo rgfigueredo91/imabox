@@ -86,7 +86,7 @@ blockquote {
 	height: auto;
 }
 .comments-1 a{
-	color: #1cb5f1;
+	color: #f01f50;
 	text-decoration: none;
 
 }
@@ -112,7 +112,7 @@ blockquote {
 	width: auto;
 	margin-top: -30px;
 	padding: 16px;
-	color: #1cb5f1;
+	color: #f01f50;
 	font-weight: bold;
 	font-size: 30px;
 	border-radius: 0 3px 3px 0;
@@ -146,7 +146,7 @@ blockquote {
 	height: 15px;
 	width: 15px;
 	margin: 0 2px;
-	background-color: #1cb5f1;
+	background-color: #f01f50;
 	border-radius: 50%;
 	display: inline-block;
 	transition: background-color 0.6s ease;
@@ -219,13 +219,13 @@ footer{
 			content: open-quote;
 			font-weight: bold;
 			font-size:25px;
-			color:#ff0066;
+			color:#f01f50;
 		} 
 		blockquote p:after { 
 			content: close-quote;
 			font-weight: bold;
 			font-size:25px;
-			color:#ff0066;
+			color:#f01f50;
 		}
 	.comments-1{
 		margin-left: 18%;
