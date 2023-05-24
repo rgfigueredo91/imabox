@@ -208,8 +208,12 @@ font-weight: bold;
 	width: 100%
 }
 
+#removeidtitle {
+	opacity: 0;
+}
+
 .wrapper-2 .remove-title h1 {
-	opacity: 100;
+
 	margin-left: 30px;
 	margin-top: 25px;
 }
