@@ -129,13 +129,24 @@
 
 	
 		<div class="supervideo">
-			<video class="videoloch" autoplay loop >
+			<video class="videoloch" id="videoElementId" autoplay loop muted>
 				<source src="animations/vfinal.mp4" type="video/mp4">
 			</video>
 		</div>
 </section>
 	
+		<script>
+			window.addEventListener('load', function(){
+				let newVideo = document.getElementById('videoElementId');
+				newVideo.addEventListener('ended', function() {
+					this.currentTime = 0;
+					this.play();
+				}, false);
 
+    		newVideo.play();
+
+});
+		</script>
 		
 
 		<script src="js/yall.min.js"></script>
