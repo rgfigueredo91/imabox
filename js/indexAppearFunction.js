@@ -4,5 +4,5 @@ const faders = document.querySelectorAll(".fade-in");
 				faders[0].classList.add("appear");
 				console.log(faders)
 			
-			}, 1000);
+			}, 3500);
 			
