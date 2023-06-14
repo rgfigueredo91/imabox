@@ -7,7 +7,7 @@ let lastScrollTop = 100;
 					.documentElement.scrollTop;
 					
 				if (scrollTop > lastScrollTop) {
-					navbar.style.background = "white";	
+					navbar.style.background = "black";	
 				} 
 				else {
 					navbar.style.background = "none";

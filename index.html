@@ -102,9 +102,24 @@
 			</div>
 
 		<!--fin barra fija arriba telefono navbar-->
-			<section>
+			<section id="section1">
 				<div class="supervideo">
 					<video class="videoloch" id="videoElementId" autoplay loop muted playsinline src="https://imabox.uy/animations/presentation.mp4" type="video/mp4" poster="placeholder.png"></video>
+				</div>
+			</section>
+
+			<section id="section2" class="sectiondos">
+				<div class="textandimage">
+					<div class="textandimagediv">
+						<p>Imabox is a skilled architecture visualization studio that specializes in photography, graphic design, and audiovisual work.
+							 We excel at capturing the beauty of architectural imagery through our expertise in geometry, texture, and lighting. 
+							Our goal is to create distinctive visual experiences that showcase the strengths of each project.
+
+						</p>
+
+					</div>
+
+					<div></div>
 				</div>
 			</section>
 			<script>
@@ -131,6 +146,27 @@
 				;( function( $ ) {
 					$( '.swipebox' ).swipebox();
 				} )( jQuery );
+			</script>
+
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+			<script src="js/snap-scroll.js"></script>
+			<script>
+				var snapScroll = $("header, section, footer").SnapScroll({
+					hashes:true
+				});
+				console.log(snapScroll);
+
+				//Listen for active element change
+				//You could listen globally like $(document)
+				$("header").on(snapScroll.eventChangeActive, function(evt, newActive){
+					console.log(evt, newActive);
+				});
+
+				//Listen for visible element change
+				//You could listen on a specific element like $("header")
+				$(document).on(snapScroll.eventChangeVisible, function(evt, visibleList){
+					console.log(evt, visibleList.data);
+				});
 			</script>
 	</body>
 </html>
