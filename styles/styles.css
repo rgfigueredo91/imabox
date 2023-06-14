@@ -38,8 +38,8 @@ body {
 	display: none;}
 
 .fade-in {
-	opacity: 0;
-	transition: opacity 2000ms ease-in;
+	opacity: 100;
+
 	}
 	  
 .appear {
@@ -53,11 +53,11 @@ body {
 	flex-direction: column;
 	align-items: center;
 	margin: 0;
-	height: 150px;
+	height: 50px;
 	position: fixed;
 	z-index: 9999999;
 	width: 100%;
-	background: none;
+	background: white;
 	justify-content: center;
 	border-bottom: 0px solid #000;
 	border-top: 0px solid #000;
@@ -131,58 +131,12 @@ font-weight: bold;
 
 
 /*--barra fija arriba titulo imago--*/
-.title {
-	width: 100%;
-	letter-spacing: 1px;
-	font-size: 50px;
-	align-self: center;
-	font-weight: bold;	
-	cursor: pointer;
-	margin-top: 15px;
-}
-.title a{
-	
-	letter-spacing: .3rem;
-	text-decoration: none;
-	color: black;
-}
-
-
-.title a:hover{
-	color: #f01f50;
-	
-}
-
-
 
 
 .lazy {
 	filter: blur(10px);
 }
 
-
-
-/*--
-.img .blurry-load{
-	filter: blur(5px);
-	transition: all 4s;
-}
-
-
-
-.img .noblur{
-	cursor: pointer;
-	transition: ease-in .3s;
-}
-
-.img .noblur:hover{
-	cursor: pointer;
-	transition: ease-in .1s;
-	transform: scale(1.005);
-}
--*/
-
-/*--barra fija arriba menu portfolio about 360 contact--*/
 
 .menu {
 	margin-right: 30%;
@@ -191,7 +145,7 @@ font-weight: bold;
 	align-self: center;
 	width: 40%;
 	letter-spacing: 1px;
-	margin-top: 25px;
+	margin-top: 20px;
 	text-align: center;
 }
 
@@ -209,13 +163,14 @@ font-weight: bold;
 }
 
 #removeidtitle {
-	opacity: 0;
+	margin-top: 20px;
+
 }
 
 .wrapper-2 .remove-title h1 {
 
 	margin-left: 30px;
-	margin-top: 25px;
+	
 }
 
 
@@ -246,7 +201,7 @@ font-weight: bold;
 /*--barra fija arriba menu social icon--*/
 
 .social-menu {
-	top: 115px;
+	margin-top: 20px;
 	right: 20px;
 	position: absolute;
 	display: flex;
@@ -292,21 +247,14 @@ font-weight: bold;
 
 
 
-
-/*--parametros generales del cuerpo de supervideo--*/
-
-.supervideo {
-	
-	height: 100vh;
-	width: 100%;
-	
-}
-.videoloch {
-	height: 100vh;
-	object-fit: cover;
-	width: 100%;
-	
-}
+.newtittle a{
+    font-size: 2rem;
+    text-decoration: none;
+    color: black;
+    text-decoration-style: none;
+    list-style-type: none;
+    
+  }
 
 
 
