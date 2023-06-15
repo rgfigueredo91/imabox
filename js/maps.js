@@ -66,7 +66,7 @@ function drawMap(world, data) {
         for (let x = 0; x <= array.length;x++){
             console.log(array[x])
             d3.select(array[x])
-                 .style("fill", "#1cb5f1")
+                 .style("fill", "#f01f50")
                      
         }
         }
