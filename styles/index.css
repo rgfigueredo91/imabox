@@ -258,21 +258,53 @@ font-weight: bold;
     height: 100vh;
 }
 
-.textandimagediv  {
-   
-    width: 50%;
-   
+
+.sectiontres{
+    background-size: cover;
+    background-image: url("../img/cover1index.jpg");
+    height: 100vh;
 }
 
+
+
+.sectioncuatro{
+    background-size: cover;
+    background-image: url("../img/cover2index.jpg");
+    height: 100vh;
+}
+
+.textandimagedivdos  h1{
+ 
+    background-color: red;
+    line-height: 3.5rem;
+    font-size: 1.4rem;
+    width: 100%;
+    color: white;
+}
+
+.textandimagediv  {
+    width: 100%;
+}
+
+#arecoGardens {
+    position:relative;
+    bottom: 0;
+    left: 0;
+
+}
 .textandimagediv  p{
     margin-left: 10%;
-    line-height: 3rem;
+    line-height: 3.5rem;
     text-align: center;
     justify-content: center;
     margin-top: 40vh;
     font-size: 1.4rem;
     width: 80%;
     color: white;
+}
+
+.textandimagediv  h1{
+   
 }
 
 .supervideo {
