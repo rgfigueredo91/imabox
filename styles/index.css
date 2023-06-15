@@ -327,6 +327,15 @@ font-weight: bold;
         display: none;
     }
 
+    
+    .sectiontres{
+        display: none;
+    }
+
+    .sectioncuatro{
+        display: none;
+    }
+
 	.menu {
 		margin-right: 15%;
 		display: flex;
@@ -361,6 +370,14 @@ font-weight: bold;
 
 @media only screen and (max-width: 850px) {
     .sectiondos{
+        display: none;
+    }
+
+    .sectiontres{
+        display: none;
+    }
+
+    .sectioncuatro{
         display: none;
     }
 
