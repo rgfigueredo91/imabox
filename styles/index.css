@@ -259,28 +259,42 @@ font-weight: bold;
 }
 
 
-.sectiontres{
-    background-size: cover;
-    background-image: url("../img/cover1index.jpg");
-    height: 100vh;
-}
-
-
-
-.sectioncuatro{
-    background-size: cover;
-    background-image: url("../img/cover2index.jpg");
-    height: 100vh;
-}
-
-.textandimagedivdos  h1{
- 
-    background-color: red;
-    line-height: 3.5rem;
-    font-size: 1.4rem;
+.image {
     width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .text {
+    position: absolute;
     color: white;
+    font-size: 18px;
+    font-family: Arial, sans-serif;
+    padding: 10px;
+  }
+
+.textandimagedivdos {
+
+    position: relative;
+    width: 100%;
+    height: 100vh;
+ 
+    
 }
+
+.bottom-text {
+    left: 50px;
+    bottom: 4.4%;
+    font-family: 'Times New Roman', Times, serif;
+  }
+
+  .left-text {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 1.5rem;
+    left: 50px;
+    top: 90%;
+    transform: translateY(-50%);
+  }
 
 .textandimagediv  {
     width: 100%;
@@ -303,9 +317,6 @@ font-weight: bold;
     color: white;
 }
 
-.textandimagediv  h1{
-   
-}
 
 .supervideo {
     height: 100vh;
