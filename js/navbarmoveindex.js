@@ -18,18 +18,23 @@
 			*/
 
 const hamburger = document.querySelector(".div-bar")
-const navMenu = document.querySelector(".nav-menu")
-const navMenuDos = document.querySelector(".nav-menuDos")
+const navMenu = document.querySelector(".nav-text")
+const topNavBar = document.querySelector(".top-navbar")
+const navBranding = document.querySelector(".nav-branding")
 
 hamburger.addEventListener("click", () => {
 	hamburger.classList.toggle("active")
 	navMenu.classList.toggle("active")
-	navMenuDos.classList.toggle("active")
+	topNavBar.classList.toggle("active")
+	navBranding.classList.toggle("active")
+
 })
 
 document.querySelectorAll(".nav-link").forEach(n => n.
 	addEventListener("click",() => {
 		hamburger.classList.remove("active")
 		navMenu.classList.remove("active")
-		navMenuDos.classList.remove("active")
+		topNavBar.classList.remove("active")
+		navBranding.classList.remove("active")
+	
 	}))

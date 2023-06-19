@@ -10,74 +10,129 @@ body {
 	flex-direction: column;}
 
 
+.navbar {  
+    z-index: 9999; 
+    position: fixed;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
-li {
-    list-style: none;
-    text-align: right;
+  
+}
+.flex-icon{
+    margin-top: 5px;
+    flex-direction: row;
+    display: flex;
+    justify-content: space-around;
+    margin-left: 5px;
 }
 
-a {
-    text-align: right;
-    color: black;
+.social-icon a{
+    font-size: .8rem;
     text-decoration: none;
+    list-style: none;
+    color: black;
+    transition: .7;
 }
 
-.nav-text {
+.social-icon a:hover{
+    text-decoration: none;
+    list-style: none;
+    color: blue;
+}
+.top-navbar {
+    transition: .2s;
+    width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    
 }
 
-.navbar {
-    
+.top-navbar.active {
     width: 100%;
-    position: fixed;
-    height: 6vh;
     display: flex;
+    flex-direction: row;
     justify-content: space-between;
+    background-color: white;
+}
+
+.nav-text {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    top: -600px;
+    transition: .2s;
+   
     
-    z-index: 99999;
+
 }
+.top-navbarDivUno {
+    margin-top: 10px;
+}
+
+.nav-text.active{
+    top: 0vh;
+    background-color: white;
+}
+
+.top-navbarDivUno a{
+    
+    list-style: none;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+.nav-menu{
+    margin-top: 15px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
 .nav-menuDos{
-    font-size: 1.2rem;
-    font-weight: bold;
-    gap: 0;
-    position: fixed;
-    top: -100%;
-    flex-direction: column;
-    background-color: white;
-    width: 100%;
-    transition: 0.3s;
+    margin-top: 50px;
+  height: 65px;
 }
 
-.nav-menuDos.active{
-    top: 6vh;
+.nav-itemDos {
+    margin-top: 2px;
+    font-size:.9rem;
+   margin-left: 25px;
+   
 }
 
-.nav-menu {
-    font-size: 1.2rem;
-    font-weight: bold;
-    gap: 0;
-    position: fixed;
-    top: -100%;
-    flex-direction: column;
-    background-color: white;
-    width: 100%;
-    transition: 0.3s;
-}
+
 
 .nav-item {
+    margin-right: 30px;
+    text-decoration: none;
+    font-size: 1.7rem;
     
-    margin: 5px ;
+   
 }
 
-.nav-menu.active{
-    top: 6vh;
+.nav-item a{
+    font-weight: 900;
+    text-decoration: none;
+    color: black;
 }
 
 .nav-branding {
+    transition: .2s;
     margin-left: 25px;
     color: white;
+    font-size: 2.5rem;
+}
+
+.nav-branding.active {
+ 
+    margin-left: 25px;
+    color: black;
     font-size: 2.5rem;
 }
 
@@ -90,7 +145,6 @@ a {
 }
 
 .bar {
-  
     display: block ;
     width: 25px;
     height: 3px;
@@ -103,15 +157,15 @@ a {
 
 .div-bar {
     margin-left: .8px;
-    margin-top: 0.9vh;
+    margin-top: 10px;
 }
 
 .hamburger {
     cursor: pointer;
     margin-top: 15px;
     margin-right: 30px;
-    width: 5vh;
-    height: 5vh;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     background-color: white;
 }
@@ -222,7 +276,6 @@ a {
 	
 	
 }
-
 
 
 /*--tablet responsive--*/
