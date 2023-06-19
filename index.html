@@ -42,7 +42,58 @@
 			<!-- End Google Tag Manager (noscript) -->
 
 			<section class="section1">
-	<!--barra fija arriba desktop-->
+
+<header>
+
+<nav class="navbar">
+	<a href="#" class="nav-branding">Imabox.</a>
+	<div class="hamburger">
+		<div class="div-bar">
+			<span class="bar"></span>
+			<span class="bar"></span>	
+			<span class="bar"></span>
+		</div>
+	</div>
+</nav>
+<div class="nav-text">
+	<ul class="nav-menuDos">
+		<li  class="nav-item">
+			hello@imabox.uy
+		</li>
+		<li  class="nav-item">
+			Montevideo, Uruguay.
+		</li>
+		<li  class="nav-item">
+			+598 98 325 902
+		</li>
+		<ul class="flex-icon">
+			<li class="social-icon" id="instagram"><a href="https://www.instagram.com/imabox_uy" target="_blank"><i class="fa fa-instagram"></i></a></li>
+			<li class="social-icon" id="linkedin"><a href="https://www.linkedin.com/company/imabox" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+			<li class="social-icon" id="facebook"><a href="https://www.facebook.com/Imago-Rendering-Studio-108697060701498" target="_blank"><i class="fa fa-facebook"></i></a></li>
+		</ul>
+	</ul>
+
+	<ul class="nav-menu">
+		<li class="nav-item">
+			<a href="#" class="nav-link">Still Images</a>
+		</li>
+		<li class="nav-item">
+			<a href="#" class="nav-link">Virtual Tours</a>
+		</li>
+		<li class="nav-item">
+			<a href="#" class="nav-link">360 Images</a>
+		</li>
+		<li class="nav-item">
+			<a href="#" class="nav-link">about</a>
+		</li>
+		<li class="nav-item">
+			<a href="#" class="nav-link">contact</a>
+		</li>
+	</ul>
+</div>
+
+</header>
+	<!--barra fija arriba desktop
 		<header class="navbar-noboots fade-in" id="navbar-noboots">
 			<div class="wrapper-2">
 				<ul class="remove-title" id="removeidtitle">
@@ -73,35 +124,32 @@
 			</div>
 		</header>
 
-	<!--barra fija arriba telefono navbar-->
+	barra fija arriba telefono navbar
 
-			<div class="phonenavbar" id="phonenavbarid">
-				<h1 class="titlephone"><a href="https://imabox.uy/index.html">imabox</h1></a>
-				<input type="checkbox" id="nav-toggle" class="nav-toggle">
-				<nav class="navphone-3">
-					<ul>
-						<li class="currentsphone"><a href="https://imabox.uy/works.html" id="portfolio-translate-phone">Arch Viz</a></li>
-						<li class="currentsphone"><a href="https://imabox.uy/360.html" id="360-translate-phone">360º</a></li>
-						<li class="currentsphone"><a href="https://imabox.uy/vr.html" id="psvr-translate-phone">Virtual Reality</a></li>
-						<hr></hr>
-						<li class="currentsphone"><a href="https://imabox.uy/about.html" id="artist-translate-phone">about us</a></li>
-						<li class="currentsphone"><a href="https://imabox.uy/contact.html" id="contact-translate-phone">contact</a></li>
-						<hr></hr>
-						<li><a href="#eng" onclick="timedRefresh()">eng <a>|</a></a> <a href="#esp" onclick="timedRefresh()">esp</a></li>	
-						<hr></hr>
-					</ul>
-					<ul class="flex-icon">
-						<li class="social-icon" id="instagram"><a href="https://www.instagram.com/imabox_uy" target="_blank"><i class="fa fa-instagram"></i></a></li>
-						<li class="social-icon" id="linkedin"><a href="https://www.linkedin.com/company/imabox" target="_blank"><i class="fa fa-linkedin"></i></a></li>
-						<li class="social-icon" id="facebook"><a href="https://www.facebook.com/Imago-Rendering-Studio-108697060701498" target="_blank"><i class="fa fa-facebook"></i></a></li>
-					</ul>
-				</nav>
-					<label for="nav-toggle" class="nav-toggle-label">
-						<span></span>
-					</label>
-			</div>
+	<header class="phonenavbar" id="phonenavbarid">
 
-		<!--fin barra fija arriba telefono navbar-->
+		<h1 class="titlephone"><a href="https://imabox.uy/index.html">imabox</h1></a>
+		<input type="checkbox" id="nav-toggle" class="nav-toggle">
+		<nav class="navphone-3">
+			<ul>
+				<li class="currentsphone"><a href="https://imabox.uy/works.html" id="portfolio-translate-phone" class="currents">Arch Viz</a></li>
+				<li class="currentsphone"><a href="https://imabox.uy/360.html" id="360-translate-phone">360º</a></li>
+				<li class="currentsphone"><a href="https://imabox.uy/vr.html" id="psvr-translate-phone">Virtual Reality</a></li>
+				<hr></hr>
+				<li class="currentsphone"><a href="https://imabox.uy/about.html" id="artist-translate-phone">about us</a></li>
+	
+				<li class="currentsphone"><a href="https://imabox.uy/contact.html" id="contact-translate-phone">contact</a></li>
+				<hr></hr>
+				<li><a href="#eng" onclick="timedRefresh()">eng <a>|</a></a> <a href="#esp" onclick="timedRefresh()">esp</a></li>	
+				<hr></hr>
+			</ul>
+			
+		</nav>
+			<label for="nav-toggle" class="nav-toggle-label">
+				<span></span>
+			</label>
+	</header>-->
+
 			<section id="section1">
 				<div class="supervideo">
 					<video class="videoloch" id="videoElementId" autoplay loop muted playsinline src="https://imabox.uy/animations/presentation.mp4" type="video/mp4" poster="placeholder.png"></video>
@@ -167,12 +215,8 @@
 						<div class="text left-text">Areco Gardens Housing</div>
 
 				</div>
-				
-
-				
+			</section>
 			
-		
-		</section>
 			<script>
 				window.addEventListener('load', function(){
 					let newVideo = document.getElementById('videoElementId');
@@ -185,20 +229,10 @@
 
 			});
 			</script>
-			<script>
-					ScrollReveal().reveal('.lazy');
-				document.addEventListener("DOMContentLoaded", yall);
-			</script>
-			<script src="js/yall.min.js"></script>
+	
+		
 			<script src="js/navbarmoveindex.js"></script><!--navbar move-->
-			<script src="js/indexAppearFunction.js"></script>
 			<script src="js/translate.js"></script>
-			<script type="text/javascript">
-				;( function( $ ) {
-					$( '.swipebox' ).swipebox();
-				} )( jQuery );
-			</script>
-
 			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 			<script src="js/snap-scroll.js"></script>
 			<script>
