@@ -293,39 +293,79 @@ body {
         display: none;
     }
 
-	.menu {
-		margin-right: 15%;
-		display: flex;
-		font-size: 15px;
-		align-self: center;
-		width: 65%;
-		letter-spacing: 1px;
-		margin-top: 25px;
-		text-align: center;
-		letter-spacing: 1px;
-	}
-	
-	.menu li{
-		text-align: center;
-		width: 100%;
-	}
-	
-	.wrapper-2 {
-		margin-bottom: 20px;
-		display: flex;
-		justify-content: space-between;
-		flex-direction: row;
-		width: 100%
-	}
-
-	.currentsphone .currents {
-		color:#f01f50;;
-	}
 }
 
 /*--mobile responsive--*/
 
 @media only screen and (max-width: 850px) {
+
+   .nav-itemDos {
+    margin-top: 2px;
+    font-size:.9rem;
+   margin-left: 0px;
+   text-align: center;
+  
+  
+   }
+   .flex-icon{
+    margin-top: 15px;
+   }
+   
+   .nav-textUno {
+   margin-bottom: 100px;
+
+}
+.navbar {  
+    
+    z-index: 9999; 
+    position: fixed;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+  
+}
+
+
+
+    .nav-text {
+        position: relative;
+        width: 100%;
+        display: flex;
+        flex-direction: column-reverse;
+        justify-content: space-between;
+      
+        transition: .2s;
+    
+    }
+
+    .nav-text.active{
+      
+       height: 100vh;
+        background-color: white;
+    }
+
+    .nav-menu{
+       
+        text-align: center;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    
+    
+    .nav-menu li{
+        margin: 0;
+        text-align: center;      
+        margin-top: 30px;
+    }
+    
+    
+
+
+
     .sectiondos{
         display: none;
     }
@@ -338,11 +378,6 @@ body {
         display: none;
     }
 
-    * {
-        font-family: 'Poppins', sans-serif;}
-        .currentsphone .currents {
-            color:#f01f50;;
-        }
 
 
     
