@@ -264,6 +264,12 @@ body {
     flex-direction: column;
     justify-content: space-between;
 }
+
+.nav-menuDos{
+
+    margin-top: 0px;
+  height: auto;
+}
 .nav-text {
     top: -100vh;
     position: relative;
@@ -278,6 +284,7 @@ body {
     background-color: white;
     }
 .nav-menu{ 
+    margin-top: 50px;
     text-align: center;
     width: 100%;
     display: flex;
@@ -303,20 +310,20 @@ body {
     
 .nav-item {
    
- 
+    
     text-decoration: none;
-    font-size: 1.2rem;
+    font-size: 1rem;
     
    
 }
 .nav-menu li{
         margin: 0;
         text-align: center;      
-        margin-top: 40px;
+        margin-top: 30px;
     }
 
 .top-navbarDivUno {
-    margin-top: 15px;
+    margin-top: 18px;
 }
     
 
