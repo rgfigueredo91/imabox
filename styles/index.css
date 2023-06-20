@@ -9,7 +9,6 @@ body {
 	display: flex;
 	flex-direction: column;}
 
-
 .navbar {  
     z-index: 9999; 
     position: fixed;
@@ -27,7 +26,6 @@ body {
     justify-content: space-around;
     margin-left: 5px;
 }
-
 .social-icon a{
     font-size: .8rem;
     text-decoration: none;
@@ -35,21 +33,18 @@ body {
     color: black;
     transition: .7;
 }
-
 .social-icon a:hover{
     text-decoration: none;
     list-style: none;
-    color: blue;
+    color: #f01f50;
 }
 .top-navbar {
-    transition: .2s;
+    transition: .8s;
     width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    
 }
-
 .top-navbar.active {
     width: 100%;
     display: flex;
@@ -57,93 +52,69 @@ body {
     justify-content: space-between;
     background-color: white;
 }
-
 .nav-text {
     position: relative;
     width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    top: -600px;
-    transition: .2s;
-   
-    
-
+    top: -200px;
+    transition: .8s;
 }
 .top-navbarDivUno {
     margin-top: 10px;
 }
-
 .nav-text.active{
     top: 0vh;
     background-color: white;
 }
-
-.top-navbarDivUno a{
-    
+.top-navbarDivUno a{   
     list-style: none;
     text-decoration: none;
     cursor: pointer;
 }
-
-
 .nav-menu{
     margin-top: 15px;
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
 }
-
 .nav-menuDos{
     margin-top: 50px;
   height: 65px;
 }
-
 .nav-itemDos {
     margin-top: 2px;
     font-size:.9rem;
-   margin-left: 25px;
-   
+   margin-left: 25px; 
 }
-
-
-
 .nav-item {
     margin-right: 30px;
     text-decoration: none;
-    font-size: 1.7rem;
-    
-   
+    font-size: 1.5rem; 
 }
-
 .nav-item a{
     font-weight: 900;
     text-decoration: none;
     color: black;
 }
-
 .nav-branding {
-    transition: .2s;
+    transition: .1s;
     margin-left: 25px;
     color: white;
     font-size: 2.5rem;
 }
-
 .nav-branding.active {
- 
     margin-left: 25px;
     color: black;
     font-size: 2.5rem;
 }
-
 .nav-link {
     transition: 0.7s ease;
 }
-
 .nav-link:hover {
-    color: blue;
+    color: #f01f50;
 }
-
 .bar {
     display: block ;
     width: 25px;
@@ -152,14 +123,11 @@ body {
     -webkit-transition: all 0.3s ease-in-out;
     transition: all 0.3s ease-in-out;
     background-color: black;
-
 }
-
 .div-bar {
     margin-left: .8px;
     margin-top: 10px;
 }
-
 .hamburger {
     cursor: pointer;
     margin-top: 15px;
@@ -169,8 +137,6 @@ body {
     border-radius: 50%;
     background-color: white;
 }
-
-
 .div-bar.active .bar:nth-child(2){
     opacity: 0;
 }
@@ -181,17 +147,6 @@ body {
     transform: translateY(-8px) rotate(-45deg);
 }
 
-
-
-
-
-
-/*--barra fija arriba--*/
-
-
-/*--barra fija arriba titulo imago--*/
-
-/*--barra fija arriba menu social icon--*/
 
 /*--parametros generales del cuerpo de supervideo--*/
 
@@ -204,54 +159,43 @@ body {
     background-color: black;
     height: 100vh;
 }
-
-
 .image {
     width: 100%;
     height: 100%;
     object-fit: cover;
-  }
-
-  .text {
+}
+.text {
     position: absolute;
     color: white;
     font-size: 18px;
     font-family: Arial, sans-serif;
     padding: 10px;
-  }
-
+}
 .textandimagedivdos {
-
     position: relative;
     width: 100%;
-    height: 100vh;
- 
-    
+    height: 100vh; 
 }
-
 .bottom-text {
     left: 50px;
     bottom: 4.4%;
     font-family: 'Times New Roman', Times, serif;
-  }
-
-  .left-text {
+}
+.left-text {
     font-family: 'Times New Roman', Times, serif;
     font-size: 1.5rem;
     left: 50px;
     top: 90%;
     transform: translateY(-50%);
-  }
-
-.textandimagediv  {
-    width: 100%;
 }
-  
+.textandimagediv  p{
+    font-family: 'Poppins', sans-serif;
+    width: 100%;
+} 
 #arecoGardens {
     position:relative;
     bottom: 0;
     left: 0;
-
 }
 .textandimagediv  p{
     margin-left: 10%;
@@ -263,8 +207,6 @@ body {
     width: 80%;
     color: white;
 }
-
-
 .supervideo {
     height: 100vh;
 }
@@ -299,82 +241,96 @@ body {
 
 @media only screen and (max-width: 850px) {
 
-   .nav-itemDos {
+.nav-itemDos {
     margin-top: 2px;
     font-size:.9rem;
-   margin-left: 0px;
-   text-align: center;
-  
-  
+    margin-left: 0px;
+    text-align: center;
    }
-   .flex-icon{
+
+.flex-icon{
     margin-top: 15px;
+    justify-content: space-evenly;
    }
    
-   .nav-textUno {
-   margin-bottom: 100px;
-
+.nav-textUno {
+   margin-bottom: 40%;
 }
 .navbar {  
-    
     z-index: 9999; 
     position: fixed;
     width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-
-  
 }
-
-
-
-    .nav-text {
-        position: relative;
-        width: 100%;
-        display: flex;
-        flex-direction: column-reverse;
-        justify-content: space-between;
-      
-        transition: .2s;
-    
+.nav-text {
+    top: -100vh;
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: space-between;
+    transition: .2s;
+    }
+.nav-text.active{
+    height: 100vh;
+    background-color: white;
+    }
+.nav-menu{ 
+    text-align: center;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     }
 
-    .nav-text.active{
-      
-       height: 100vh;
-        background-color: white;
-    }
-
-    .nav-menu{
-       
-        text-align: center;
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
+.top-navbar {
+    transition: none;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     }
     
+.top-navbar.active {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: none;
+    }
     
-    .nav-menu li{
+.nav-item {
+   
+ 
+    text-decoration: none;
+    font-size: 1.2rem;
+    
+   
+}
+.nav-menu li{
         margin: 0;
         text-align: center;      
-        margin-top: 30px;
+        margin-top: 40px;
     }
+
+.top-navbarDivUno {
+    margin-top: 15px;
+}
     
-    
 
 
 
-    .sectiondos{
+.sectiondos{
         display: none;
     }
 
-    .sectiontres{
+.sectiontres{
         display: none;
     }
 
-    .sectioncuatro{
+.sectioncuatro{
         display: none;
     }
 
