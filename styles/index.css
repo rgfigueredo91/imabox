@@ -31,7 +31,7 @@ body {
     text-decoration: none;
     list-style: none;
     color: black;
-    transition: .7;
+    
 }
 .social-icon a:hover{
     text-decoration: none;
@@ -39,7 +39,7 @@ body {
     color: #f01f50;
 }
 .top-navbar {
-    transition: .8s;
+    transition: .1s;
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -53,21 +53,27 @@ body {
     background-color: white;
 }
 .nav-text {
+   
     position: relative;
     width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     top: -200px;
-    transition: .8s;
+    transition: .2s;
+
 }
-.top-navbarDivUno {
-    margin-top: 10px;
-}
+
 .nav-text.active{
+  
     top: 0vh;
     background-color: white;
 }
+
+.top-navbarDivUno {
+    margin-top: 10px;
+}
+
 .top-navbarDivUno a{   
     list-style: none;
     text-decoration: none;
