@@ -457,6 +457,7 @@ footer p {
    margin-bottom: 40%;
 }
 .navbar {  
+	height: 80px;
     z-index: 9999; 
     position: fixed;
     width: 100%;
@@ -467,8 +468,8 @@ footer p {
 
 .nav-menuDos{
 
-    margin-top: 0px;
-  height: auto;
+    margin-top: 30px;
+  	height: auto;
 }
 .nav-text {
     top: -100vh;
