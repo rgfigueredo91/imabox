@@ -8,6 +8,8 @@
 *::-webkit-scrollbar{
   display: none;
 }
+
+
 body {
 
 	display: flex;
@@ -454,11 +456,10 @@ footer p {
    }
    
 .nav-textUno {
-   margin-bottom: 40%;
+   margin-bottom: 30%;
 }
 .navbar {  
-	height: 80px;
-    z-index: 9999; 
+height: 0;
     position: fixed;
     width: 100%;
     display: flex;
@@ -468,7 +469,7 @@ footer p {
 
 .nav-menuDos{
 
-    margin-top: 30px;
+    margin-top: 90px;
   	height: auto;
 }
 .nav-text {
@@ -481,7 +482,8 @@ footer p {
     transition: .2s;
     }
 .nav-text.active{
-    height: 100vh;
+	
+  
     background-color: white;
     }
 .nav-menu{ 
@@ -527,6 +529,19 @@ footer p {
     margin-top: 18px;
 }
     
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 .hes-gallery {
