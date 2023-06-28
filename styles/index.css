@@ -10,7 +10,7 @@ body {
 	flex-direction: column;}
 
 .navbar {  
-    z-index: 9999; 
+    z-index: 1; 
     position: fixed;
     width: 100%;
     display: flex;
@@ -19,14 +19,22 @@ body {
 
   
 }
+
+.nav-textUno {
+    margin-top: 0px;
+    margin-bottom: 0px;
+ }
+
+
 .flex-icon{
     margin-top: 5px;
     flex-direction: row;
     display: flex;
-    justify-content: space-around;
-    margin-left: 5px;
+    justify-content: space-between;
+    margin-left: 1px;
 }
 .social-icon a{
+    
     font-size: .8rem;
     text-decoration: none;
     list-style: none;
@@ -59,13 +67,13 @@ body {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    top: -200px;
+    top: -170px;
     transition: .2s;
 
 }
 
 .nav-text.active{
-  
+    height: 100px;
     top: 0vh;
     background-color: white;
 }
@@ -86,14 +94,33 @@ body {
     justify-content: space-evenly;
 }
 .nav-menuDos{
-    margin-top: 50px;
-  height: 65px;
+    margin-top: 20px;
+  height: 80px;
+}
+
+.nav-menuDos a{
+    margin-left: 25px; 
+    text-decoration: none;
+   color: black;
+    font-size:.78rem;
+}
+
+.nav-menuDos a:hover{
+    cursor: pointer;
+    color: #f01f50;
+
 }
 .nav-itemDos {
     margin-top: 2px;
-    font-size:.9rem;
+    font-size:.78rem;
    margin-left: 25px; 
 }
+
+.nav-itemDos a{
+   
+   margin-left: 0px; 
+}
+
 .nav-item {
     margin-right: 30px;
     text-decoration: none;
@@ -105,6 +132,7 @@ body {
     color: black;
 }
 .nav-branding {
+    font-family: 'Poppins', Times, serif;
     transition: .1s;
     margin-left: 25px;
     color: white;
@@ -116,7 +144,7 @@ body {
     font-size: 2.5rem;
 }
 .nav-link {
-    transition: 0.7s ease;
+    
 }
 .nav-link:hover {
     color: #f01f50;
@@ -274,7 +302,7 @@ body {
 .nav-menuDos{
 
     margin-top: 0px;
-  height: auto;
+    height: auto;
 }
 .nav-text {
     top: -100vh;
@@ -348,6 +376,14 @@ body {
     }
 
 
+    .nav-menuDos a{
+        margin-left: 0;
+        width: 100%;
+text-align: center;        text-decoration: none;
+       color: black;
+        font-size:.9rem;
+    }
+    
 
     
     }
