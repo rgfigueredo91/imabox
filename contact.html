@@ -20,8 +20,10 @@
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+		
 		<link rel="stylesheet" type="text/css" href="styles/styles.css">
 		<link rel="stylesheet" type="text/css" href="styles/contact.css">
+	
 		<link rel="stylesheet" href="https://use.typekit.net/oov2wcw.css">
 		<link rel="shortcut icon" type="image/png" href="favicon.png"/>
 		<script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
@@ -47,65 +49,74 @@
 	
 	
 
+
 <!--barra fija arriba desktop-->
 <header>
 
-	<nav class="navbar">
-		<div class="top-navbar">
-			<div class="top-navbarDivUno">
-				<a href="https://imabox.uy" class="nav-branding">Imabox.</a>
+	<header>
+
+		<nav class="navbar">
+			<div class="top-navbar">
+				<div class="top-navbarDivUno">
+					<a href="https://imabox.uy" class="nav-branding nav-brandingblack" id="link-font-index">imabox.</a>
+				</div>
+				<div class="hamburger">
+					<div class="div-bar">
+							<span class="bar"></span>
+							<span class="bar"></span>	
+							<span class="bar"></span>
+					</div>
+				</div>
+				
 			</div>
-			<div class="hamburger">
-				<div class="div-bar">
-						<span class="bar"></span>
-						<span class="bar"></span>	
-						<span class="bar"></span>
+
+			<div class="nav-text">
+				<div class="nav-textUno">
+					<ul class="nav-menuDos">
+						<li  class="nav-itemDos">
+							<p>hello@imabox.uy</p>	
+						</li>
+						<li  class="nav-itemDos">
+							<p>Montevideo, Uruguay.</p>	
+						</li>
+						
+						<li class="nav-itemDos">
+							<a href="#eng" onclick="timedRefresh()">eng <a>|</a>
+							</a> <a href="#esp" onclick="timedRefresh()">esp</a>
+						</li>	
+						
+					
+						<ul class="flex-icon">
+							<li class="social-icon" id="instagram"><a href="https://www.instagram.com/imabox_uy" target="_blank"><i class="fa fa-instagram"></i></a></li>
+							<li class="social-icon" id="linkedin"><a href="https://www.linkedin.com/company/imabox" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+							<li class="social-icon" id="facebook"><a href="https://www.facebook.com/Imago-Rendering-Studio-108697060701498" target="_blank"><i class="fa fa-facebook"></i></a></li>
+						</ul>
+					</ul>
+				</div>
+				<div>
+					<ul class="nav-menu">
+						<li class="nav-item">
+							<a href="https://imabox.uy/works.html" class="nav-link" id="link-font">Still Images</a>
+						</li>
+						<li class="nav-item">
+							<a href="https://imabox.uy/vr.html" class="nav-link" id="link-font-Virtual">Virtual Tours</a>
+						</li>
+						<li class="nav-item">
+							<a href="https://imabox.uy/360.html" class="nav-link"  id="link-font-360">360 Images</a>
+						</li>
+						<li class="nav-item">
+							<a href="https://imabox.uy/about.html" class="nav-link" id="link-font-about">About</a>
+						</li>
+						<li class="nav-item">
+							<a href="https://imabox.uy/contact.html" class="nav-link" id="link-font-contact">Contact</a>
+						</li>
+					</ul>
 				</div>
 			</div>
-			
-		</div>
+		</nav>
 
-		<div class="nav-text">
-			<div class="nav-textUno">
-				<ul class="nav-menuDos">
-					<li  class="nav-itemDos">
-						<p>hello@imabox.uy</p>	
-					</li>
-					<li  class="nav-itemDos">
-						<p>Montevideo, Uruguay.</p>	
-					</li>
-				
-					<ul class="flex-icon">
-						<li class="social-icon" id="instagram"><a href="https://www.instagram.com/imabox_uy" target="_blank"><i class="fa fa-instagram"></i></a></li>
-						<li class="social-icon" id="linkedin"><a href="https://www.linkedin.com/company/imabox" target="_blank"><i class="fa fa-linkedin"></i></a></li>
-						<li class="social-icon" id="facebook"><a href="https://www.facebook.com/Imago-Rendering-Studio-108697060701498" target="_blank"><i class="fa fa-facebook"></i></a></li>
-					</ul>
-				</ul>
-			</div>
-			<div>
-				<ul class="nav-menu">
-					<li class="nav-item">
-						<a href="https://imabox.uy/works.html" class="nav-link">Still Images</a>
-					</li>
-					<li class="nav-item">
-						<a href="https://imabox.uy/vr.html" class="nav-link">Virtual Tours</a>
-					</li>
-					<li class="nav-item">
-						<a href="https://imabox.uy/360.html" class="nav-link">360 Images</a>
-					</li>
-					<li class="nav-item">
-						<a href="https://imabox.uy/about.html" class="nav-link">about</a>
-					</li>
-					<li class="nav-item">
-						<a href="https://imabox.uy/contact.html" class="nav-link">contact</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</nav>
+	</header>
 
-</header>
-<!--fin barra fija arriba telefono navbar-->
 
 
 
@@ -160,7 +171,7 @@
 					</form>
 					<footer>
 						<hr>
-						<p  id="rights-reserved">&copy; 2022 Imabox "Unboxing Possible Futures". All rights reserved</p>
+						<p  id="rights-reserved">&copy; 2023 Imabox - "Unboxing The Future". All rights reserved</p>
 					</footer>
 		<script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-app.js"></script>
 
@@ -189,6 +200,7 @@
 	
 	
 	</script>
+	<script src="js/navbarmoveindex.js"></script><!--navbar move-->
 		<script src="js/translate.js"></script><!--navbar move-->
 		<script src="js/translate-contact.js"></script><!--navbar move-->
 

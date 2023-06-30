@@ -31,6 +31,8 @@ body {
     flex-direction: row;
     display: flex;
     justify-content: space-between;
+    text-decoration: none;
+    list-style: none;
     margin-left: 1px;
 }
 .social-icon a{
@@ -291,7 +293,7 @@ body {
    margin-bottom: 40%;
 }
 .navbar {  
-    z-index: 9999; 
+    z-index: 1; 
     position: fixed;
     width: 100%;
     display: flex;

@@ -4,7 +4,7 @@
 .main {
 	
 	left: 1vh;
-	margin-top: 160px;
+	margin-top: 10px;
 	position: relative;
 	height: 100%;
 	width: 99.1%;
@@ -25,6 +25,7 @@
 	user-select: none;
 	transition: all 2s;
 }
+
 
 
 

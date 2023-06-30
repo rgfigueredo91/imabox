@@ -4,8 +4,8 @@ document.addEventListener("DOMContentLoaded", function(e){
         esp: {
             stillImages: "Imágenes",
             virtual: "Tour Virtual",
-            about: "nosotros",
-            contact: "contacto",
+            about: "Nosotros",
+            contact: "Contacto",
             portfolio: "Vis Arq",
             visualization: "360º",
             rights: `© 2022 Imabox "Unboxing Possible Futures". Todos los derechos reservados`,
