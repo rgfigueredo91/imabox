@@ -90,7 +90,7 @@
 .main {
 	display: flex;
 	flex-direction: column;
-	margin-top: 90px;
+	margin-top: 10px;
 	width: 96.5%;
 	height: 100%;
 }
