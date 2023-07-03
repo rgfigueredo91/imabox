@@ -3,6 +3,7 @@
 	padding: 0;
 	font-family: 'Times New Roman', Times, serif;
     overflow-y: hidden;
+    overflow-x: hidden;
 	margin: 0;}
 
 body {
@@ -211,7 +212,12 @@ body {
     position: relative;
     width: 100%;
     height: 100vh; 
+
+
 }
+
+
+
 .bottom-text {
     left: 50px;
     bottom: 4.4%;
@@ -224,25 +230,196 @@ body {
     top: 90%;
     transform: translateY(-50%);
 }
-.textandimagediv  p{
-    font-family: 'Poppins', sans-serif;
-    width: 100%;
-} 
+
 #arecoGardens {
     position:relative;
     bottom: 0;
     left: 0;
 }
+
+.textandimagediv{
+    margin-top: 15%;
+    display: flex;
+    flex-direction: column;
+ 
+    
+}
+
 .textandimagediv  p{
-    margin-left: 10%;
+    font-family: 'Poppins', sans-serif;
+    margin-top: 5%;
+    margin-left: 15%;
     line-height: 3.5rem;
     text-align: center;
     justify-content: center;
-    margin-top: 40vh;
     font-size: 1.4rem;
-    width: 80%;
+    width:75%;
     color: white;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  .container {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  .carousel {
+    text-align: left;
+    height: 100%;
+    transition: transform 0.5s ease-in-out;
+  }
+  .carousel .slide .caption h1{
+    margin-left: 30px;
+    text-align: left;
+  }
+  .carousel .slide .caption p{
+    margin-left: 30px;
+    text-align: left;
+  }
+  .slide {
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+  }
+  
+  .slide.active {
+    text-align: left;
+    opacity: 1;
+    z-index: 0;
+  }
+  
+  .slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .caption {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    position: relative;
+    text-align: left;
+    bottom: 100px;
+  
+  }
+  
+  .caption h1 {
+    text-align: left;
+
+    font-weight: 100;
+    color: white;
+    text-align: center;
+    font-size: 1.6rem;
+  }
+  
+  .caption p {
+    font-weight: 100;
+    color: white;
+    text-align: center;
+    font-size: 1rem;
+  }
+  
+  .smooth-transition {
+    transition: transform 0.5s ease-in-out;
+  }
+  
+  .dots {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    transform: translateX(-50%);
+    margin-bottom: 50px;
+    margin-right: 50px;
+  }
+  
+  .dot {
+    width: 10px;
+    height: 10px;
+    background-color: white;
+    border-radius: 50%;
+    margin: 0 5px;
+    cursor: pointer;
+  }
+  
+  .dot.active {
+    background-color: #f01f50;
+  }
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .supervideo {
     height: 100vh;
 }
@@ -268,6 +445,10 @@ body {
     }
 
     .sectioncuatro{
+        display: none;
+    }
+
+    .sectioncinco{
         display: none;
     }
 
@@ -374,6 +555,10 @@ body {
     }
 
 .sectioncuatro{
+        display: none;
+    }
+
+    .sectioncinco{
         display: none;
     }
 
