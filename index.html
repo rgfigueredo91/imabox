@@ -221,24 +221,36 @@
 
 				});
 				</script>
+
+				<script src="js/yall.min.js"></script>
+				<script src="js/snap-scroll.js"></script>
+				<script>
+								window.addEventListener('load', function () {
+								let newVideo = document.getElementById('videoElementId');
+									newVideo.addEventListener('ended', function () {
+										this.currentTime = 0;
+										this.play();
+									}, false);
+									newVideo.play();
+					});
+					
+					ScrollReveal().reveal('.lazy');
+					document.addEventListener("DOMContentLoaded", yall);
+					var snapScroll = $("section").SnapScroll({
+						hashes: false
+					});
+					$(document).on(snapScroll.eventChangeVisible, function (evt, visibleList) {
+						console.log(evt, visibleList.data);
+					});
+				</script>
 				<script src="js/carouselDots.js"></script><!--Carousel-->
 				<script src="js/navbarmoveindex.js"></script><!--navbar move-->
 				<script src="js/translate.js"></script>
 				<script src="js/translate-index.js"></script>
 				<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-				<script src="js/snap-scroll.js"></script>
+				
 				<script>
-					var snapScroll = $("section").SnapScroll({
-						hashes:false
-					});
-					console.log(snapScroll);
 
-			
-					//Listen for visible element change
-					//You could listen on a specific element like $("header")
-					$(document).on(snapScroll.eventChangeVisible, function(evt, visibleList){
-						console.log(evt, visibleList.data);
-					});
 				</script>
 				
 		</body>
