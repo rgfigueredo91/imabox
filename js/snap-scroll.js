@@ -19,9 +19,9 @@
 			classActive:"snap-scroll-active",					//Class applied to a snap point element when snapped
 			hashes:false,										//Use element id in hash
 
-			scrollDelay:300,									//Delay between scroll events needed to trigger scroll action
+			scrollDelay:180,									//Delay between scroll events needed to trigger scroll action
 			wheelInterval:1000,									//Interval used for wheel to trigger scroll action
-			animateDuration:750,								//The amount of time it takes to animate to a snap point
+			animateDuration:450,								//The amount of time it takes to animate to a snap point
 			animateTimeBuffer:100,								//The amount of time to wait after an animation is complete before scrolling can be triggered
 
 			snapTop:true,										//Snap to the top of page regardless of there being an element
