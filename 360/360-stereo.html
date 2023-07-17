@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+
+<html lang="eng">
+	<head>
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width, shrink-to-fit=no">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+		<meta charset="UTF-8"/> 
+		<title>Imabox Studio</title>
+		<meta name="description" content="IMABOX was founded in 2018 by Arch. Juan Delgado and Arch. Rodrigo Figueredo. We are a Rendering and 3dart imaging studio based in Montevideo, Uruguay."/>
+		<meta name="keywords" content="Imabox - Rendering Visualization Studio"/>
+		<meta name="author" content="Rodrigo Figueredo"/>
+		<meta property="og:type" content="website"/>
+		<meta property="og:title" content="Imabox Rendering Studio"/>
+		<meta name="google-site-verification" content="E0SpeRDXnyyyYe_az7hMb6PirOHIawPyVZi6EA_HKSc" />
+		<meta property="og:description" content="IMABOX was founded in 2018 by Arch. Juan Delgado and Arch. Rodrigo Figueredo. We are a Rendering and 3dart imaging studio based in Montevideo, Uruguay."/>
+		<meta property="og:url" content="https://imabox.uy"/>
+    <link rel="stylesheet" type="text/css" href="css/pano.css">
+    <link rel="shortcut icon" type="image/png" href="../favicon.png"/>
+
+
+     
+       
+
+<body>
+
+    <div id="progress" style="width: 0px;"></div>
+
+    <p class="logo">.imabox</p>
+    <div id="spinner-wrapper">
+      <div class="lds-ring">
+          <div> </div>
+          <div></div>
+          <div></div>
+          <div></div>
+      </div>
+  </div>
+
+<script src="js/spinner.js"></script>
+
+
+<script src="../js/three.min.js"></script>
+<script src="../js/panolens.min.js"></script>
+
+<script>
+
+
+
+
+
+
+
+const imageURL = 'img/stereo/room.jpg';
+      const { style, classList } = document.querySelector( '#progress' );
+
+      const onEnterFadeStart = ( event ) => {
+        style.width = 0;
+        classList.remove( 'finish' );
+      };
+
+      const onProgress = ( event ) => {
+        style.width = `${event.progress.loaded / event.progress.total * 100}%`;
+        if ( progress === 100 ) {
+          classList.add( 'finish' );
+        }
+      };
+
+      const onLoad = () => {
+        const { image } = panorama.getTexture();
+        image.classList.add( 'panolens-image' );
+        document.body.appendChild( image );
+      };
+
+      const createWidget = () => {
+
+        const onImage = 'url("img/stereo/onimage.png")';
+        const offImage = 'url("img/stereo/offimage.png")';
+        let status = 0;
+
+        const widget = { 
+          style: { backgroundImage: onImage },
+          onTap: () => {
+            const { image } = panorama.getTexture();
+            image.classList.toggle( 'visible' );
+            item.style.backgroundImage = status === 0 ? offImage : onImage;
+            status = status === 1 ? 0 : 1;
+          }
+        };
+
+        const item = viewer.appendControlItem( widget );
+
+      };
+
+      const viewer = new PANOLENS.Viewer();
+      const stereo = new PANOLENS.Stereo( 0.02 );
+
+    
+      const panorama = new PANOLENS.StereoImagePanorama( imageURL, stereo );
+      panorama.addEventListener( 'progress', onProgress );
+      panorama.addEventListener( 'enter-fade-start', onEnterFadeStart );
+      panorama.addEventListener( 'load', onLoad );
+     
+
+      viewer.add( panorama );
+      viewer.enableEffect( PANOLENS.MODES.STEREO );
+      createWidget();
+
+    
+</script>
+</body>
+</html>
