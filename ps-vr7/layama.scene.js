@@ -3,9 +3,10 @@
 function getLayamaCameras()
 {
    var layamaCameras = new BABYLON.SmartArray(0);
-   layamaCameras.push({n: "layama0000", a: "VRayCam001", p: new BABYLON.Vector3(464.061, 124.192, -4072.74), l: new BABYLON.Vector3(463.925, 124.192, -3972.74)});
-   layamaCameras.push({n: "layama0001", a: "VRayCam002", p: new BABYLON.Vector3(474.054, 124.192, -3383.09), l: new BABYLON.Vector3(473.917, 124.192, -3283.09)});
-   layamaCameras.push({n: "layama0002", a: "VRayCam003", p: new BABYLON.Vector3(2605.08, 124.192, -3393.13), l: new BABYLON.Vector3(2604.94, 124.192, -3293.13)});
+   layamaCameras.push({n: "UNI0000", a: "PhysCamera007", p: new BABYLON.Vector3(434.026, 175.187, -4281.63), l: new BABYLON.Vector3(434.026, 175.187, -4181.63)});
+   layamaCameras.push({n: "UNI0001", a: "PhysCamera008", p: new BABYLON.Vector3(436.584, 175.187, -3406.72), l: new BABYLON.Vector3(436.584, 175.187, -3306.72)});
+   layamaCameras.push({n: "UNI0002", a: "PhysCamera009", p: new BABYLON.Vector3(1474.21, 175.187, -3406.72), l: new BABYLON.Vector3(1474.21, 175.187, -3306.72)});
+   layamaCameras.push({n: "UNI0003", a: "PhysCamera010", p: new BABYLON.Vector3(2574.92, 175.187, -3406.72), l: new BABYLON.Vector3(2574.92, 175.187, -3306.72)});
    return layamaCameras;
 }
 
