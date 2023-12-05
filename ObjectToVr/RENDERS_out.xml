@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vrobject>
+  <input states="1" windowheight="1080" width="1920" imagepath="images" preview="4" windowwidth="1920" height="1080" preload="1" columns="26" rows="3" fileextension="jpg"/>
+  <control simulatemass="1" lockedmouse="0" swapxy="0" lockedkeyboard="0" dblclickfullscreen="0" revx="0" invertwheel="0" revy="0" wrapx="1" wrapy="0" trapwheel="1" automovemode="1" lockedwheel="0" speedwheel="1.000" controller="1" sensitivity="10"/>
+  <view>
+    <start row="0" column="0" state="0"/>
+    <zoom default="1" min="1" max="1"/>
+    <viewer imagescaling="1" backgroundcolor="0xffffff" background="1"/>
+  </view>
+  <autorotate speed="1.000" delay="5.00" start="0"/>
+  <userdata title="" datetime="" description="" copyright="" author="" source="" comment="" info=""/>
+  <qthotspots enabled="1" reuse="8">
+    <label width="180" backgroundalpha="1.000" enabled="1" height="20" backgroundcolor="0xffffff" bordercolor="0x000000" border="1" textcolor="0x000000" background="1" borderalpha="1.000" borderradius="1" wordwrap="1" textalpha="1.000"/>
+    <hotspot title="" target="" url="https://imabox.uy/img/img%20window/35%20-%20ArecoGarden%20high%20copy.jpg" id="1"/>
+  </qthotspots>
+  <hotspots>
+    <label width="180" backgroundalpha="1.000" enabled="1" height="20" backgroundcolor="0xffffff" bordercolor="0x000000" border="1" textcolor="0x000000" background="1" borderalpha="1.000" borderradius="1" wordwrap="1" textalpha="1.000"/>
+    <polystyle mode="0" backgroundalpha="0.251" backgroundcolor="0x0000ff" bordercolor="0x0000ff" borderalpha="1.000"/>
+    <hotspot title="Render" target="" skinid="" url="https://imabox.uy/img/img%20window/35%20-%20ArecoGarden%20high%20copy.jpg" id="Point01" reuse="0">
+      <location x="0.405729" y="0.481481" row="0" column="0" state="0"/>
+      <location x="0.558854" y="0.512037" row="0" column="1" state="0"/>
+      <location x="0.544792" y="0.5" row="0" column="2" state="0"/>
+      <location x="0.398958" y="0.419444" row="0" column="3" state="0"/>
+      <location x="0.489062" y="0.5" row="0" column="4" state="0"/>
+    </hotspot>
+    <hotspot title="Render" target="" skinid="" url="https://imabox.uy/img/img%20window/35%20-%20ArecoGarden%20high%20copy.jpg" id="Point02" reuse="0">
+      <location x="0.572917" y="0.475" row="0" column="0" state="0"/>
+      <location x="0.392188" y="0.481481" row="0" column="1" state="0"/>
+      <location x="0.381771" y="0.437963" row="0" column="2" state="0"/>
+      <location x="0.506771" y="0.5" row="0" column="3" state="0"/>
+      <location x="0.395833" y="0.363889" row="0" column="4" state="0"/>
+      <location x="0.457812" y="0.505556" row="0" column="5" state="0"/>
+      <location x="0.419792" y="0.34537" row="0" column="6" state="0"/>
+    </hotspot>
+  </hotspots>
+</vrobject>

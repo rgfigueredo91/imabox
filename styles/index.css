@@ -97,10 +97,11 @@ body {
     justify-content: space-evenly;
 }
 .nav-menuDos{
-    margin-top: 20px;
-  height: 80px;
+	text-decoration: none; 
+	list-style-type: none;  
+ 	margin-top: 5px;
+  	height: 90px;
 }
-
 .nav-menuDos a{
     margin-left: 25px; 
     text-decoration: none;
