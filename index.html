@@ -33,6 +33,15 @@
 			})(window,document,'script','dataLayer','GTM-NMJRX79');</script>
 		<!-- End Google Tag Manager -->
 
+		<script>				window.addEventListener('load', function () {
+			let newVideo = document.getElementById('videoElementId');
+				newVideo.addEventListener('ended', function () {
+					this.currentTime = 0;
+					this.play();
+				}, false);
+				newVideo.play();
+});</script>
+
 	</head>
 	<body>
 
@@ -219,14 +228,7 @@
 				<script src="js/yall.min.js"></script>
 				<script src="js/snap-scroll.js"></script>
 				<script>
-								window.addEventListener('load', function () {
-								let newVideo = document.getElementById('videoElementId');
-									newVideo.addEventListener('ended', function () {
-										this.currentTime = 0;
-										this.play();
-									}, false);
-									newVideo.play();
-					});
+				
 					
 					ScrollReveal().reveal('.lazy');
 					document.addEventListener("DOMContentLoaded", yall);
