@@ -233,40 +233,24 @@ body {
 	grid-template-rows: repeat(22, 1fr);
 	grid-gap: .7vh;	}
 
-.img img{
-	height: 100%;
-	width: 100%;
-	object-fit: cover;
-	cursor: pointer;
-	-khtml-user-select: none;
-    -o-user-select: none;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-	user-select: none;
-	transition: all 1s;
-}
-
-.img img:hover{
-	-webkit-filter: opacity(.86);
-}
+	.img {
+		position: relative;
+		display: inline-block;
+	}
 	
-
-.img {
-	transition: all 1s;
-	-khtml-user-select: none;
-    -o-user-select: none;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    user-select: none;}
-
-.img p {
+	.img img, .img .gif {
+		height: 100%;
+		width: 100%;
+		object-fit: cover;
+		cursor: pointer;
+	}
 	
-	font-weight: bold;
-	margin-top: 45%;
-	vertical-align: middle;
-	text-align: center;
-	font-size: 2rem;
-}
+	.gif {
+		position: absolute;
+		top: 0;
+		left: 0;
+		display: none;
+	}
 
 #noselectgrid {
 	-webkit-touch-callout: none; /* iOS Safari */
@@ -295,19 +279,8 @@ body {
 
 /*--efecto hover en imagenes--*/
 
-.img img:hover{
-	height: 100%;
-	width: 100%;
-	object-fit: cover;
-	cursor: pointer;
-	-khtml-user-select: none;
-    -o-user-select: none;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-	user-select: none;
-	transition: all 1s;
 
-}
+
 
 
 
@@ -724,6 +697,7 @@ text-align: center;        text-decoration: none;
 
 
 .img img:hover{
+	
 	height: 100%;
 	width: 100%;
 	object-fit: cover;
