@@ -236,6 +236,12 @@ body {
 	.img {
 		position: relative;
 		display: inline-block;
+		transition: all .3s;
+	}
+
+	.img:hover {
+		opacity: 0.95
+		;
 	}
 	
 	.img img, .img .gif {
