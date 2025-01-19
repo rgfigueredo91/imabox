@@ -1,74 +1,74 @@
 /*--parametros generales del cuerpo de imagenes 360--*/
-
-.main {
+.servicesContainer{
+	height: 100vh;
 	display: flex;
 	flex-direction: column;
-	margin-top: 60px;
-	width: 100%;
-	height: auto;
-	display: flex;
-	height: auto;
-	background-color: red;
-	justify-content: center;
-	background: white;
+	justify-content: space-evenly;
+}
+.main {
+	
+	
 
 }
 
 .nav-brandingblack 
 {
-	color: black;
-}
-
-
-
-
-.imagevirtual {
-	margin-top: 60px;
-	display: flex;
-	
-	justify-content: space-evenly;
-}
-.box-img {
-	display: flex;
-	
-	justify-content: space-around;
-
-}
-.box-img img{
-	margin-top: 40px;
-	width: 95%;
-	margin-left: 2.5%;
-}
-.header-vr {
-	margin-top: 250px;
-	width: 100%;
-	text-align: center;
-}
-
-.header-vr img {
-	margin-top: 40px;
-	width: 4%;
-
-	text-align: center;
-}
-
-.caption {
-	color: black;
-	margin-top: 50px;
-	text-align: center;
-	margin-bottom: 40px;
-	
-	
-}
-
-.caption a{
-	
-	text-decoration: none;
-	list-style-type: none;
-	font-weight: bold;
 	color: white;
+}
+body {
+	background-color: rgb(27, 27, 27);
+}
+
+.ourWork {
+	
+
+	text-align: center;
+	color: white;
+}
+
+.ourWork h3{
+
+	font-weight: 2;
 	
 	
+}
+
+
+
+.box-img {
+	height: auto;
+	width: 100%;
+	margin-top: 20%;
+	display: flex;
+	
+
+
+}
+
+.box-img img{
+	width: 20%;
+	
+}
+
+
+
+
+
+
+
+
+footer hr {
+	margin-top: 20%;
+	width: 90%;
+	margin-left: 5%;
+	color: white;
+}
+
+footer p {
+	font-size: 12px;
+	margin-top: 15px;
+	text-align: center;
+	color: white;
 }
 
 			
@@ -112,12 +112,12 @@
 
 	.box-img img{
 		margin-top: 40px;
-		width: 90%;
-		margin-left: 5%;
+		width: 20%;
+		
 	}
 
 	.caption {
-		color: black;
+		color: white;
 		margin-top: 50px;
 		text-align: center;
 		margin-bottom: 40px;
@@ -127,9 +127,24 @@
 		text-decoration: none;
 		list-style-type: none;
 		font-weight: bold;
-		color: black;
+		color: white;
 		
 		
 	}
+
+	footer hr {
+		margin-top: 50px;
+		width: 90%;
+		margin-left: 5%;
+		color: white;
+	}
+	
+	footer p {
+		font-size: 12px;
+		margin-top: 15px;
+		text-align: center;
+		color: white;
+	}
+	
 
 }
