@@ -6,9 +6,17 @@ body {
 }
 
 
+.FirstParagraph{
+	margin-top: 50px;
+	text-align: justify;
+	font-size: 1.4rem;
+	width: 80%;
+	color: white;
+}
+
 
 .main {
-	margin-top: 250px;
+	margin-top: 150px;
 	height: 100%;
 	width: 100%;	
 	display: flex;
@@ -19,6 +27,7 @@ body {
 }
 
 .formulario {
+	margin-top: 100px;
 	width: 40%;
 	color: white;
 }
@@ -114,6 +123,11 @@ progress[value]::-webkit-progress-bar {
 	border-radius: 2px;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
   }
+
+footer {
+	margin-top: 150px;
+	height: 50px;
+}
 
   footer hr {
 		
