@@ -1,5 +1,12 @@
 /*--parametros generales del cuerpo de imagenes--*/
 
+body {
+	background-color: rgb(27, 27, 27);
+
+}
+
+
+
 .main {
 	margin-top: 250px;
 	height: 100%;
@@ -8,22 +15,27 @@
 	justify-content: center;
 	flex-direction: column;
 	align-items: center;
+	
 }
 
 .formulario {
 	width: 40%;
+	color: white;
 }
+
+
 
 
 .nav-brandingblack 
 {
-	color: black;
+	color: white;
 }
 
 
 
 
 .label1, input, textarea {
+	color: white;
 	margin-left: 5%;
 	text-align: center;
 	font-size: 15px;
@@ -102,6 +114,20 @@ progress[value]::-webkit-progress-bar {
 	border-radius: 2px;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
   }
+
+  footer hr {
+		
+	width: 90%;
+	margin-left: 5%;
+	color: white;
+}
+
+footer p {
+	font-size: 12px;
+
+	text-align: center;
+	color: white;
+}
 
 /*--mobile responsive--*/
 @media only screen and (max-width: 900px) {
