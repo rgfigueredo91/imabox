@@ -1,4 +1,9 @@
 /*--parametros generales about--*/
+body{
+	background-color: rgb(27, 27, 27);
+}
+
+
 
 .main-artist {
 	width: 100%;
@@ -14,7 +19,7 @@
 
 .nav-brandingblack 
 {
-	color: black;
+	color: white;
 }
 
 .photos-artist {
@@ -86,10 +91,12 @@
 }
 
 .firstchild p{
+	color: white;
 	margin-top: 30px;
 	text-align: center;
 }
-.top-about2{
+.top-about{
+	color: white;
 	margin-top: 100px;
 	width: 100%;
 	text-align: center;
@@ -105,7 +112,7 @@
 
 
 .insidebox{
-	background-color: rgb(238, 238, 238);
+	background-color: rgb(20, 20, 20);
 	width: 100%;
 	display: flex;
 	flex-direction: row;
@@ -124,7 +131,7 @@
 }
 .insidebox2{
 	margin-top: 1vh;
-	background-color: rgb(238, 238, 238);
+	background-color: rgb(20, 20, 20);
 	width: 100%;
 	display: flex;
 	flex-direction: row-reverse;
@@ -137,6 +144,7 @@
 }
 
 .textoyo {
+	color: white;
 	margin-top: 4%;
 	width: 50%;
 	margin-right: 20vh;
@@ -175,7 +183,8 @@ svg {
 }
 
 .textoyo2 p{
-	
+	font-weight: 1;
+	color: white;
 	margin-top: 20px;
 }
 
@@ -190,7 +199,7 @@ svg {
 	color: #f01f50;
 }
 .top-about{
-	margin-top: 250px;
+	margin-top: 150px;
 	width: 100%;
 	text-align: center;
 }
@@ -233,10 +242,28 @@ svg {
 
 	margin-left: 25px;
 	margin-right: 25px;
-	color: black
+	color: white;
 }
 .icons i:hover {
 	transform: scale(1.2);
+}
+
+footer{
+	height: 50px;
+}
+
+footer hr {
+		
+	width: 90%;
+	margin-left: 5%;
+	color: white;
+}
+
+footer p {
+	font-size: 12px;
+
+	text-align: center;
+	color: white;
 }
 
 
@@ -330,26 +357,30 @@ svg {
 }
 
 .textoyo2 h2{
+	color: white;
 	text-align: center;
 	width: 100%;
 }
 .textoyo2 p{
+	color: white;
 	width:80%;
-	
 	margin-left: 10%;
 }
 
 .top-about h2{
+	color: white;
 	text-align: center;
 	width: 100%;
 }
 .top-about p{
+	color: white;
 	width:80%;
 	text-align: justify;
 	margin-left: 10%;
 }
 
 .firstchild p{
+	color: white;
 	text-align: center;
 }
 .map-container {
@@ -382,6 +413,21 @@ svg {
 	
 	}
 	
+	footer hr {
+		
+		width: 90%;
+		margin-left: 5%;
+		color: white;
+	}
+	
+	footer p {
+		font-size: 12px;
+	
+		text-align: center;
+		color: white;
+	}
+	
+		
 	
 	
 	
@@ -413,6 +459,14 @@ svg {
 			
 			width: auto;
 			
+		}
+
+		.map-container {
+			height: 100px;
+			margin-top: 40px;
+			width: 50%;
+			margin-left: 25%;
+		
 		}
 
 		.textoyo {

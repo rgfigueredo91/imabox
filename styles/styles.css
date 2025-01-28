@@ -552,10 +552,15 @@ footer p {
 	   }
 	
 	.flex-icon{
-		margin-top: 15px;
+		
 		justify-content: space-evenly;
 	   }
 	   
+
+	   .flex-icon li{
+		margin-top: 45px;
+		justify-content: space-evenly;
+	   }
 	.nav-textUno {
 	   margin-bottom: 40%;
 	}
