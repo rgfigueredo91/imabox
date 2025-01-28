@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+
+<html lang="eng">
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="UTF-8" />
@@ -10,151 +11,145 @@
 		<meta name="viewport" content="=width=device-width, initial-scale=1.0, user-scalable=no"/>
 		<meta property="og:type" content="website" />
 		<meta property="og:title" content="Imabox Rendering Studio" />
+	
 		<meta property="og:description" content="IMABOX was founded in 2018 by Arch. Juan Delgado and Arch. Rodrigo Figueredo. We are a Rendering and 3dart imaging studio based in Montevideo, Uruguay." />
 		<meta property="og:url" content="https://imabox.uy" />
-		
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
 		<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 		<link rel="shortcut icon" type="image/png" href="favicon.png"/>
 		<link rel="stylesheet" type="text/css" href="styles/styles.css">
-		<link rel="stylesheet" type="text/css" href="styles/styles.css">
-		<link rel="stylesheet" type="text/css" href="styles/prices.css">
+		<link rel="stylesheet" type="text/css" href="styles/vr.css">
 		<link rel="stylesheet" href="https://use.typekit.net/oov2wcw.css">
+	
+				<!-- Google Tag Manager -->
+				<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+					new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+					j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+					'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+					})(window,document,'script','dataLayer','GTM-NMJRX79');</script>
+					<!-- End Google Tag Manager -->
+	
 
-		<script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
-		<script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-firestore.js"></script>
-
-
-			<!-- Google Tag Manager -->
-	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-		new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-		j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-		'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-		})(window,document,'script','dataLayer','GTM-NMJRX79');</script>
-		<!-- End Google Tag Manager -->
 	</head>
 
 	<body>
-			<!-- Google Tag Manager (noscript) -->
+
+				<!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMJRX79"
 	height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 	<!-- End Google Tag Manager (noscript) -->
-	
-		<!--barra fija arriba desktop-->
-		<header class="navbar-noboots" id="navbar-noboots">
-			<div class="wrapper-1">
-				<h1 class="title"><a href="/">imabox</h1></a>
+
+	<header>
+
+		<nav class="navbar">
+			<div class="top-navbar">
+				<div class="top-navbarDivUno">
+					<a href="https://imabox.uy" class="nav-branding nav-brandingblack" id="link-font-index">imabox.</a>
+				</div>
+				<div class="hamburger">
+					<div class="div-bar">
+							<span class="bar"></span>
+							<span class="bar"></span>	
+							<span class="bar"></span>
+					</div>
+				</div>
+				
 			</div>
-			<div class="wrapper-2">
-				<ul class="menu">
-					<li class="items"><a href="#" id="link-font" >#works ↓</a>
-						<div class="sub-menu1">
-							<ul class="activenavbar">
-								<li class="items dropdown-content "><a href="https://imabox.uy/index.html"  id="portfolio-translate">Arch Viz</a></li>
-								<li class="items dropdown-content"><a href="https://imabox.uy/360.html" id="360-translate" >360º</a></li>
-								<li class="items dropdown-content"><a href="https://imabox.uy/vr.html" id="vr-translate">Virtual Reality</a></li>	
-								<!--<li class="items dropdown-content"><a href="#" id="animation-translate" onclick="waitingForAnimation()">Animations</a></li> -->
-							</ul>
-						</div>
-					</li>
-					<li class="items"><a href="#" id="link-font-about" class="currents">#about us ↓</a>
-						<div class="sub-menu1">
-							<ul class="activenavbar" >
-								<li class="items dropdown-content"><a href="https://imabox.uy/artists.html" id="artist-translate" >artists</a></li>
-								<li class="items dropdown-content"><a href="https://imabox.uy/services.html" id="prices-translate" class="currents">services</a></li>
-								<li class="items dropdown-content"><a href="https://imabox.uy/process.html" id="process-translate">process</a></li>
-								<!--<li class="items dropdown-content"><a href="https://imabox.uy/book.html" id="process-translate">book</a></li>
-								<li class="items dropdown-content"><a href="https://imabox.uy/reviews.html" id="references-translate">clients</a></li>-->
-							</ul>
-						</div>
-					</li>	
-					<li class="items"><a href="https://imabox.uy/contact.html"  id="contactid">#contact</a></li>
+
+			<div class="nav-text">
+				<div class="nav-textUno">
+					<ul class="nav-menuDos">
+						<li  class="nav-itemDos">
+							<p>hello@imabox.uy</p>	
+						</li>
+						<li  class="nav-itemDos">
+							<p>Montevideo, Uruguay.</p>	
+						</li>
+						<li  class="nav-itemDos">
+							<p>+598 98 325 902</p>	
+						</li>
+						
+						<li class="nav-itemDos">
+							<a href="#eng" onclick="timedRefresh()">eng <a>|</a>
+							</a> <a href="#esp" onclick="timedRefresh()">esp</a>
+						</li>	
+						
 					
-					<li class="items"><a href="#eng" onclick="timedRefresh()">eng <a>|</a></a> <a href="#esp" onclick="timedRefresh(), changeChatLanguage()">esp</a></li>	
-				</ul>
-				<ul class="social-menu">
-					<li class="social-icon" id="instagram"><a href="https://www.instagram.com/imago_uy" target="_blank"><i
-								class="fa fa-instagram"></i></a></li>
-					<li class="social-icon" id="linkedin"><a href="https://www.linkedin.com/company/imagouy" target="_blank"><i
-								class="fa fa-linkedin"></i></a></li>
-					<li class="social-icon" id="facebook"><a href="https://www.facebook.com/Imago-Rendering-Studio-108697060701498" target="_blank"><i
-								class="fa fa-facebook"></i></a></li>
-				</ul>
-			</div>
-				</header>
-		
-		<!--barra fija arriba telefono navbar-->
-		
-				<section class="phonenavbar" id="phonenavbarid">
-		
-					<h1 class="titlephone"><a href="/">imabox</h1></a>
-					<input type="checkbox" id="nav-toggle" class="nav-toggle">
-					<nav class="navphone-3">
-						<ul>
-							<li class="currentsphone"><a href="https://imabox.uy/index.html" id="portfolio-translate-phone" >Arch Viz</a></li>
-							<!--<li class="currentsphone"><a href="#" id="animation-translate-phone" onclick="waitingForAnimation()">Animations</a></li> -->
-							<li class="currentsphone"><a href="https://imabox.uy/360.html" id="360-translate-phone" >360º</a></li>
-							<li class="currentsphone"><a href="https://imabox.uy/vr.html" id="psvr-translate-phone">Virtual Reality</a></li>
-							<hr></hr>
-							<li class="currentsphone"><a href="https://imabox.uy/artists.html" id="artist-translate-phone" >artists</a></li>
-							<li class="currentsphone"><a href="https://imabox.uy/services.html" id="prices-translate-phone" class="currents">services</a></li>
-							<li class="currentsphone"><a href="https://imabox.uy/process.html" id="process-translate-phone">process</a></li>
-							<!--<li class="currentsphone"><a href="https://imabox.uy/book.html" id="book-translate-phone">book</a></li>
-							<li class="currentsphone"><a href="https://imabox.uy/reviews.html" id="references-translate-phone">clients</a></li>-->
-							<li class="currentsphone"><a href="https://imabox.uy/contact.html" id="contact-translate-phone">contact</a></li>
-							<hr></hr>
-							<li><a href="#eng" onclick="timedRefresh()">eng <a>|</a></a> <a href="#esp" onclick="timedRefresh(), changeChatLanguage() ">esp</a></li>	
-							<hr></hr>
-						</ul>
 						<ul class="flex-icon">
-							<li class="social-icon" id="instagram"><a href="https://www.instagram.com/imago_uy" target="_blank"><i class="fa fa-instagram"></i></a></li>
-							<li class="social-icon" id="linkedin"><a href="https://www.linkedin.com/company/imagouy" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+							<li class="social-icon" id="instagram"><a href="https://www.instagram.com/imabox_uy" target="_blank"><i class="fa fa-instagram"></i></a></li>
+							<li class="social-icon" id="linkedin"><a href="https://www.linkedin.com/company/imabox" target="_blank"><i class="fa fa-linkedin"></i></a></li>
 							<li class="social-icon" id="facebook"><a href="https://www.facebook.com/Imago-Rendering-Studio-108697060701498" target="_blank"><i class="fa fa-facebook"></i></a></li>
 						</ul>
-					</nav>
-						<label for="nav-toggle" class="nav-toggle-label">
-							<span></span>
-						</label>
-				</section>
-		
+					</ul>
+				</div>
+				<div>
+					<ul class="nav-menu">
+						<li class="nav-item">
+							<a href="https://imabox.uy/works.html" class="nav-link" id="link-font">Our Work</a>
+						</li>
+						<li class="nav-item">
+							<a href="https://imabox.uy/services.html" class="nav-link" id="link-font-Virtual">Services</a>
+						</li>
+				
+						<li class="nav-item">
+							<a href="https://imabox.uy/about.html" class="nav-link" id="link-font-about">About</a>
+						</li>
+						<li class="nav-item">
+							<a href="https://imabox.uy/contact.html" class="nav-link" id="link-font-contact">Contact</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+
+	</header>
+	<!--fin barra fija arriba telefono navbar-->
 		<!--seccion imagenes-->
-
-		<div class="main">
-			<div class="header-prices">	
-				<h1 id="titleservicefor">Who is our service for?</h>
+		<div class="servicesContainer">
+			<div class="firstParagraphVR">
+				<p>We empower real estate developers, architects, 
+					and creative teams by providing visual tools that 
+					turn ideas into unforgettable experiences. With extensive expertise in architecture, 
+					photography, and CGI, we specialize in bringing unbuilt projects to life through hyper-realistic imagery 
+					and animations, interactive solutions, and branding design for both digital and traditional platforms.</p>
 			</div>
-		
-			<div class="icons-totals">
-				<div class="icons-prices">
-					<img  src="images/icon.jpg" data-src="">
-					<p id="architecture-studio">Architecture studios</p>
+			<div class="main">
+				<div class="box-img">
+					<div class="ourWork">
+						<a href="https://imabox.uy/works" target="_blank"><img src="images/logos/images.png"></a>
+						<h3>Images & Motions</h3>
+					</div>
+					<div class="ourWork">
+						<a href="https://imabox.uy/ps-vr4/index.html" target="_blank"><img src="images/logos/video.png"></a>
+						<h3>Films</h3>
+					</div>
+					<div class="ourWork">
+						<a href="https://imabox.uy/branding.html" target="_blank"><img src="images/logos/branding.png"></a>
+						<h3>Branding identity</h3>
+					</div>
+					<div class="ourWork">
+						
+						<a href="https://imabox.uy/ps-vr/index.html"  target="_blank"><img src="images/logos/saleplatform.png"></a>
+						<h3>Virtual Showroom</h3>
+					</div>
 				</div>
-				<div class="icons-prices">
-					<img  src="images/icon.jpg" data-src="">
-					<p id="developers">Developers</p>
-				</div>
-				<div class="icons-prices">
-					<img  src="images/icon.jpg" data-src="">
-					<p id="professionals">Professionals</p>
-				</div>
+				
 			</div>
-
-			
+			<div>
+				<footer>
+					<hr>
+					<p  id="rights-reserved">&copy; 2024 Imabox - "Unboxing The Future". All rights reserved</p>
+				</footer>
+			</div>
 		</div>
-
-		<footer>
-			<hr>
-			<p id="rights-reserved">&copy; 2022 Imabox "Unboxing Possible Futures". All rights reserved</p>
-		</footer>
-		
-	
-
-		<!--precio script-->
-
-		
-		<script src="js/navbarmove.js"></script><!--navbar move-->
-	
+		<script src="js/alert.js"></script>
+		<script src="js/navbarmoveindex.js"></script><!--navbar move-->
 		<script src="js/translate.js"></script><!--navbar move-->
-		<script src="js/translate-pricing.js"></script>
-		<!--fin precio script-->
+		<script src="js/translate-vr.js"></script><!--navbar move-->
+
 	</body>
 </html>
