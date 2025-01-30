@@ -16,28 +16,24 @@
 			})
 
 			*/
-
-const hamburger = document.querySelector(".div-bar")
-const navMenu = document.querySelector(".nav-text")
-const topNavBar = document.querySelector(".top-navbar")
-const navBranding = document.querySelector(".nav-branding")
-const navBar = document.querySelector(".navbar")
+			const hamburger = document.querySelector(".div-bar");
+const navMenu = document.querySelector(".nav-text");
+const topNavBar = document.querySelector(".top-navbar");
+const navBranding = document.querySelector(".nav-branding");
+const navBar = document.querySelector(".navbar");
 
 hamburger.addEventListener("click", () => {
-	hamburger.classList.toggle("active")
-	navMenu.classList.toggle("active")
-	topNavBar.classList.toggle("active")
-	navBranding.classList.toggle("active")
-	navBar.classList.toggle("active")
+	hamburger.classList.toggle("active");
+	navMenu.classList.toggle("active");
+	topNavBar.classList.toggle("active");
+	navBranding.classList.toggle("active");
+	navBar.classList.toggle("active");
+});
 
-})
-
-document.querySelectorAll(".nav-link").forEach(n => n.
-	addEventListener("click",() => {
-		hamburger.classList.remove("active")
-		navMenu.classList.remove("active")
-		topNavBar.classList.remove("active")
-		navBranding.classList.remove("active")
-		navBar.classList.remove("active")
-	
-	}))
+document.querySelectorAll(".nav-link").forEach(n => n.addEventListener("click", () => {
+	hamburger.classList.remove("active");
+	navMenu.classList.remove("active");
+	topNavBar.classList.remove("active");
+	navBranding.classList.remove("active");
+	navBar.classList.remove("active");
+}));

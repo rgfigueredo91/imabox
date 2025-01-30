@@ -233,6 +233,15 @@
 			</footer>
 
 		<script>
+			  
+        document.addEventListener("DOMContentLoaded", function() {
+            setTimeout(() => {
+                document.querySelector(".top-about").classList.add("show");
+                document.querySelector(".map-container").classList.add("show");
+                document.querySelector(".buttons-students").classList.add("show");
+            }, 300);
+        });
+   
 		$('.map-container')
 	.click(function(){
 			$(this).find('iframe').addClass('clicked')})

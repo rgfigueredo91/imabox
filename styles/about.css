@@ -5,16 +5,71 @@ body{
 
 
 
-.main-artist {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.map-container.show {
+	opacity: 1;
+	transform: translateX(0);
+}
+
+
+
+.main-artists {
 	width: 100%;
+	overflow: hidden;
 }
 .map-container {
 	height: 400px;
-	margin-top: 40px;
 	width: 50%;
-	margin-left: 25%;
-
+	margin: 40px auto 0;
+	opacity: 0;
+	transform: translateX(100px);
+	transition: all 1s ease-in-out 0.5s;
 }
+
 
 
 .nav-brandingblack 
@@ -49,13 +104,14 @@ body{
 	
 }
 
-.buttons-students{
-	margin-top: 100px;
-	display: flex;
-	flex-direction: column;
-	width: 100%;
-	
+.buttons-students {
+	text-align: center;
+	margin-top: 50px;
+	opacity: 0;
+	transform: translateY(50px);
+	transition: all 1s ease-in-out 1s;
 }
+
 
 .buttons-students a{
 	cursor: auto;
@@ -64,9 +120,14 @@ body{
 	
 }
 
+.buttons-students.show {
+	opacity: 1;
+	transform: translateY(0);
+}
 
-.buttons-students button{
-	margin-left: 40%;
+
+
+.buttons-students button {
 	color: white;
 	cursor: pointer;
 	background-color: #f01f50;
@@ -198,10 +259,18 @@ svg {
 	text-align: center;
 	color: #f01f50;
 }
-.top-about{
-	margin-top: 150px;
-	width: 100%;
+.top-about {
 	text-align: center;
+	margin-top: 150px;
+	opacity: 0;
+	transform: translateX(-100px);
+	transition: all 1s ease-in-out;
+}
+
+
+.top-about.show {
+	opacity: 1;
+	transform: translateX(0);
 }
 
 .bottom-about{
@@ -514,7 +583,7 @@ footer p {
 		}
 
 		.buttons-students button{
-			margin-left: 25%;
+		
 			color: white;
 			cursor: pointer;
 			background-color: #f01f50;
