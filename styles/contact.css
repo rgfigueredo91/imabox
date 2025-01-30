@@ -4,14 +4,36 @@ body {
 	background-color: rgb(27, 27, 27);
 
 }
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
 
 
 .FirstParagraph{
 	margin-top: 50px;
 	text-align: justify;
-	font-size: 1.4rem;
-	width: 80%;
+	font-size: 1.2rem;
+	width: 55%;
 	color: white;
+	animation: slideInLeft 1s ease-out forwards;
 }
 
 
@@ -27,9 +49,16 @@ body {
 }
 
 .formulario {
+	animation: slideInRight 1.2s ease-out forwards;
 	margin-top: 100px;
 	width: 40%;
 	color: white;
+}
+
+.label1, input, textarea {
+    opacity: 0;
+    transform: translateX(50px);
+    animation: slideInLeft 1s ease-out forwards;
 }
 
 
@@ -66,7 +95,12 @@ body {
 	border: none;
 	background-color: #f01f50;
 	color: white;
-	transition: .6 ease-in-out
+	transition: .6 ease-in-out;
+	opacity: 0;
+    transform: translateY(20px);
+    animation: slideInRight 1s ease-out forwards;
+    animation-delay: 1.7s;
+	
 }
 
 #uploading{
