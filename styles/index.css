@@ -1,11 +1,16 @@
 * {
-   
 	margin-top: 0;
 	padding: 0;
 	font-family: 'Times New Roman', Times, serif;
-    overflow-y: hidden;
-    overflow-x: hidden;
-	margin: 0;}
+	margin: 0;
+
+
+}
+
+*::-webkit-scrollbar{
+    display: none;
+  }
+
 
 body {
 	display: flex;
@@ -20,7 +25,7 @@ body {
 		flex-direction: column;
 		justify-content: space-between;
 		transition: height 0.3s ease-in-out, background-color 0.3s ease-in-out;
-	    
+	    height: 0;
 	}
 	
 
@@ -42,22 +47,20 @@ body {
     margin-bottom: 0px;
  }
 
-
 .flex-icon{
     margin-top: 5px;
     flex-direction: row;
     display: flex;
     justify-content: space-between;
-    text-decoration: none;
-    list-style: none;
     margin-left: 1px;
+	list-style: none;
 }
 .social-icon a{
-    
     font-size: .8rem;
     text-decoration: none;
     list-style: none;
     color: black;
+	list-style: none;
     
 }
 .social-icon a:hover{
@@ -83,6 +86,10 @@ body {
 	
 
 }
+.nav-textUno{
+	text-decoration: none;
+	list-style: none;
+}
 
 .nav-text {
 	position: relative;
@@ -100,7 +107,6 @@ body {
     top: 0;
 	
 }
-
 .top-navbarDivUno {
     margin-top: 10px;
 }
@@ -111,6 +117,8 @@ body {
     cursor: pointer;
 }
 .nav-menu{
+	text-decoration: none; 
+	list-style-type: none;
     margin-top: 15px;
     display: flex;
     flex-direction: row;
@@ -122,6 +130,7 @@ body {
  	margin-top: 5px;
   	height: 90px;
 }
+
 .nav-menuDos a{
     margin-left: 25px; 
     text-decoration: none;
@@ -144,7 +153,6 @@ body {
    
    margin-left: 0px; 
 }
-
 .nav-item {
     margin-right: 30px;
     text-decoration: none;
@@ -168,7 +176,7 @@ body {
     font-size: 2.5rem;
 }
 .nav-link {
-    
+    transition: 0.7s ease;
 }
 .nav-link:hover {
     color: #f01f50;
@@ -178,13 +186,13 @@ body {
     width: 25px;
     height: 3px;
     margin: 5px auto;
-    -webkit-transition: all 0.3s ease-in-out;
-    transition: all 0.3s ease-in-out;
+    -webkit-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
     background-color: black;
 }
 .div-bar {
     margin-left: .8px;
-    margin-top: 10px;
+    margin-top: 15px;
 }
 .hamburger {
     cursor: pointer;
@@ -259,7 +267,7 @@ body {
 }
 
 .textandimagediv{
-    margin-top: 15%;
+  
     display: flex;
     flex-direction: column;
  
@@ -268,7 +276,7 @@ body {
 
 .textandimagediv  p{
     font-family: 'Poppins', sans-serif;
-    margin-top: 5%;
+    margin-top: 20%;
     margin-left: 15%;
     line-height: 3.5rem;
     text-align: center;
