@@ -11,16 +11,27 @@ body {
 	display: flex;
 	flex-direction: column;}
 
-.navbar {  
-    z-index: 1; 
-    position: fixed;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
 
-  
-}
+    .navbar {
+        z-index: 9;
+		position: fixed;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		transition: height 0.3s ease-in-out, background-color 0.3s ease-in-out;
+	    
+	}
+	
+
+
+	.navbar.active {
+		height: 170px;
+		z-index: 10;
+		background-color: rgba(255, 255, 255, 0.856);
+	
+	}
+	
 
 #section1{
     background-color: black;
@@ -60,30 +71,34 @@ body {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+	transition: background-color 0.3s ease-in-out;
 }
 .top-navbar.active {
+	
     width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    background-color: white;
-}
-.nav-text {
-   
-    position: relative;
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    top: -170px;
-    transition: .2s;
+    
+	
 
+}
+
+.nav-text {
+	position: relative;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	top: -170px;
+	opacity: 0;
+	transition: top 0.3s ease-in-out, opacity 0.2s ease-in-out;
 }
 
 .nav-text.active{
-    height: 100px;
-    top: 0vh;
-    background-color: white;
+    opacity: 1;
+    top: 0;
+	
 }
 
 .top-navbarDivUno {
