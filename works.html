@@ -471,8 +471,57 @@
 
 	<script src="js/yall.min.js"></script>
 	<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+    const images = document.querySelectorAll(".img");
+
+    // Animación de las imágenes al cargar la página
+    images.forEach(img => {
+        img.classList.add("hidden-scale"); // Clase inicial
+    });
+
+    // Observer para animar cuando se hace scroll
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("scale-in");
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.2
+    });
+
+    images.forEach(img => {
+        observer.observe(img);
+    });
+
+    // Añadir la clase 'loaded' a las imágenes cuando cargan
+    const lazyImages = document.querySelectorAll('img.lazy');
+    lazyImages.forEach(img => {
+        img.onload = () => {
+            img.classList.add('loaded');
+        };
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
 		ScrollReveal().reveal('.lazy');
 	document.addEventListener("DOMContentLoaded", yall);
+
 	</script>
 
 	

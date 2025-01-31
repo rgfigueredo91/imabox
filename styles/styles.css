@@ -218,6 +218,27 @@ body {
 	filter: blur(10px);
 }
 
+.hidden-scale {
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 1.5s ease-out, transform 1.5s ease-out;
+}
+
+/* Efecto de escala cuando la imagen entra en el viewport */
+.scale-in {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Al cargar la página, las imágenes aparecerán */
+img.lazy {
+    opacity: 0;
+    transition: opacity 1.5s ease-out;
+}
+
+img.lazy.loaded {
+    opacity: 1;
+}
 .container {
     width: 100vw;
     height: 100vh;
