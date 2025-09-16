@@ -18,12 +18,14 @@
 		<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
 		<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="styles/index.css">
+		<link rel="stylesheet" type="text/css" href="styles/chat.css">
 		<link rel="stylesheet" href="https://use.typekit.net/oov2wcw.css">
 		<link rel="shortcut icon" type="image/png" href="favicon.png" />
 		<script src="js/scrollreveal.js"></script>
 		<script src="js/jquery-2.1.0.min.js"></script>
 		<script src="js/jquery.swipebox.min.js"></script>
 		<script src="js/polyfill.js"></script>
+		<script src="js/chat.js"></script><!--chat-->
 
 		<!-- Google Tag Manager -->
 			<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -92,56 +94,8 @@
   </div>
 </div>
 
-<style>
-/* Floating button */
-.imabox-chat-btn{
-  position: fixed; right: 18px; bottom: 18px;
-  width: 56px; height: 56px; border: 0; border-radius: 50%;
-  background:#25D366; box-shadow:0 12px 30px rgba(0,0,0,.28);
-  display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:9999;
-}
-.imabox-chat-btn svg{ width:28px; height:28px; fill:#fff; }
 
-/* Chat panel */
-#imabox-chat-panel{
-  position: fixed; right: 18px; bottom: 86px;
-  width: 360px; max-width: calc(100vw - 36px);
-  max-height: 80vh; overflow: auto;
-  background:#fff; border-radius:16px;
-  border:1px solid rgba(0,0,0,.06);
-  box-shadow:0 24px 60px rgba(0,0,0,.35);
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
-  z-index:9998;
-}
-#imabox-chat-panel header{
-  background:#075E54; color:#fff;
-  padding:1rem 1.1rem; display:grid; gap:.25rem;
-  border-top-left-radius:16px; border-top-right-radius:16px;
-}
-#imabox-chat-panel form{
-  padding:1rem 1.1rem 1.2rem; display:grid; gap:.8rem;
-}
-#imabox-chat-panel label{ display:grid; gap:.35rem; color:#222; font-weight:600; }
-#imabox-chat-panel input,
-#imabox-chat-panel textarea{
-  width:100%; background:#fff; color:#222;
-  border:1px solid #e6e6e6; border-radius:12px;
-  padding:.75rem; font:inherit; text-align:center;
-}
-#imabox-chat-panel textarea{ min-height:110px; resize:vertical; }
-#imabox-chat-panel input:focus,
-#imabox-chat-panel textarea:focus{
-  border-color:#25D366; box-shadow:0 0 0 3px rgba(37,211,102,.18);
-}
-.actions{ display:grid; grid-template-columns:1fr 1fr; gap:.6rem; margin-top:.2rem; }
-.actions button{
-  padding:.75rem .9rem; border:0; border-radius:10px; cursor:pointer; font-weight:700;
-}
-.actions button[type="submit"]{ background:#25D366; color:#fff; }
-#imabox-whats{ background:#f1f2f4; color:#1f2937; }
-.hint{ font-size:.85rem; color:#666; margin-top:.15rem; }
-.ok{ color:#0a7f3f; } .err{ color:#b00020; }
-</style>
+
 
 <script>
 (() => {
@@ -402,10 +356,7 @@
 				<script src="js/translate-index.js"></script>
 				<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 				
-				<script>
-
-				</script>
-				
+			
 		</body>
 	
 </html>
