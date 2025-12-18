@@ -1,8 +1,8 @@
 var APP_DATA = {
   "scenes": [
     {
-      "id": "0-living-01",
-      "name": "living 01",
+      "id": "0-living",
+      "name": "living",
       "levels": [
         {
           "tileSize": 256,
@@ -24,29 +24,29 @@ var APP_DATA = {
       ],
       "faceSize": 1500,
       "initialViewParameters": {
-        "yaw": 1.6012683915458048,
-        "pitch": 0.04861587172507953,
+        "yaw": 1.5535861049369544,
+        "pitch": 0.008429052671610648,
         "fov": 1.38217411905719
       },
       "linkHotspots": [
         {
-          "yaw": 1.4703440105589012,
-          "pitch": 0.009564367230947113,
+          "yaw": 1.578069736209228,
+          "pitch": 0.073081243895178,
           "rotation": 0,
-          "target": "1-living-02"
+          "target": "1-cocina"
         },
         {
-          "yaw": -1.853384320292598,
-          "pitch": 0.08143518728448207,
+          "yaw": -1.8419900663071456,
+          "pitch": 0.05648512150190399,
           "rotation": 0,
-          "target": "2-cuarto-01"
+          "target": "3-dormitorio"
         }
       ],
       "infoHotspots": []
     },
     {
-      "id": "1-living-02",
-      "name": "living 02",
+      "id": "1-cocina",
+      "name": "cocina",
       "levels": [
         {
           "tileSize": 256,
@@ -74,23 +74,23 @@ var APP_DATA = {
       },
       "linkHotspots": [
         {
-          "yaw": 2.008957318326277,
-          "pitch": 0.09479271935521183,
+          "yaw": -1.5205082325533077,
+          "pitch": 0.049816318229165546,
           "rotation": 0,
-          "target": "3-bano-01-final"
+          "target": "0-living"
         },
         {
-          "yaw": -1.4980743543418562,
-          "pitch": 0.02453826442396867,
+          "yaw": 2.0091236319335604,
+          "pitch": -0.02127866896691266,
           "rotation": 0,
-          "target": "0-living-01"
+          "target": "2-bao"
         }
       ],
       "infoHotspots": []
     },
     {
-      "id": "2-cuarto-01",
-      "name": "cuarto 01",
+      "id": "2-bao",
+      "name": "baño",
       "levels": [
         {
           "tileSize": 256,
@@ -118,17 +118,17 @@ var APP_DATA = {
       },
       "linkHotspots": [
         {
-          "yaw": 1.6471323546838939,
-          "pitch": 0.10131359098556914,
+          "yaw": -1.3334659100071722,
+          "pitch": 0.0698021661115007,
           "rotation": 0,
-          "target": "0-living-01"
+          "target": "1-cocina"
         }
       ],
       "infoHotspots": []
     },
     {
-      "id": "3-bano-01-final",
-      "name": "bano 01 final",
+      "id": "3-dormitorio",
+      "name": "dormitorio",
       "levels": [
         {
           "tileSize": 256,
@@ -156,20 +156,20 @@ var APP_DATA = {
       },
       "linkHotspots": [
         {
-          "yaw": -1.3496374689164128,
-          "pitch": 0.11713926447267653,
+          "yaw": 1.7178954554400985,
+          "pitch": 0.08422784026279473,
           "rotation": 0,
-          "target": "1-living-02"
+          "target": "0-living"
         }
       ],
       "infoHotspots": []
     }
   ],
-  "name": "KIU AV ITALIA",
+  "name": "Project Title",
   "settings": {
     "mouseViewMode": "drag",
-    "autorotateEnabled": false,
-    "fullscreenButton": true,
+    "autorotateEnabled": true,
+    "fullscreenButton": false,
     "viewControlButtons": false
   }
 };
