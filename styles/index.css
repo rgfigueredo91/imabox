@@ -488,6 +488,22 @@ body {
 
 @media only screen and (max-width: 850px) {
 
+	html, body {
+		overflow: hidden;
+		height: 100vh;
+		height: 100dvh;
+	}
+
+	#section1 {
+		height: 100vh;
+		height: 100dvh;
+	}
+
+	.sectioncinco {
+		display: none;
+	}
+
+
 	.nav-itemDos {
 		margin-top: 2px;
 		font-size:.9rem;

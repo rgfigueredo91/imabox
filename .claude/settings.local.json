@@ -6,7 +6,9 @@
       "Bash(sed -i '/<script src=\"js\\\\/alert.js\"><\\\\/script>/d' \"C:/Users/User/Documents/GitHub/imabox/services.html\")",
       "Bash(sed -i 's/poster=\"placeholder.webp\"/poster=\"img\\\\/cover1index.webp\"/g' \"C:/Users/User/Documents/GitHub/imabox/index.html\")",
       "Bash(grep -l =width=device-width 'C:/Users/User/Documents/GitHub/imabox/*.html')",
-      "Bash(grep *)"
+      "Bash(grep *)",
+      "Bash(/tmp/compress_videos.sh)",
+      "Bash(tee /tmp/video_compression.log)"
     ]
   }
 }
