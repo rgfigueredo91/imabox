@@ -89,14 +89,14 @@ function object2vrSkin(player,base) {
 	
 	this.preloadImages=function() {
 		var preLoadImg=new Image();
-		preLoadImg.src=basePath + 'images/left__o.png';
-		preLoadImg.src=basePath + 'images/right__o.png';
-		preLoadImg.src=basePath + 'images/up__o.png';
-		preLoadImg.src=basePath + 'images/down__o.png';
-		preLoadImg.src=basePath + 'images/zoom_in__o.png';
-		preLoadImg.src=basePath + 'images/zoom_out__o.png';
-		preLoadImg.src=basePath + 'images/auto_rotate__o.png';
-		preLoadImg.src=basePath + 'images/fullscreen__o.png';
+		preLoadImg.src=basePath + 'images/left__o.webp';
+		preLoadImg.src=basePath + 'images/right__o.webp';
+		preLoadImg.src=basePath + 'images/up__o.webp';
+		preLoadImg.src=basePath + 'images/down__o.webp';
+		preLoadImg.src=basePath + 'images/zoom_in__o.webp';
+		preLoadImg.src=basePath + 'images/zoom_out__o.webp';
+		preLoadImg.src=basePath + 'images/auto_rotate__o.webp';
+		preLoadImg.src=basePath + 'images/fullscreen__o.webp';
 	}
 	
 	this.addSkin=function() {
@@ -125,7 +125,7 @@ function object2vrSkin(player,base) {
 		this._loading_image.setAttribute('style',hs);
 		this._loading_image__img=document.createElement('img');
 		this._loading_image__img.className='ggskin ggskin_image';
-		this._loading_image__img.setAttribute('src',basePath + 'images/loading_image.png');
+		this._loading_image__img.setAttribute('src',basePath + 'images/loading_image.webp');
 		this._loading_image__img.setAttribute('style','position: absolute;top: 0px;left: 0px;-webkit-user-drag:none;');
 		this._loading_image__img.className='ggskin ggskin_image';
 		this._loading_image__img['ondragstart']=function() { return false; };
@@ -203,7 +203,7 @@ function object2vrSkin(player,base) {
 		this._loading_close.setAttribute('style',hs);
 		this._loading_close__img=document.createElement('img');
 		this._loading_close__img.className='ggskin ggskin_image';
-		this._loading_close__img.setAttribute('src',basePath + 'images/loading_close.png');
+		this._loading_close__img.setAttribute('src',basePath + 'images/loading_close.webp');
 		this._loading_close__img.setAttribute('style','position: absolute;top: 0px;left: 0px;-webkit-user-drag:none;');
 		this._loading_close__img.className='ggskin ggskin_image';
 		this._loading_close__img['ondragstart']=function() { return false; };
@@ -293,7 +293,7 @@ function object2vrSkin(player,base) {
 		this._left.setAttribute('style',hs);
 		this._left__img=document.createElement('img');
 		this._left__img.className='ggskin ggskin_button';
-		this._left__img.setAttribute('src',basePath + 'images/left.png');
+		this._left__img.setAttribute('src',basePath + 'images/left.webp');
 		this._left__img.setAttribute('style','position: absolute;top: 0px;left: 0px;-webkit-user-drag:none;');
 		this._left__img.className='ggskin ggskin_button';
 		this._left__img['ondragstart']=function() { return false; };
@@ -303,10 +303,10 @@ function object2vrSkin(player,base) {
 			me.player.changePanLog(1,true);
 		}
 		this._left.onmouseover=function () {
-			me._left__img.src=basePath + 'images/left__o.png';
+			me._left__img.src=basePath + 'images/left__o.webp';
 		}
 		this._left.onmouseout=function () {
-			me._left__img.src=basePath + 'images/left.png';
+			me._left__img.src=basePath + 'images/left.webp';
 		}
 		this._toolbar.appendChild(this._left);
 		this._right=document.createElement('div');
@@ -326,7 +326,7 @@ function object2vrSkin(player,base) {
 		this._right.setAttribute('style',hs);
 		this._right__img=document.createElement('img');
 		this._right__img.className='ggskin ggskin_button';
-		this._right__img.setAttribute('src',basePath + 'images/right.png');
+		this._right__img.setAttribute('src',basePath + 'images/right.webp');
 		this._right__img.setAttribute('style','position: absolute;top: 0px;left: 0px;-webkit-user-drag:none;');
 		this._right__img.className='ggskin ggskin_button';
 		this._right__img['ondragstart']=function() { return false; };
@@ -336,10 +336,10 @@ function object2vrSkin(player,base) {
 			me.player.changePanLog(-1,true);
 		}
 		this._right.onmouseover=function () {
-			me._right__img.src=basePath + 'images/right__o.png';
+			me._right__img.src=basePath + 'images/right__o.webp';
 		}
 		this._right.onmouseout=function () {
-			me._right__img.src=basePath + 'images/right.png';
+			me._right__img.src=basePath + 'images/right.webp';
 		}
 		this._toolbar.appendChild(this._right);
 		this._up=document.createElement('div');
@@ -359,7 +359,7 @@ function object2vrSkin(player,base) {
 		this._up.setAttribute('style',hs);
 		this._up__img=document.createElement('img');
 		this._up__img.className='ggskin ggskin_button';
-		this._up__img.setAttribute('src',basePath + 'images/up.png');
+		this._up__img.setAttribute('src',basePath + 'images/up.webp');
 		this._up__img.setAttribute('style','position: absolute;top: 0px;left: 0px;-webkit-user-drag:none;');
 		this._up__img.className='ggskin ggskin_button';
 		this._up__img['ondragstart']=function() { return false; };
@@ -369,10 +369,10 @@ function object2vrSkin(player,base) {
 			me.player.changeTiltLog(1,true);
 		}
 		this._up.onmouseover=function () {
-			me._up__img.src=basePath + 'images/up__o.png';
+			me._up__img.src=basePath + 'images/up__o.webp';
 		}
 		this._up.onmouseout=function () {
-			me._up__img.src=basePath + 'images/up.png';
+			me._up__img.src=basePath + 'images/up.webp';
 		}
 		this._toolbar.appendChild(this._up);
 		this._down=document.createElement('div');
@@ -392,7 +392,7 @@ function object2vrSkin(player,base) {
 		this._down.setAttribute('style',hs);
 		this._down__img=document.createElement('img');
 		this._down__img.className='ggskin ggskin_button';
-		this._down__img.setAttribute('src',basePath + 'images/down.png');
+		this._down__img.setAttribute('src',basePath + 'images/down.webp');
 		this._down__img.setAttribute('style','position: absolute;top: 0px;left: 0px;-webkit-user-drag:none;');
 		this._down__img.className='ggskin ggskin_button';
 		this._down__img['ondragstart']=function() { return false; };
@@ -402,10 +402,10 @@ function object2vrSkin(player,base) {
 			me.player.changeTiltLog(-1,true);
 		}
 		this._down.onmouseover=function () {
-			me._down__img.src=basePath + 'images/down__o.png';
+			me._down__img.src=basePath + 'images/down__o.webp';
 		}
 		this._down.onmouseout=function () {
-			me._down__img.src=basePath + 'images/down.png';
+			me._down__img.src=basePath + 'images/down.webp';
 		}
 		this._toolbar.appendChild(this._down);
 		this._zoom_in=document.createElement('div');
@@ -425,7 +425,7 @@ function object2vrSkin(player,base) {
 		this._zoom_in.setAttribute('style',hs);
 		this._zoom_in__img=document.createElement('img');
 		this._zoom_in__img.className='ggskin ggskin_button';
-		this._zoom_in__img.setAttribute('src',basePath + 'images/zoom_in.png');
+		this._zoom_in__img.setAttribute('src',basePath + 'images/zoom_in.webp');
 		this._zoom_in__img.setAttribute('style','position: absolute;top: 0px;left: 0px;-webkit-user-drag:none;');
 		this._zoom_in__img.className='ggskin ggskin_button';
 		this._zoom_in__img['ondragstart']=function() { return false; };
@@ -435,10 +435,10 @@ function object2vrSkin(player,base) {
 			me.player.changeFovLog(-1,true);
 		}
 		this._zoom_in.onmouseover=function () {
-			me._zoom_in__img.src=basePath + 'images/zoom_in__o.png';
+			me._zoom_in__img.src=basePath + 'images/zoom_in__o.webp';
 		}
 		this._zoom_in.onmouseout=function () {
-			me._zoom_in__img.src=basePath + 'images/zoom_in.png';
+			me._zoom_in__img.src=basePath + 'images/zoom_in.webp';
 		}
 		this._toolbar.appendChild(this._zoom_in);
 		this._zoom_out=document.createElement('div');
@@ -458,7 +458,7 @@ function object2vrSkin(player,base) {
 		this._zoom_out.setAttribute('style',hs);
 		this._zoom_out__img=document.createElement('img');
 		this._zoom_out__img.className='ggskin ggskin_button';
-		this._zoom_out__img.setAttribute('src',basePath + 'images/zoom_out.png');
+		this._zoom_out__img.setAttribute('src',basePath + 'images/zoom_out.webp');
 		this._zoom_out__img.setAttribute('style','position: absolute;top: 0px;left: 0px;-webkit-user-drag:none;');
 		this._zoom_out__img.className='ggskin ggskin_button';
 		this._zoom_out__img['ondragstart']=function() { return false; };
@@ -468,10 +468,10 @@ function object2vrSkin(player,base) {
 			me.player.changeFovLog(1,true);
 		}
 		this._zoom_out.onmouseover=function () {
-			me._zoom_out__img.src=basePath + 'images/zoom_out__o.png';
+			me._zoom_out__img.src=basePath + 'images/zoom_out__o.webp';
 		}
 		this._zoom_out.onmouseout=function () {
-			me._zoom_out__img.src=basePath + 'images/zoom_out.png';
+			me._zoom_out__img.src=basePath + 'images/zoom_out.webp';
 		}
 		this._toolbar.appendChild(this._zoom_out);
 		this._auto_rotate=document.createElement('div');
@@ -491,7 +491,7 @@ function object2vrSkin(player,base) {
 		this._auto_rotate.setAttribute('style',hs);
 		this._auto_rotate__img=document.createElement('img');
 		this._auto_rotate__img.className='ggskin ggskin_button';
-		this._auto_rotate__img.setAttribute('src',basePath + 'images/auto_rotate.png');
+		this._auto_rotate__img.setAttribute('src',basePath + 'images/auto_rotate.webp');
 		this._auto_rotate__img.setAttribute('style','position: absolute;top: 0px;left: 0px;-webkit-user-drag:none;');
 		this._auto_rotate__img.className='ggskin ggskin_button';
 		this._auto_rotate__img['ondragstart']=function() { return false; };
@@ -501,10 +501,10 @@ function object2vrSkin(player,base) {
 			me.player.toggleAutorotate();
 		}
 		this._auto_rotate.onmouseover=function () {
-			me._auto_rotate__img.src=basePath + 'images/auto_rotate__o.png';
+			me._auto_rotate__img.src=basePath + 'images/auto_rotate__o.webp';
 		}
 		this._auto_rotate.onmouseout=function () {
-			me._auto_rotate__img.src=basePath + 'images/auto_rotate.png';
+			me._auto_rotate__img.src=basePath + 'images/auto_rotate.webp';
 		}
 		this._toolbar.appendChild(this._auto_rotate);
 		this._fullscreen=document.createElement('div');
@@ -524,7 +524,7 @@ function object2vrSkin(player,base) {
 		this._fullscreen.setAttribute('style',hs);
 		this._fullscreen__img=document.createElement('img');
 		this._fullscreen__img.className='ggskin ggskin_button';
-		this._fullscreen__img.setAttribute('src',basePath + 'images/fullscreen.png');
+		this._fullscreen__img.setAttribute('src',basePath + 'images/fullscreen.webp');
 		this._fullscreen__img.setAttribute('style','position: absolute;top: 0px;left: 0px;-webkit-user-drag:none;');
 		this._fullscreen__img.className='ggskin ggskin_button';
 		this._fullscreen__img['ondragstart']=function() { return false; };
@@ -534,10 +534,10 @@ function object2vrSkin(player,base) {
 			me.player.toggleFullscreen();
 		}
 		this._fullscreen.onmouseover=function () {
-			me._fullscreen__img.src=basePath + 'images/fullscreen__o.png';
+			me._fullscreen__img.src=basePath + 'images/fullscreen__o.webp';
 		}
 		this._fullscreen.onmouseout=function () {
-			me._fullscreen__img.src=basePath + 'images/fullscreen.png';
+			me._fullscreen__img.src=basePath + 'images/fullscreen.webp';
 		}
 		this._toolbar.appendChild(this._fullscreen);
 		this.divSkin.appendChild(this._toolbar);

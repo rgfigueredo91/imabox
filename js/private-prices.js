@@ -139,20 +139,20 @@ function addingImageInteriorScope() {
 	let htmlContentToAppend = "";
 	if (slider.value == "1"){
 		htmlContentToAppend = `
-		<img  src="img/imgscope/2x1Vh.jpg" data-src="" >
+		<img  src="img/imgscope/2x1Vh.webp" data-src="" >
 		`;
-		name = '<img  src="img/imgscope/2x1Vh.jpg" data-src="" width="100">';
+		name = '<img  src="img/imgscope/2x1Vh.webp" data-src="" width="100">';
 	}
 	else if (slider.value == "2"){
 		htmlContentToAppend = `
-		<img  src="img/imgscope/1x1Bm.jpg" data-src="" >
+		<img  src="img/imgscope/1x1Bm.webp" data-src="" >
 		`;
-		name = '<img  src="img/imgscope/1x1Bm.jpg" data-src="" width="100">';
+		name = '<img  src="img/imgscope/1x1Bm.webp" data-src="" width="100">';
 	}
 	else if (slider.value == "3"){
 		htmlContentToAppend = 
-		`<img  src="img/imgscope/1x1Bp.jpg" data-src="" >`;
-		name = '<img  src="img/imgscope/1x1Bp.jpg" data-src="" width="100">';
+		`<img  src="img/imgscope/1x1Bp.webp" data-src="" >`;
+		name = '<img  src="img/imgscope/1x1Bp.webp" data-src="" width="100">';
 	}
 	document.getElementById("images-scopes").innerHTML = htmlContentToAppend;
 	console.log(slider.value);
@@ -184,22 +184,22 @@ function addingImageExteriorScope() {
 	
 	if (slider.value == "1"){
 		htmlContentToAppend = `
-		<img  src="img/imgscope/2x1Hh.jpg" data-src="" >
+		<img  src="img/imgscope/2x1Hh.webp" data-src="" >
 		`;
-		name = '<img  src="img/imgscope/2x1Hh.jpg" data-src="" width="100">';
+		name = '<img  src="img/imgscope/2x1Hh.webp" data-src="" width="100">';
 	}
 	else if (slider.value == "2"){
 		htmlContentToAppend = `
-		<img  src="img/imgscope/1x1Bk.jpg" data-src="" >
+		<img  src="img/imgscope/1x1Bk.webp" data-src="" >
 		`;
-		name = '<img  src="img/imgscope/1x1Bk.jpg" data-src="" width="100">';
+		name = '<img  src="img/imgscope/1x1Bk.webp" data-src="" width="100">';
 	}
 	else if (slider.value == "3"){
 	
 		htmlContentToAppend = `
-		<img  src="img/imgscope/2x1Hza.jpg" data-src="" >
+		<img  src="img/imgscope/2x1Hza.webp" data-src="" >
 		`;
-		name = '<img  src="img/imgscope/2x1Hza.jpg" data-src="" width="100">';
+		name = '<img  src="img/imgscope/2x1Hza.webp" data-src="" width="100">';
 	}
 	document.getElementById("images-scopes-exterior").innerHTML = htmlContentToAppend;
 	return name;
@@ -211,20 +211,20 @@ function addingImageAnimationScope() {
 	let htmlContentToAppend = "";
 	if (slider.value == "1"){
 		htmlContentToAppend = `
-		<img  src="img/imgscope/1x1Bk-video.jpg" data-src="" >
+		<img  src="img/imgscope/1x1Bk-video.webp" data-src="" >
 		`;
-		name = '<img  src="img/imgscope/1x1Bk-video.jpg" data-src="" width="100">';
+		name = '<img  src="img/imgscope/1x1Bk-video.webp" data-src="" width="100">';
 	}
 	else if (slider.value == "2"){
 		htmlContentToAppend = `
-		<img  src="img/imgscope/1x1Bk-video2.jpg" data-src="" >
+		<img  src="img/imgscope/1x1Bk-video2.webp" data-src="" >
 		`;
-		name = '<img  src="img/imgscope/1x1Bk-video2.jpg" data-src="" width="100">';
+		name = '<img  src="img/imgscope/1x1Bk-video2.webp" data-src="" width="100">';
 	}
 	else if (slider.value == "3"){
 		htmlContentToAppend = 
-		`<img  src="img/imgscope/1x1Bk-video3.jpg" data-src="" >`;
-		name = '<img  src="img/imgscope/1x1Bk-video3.jpg" data-src="" width="100">';
+		`<img  src="img/imgscope/1x1Bk-video3.webp" data-src="" >`;
+		name = '<img  src="img/imgscope/1x1Bk-video3.webp" data-src="" width="100">';
 	}
 	document.getElementById("images-scopes-animation").innerHTML = htmlContentToAppend;
 	console.log(slider.value);
@@ -238,20 +238,20 @@ function addingImage360Scope() {
 	let htmlContentToAppend = "";
 	if (slider.value == "1"){
 		htmlContentToAppend = `
-		<img  src="img/imgscope/1x1Bk-360.jpg" data-src="" >
+		<img  src="img/imgscope/1x1Bk-360.webp" data-src="" >
 		`;
-		name = '<img  src="img/imgscope/1x1Bk-360.jpg" data-src="" width="100">';
+		name = '<img  src="img/imgscope/1x1Bk-360.webp" data-src="" width="100">';
 	}
 	else if (slider.value == "2"){
 		htmlContentToAppend = `
-		<img  src="img/imgscope/1x1Bk-3602.jpg" data-src="" >
+		<img  src="img/imgscope/1x1Bk-3602.webp" data-src="" >
 		`;
-		name = '<img  src="img/imgscope/1x1Bk-3602.jpg" data-src="" width="100">';
+		name = '<img  src="img/imgscope/1x1Bk-3602.webp" data-src="" width="100">';
 	}
 	else if (slider.value == "3"){
 		htmlContentToAppend = 
-		`<img  src="img/imgscope/1x1Bk-3603.jpg" data-src="" >`;
-		name = '<img  src="img/imgscope/1x1Bk-3603.jpg" data-src="" width="100">';
+		`<img  src="img/imgscope/1x1Bk-3603.webp" data-src="" >`;
+		name = '<img  src="img/imgscope/1x1Bk-3603.webp" data-src="" width="100">';
 	}
 	document.getElementById("images-scopes-360").innerHTML = htmlContentToAppend;
 	console.log(slider.value);
@@ -265,20 +265,20 @@ function addingImageVr() {
 	let htmlContentToAppend = "";
 	if (slider.value == "1"){
 		htmlContentToAppend = `
-		<img  src="img/imgscope/1x1Bk-vr.jpg" data-src="" >
+		<img  src="img/imgscope/1x1Bk-vr.webp" data-src="" >
 		`;
-		name = '<img  src="img/imgscope/1x1Bk-vr.jpg" data-src="" width="100">';
+		name = '<img  src="img/imgscope/1x1Bk-vr.webp" data-src="" width="100">';
 	}
 	else if (slider.value == "2"){
 		htmlContentToAppend = `
-		<img  src="img/imgscope/1x1Bk-vr2.jpg" data-src="" >
+		<img  src="img/imgscope/1x1Bk-vr2.webp" data-src="" >
 		`;
-		name = '<img  src="img/imgscope/1x1Bk-vr2.jpg" data-src="" width="100">';
+		name = '<img  src="img/imgscope/1x1Bk-vr2.webp" data-src="" width="100">';
 	}
 	else if (slider.value == "3"){
 		htmlContentToAppend = 
-		`<img  src="img/imgscope/1x1Bk-vr3.jpg" data-src="" >`;
-		name = '<img  src="img/imgscope/1x1Bk-vr3.jpg" data-src="" width="100">';
+		`<img  src="img/imgscope/1x1Bk-vr3.webp" data-src="" >`;
+		name = '<img  src="img/imgscope/1x1Bk-vr3.webp" data-src="" width="100">';
 	}
 	document.getElementById("images-scopes-vr").innerHTML = htmlContentToAppend;
 	console.log(slider.value);
