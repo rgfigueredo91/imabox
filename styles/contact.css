@@ -72,8 +72,18 @@ body {
 
 
 
-.label1, input, textarea {
+.label1 {
 	color: white;
+	margin-left: 5%;
+	text-align: center;
+	font-size: 15px;
+	width: 80%;
+	line-height: 40px;
+	margin-top: 20px;
+}
+
+input, textarea {
+	color: black;
 	margin-left: 5%;
 	text-align: center;
 	font-size: 15px;

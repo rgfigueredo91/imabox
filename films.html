@@ -22,6 +22,7 @@
 		<link rel="stylesheet" href="https://use.typekit.net/oov2wcw.css">
 		<link rel="shortcut icon" type="image/png" href="favicon.png" />
 		<link rel="canonical" href="https://imabox.uy/films.html" />
+	<script src="js/scrollreveal.js"></script>
 		<!-- Google Tag Manager -->
 		<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 		new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -232,6 +233,16 @@
 
 		document.addEventListener('keydown', e => {
 			if (e.key === 'Escape') closeFilm();
+		});
+
+		ScrollReveal().reveal('.film-card', {
+			distance: '40px',
+			origin: 'bottom',
+			opacity: 0,
+			duration: 700,
+			easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+			interval: 120,
+			reset: false
 		});
 	</script>
 
