@@ -86,11 +86,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <p  class="sr-project-sub"  id="sr-project-sub"></p>
     </div>
 
-    <!-- ── CLICK HINT ───────────────────────────────────────── -->
-    <div class="sr-hint" id="sr-hint">
-        <span class="sr-hint-dot"></span>
-        <span id="txt-hint">Click the building to explore</span>
-    </div>
+    <!-- ── ENTER BUTTON ─────────────────────────────────────── -->
+    <button class="sr-btn-enter" id="sr-btn-enter">
+        <span id="txt-enter">Ingresar</span>
+    </button>
 
     <!-- ── FLOOR NAME TOOLTIP ───────────────────────────────── -->
     <div class="sr-tooltip" id="sr-tooltip"></div>
@@ -306,19 +305,18 @@ function init() {
     applyTexts();
     bindFloorZones();
 
-    /* click on full-screen aerial OR on the stage → zoom in */
-    $("sr-img-landing").addEventListener("click", onStageClick);
-    stageWrap.addEventListener("click", onStageClick);
+    /* only the enter button triggers zoom */
+    $("sr-btn-enter").addEventListener("click", onStageClick);
 }
 
 /* ══════════════════════════════════════════════════════════════
    TEXTS / TRANSLATIONS
 ══════════════════════════════════════════════════════════════ */
 const TEXTS = {
-    eng: { hint: "Click the building to explore", back: "Back", floor: "Floor",
+    eng: { enter: "Enter", back: "Back", floor: "Floor",
            virtualTour: "Virtual Tour", tour360: "360° Tour", viewRender: "View render" },
-    esp: { hint: "Hacé click para explorar",       back: "Volver", floor: "Planta",
-           virtualTour: "Recorrido Virtual",        tour360: "Recorrido 360°", viewRender: "Ver render" },
+    esp: { enter: "Ingresar", back: "Volver", floor: "Planta",
+           virtualTour: "Recorrido Virtual", tour360: "Recorrido 360°", viewRender: "Ver render" },
 };
 
 function t(k) { return TEXTS[state.lang][k] || k; }
@@ -327,7 +325,7 @@ function applyTexts() {
     const p = DATA.project;
     $("sr-project-name").textContent = state.lang === "esp" ? p.nameEsp : p.name;
     $("sr-project-sub").textContent  = state.lang === "esp" ? p.subEsp  : p.sub;
-    $("txt-hint").textContent        = t("hint");
+    $("txt-enter").textContent       = t("enter");
     $("txt-back").textContent        = t("back");
     $("txt-floor-label").textContent = t("floor");
 }
@@ -395,7 +393,7 @@ function onStageClick() {
 function zoomIn() {
     state.phase = "zoomed";
 
-    hint.classList.add("hidden");
+    $("sr-btn-enter").classList.add("hidden");
     btnBack.classList.remove("hidden");
 
     scene.classList.add("is-zoomed");
@@ -419,7 +417,7 @@ function resetToLanding() {
 
     scene.classList.remove("is-zoomed", "is-open");
     floorsSvg.classList.remove("visible");
-    hint.classList.remove("hidden");
+    $("sr-btn-enter").classList.remove("hidden");
     btnBack.classList.add("hidden");
     hideTooltip();
 

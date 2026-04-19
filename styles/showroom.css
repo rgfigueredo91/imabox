@@ -90,7 +90,7 @@ html, body {
     object-fit: cover;
     object-position: center;
     z-index: 4;          /* above stage, below hints */
-    cursor: pointer;
+    cursor: default;
     transition: opacity 0.8s ease;
     user-select: none;
     -webkit-user-drag: none;
@@ -190,39 +190,38 @@ html, body {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   CLICK HINT  (center bottom — disappears on zoom)
+   ENTER BUTTON  (centered over the full-screen aerial)
    ═══════════════════════════════════════════════════════════════ */
-.sr-hint {
+.sr-btn-enter {
+    /* centering: inset 0 + margin auto is more reliable than top/left 50% */
     position: absolute;
-    bottom: 36px;
-    left: 50%;
-    transform: translateX(-50%);
+    inset: 0;
+    margin: auto;
+    width: fit-content;
+    height: fit-content;
     z-index: 10;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 0.72rem;
-    letter-spacing: 0.14em;
+    background: rgba(0, 0, 0, 0.45);
+    border: 2px solid rgba(255, 255, 255, 0.7);
+    border-radius: 6px;
+    color: #fff;
+    font-family: inherit;
+    font-size: 0.85rem;
+    letter-spacing: 0.3em;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.45);
+    padding: 18px 52px;
+    cursor: pointer;
+    animation: fadeUp 1.2s ease 0.6s both;
+    transition: background 0.3s ease, border-color 0.3s ease, opacity 0.4s ease;
+}
+
+.sr-btn-enter:hover {
+    background: rgba(0, 0, 0, 0.65);
+    border-color: #fff;
+}
+
+.sr-btn-enter.hidden {
+    opacity: 0;
     pointer-events: none;
-    animation: fadeUp 1.2s ease 0.8s both;
-    transition: opacity 0.4s ease;
-}
-
-.sr-hint.hidden { opacity: 0; }
-
-.sr-hint-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.5);
-    animation: pulse 2s ease-in-out infinite;
-}
-
-@keyframes pulse {
-    0%, 100% { opacity: 1;   transform: scale(1);   }
-    50%       { opacity: 0.4; transform: scale(0.7); }
 }
 
 /* ═══════════════════════════════════════════════════════════════
