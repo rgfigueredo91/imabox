@@ -214,7 +214,10 @@
 							action="https://formsubmit.co/imabox.rendering@gmail.com"
 							method="POST"
 							enctype="multipart/form-data">
-						<div>	
+						<input type="hidden" name="_captcha" value="false">
+						<input type="hidden" name="_subject" value="New contact from imabox.uy">
+						<input type="hidden" name="_next" value="https://imabox.uy/contact.html">
+						<div>
 							<label class="label1">
 							<input type="name" class="name" name="name" placeholder="name" required id="nameid">
 							</label>
@@ -236,13 +239,8 @@
 						</div>
 						<div class="uploads">
 							<br />
-							<input type="file" id="files" multiple class="input-file">
-							<br /><br />
-							<button class="send-button" id="send" type="button">Click here to Upload the file before send</button>
-							<p id="uploading"></p>
-	
-							
-							<progress value="0" max="100" id="progress"></progress>
+							<input type="file" id="files" name="attachment" multiple class="input-file">
+							<p id="file-warning" style="display:none; color:#f01f50; text-align:center; margin-top:8px; font-size:13px;"></p>
 						</div>
 						<div>
 							<label class="label1">
@@ -258,38 +256,12 @@
 						<hr>
 						<p  id="rights-reserved">&copy; 2025 Imabox - "Unboxing The Future". All rights reserved</p>
 					</footer>
-		<script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-app.js"></script>
-
-		<!-- TODO: Add SDKs for Firebase products that you want to use -->
-		<script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-storage.js"></script>
-		<script src="js/contact.js"></script>
-
-
-<script>
-// Your web app's Firebase configuration
-
-</script>
-
-
-<script>
-	let jwtClaimSet =
-   {
- "iss": "firebase-adminsdk-kxx5h@fir-30c9e.iam.gserviceaccount.com",
- "scope": "https://www.googleapis.com/auth/userinfo.email",  
- "aud": "https://www.googleapis.com/oauth2/v4/token",
-   };
-
-	
-	
-	
-	
-	
-	</script>
 	<script src="js/navbarmoveindex.js"></script><!--navbar move-->
 	<script src="js/circle.js"></script>
 		<script src="js/translate.js"></script><!--navbar move-->
 		<script src="js/chat.js"></script><!--chat-->
-		<script src="js/translate-contact.js"></script><!--navbar move-->
+		<script src="js/translate-contact.js"></script>
+		<script src="js/contact.js"></script>
 
 	<script>
 		ScrollReveal().reveal('.FirstParagraph', {
