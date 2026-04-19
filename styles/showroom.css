@@ -357,7 +357,10 @@ html, body {
     width: 100%;
     display: block;
     background: #fff;
+    cursor: zoom-in;
+    transition: opacity 0.2s;
 }
+#sr-tab-planta img:hover { opacity: 0.88; }
 
 /* Galería tab */
 .sr-up-gallery {

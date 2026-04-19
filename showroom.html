@@ -81,6 +81,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- LAYER 2a: apartment highlight overlays -->
     <img class="sr-plant-overlay" id="sr-plant-01" src="img/kiu/plantas/01.jpg" alt="" draggable="false" />
     <img class="sr-plant-overlay" id="sr-plant-02" src="img/kiu/plantas/02.jpg" alt="" draggable="false" />
+    <img class="sr-plant-overlay" id="sr-plant-03" src="img/kiu/plantas/03.jpg" alt="" draggable="false" />
     <img class="sr-plant-overlay" id="sr-plant-04" src="img/kiu/plantas/04.jpg" alt="" draggable="false" />
     <img class="sr-plant-overlay" id="sr-plant-05" src="img/kiu/plantas/05.jpg" alt="" draggable="false" />
     <img class="sr-plant-overlay" id="sr-plant-06" src="img/kiu/plantas/06.jpg" alt="" draggable="false" />
@@ -140,7 +141,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="sr-up-header">
             <div class="sr-up-meta">
                 <p class="sr-up-label">Tipología</p>
-                <h2 class="sr-up-name">KIU</h2>
+                <h2 class="sr-up-name" id="sr-up-name">KIU</h2>
             </div>
             <button class="sr-up-close" id="sr-up-close" aria-label="Cerrar">
                 <i class="fa fa-times"></i>
@@ -154,7 +155,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
         <div class="sr-up-body">
             <div class="sr-up-content active" id="sr-tab-planta">
-                <img src="img/kiu/planta.jpg" alt="Planta tipología KIU" />
+                <img id="sr-planta-img" src="img/kiu/planta.jpg" alt="Planta tipología" />
             </div>
             <div class="sr-up-content" id="sr-tab-galeria">
                 <div class="sr-up-gallery" id="sr-up-gallery">
@@ -213,18 +214,26 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 ═══════════════════════════════════════════════════════════ -->
 <script>
 /* ══════════════════════════════════════════════════════════════
-   DATA  —  floors ordered top → bottom
-   viewImage: full-screen image shown when this floor is selected
-              (null = keep building view)
-
+   DATA  —  edit this block to adapt to any building
+   ══════════════════════════════════════════════════════════════
+   defaults  → fallback images/tour used when a unit doesn't
+               override them (use same assets while new ones
+               aren't ready, swap per-unit when they are)
+   units     → keyed by the data-unit value on each SVG rect;
+               omit any key to use the default fallback
+   floors    → ordered top → bottom; hasUnits: true shows SVG
+               hotspots and opens the unit panel on click
 ══════════════════════════════════════════════════════════════ */
 const DATA = {
     project: {
         name: "KIU", nameEsp: "KIU",
         sub: "Av. Italia, Montevideo · 2025",
         subEsp: "Av. Italia, Montevideo · 2025",
-        plantaImage: "img/kiu/planta.jpg",
-        tourUrl: "360/KIU.html",
+    },
+
+    /* ── Fallbacks (shared until per-unit assets are ready) ── */
+    defaults: {
+        tourUrl: "app-files2/index.html",
         interiorImages: [
             "img/kiu/2025-12-19_Living comedor cocina piso  5.jpg",
             "img/kiu/2025-12-19_Living comedor cocina piso  6.jpg",
@@ -233,6 +242,17 @@ const DATA = {
             "img/kiu/2025-12-19_Dormitorio n11.jpg",
         ],
     },
+
+    /* ── Per-unit data — add interiorImages / tourUrl to override ── */
+    units: {
+        "01": { label: "Tipología A", plantaImage: "img/kiu/planta.jpg" },
+        "02": { label: "Tipología B", plantaImage: "img/kiu/planta-02.jpg" },
+        "03": { label: "Tipología C", plantaImage: "img/kiu/planta-03.jpg" },
+        "04": { label: "Tipología D", plantaImage: "img/kiu/planta-04.jpg" },
+        "05": { label: "Tipología E", plantaImage: "img/kiu/planta-05.jpg" },
+        "06": { label: "Tipología A", plantaImage: "img/kiu/planta.jpg" },
+    },
+
     floors: [
         {
             id: "skybar",
@@ -253,11 +273,12 @@ const DATA = {
    STATE
 ══════════════════════════════════════════════════════════════ */
 const state = {
-    phase:       "landing",   /* landing | playing | explore */
-    activeFloor: null,
-    activeSlot:  "a",
-    openUnit:    null,
-    lang:        (location.hash === "#esp") ? "esp" : "eng",
+    phase:          "landing",   /* landing | playing | explore */
+    activeFloor:    null,
+    activeSlot:     "a",
+    openUnit:       null,
+    currentTourUrl: null,
+    lang:           (location.hash === "#esp") ? "esp" : "eng",
 };
 
 const $ = id => document.getElementById(id);
@@ -313,7 +334,13 @@ function init() {
     applyTexts();
     buildSidebar();
     bindUnitHotspots();
-    buildGallery();
+    buildGallery(DATA.defaults.interiorImages);
+
+    /* planta image opens in lightbox on click */
+    $("sr-planta-img").addEventListener("click", () => {
+        const src = $("sr-planta-img").src;
+        if (src) openLightbox([src], 0);
+    });
 
     const video = $("sr-video");
 
@@ -367,17 +394,17 @@ function bindUnitHotspots() {
 /* ══════════════════════════════════════════════════════════════
    UNIT PANEL
 ══════════════════════════════════════════════════════════════ */
-function buildGallery() {
+function buildGallery(images) {
     const gallery = $("sr-up-gallery");
     gallery.innerHTML = "";
-    DATA.project.interiorImages.forEach((src, i) => {
+    images.forEach((src, i) => {
         const item = document.createElement("div");
         item.className = "sr-up-gallery-item";
         const img = document.createElement("img");
         img.src = src;
-        img.alt = "Interior KIU " + (i + 1);
+        img.alt = "Interior " + (i + 1);
         img.loading = "lazy";
-        img.addEventListener("click", () => openLightbox(i));
+        img.addEventListener("click", () => openLightbox(images, i));
         item.appendChild(img);
         gallery.appendChild(item);
     });
@@ -385,6 +412,23 @@ function buildGallery() {
 
 function openUnitPanel(unit) {
     state.openUnit = unit;
+
+    const unitData = DATA.units[unit] || {};
+    const plantaSrc   = unitData.plantaImage   || "img/kiu/planta.jpg";
+    const images      = unitData.interiorImages || DATA.defaults.interiorImages;
+    state.currentTourUrl = unitData.tourUrl     || DATA.defaults.tourUrl;
+
+    /* update panel header */
+    $("sr-up-name").textContent = unitData.label || DATA.project.name;
+
+    /* update planta image */
+    const plantaEl = $("sr-planta-img");
+    plantaEl.src = plantaSrc;
+    plantaEl.dataset.src = plantaSrc;
+
+    /* rebuild gallery with unit images */
+    buildGallery(images);
+
     document.querySelectorAll(".sr-plant-overlay").forEach(el => el.classList.remove("visible"));
     const overlay = $("sr-plant-" + unit);
     if (overlay) overlay.classList.add("visible");
@@ -420,7 +464,7 @@ const tourIframe = $("sr-tour-iframe");
 const tourMaxBtn = $("sr-tour-maximize");
 
 function openTour() {
-    tourIframe.src = "app-files2/index.html";
+    tourIframe.src = state.currentTourUrl || DATA.defaults.tourUrl;
     tourModal.classList.add("active");
 }
 function closeTour() {
@@ -439,21 +483,26 @@ tourMaxBtn.addEventListener("click", () => {
 });
 
 /* ══════════════════════════════════════════════════════════════
-   LIGHTBOX
+   LIGHTBOX  — works for gallery images and planta (single image)
 ══════════════════════════════════════════════════════════════ */
-let lbIndex = 0;
-const lb    = $("sr-lightbox");
-const lbImg = $("sr-lb-img");
+let lbImages = [];
+let lbIndex  = 0;
+const lb     = $("sr-lightbox");
+const lbImg  = $("sr-lb-img");
 
-function openLightbox(i) {
-    lbIndex = i;
-    lbImg.src = DATA.project.interiorImages[lbIndex];
+function openLightbox(images, i) {
+    lbImages = Array.isArray(images) ? images : [images];
+    lbIndex  = i || 0;
+    lbImg.src = lbImages[lbIndex];
     lb.classList.add("active");
+    const single = lbImages.length <= 1;
+    $("sr-lb-prev").style.display = single ? "none" : "";
+    $("sr-lb-next").style.display = single ? "none" : "";
 }
 function closeLightbox() { lb.classList.remove("active"); }
 function lbStep(dir) {
-    lbIndex = (lbIndex + dir + DATA.project.interiorImages.length) % DATA.project.interiorImages.length;
-    lbImg.src = DATA.project.interiorImages[lbIndex];
+    lbIndex = (lbIndex + dir + lbImages.length) % lbImages.length;
+    lbImg.src = lbImages[lbIndex];
 }
 $("sr-lb-close").addEventListener("click", closeLightbox);
 $("sr-lb-prev").addEventListener("click", () => lbStep(-1));
