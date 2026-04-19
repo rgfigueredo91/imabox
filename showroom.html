@@ -260,6 +260,12 @@ const DATA = {
 
     floors: [
         {
+            id: "edificio",
+            label: "Complete Building", labelEsp: "Edificio Completo",
+            viewImage: null,
+            hasUnits: false,
+        },
+        {
             id: "skybar",
             label: "Skybar & Amenities", labelEsp: "Skybar & Amenidades",
             viewImage: "img/kiu/amenities.jpg",
@@ -365,6 +371,7 @@ function init() {
         scene.classList.remove("is-playing");
         scene.classList.add("is-explore");
         btnBack.classList.remove("hidden");
+        selectFloor("edificio");
     });
 }
 
@@ -545,7 +552,8 @@ function selectFloor(fid) {
     }
 }
 
-/* A/B crossfade */
+/* A/B crossfade — outgoing stays opaque until incoming is fully visible,
+   then snaps to hidden (prevents background bleeding through) */
 function crossfadeTo(src) {
     const incoming = state.activeSlot === "a" ? imgB : imgA;
     const outgoing = state.activeSlot === "a" ? imgA : imgB;
@@ -553,7 +561,11 @@ function crossfadeTo(src) {
     incoming.src = src;
     incoming.classList.add("visible");
 
-    outgoing.classList.remove("visible");
+    setTimeout(() => {
+        outgoing.classList.add("no-fade");
+        outgoing.classList.remove("visible");
+        requestAnimationFrame(() => outgoing.classList.remove("no-fade"));
+    }, 720);
 
     state.activeSlot = state.activeSlot === "a" ? "b" : "a";
 }
