@@ -91,6 +91,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
         <rect class="sr-unit-zone" data-unit="01" x="11.7" y="26.1" width="23.5" height="38.1" rx="0.5"/>
         <rect class="sr-unit-zone" data-unit="02" x="33.4" y="45.3" width="16.6" height="18.3" rx="0.5"/>
+        <rect class="sr-unit-zone" data-unit="03" x="33.4" y="26.2" width="18.5" height="19.0" rx="0.5"/>
         <rect class="sr-unit-zone" data-unit="04" x="49.6" y="45.2" width="21.2" height="18.5" rx="0.5"/>
         <rect class="sr-unit-zone" data-unit="05" x="67.2" y="26.2" width="26.6" height="37.4" rx="0.5"/>
         <rect class="sr-unit-zone" data-unit="06" x="52.1" y="26.2" width="17.3" height="14.9" rx="0.5"/>
@@ -134,7 +135,69 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <!-- populated by JS -->
     </nav>
 
+    <!-- LEFT UNIT PANEL — slides in on unit click -->
+    <div class="sr-unit-panel" id="sr-unit-panel" aria-hidden="true">
+        <div class="sr-up-header">
+            <div class="sr-up-meta">
+                <p class="sr-up-label">Tipología</p>
+                <h2 class="sr-up-name">KIU</h2>
+            </div>
+            <button class="sr-up-close" id="sr-up-close" aria-label="Cerrar">
+                <i class="fa fa-times"></i>
+            </button>
+        </div>
+
+        <div class="sr-up-tabs">
+            <button class="sr-up-tab active" data-tab="planta">Planta</button>
+            <button class="sr-up-tab" data-tab="galeria">Imágenes</button>
+        </div>
+
+        <div class="sr-up-body">
+            <div class="sr-up-content active" id="sr-tab-planta">
+                <img src="img/kiu/planta.jpg" alt="Planta tipología KIU" />
+            </div>
+            <div class="sr-up-content" id="sr-tab-galeria">
+                <div class="sr-up-gallery" id="sr-up-gallery">
+                    <!-- populated by JS -->
+                </div>
+            </div>
+        </div>
+
+        <div class="sr-up-actions">
+            <a href="contact.html" class="sr-up-btn sr-up-btn--primary">
+                <i class="fa fa-envelope-o"></i>
+                <span>Consultar precio</span>
+            </a>
+            <button id="sr-btn-tour" class="sr-up-btn sr-up-btn--secondary">
+                <i class="fa fa-street-view"></i>
+                <span>Tour virtual</span>
+            </button>
+        </div>
+    </div>
+
 </div><!-- /.sr-scene -->
+
+<!-- TOUR MODAL -->
+<div class="sr-tour-modal" id="sr-tour-modal">
+    <div class="sr-tour-dialog" id="sr-tour-dialog">
+        <div class="sr-tour-header">
+            <span>Tour Virtual · KIU</span>
+            <div class="sr-tour-header-btns">
+                <button id="sr-tour-maximize" title="Maximizar"><i class="fa fa-expand"></i></button>
+                <button id="sr-tour-close"    title="Cerrar"><i class="fa fa-times"></i></button>
+            </div>
+        </div>
+        <iframe id="sr-tour-iframe" src="" allow="fullscreen" allowfullscreen></iframe>
+    </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="sr-lightbox" id="sr-lightbox" aria-modal="true" role="dialog">
+    <button class="sr-lightbox-close" id="sr-lb-close"><i class="fa fa-times"></i></button>
+    <button class="sr-lightbox-prev"  id="sr-lb-prev"><i class="fa fa-angle-left"></i></button>
+    <img id="sr-lb-img" src="" alt="" />
+    <button class="sr-lightbox-next"  id="sr-lb-next"><i class="fa fa-angle-right"></i></button>
+</div>
 
 <!-- ═══════════════════════════════════════════════════════════
      DATA
@@ -160,6 +223,15 @@ const DATA = {
         name: "KIU", nameEsp: "KIU",
         sub: "Av. Italia, Montevideo · 2025",
         subEsp: "Av. Italia, Montevideo · 2025",
+        plantaImage: "img/kiu/planta.jpg",
+        tourUrl: "360/KIU.html",
+        interiorImages: [
+            "img/kiu/2025-12-19_Living comedor cocina piso  5.jpg",
+            "img/kiu/2025-12-19_Living comedor cocina piso  6.jpg",
+            "img/kiu/2025-12-19_Living piso  6.jpg",
+            "img/kiu/2025-12-19_Dormitorio n05.jpg",
+            "img/kiu/2025-12-19_Dormitorio n11.jpg",
+        ],
     },
     floors: [
         {
@@ -183,7 +255,8 @@ const DATA = {
 const state = {
     phase:       "landing",   /* landing | playing | explore */
     activeFloor: null,
-    activeSlot:  "a",         /* A/B crossfade slot */
+    activeSlot:  "a",
+    openUnit:    null,
     lang:        (location.hash === "#esp") ? "esp" : "eng",
 };
 
@@ -240,6 +313,7 @@ function init() {
     applyTexts();
     buildSidebar();
     bindUnitHotspots();
+    buildGallery();
 
     const video = $("sr-video");
 
@@ -263,7 +337,7 @@ function init() {
 }
 
 /* ══════════════════════════════════════════════════════════════
-   UNIT HOTSPOTS — hover highlights individual apartments
+   UNIT HOTSPOTS — hover highlights + click opens panel
 ══════════════════════════════════════════════════════════════ */
 function bindUnitHotspots() {
     document.querySelectorAll(".sr-unit-zone").forEach(rect => {
@@ -272,16 +346,119 @@ function bindUnitHotspots() {
         if (!overlay) return;
 
         rect.addEventListener("mouseenter", () => {
-            if (state.phase !== "explore") return;
+            if (state.phase !== "explore" || state.openUnit) return;
             const floor = DATA.floors.find(f => f.id === state.activeFloor);
             if (!floor || !floor.hasUnits) return;
             overlay.classList.add("visible");
         });
         rect.addEventListener("mouseleave", () => {
+            if (state.openUnit === unit) return;
             overlay.classList.remove("visible");
+        });
+        rect.addEventListener("click", () => {
+            if (state.phase !== "explore") return;
+            const floor = DATA.floors.find(f => f.id === state.activeFloor);
+            if (!floor || !floor.hasUnits) return;
+            openUnitPanel(unit);
         });
     });
 }
+
+/* ══════════════════════════════════════════════════════════════
+   UNIT PANEL
+══════════════════════════════════════════════════════════════ */
+function buildGallery() {
+    const gallery = $("sr-up-gallery");
+    gallery.innerHTML = "";
+    DATA.project.interiorImages.forEach((src, i) => {
+        const item = document.createElement("div");
+        item.className = "sr-up-gallery-item";
+        const img = document.createElement("img");
+        img.src = src;
+        img.alt = "Interior KIU " + (i + 1);
+        img.loading = "lazy";
+        img.addEventListener("click", () => openLightbox(i));
+        item.appendChild(img);
+        gallery.appendChild(item);
+    });
+}
+
+function openUnitPanel(unit) {
+    state.openUnit = unit;
+    document.querySelectorAll(".sr-plant-overlay").forEach(el => el.classList.remove("visible"));
+    const overlay = $("sr-plant-" + unit);
+    if (overlay) overlay.classList.add("visible");
+    scene.classList.add("is-open");
+    $("sr-unit-panel").removeAttribute("aria-hidden");
+}
+
+function closeUnitPanel() {
+    state.openUnit = null;
+    scene.classList.remove("is-open");
+    $("sr-unit-panel").setAttribute("aria-hidden", "true");
+    document.querySelectorAll(".sr-plant-overlay").forEach(el => el.classList.remove("visible"));
+}
+
+/* Tabs */
+document.querySelectorAll(".sr-up-tab").forEach(tab => {
+    tab.addEventListener("click", () => {
+        const target = tab.getAttribute("data-tab");
+        document.querySelectorAll(".sr-up-tab").forEach(t => t.classList.toggle("active", t === tab));
+        document.querySelectorAll(".sr-up-content").forEach(c =>
+            c.classList.toggle("active", c.id === "sr-tab-" + target)
+        );
+    });
+});
+$("sr-up-close").addEventListener("click", closeUnitPanel);
+
+/* ══════════════════════════════════════════════════════════════
+   TOUR MODAL
+══════════════════════════════════════════════════════════════ */
+const tourModal  = $("sr-tour-modal");
+const tourDialog = $("sr-tour-dialog");
+const tourIframe = $("sr-tour-iframe");
+const tourMaxBtn = $("sr-tour-maximize");
+
+function openTour() {
+    tourIframe.src = "app-files2/index.html";
+    tourModal.classList.add("active");
+}
+function closeTour() {
+    tourModal.classList.remove("active");
+    tourDialog.classList.remove("maximized");
+    tourMaxBtn.querySelector("i").className = "fa fa-expand";
+    setTimeout(() => { tourIframe.src = ""; }, 400);
+}
+$("sr-btn-tour").addEventListener("click", openTour);
+$("sr-tour-close").addEventListener("click", closeTour);
+tourModal.addEventListener("click", e => { if (e.target === tourModal) closeTour(); });
+tourMaxBtn.addEventListener("click", () => {
+    tourDialog.classList.toggle("maximized");
+    tourMaxBtn.querySelector("i").className = tourDialog.classList.contains("maximized")
+        ? "fa fa-compress" : "fa fa-expand";
+});
+
+/* ══════════════════════════════════════════════════════════════
+   LIGHTBOX
+══════════════════════════════════════════════════════════════ */
+let lbIndex = 0;
+const lb    = $("sr-lightbox");
+const lbImg = $("sr-lb-img");
+
+function openLightbox(i) {
+    lbIndex = i;
+    lbImg.src = DATA.project.interiorImages[lbIndex];
+    lb.classList.add("active");
+}
+function closeLightbox() { lb.classList.remove("active"); }
+function lbStep(dir) {
+    lbIndex = (lbIndex + dir + DATA.project.interiorImages.length) % DATA.project.interiorImages.length;
+    lbImg.src = DATA.project.interiorImages[lbIndex];
+}
+$("sr-lb-close").addEventListener("click", closeLightbox);
+$("sr-lb-prev").addEventListener("click", () => lbStep(-1));
+$("sr-lb-next").addEventListener("click", () => lbStep(1));
+lb.addEventListener("click", e => { if (e.target === lb) closeLightbox(); });
 
 /* ══════════════════════════════════════════════════════════════
    SELECT FLOOR  — crossfade to viewImage (if any)
@@ -331,6 +508,7 @@ function clearFloorImage() {
 btnBack.addEventListener("click", resetToLanding);
 
 function resetToLanding() {
+    closeUnitPanel();
     state.phase = "landing";
     state.activeFloor = null;
     state.activeSlot = "a";
@@ -340,7 +518,7 @@ function resetToLanding() {
     video.currentTime = 0;
 
     clearFloorImage();
-    scene.classList.remove("is-playing", "is-explore");
+    scene.classList.remove("is-playing", "is-explore", "is-open");
     $("sr-btn-enter").classList.remove("hidden");
     btnBack.classList.add("hidden");
     document.querySelectorAll(".sr-floor-btn").forEach(b => b.classList.remove("active"));
@@ -350,7 +528,12 @@ function resetToLanding() {
    KEYBOARD
 ══════════════════════════════════════════════════════════════ */
 document.addEventListener("keydown", e => {
-    if (e.key === "Escape" && state.phase === "explore") resetToLanding();
+    if (e.key === "Escape") {
+        if (tourModal.classList.contains("active")) { closeTour(); return; }
+        if (lb.classList.contains("active"))        { closeLightbox(); return; }
+        if (state.openUnit)                         { closeUnitPanel(); return; }
+        if (state.phase === "explore")               resetToLanding();
+    }
 });
 
 init();
