@@ -25,6 +25,7 @@
 		<link rel="stylesheet" type="text/css" href="styles/styles.css">
 		<link rel="stylesheet" type="text/css" href="styles/contact.css">
 		<link rel="stylesheet" type="text/css" href="styles/chat.css">
+		<script src="js/scrollreveal.js"></script>
 		<link rel="stylesheet" href="https://use.typekit.net/oov2wcw.css">
 		<link rel="shortcut icon" type="image/png" href="favicon.png"/>
 		<link rel="canonical" href="https://imabox.uy/contact.html" />
@@ -289,6 +290,26 @@
 		<script src="js/translate.js"></script><!--navbar move-->
 		<script src="js/chat.js"></script><!--chat-->
 		<script src="js/translate-contact.js"></script><!--navbar move-->
+
+	<script>
+		ScrollReveal().reveal('.FirstParagraph', {
+			distance: '40px',
+			origin: 'left',
+			opacity: 0,
+			duration: 700,
+			easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+			reset: false
+		});
+		ScrollReveal().reveal('.formulario > div, .formulario .submit', {
+			distance: '30px',
+			origin: 'bottom',
+			opacity: 0,
+			duration: 600,
+			easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+			interval: 100,
+			reset: false
+		});
+	</script>
 
 	</body>
 </html>

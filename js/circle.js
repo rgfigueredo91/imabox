@@ -68,6 +68,7 @@
   /* ── Click on top/bottom edge → scroll ────────────── */
   document.addEventListener('click', function (e) {
     if (!currentEdge) return;
+    if (currentSize === 'hamburger') return;
 
     // Don't hijack clicks on interactive elements
     const tag = e.target.tagName;
@@ -80,28 +81,32 @@
     }
   });
 
-  /* ── Hamburger hover ───────────────────────────────── */
-  function attachHamburger() {
-    const hamburger = document.querySelector('.hamburger');
-    if (!hamburger) return;
+  /* ── Hamburger / interactive-element hover ─────────── */
+  function attachHoverElements() {
+    const selectors = ['.hamburger', '.imabox-chat-btn'];
 
-    hamburger.addEventListener('mouseenter', function () {
-      ring.classList.remove('size-edge');
-      ring.classList.add('size-hamburger');
-      arrowEl.innerHTML = '';
-      currentSize = 'hamburger';
-    });
+    selectors.forEach(function (sel) {
+      const el = document.querySelector(sel);
+      if (!el) return;
 
-    hamburger.addEventListener('mouseleave', function () {
-      ring.classList.remove('size-hamburger');
-      currentSize = 'normal';
+      el.addEventListener('mouseenter', function () {
+        ring.classList.remove('size-edge');
+        ring.classList.add('size-hamburger');
+        arrowEl.innerHTML = '';
+        currentSize = 'hamburger';
+      });
+
+      el.addEventListener('mouseleave', function () {
+        ring.classList.remove('size-hamburger');
+        currentSize = 'normal';
+      });
     });
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', attachHamburger);
+    document.addEventListener('DOMContentLoaded', attachHoverElements);
   } else {
-    attachHamburger();
+    attachHoverElements();
   }
 
   /* ── Hide when leaving window ──────────────────────── */
