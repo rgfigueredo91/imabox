@@ -153,6 +153,25 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </button>
         </div>
 
+        <div class="sr-up-specs" id="sr-up-specs">
+            <div class="sr-up-spec">
+                <span class="sr-up-spec-val" id="spec-area">—</span>
+                <span class="sr-up-spec-label">m² área</span>
+            </div>
+            <div class="sr-up-spec">
+                <span class="sr-up-spec-val" id="spec-terraza">—</span>
+                <span class="sr-up-spec-label">m² terraza</span>
+            </div>
+            <div class="sr-up-spec">
+                <span class="sr-up-spec-val" id="spec-dorms">—</span>
+                <span class="sr-up-spec-label">dormitorios</span>
+            </div>
+            <div class="sr-up-spec">
+                <span class="sr-up-spec-val" id="spec-banos">—</span>
+                <span class="sr-up-spec-label">baños</span>
+            </div>
+        </div>
+
         <div class="sr-up-tabs">
             <button class="sr-up-tab active" data-tab="planta">Planta</button>
             <button class="sr-up-tab" data-tab="galeria">Imágenes</button>
@@ -250,12 +269,30 @@ const DATA = {
 
     /* ── Per-unit data — add interiorImages / tourUrl to override ── */
     units: {
-        "01": { label: "Tipología A", plantaImage: "img/kiu/planta.jpg" },
-        "02": { label: "Tipología B", plantaImage: "img/kiu/planta-02.jpg" },
-        "03": { label: "Tipología C", plantaImage: "img/kiu/planta-03.jpg" },
-        "04": { label: "Tipología D", plantaImage: "img/kiu/planta-04.jpg" },
-        "05": { label: "Tipología E", plantaImage: "img/kiu/planta-05.jpg" },
-        "06": { label: "Tipología A", plantaImage: "img/kiu/planta.jpg" },
+        "01": {
+            label: "Tipología A", plantaImage: "img/kiu/planta.jpg",
+            area: 72, terraza: 18, dorms: 2, banos: 1,
+        },
+        "02": {
+            label: "Tipología B", plantaImage: "img/kiu/planta-02.jpg",
+            area: 58, terraza: 10, dorms: 1, banos: 1,
+        },
+        "03": {
+            label: "Tipología C", plantaImage: "img/kiu/planta-03.jpg",
+            area: 65, terraza: 12, dorms: 2, banos: 1,
+        },
+        "04": {
+            label: "Tipología D", plantaImage: "img/kiu/planta-04.jpg",
+            area: 80, terraza: 20, dorms: 2, banos: 2,
+        },
+        "05": {
+            label: "Tipología E", plantaImage: "img/kiu/planta-05.jpg",
+            area: 95, terraza: 25, dorms: 3, banos: 2,
+        },
+        "06": {
+            label: "Tipología A", plantaImage: "img/kiu/planta.jpg",
+            area: 72, terraza: 18, dorms: 2, banos: 1,
+        },
     },
 
     floors: [
@@ -439,6 +476,12 @@ function openUnitPanel(unit) {
 
     /* update panel header */
     $("sr-up-name").textContent = unitData.label || DATA.project.name;
+
+    /* update specs */
+    $("spec-area").textContent    = unitData.area    ?? "—";
+    $("spec-terraza").textContent = unitData.terraza ?? "—";
+    $("spec-dorms").textContent   = unitData.dorms   ?? "—";
+    $("spec-banos").textContent   = unitData.banos   ?? "—";
 
     /* update planta image */
     const plantaEl = $("sr-planta-img");
