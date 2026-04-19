@@ -13,7 +13,9 @@
       "Bash('/c/Program Files/ImageMagick-7.1.2-Q16-HDRI/magick.exe' '/c/Users/User/Documents/GitHub/imabox/img/common/2024/01-balneario ipora.webp' -ping -format '%wx%h\\\\n' info:)",
       "Bash('/c/Program Files/ImageMagick-7.1.2-Q16-HDRI/magick.exe' '/c/Users/User/Documents/GitHub/imabox/img/lowquality/2024/01-balneario ipora.webp' -ping -format '%wx%h\\\\n' info:)",
       "Read(//c/Users/User/Desktop/imagenes//**)",
-      "Read(//c/Users/User/Desktop/Imagenes//**)"
+      "Read(//c/Users/User/Desktop/Imagenes//**)",
+      "Bash(curl -s \"https://proyecto.venturaskyresidences.uy/assets/index-D4OQuPtb.js\")",
+      "Bash(curl -s \"https://proyecto.venturaskyresidences.uy/assets/index-Dqcrs1cO.css\")"
     ]
   }
 }

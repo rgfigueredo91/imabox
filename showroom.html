@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta charset="UTF-8" />
+    <title>Virtual Showroom | Imabox</title>
+    <meta name="description" content="Interactive virtual showroom. Explore building floors, view renders and take virtual tours." />
+    <meta name="author" content="Rodrigo Figueredo" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500&display=swap" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="shortcut icon" type="image/png" href="favicon.png"/>
+    <link rel="stylesheet" type="text/css" href="styles/styles.css">
+    <link rel="stylesheet" type="text/css" href="styles/showroom.css">
+    <link rel="stylesheet" href="https://use.typekit.net/oov2wcw.css">
+
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-NMJRX79');</script>
+</head>
+<body>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMJRX79"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+<!-- ═══ NAVBAR ════════════════════════════════════════════════ -->
+<header>
+    <nav class="navbar">
+        <div class="top-navbar">
+            <div class="top-navbarDivUno">
+                <a href="https://imabox.uy" class="nav-branding nav-brandingblack" id="link-font-index">imabox.</a>
+            </div>
+            <div class="hamburger" role="button" aria-label="Toggle navigation" aria-expanded="false" tabindex="0">
+                <div class="div-bar">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </div>
+        <div class="nav-text">
+            <div class="nav-textUno">
+                <ul class="nav-menuDos">
+                    <li class="nav-itemDos"><p>hello@imabox.uy</p></li>
+                    <li class="nav-itemDos"><p>Montevideo, Uruguay.</p></li>
+                    <li class="nav-itemDos"><p>+598 98 325 902</p></li>
+                    <li class="nav-itemDos">
+                        <a href="#eng" onclick="switchLang('eng')">eng <span>|</span></a>
+                        <a href="#esp" onclick="switchLang('esp')">esp</a>
+                    </li>
+                    <ul class="flex-icon">
+                        <li class="social-icon"><a href="https://www.instagram.com/imabox_uy" target="_blank"><i class="fa fa-instagram"></i></a></li>
+                        <li class="social-icon"><a href="https://www.linkedin.com/company/imabox" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+                    </ul>
+                </ul>
+            </div>
+            <div>
+                <ul class="nav-menu">
+                    <li class="nav-item"><a href="https://imabox.uy/works.html" class="nav-link" id="link-font">Our Work</a></li>
+                    <li class="nav-item"><a href="https://imabox.uy/services.html" class="nav-link" id="link-font-Virtual">Services</a></li>
+                    <li class="nav-item"><a href="https://imabox.uy/about.html" class="nav-link" id="link-font-about">About</a></li>
+                    <li class="nav-item"><a href="https://imabox.uy/contact.html" class="nav-link" id="link-font-contact">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<!-- ═══ FULL-SCREEN SCENE ═════════════════════════════════════ -->
+<div class="sr-scene" id="sr-scene">
+
+    <!-- ── BACK / EXPLORE-AGAIN BUTTON ─────────────────────── -->
+    <button class="sr-btn-back hidden" id="sr-btn-back" aria-label="Back">
+        <i class="fa fa-arrow-left"></i>
+        <span id="txt-back">Proyectos</span>
+    </button>
+
+    <!-- ── PROJECT META (bottom-left) ──────────────────────── -->
+    <div class="sr-project-meta" id="sr-project-meta">
+        <h1 class="sr-project-name" id="sr-project-name"></h1>
+        <p  class="sr-project-sub"  id="sr-project-sub"></p>
+    </div>
+
+    <!-- ── CLICK HINT ───────────────────────────────────────── -->
+    <div class="sr-hint" id="sr-hint">
+        <span class="sr-hint-dot"></span>
+        <span id="txt-hint">Click the building to explore</span>
+    </div>
+
+    <!-- ── FLOOR NAME TOOLTIP ───────────────────────────────── -->
+    <div class="sr-tooltip" id="sr-tooltip"></div>
+
+    <!-- ══════════════════════════════════════════════════════
+         LANDING IMAGE  — full-screen aerial, clickable
+         Sits above the stage; fades out on zoom.
+    ═══════════════════════════════════════════════════════════ -->
+    <img class="sr-img-landing" id="sr-img-landing"
+         src="img/kiu/2025-12-19_Aerea.jpg"
+         alt="KIU Av. Italia — vista aérea"
+         draggable="false" />
+
+    <!-- ══════════════════════════════════════════════════════
+         BUILDING STAGE
+         Scales (zoom) and contains the frontal image + SVG.
+         Hidden behind the aerial on landing; revealed on zoom.
+    ═══════════════════════════════════════════════════════════ -->
+    <div class="sr-stage-wrap" id="sr-stage-wrap">
+        <div class="sr-stage" id="sr-stage">
+
+            <!-- Frontal view — floor SVG zones overlay on this -->
+            <img class="sr-building-img"
+                 id="sr-building-img"
+                 src="img/kiu/2025-12-19_Exterior Frontal.jpg"
+                 alt="KIU Av. Italia — exterior frontal"
+                 draggable="false" />
+
+            <!-- SVG FLOOR ZONES
+                 Positioned over the frontal building image.
+                 x, y, width, height → percentages of image size (0–100).
+                 Adjust y / height to align with your building's actual floor lines.
+                 data-fid must match each floor id in DATA.floors below. -->
+            <svg class="sr-floors-svg" id="sr-floors-svg"
+                 viewBox="0 0 100 100"
+                 preserveAspectRatio="none"
+                 aria-hidden="true">
+
+                <rect class="sr-floor-zone" data-fid="skybar"
+                      x="12" y="6"  width="76" height="14" rx="1"/>
+
+                <rect class="sr-floor-zone" data-fid="pisos-superiores"
+                      x="12" y="22" width="76" height="18" rx="1"/>
+
+                <rect class="sr-floor-zone" data-fid="pisos-medios"
+                      x="12" y="42" width="76" height="18" rx="1"/>
+
+                <rect class="sr-floor-zone" data-fid="planta-baja"
+                      x="12" y="62" width="76" height="16" rx="1"/>
+
+            </svg>
+
+        </div><!-- /.sr-stage -->
+    </div><!-- /.sr-stage-wrap -->
+
+    <!-- ══════════════════════════════════════════════════════
+         CONTENT DRAWER  (slides in from the right)
+    ═══════════════════════════════════════════════════════════ -->
+    <div class="sr-drawer" id="sr-drawer" aria-hidden="true">
+        <button class="sr-drawer-close" id="sr-drawer-close" aria-label="Close">
+            <i class="fa fa-times"></i>
+        </button>
+
+        <div class="sr-drawer-inner">
+            <p class="sr-drawer-label" id="txt-floor-label">Planta</p>
+            <h2 class="sr-drawer-title" id="sr-drawer-title"></h2>
+
+            <!-- Tour buttons -->
+            <div class="sr-drawer-actions" id="sr-drawer-actions"></div>
+
+            <!-- Renders gallery -->
+            <div class="sr-renders-grid" id="sr-renders-grid"></div>
+        </div>
+    </div>
+
+</div><!-- /.sr-scene -->
+
+<!-- ═══ LIGHTBOX ═════════════════════════════════════════════ -->
+<div class="sr-lightbox" id="sr-lightbox" role="dialog" aria-modal="true">
+    <button class="sr-lb-close" id="sr-lb-close" aria-label="Close"><i class="fa fa-times"></i></button>
+    <button class="sr-lb-prev"  id="sr-lb-prev"  aria-label="Previous"><i class="fa fa-chevron-left"></i></button>
+    <button class="sr-lb-next"  id="sr-lb-next"  aria-label="Next"><i class="fa fa-chevron-right"></i></button>
+    <div class="sr-lb-img-wrap">
+        <img id="sr-lb-img" src="" alt="" />
+    </div>
+</div>
+
+<!-- ═══ TOUR MODAL ════════════════════════════════════════════ -->
+<div class="sr-tour-modal" id="sr-tour-modal" role="dialog" aria-modal="true">
+    <button class="sr-tour-close" id="sr-tour-close" aria-label="Close tour">
+        <i class="fa fa-times"></i>
+    </button>
+    <iframe id="sr-tour-iframe" src="" allowfullscreen
+            allow="fullscreen; vr; xr; accelerometer; gyroscope"></iframe>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     DATA
+     ══════════════════════════════════════════════════════════
+     FLOORS must be ordered top → bottom (highest floor first).
+     Each floor object:
+       id         → must match the data-fid on the SVG <rect>
+       label      → English name
+       labelEsp   → Spanish name
+       renders    → array of image paths (can be empty [])
+       layamaUrl  → Layama tour embed URL, or null
+       tour360    → path to internal 360 page, or null
+
+     BUILDING IMAGE:
+       Change DATA.buildingImage to your exterior render path.
+       Then adjust the SVG <rect> y / height values above
+       so they align with each floor band in your image.
+═══════════════════════════════════════════════════════════ -->
+<script>
+const DATA = {
+    buildingImage: "img/kiu/2025-12-19_Aerea.jpg",
+
+    project: {
+        name:     "KIU",
+        nameEsp:  "KIU",
+        sub:      "Av. Italia, Montevideo · 2025",
+        subEsp:   "Av. Italia, Montevideo · 2025",
+    },
+
+    floors: [
+        {
+            id:       "skybar",
+            label:    "Skybar & Amenities",
+            labelEsp: "Skybar & Amenidades",
+            renders:  [
+                "img/kiu/2025-12-19_Skybar.jpg",
+                "img/kiu/2025-12-19_Barbacoa.jpg",
+            ],
+            layamaUrl: null,
+            tour360:   null,
+        },
+        {
+            id:       "pisos-superiores",
+            label:    "Upper Floors",
+            labelEsp: "Pisos Superiores",
+            renders:  [
+                "img/kiu/2025-12-19_Living piso  6.jpg",
+                "img/kiu/2025-12-19_Living comedor cocina piso  6.jpg",
+                "img/kiu/2025-12-19_Dormitorio n11.jpg",
+            ],
+            layamaUrl: null,
+            tour360:   "/360/KIU.html",
+        },
+        {
+            id:       "pisos-medios",
+            label:    "Middle Floors",
+            labelEsp: "Pisos Medios",
+            renders:  [
+                "img/kiu/2025-12-19_Living comedor cocina piso  5.jpg",
+                "img/kiu/2025-12-19_Dormitorio n05.jpg",
+                "img/kiu/2025-12-19_Cowork.jpg",
+            ],
+            layamaUrl: null,
+            tour360:   null,
+        },
+        {
+            id:       "planta-baja",
+            label:    "Ground Floor & Access",
+            labelEsp: "Planta Baja & Acceso",
+            renders:  [
+                "img/kiu/2025-12-19_Acceso.jpg",
+                "img/kiu/2025-12-19_Exterior Frontal.jpg",
+                "img/kiu/2025-12-19_Exterior Esquina.jpg",
+                "img/kiu/2025-12-19_Semi aerea.jpg",
+            ],
+            layamaUrl: null,
+            tour360:   null,
+        },
+    ],
+};
+
+/* ══════════════════════════════════════════════════════════════
+   STATE
+══════════════════════════════════════════════════════════════ */
+const state = {
+    phase:  "landing",   /* "landing" | "zoomed" | "open" */
+    floor:  null,
+    lang:   (location.hash === "#esp") ? "esp" : "eng",
+    lbImages: [],
+    lbIndex:  0,
+};
+
+/* ══════════════════════════════════════════════════════════════
+   DOM REFS
+══════════════════════════════════════════════════════════════ */
+const $ = id => document.getElementById(id);
+const scene        = $("sr-scene");
+const stageWrap    = $("sr-stage-wrap");
+const stage        = $("sr-stage");
+const buildingImg  = $("sr-building-img");
+const floorsSvg    = $("sr-floors-svg");
+const hint         = $("sr-hint");
+const tooltip      = $("sr-tooltip");
+const btnBack      = $("sr-btn-back");
+const drawer       = $("sr-drawer");
+const drawerTitle  = $("sr-drawer-title");
+const drawerAct    = $("sr-drawer-actions");
+const rendersGrid  = $("sr-renders-grid");
+const lightbox     = $("sr-lightbox");
+const lbImg        = $("sr-lb-img");
+const tourModal    = $("sr-tour-modal");
+const tourIframe   = $("sr-tour-iframe");
+
+/* ══════════════════════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════════════════════ */
+function init() {
+    applyTexts();
+    bindFloorZones();
+
+    /* click on full-screen aerial OR on the stage → zoom in */
+    $("sr-img-landing").addEventListener("click", onStageClick);
+    stageWrap.addEventListener("click", onStageClick);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   TEXTS / TRANSLATIONS
+══════════════════════════════════════════════════════════════ */
+const TEXTS = {
+    eng: { hint: "Click the building to explore", back: "Back", floor: "Floor",
+           virtualTour: "Virtual Tour", tour360: "360° Tour", viewRender: "View render" },
+    esp: { hint: "Hacé click para explorar",       back: "Volver", floor: "Planta",
+           virtualTour: "Recorrido Virtual",        tour360: "Recorrido 360°", viewRender: "Ver render" },
+};
+
+function t(k) { return TEXTS[state.lang][k] || k; }
+
+function applyTexts() {
+    const p = DATA.project;
+    $("sr-project-name").textContent = state.lang === "esp" ? p.nameEsp : p.name;
+    $("sr-project-sub").textContent  = state.lang === "esp" ? p.subEsp  : p.sub;
+    $("txt-hint").textContent        = t("hint");
+    $("txt-back").textContent        = t("back");
+    $("txt-floor-label").textContent = t("floor");
+}
+
+function switchLang(lang) {
+    state.lang = lang;
+    applyTexts();
+    if (state.floor) renderDrawerContent(state.floor);
+}
+window.switchLang = switchLang;
+
+/* ══════════════════════════════════════════════════════════════
+   FLOOR ZONES  (SVG rects)
+══════════════════════════════════════════════════════════════ */
+function bindFloorZones() {
+    document.querySelectorAll(".sr-floor-zone").forEach(rect => {
+        const fid   = rect.getAttribute("data-fid");
+        const floor = DATA.floors.find(f => f.id === fid);
+        if (!floor) return;
+
+        rect.addEventListener("mouseenter", () => showTooltip(floor, rect));
+        rect.addEventListener("mouseleave", hideTooltip);
+        rect.addEventListener("click",      (e) => {
+            e.stopPropagation();
+            if (state.phase !== "zoomed" && state.phase !== "open") return;
+            selectFloor(floor, rect);
+        });
+    });
+}
+
+function showTooltip(floor, rect) {
+    if (state.phase === "landing") return;
+    const label = state.lang === "esp" ? floor.labelEsp : floor.label;
+    tooltip.textContent = label;
+    tooltip.classList.add("visible");
+
+    /* position tooltip near the rect center */
+    const svgEl   = floorsSvg;
+    const svgRect = svgEl.getBoundingClientRect();
+    const vb      = svgEl.viewBox.baseVal; /* 0 0 100 100 */
+    const scaleX  = svgRect.width  / vb.width;
+    const scaleY  = svgRect.height / vb.height;
+
+    const rx = parseFloat(rect.getAttribute("x"));
+    const ry = parseFloat(rect.getAttribute("y"));
+    const rh = parseFloat(rect.getAttribute("height"));
+    const rw = parseFloat(rect.getAttribute("width"));
+
+    const cx = svgRect.left + (rx + rw / 2) * scaleX;
+    const cy = svgRect.top  + (ry + rh / 2) * scaleY;
+
+    tooltip.style.left = cx + "px";
+    tooltip.style.top  = cy + "px";
+}
+function hideTooltip() { tooltip.classList.remove("visible"); }
+
+/* ══════════════════════════════════════════════════════════════
+   STAGE CLICK → zoom in
+══════════════════════════════════════════════════════════════ */
+function onStageClick() {
+    if (state.phase !== "landing") return;
+    zoomIn();
+}
+
+function zoomIn() {
+    state.phase = "zoomed";
+
+    hint.classList.add("hidden");
+    btnBack.classList.remove("hidden");
+
+    scene.classList.add("is-zoomed");
+    floorsSvg.classList.add("visible");
+}
+
+/* ══════════════════════════════════════════════════════════════
+   BACK / RESET
+══════════════════════════════════════════════════════════════ */
+btnBack.addEventListener("click", () => {
+    if (state.phase === "open") {
+        closeDrawer();
+    } else {
+        resetToLanding();
+    }
+});
+
+function resetToLanding() {
+    state.phase = "landing";
+    state.floor = null;
+
+    scene.classList.remove("is-zoomed", "is-open");
+    floorsSvg.classList.remove("visible");
+    hint.classList.remove("hidden");
+    btnBack.classList.add("hidden");
+    hideTooltip();
+
+    document.querySelectorAll(".sr-floor-zone").forEach(r =>
+        r.classList.remove("active", "dim")
+    );
+}
+
+/* ══════════════════════════════════════════════════════════════
+   SELECT FLOOR
+══════════════════════════════════════════════════════════════ */
+function selectFloor(floor, rect) {
+    state.floor = floor;
+    state.phase = "open";
+
+    /* highlight selected floor, dim others */
+    document.querySelectorAll(".sr-floor-zone").forEach(r => {
+        const isActive = r.getAttribute("data-fid") === floor.id;
+        r.classList.toggle("active", isActive);
+        r.classList.toggle("dim",    !isActive);
+    });
+
+    hideTooltip();
+    scene.classList.add("is-open");
+    openDrawer(floor);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   DRAWER
+══════════════════════════════════════════════════════════════ */
+function openDrawer(floor) {
+    renderDrawerContent(floor);
+    drawer.classList.add("open");
+    drawer.setAttribute("aria-hidden", "false");
+}
+
+function closeDrawer() {
+    drawer.classList.remove("open");
+    drawer.setAttribute("aria-hidden", "true");
+    scene.classList.remove("is-open");
+    state.phase = "zoomed";
+    state.floor = null;
+
+    document.querySelectorAll(".sr-floor-zone").forEach(r =>
+        r.classList.remove("active", "dim")
+    );
+}
+
+function renderDrawerContent(floor) {
+    const label = state.lang === "esp" ? floor.labelEsp : floor.label;
+    drawerTitle.textContent = label;
+
+    /* action buttons */
+    drawerAct.innerHTML = "";
+    if (floor.layamaUrl) {
+        const btn = document.createElement("button");
+        btn.className = "sr-btn-tour sr-btn-layama";
+        btn.innerHTML = `<i class="fa fa-street-view"></i> ${t("virtualTour")}`;
+        btn.onclick = () => openTour(floor.layamaUrl);
+        drawerAct.appendChild(btn);
+    }
+    if (floor.tour360) {
+        const btn = document.createElement("button");
+        btn.className = "sr-btn-tour sr-btn-360";
+        btn.innerHTML = `<i class="fa fa-globe"></i> ${t("tour360")}`;
+        btn.onclick = () => openTour(floor.tour360);
+        drawerAct.appendChild(btn);
+    }
+
+    /* renders */
+    rendersGrid.innerHTML = "";
+    state.lbImages = floor.renders;
+
+    floor.renders.forEach((src, i) => {
+        const item = document.createElement("div");
+        item.className = "sr-render-item";
+        item.setAttribute("tabindex", "0");
+        item.innerHTML = `<img src="${src}" alt="Render ${i+1}" loading="lazy"/>
+                          <div class="sr-render-overlay"><i class="fa fa-expand"></i></div>`;
+        item.onclick = () => openLightbox(i);
+        item.onkeydown = e => { if (e.key === "Enter") openLightbox(i); };
+        rendersGrid.appendChild(item);
+    });
+
+    if (floor.renders.length === 0) {
+        rendersGrid.innerHTML = `<p class="sr-no-renders" id="txt-no-renders">No renders available</p>`;
+    }
+}
+
+$("sr-drawer-close").addEventListener("click", closeDrawer);
+
+/* ══════════════════════════════════════════════════════════════
+   TOUR MODAL
+══════════════════════════════════════════════════════════════ */
+function openTour(url) {
+    tourIframe.src = url;
+    tourModal.classList.add("active");
+    document.body.style.overflow = "hidden";
+}
+function closeTour() {
+    tourModal.classList.remove("active");
+    tourIframe.src = "";
+    document.body.style.overflow = "";
+}
+$("sr-tour-close").addEventListener("click", closeTour);
+tourModal.addEventListener("click", e => { if (e.target === tourModal) closeTour(); });
+
+/* ══════════════════════════════════════════════════════════════
+   LIGHTBOX
+══════════════════════════════════════════════════════════════ */
+function openLightbox(i) {
+    state.lbIndex = i;
+    updateLbImg();
+    lightbox.classList.add("active");
+    document.body.style.overflow = "hidden";
+}
+function closeLightbox() {
+    lightbox.classList.remove("active");
+    document.body.style.overflow = "";
+}
+function updateLbImg() {
+    lbImg.style.opacity = "0";
+    setTimeout(() => {
+        lbImg.src = state.lbImages[state.lbIndex];
+        lbImg.style.opacity = "1";
+    }, 120);
+    const many = state.lbImages.length > 1;
+    $("sr-lb-prev").style.display = many ? "flex" : "none";
+    $("sr-lb-next").style.display = many ? "flex" : "none";
+}
+$("sr-lb-close").addEventListener("click", closeLightbox);
+$("sr-lb-prev").addEventListener("click", () => {
+    state.lbIndex = (state.lbIndex - 1 + state.lbImages.length) % state.lbImages.length;
+    updateLbImg();
+});
+$("sr-lb-next").addEventListener("click", () => {
+    state.lbIndex = (state.lbIndex + 1) % state.lbImages.length;
+    updateLbImg();
+});
+lightbox.addEventListener("click", e => { if (e.target === lightbox) closeLightbox(); });
+
+/* ══════════════════════════════════════════════════════════════
+   KEYBOARD
+══════════════════════════════════════════════════════════════ */
+document.addEventListener("keydown", e => {
+    if (e.key === "Escape") {
+        if (tourModal.classList.contains("active"))    closeTour();
+        else if (lightbox.classList.contains("active")) closeLightbox();
+        else if (state.phase === "open")               closeDrawer();
+        else if (state.phase === "zoomed")             resetToLanding();
+    }
+    if (lightbox.classList.contains("active")) {
+        if (e.key === "ArrowLeft")  { state.lbIndex = (state.lbIndex - 1 + state.lbImages.length) % state.lbImages.length; updateLbImg(); }
+        if (e.key === "ArrowRight") { state.lbIndex = (state.lbIndex + 1) % state.lbImages.length; updateLbImg(); }
+    }
+});
+
+/* ══════════════════════════════════════════════════════════════
+   START
+══════════════════════════════════════════════════════════════ */
+init();
+</script>
+
+<script src="js/navbarmoveindex.js"></script>
+</body>
+</html>
