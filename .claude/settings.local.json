@@ -8,7 +8,12 @@
       "Bash(grep -l =width=device-width 'C:/Users/User/Documents/GitHub/imabox/*.html')",
       "Bash(grep *)",
       "Bash(/tmp/compress_videos.sh)",
-      "Bash(tee /tmp/video_compression.log)"
+      "Bash(tee /tmp/video_compression.log)",
+      "Bash('/c/Program Files/ImageMagick-7.1.2-Q16-HDRI/magick.exe' '/c/Users/User/Documents/GitHub/imabox/img/img window/2024/01-balneario ipora.webp' -ping -format '%wx%h\\\\n' info:)",
+      "Bash('/c/Program Files/ImageMagick-7.1.2-Q16-HDRI/magick.exe' '/c/Users/User/Documents/GitHub/imabox/img/common/2024/01-balneario ipora.webp' -ping -format '%wx%h\\\\n' info:)",
+      "Bash('/c/Program Files/ImageMagick-7.1.2-Q16-HDRI/magick.exe' '/c/Users/User/Documents/GitHub/imabox/img/lowquality/2024/01-balneario ipora.webp' -ping -format '%wx%h\\\\n' info:)",
+      "Read(//c/Users/User/Desktop/imagenes//**)",
+      "Read(//c/Users/User/Desktop/Imagenes//**)"
     ]
   }
 }
