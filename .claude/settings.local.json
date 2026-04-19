@@ -15,7 +15,15 @@
       "Read(//c/Users/User/Desktop/imagenes//**)",
       "Read(//c/Users/User/Desktop/Imagenes//**)",
       "Bash(curl -s \"https://proyecto.venturaskyresidences.uy/assets/index-D4OQuPtb.js\")",
-      "Bash(curl -s \"https://proyecto.venturaskyresidences.uy/assets/index-Dqcrs1cO.css\")"
+      "Bash(curl -s \"https://proyecto.venturaskyresidences.uy/assets/index-Dqcrs1cO.css\")",
+      "Bash(ffmpeg -i \"C:/Users/User/Documents/GitHub/imabox/videos/kiu/kiu-intro.mp4\" -vf \"select=eq\\(n\\\\,0\\)\" -frames:v 1 -q:v 2 \"C:/Users/User/Documents/GitHub/imabox/img/kiu/kiu-start.jpg\" -y)",
+      "Bash(ffmpeg -sseof -0.1 -i \"C:/Users/User/Documents/GitHub/imabox/videos/kiu/kiu-intro.mp4\" -frames:v 1 -q:v 2 \"C:/Users/User/Documents/GitHub/imabox/img/kiu/kiu-end.jpg\" -y)",
+      "Bash(ffmpeg -i \"C:/Users/User/Desktop/KIU/plantas/01.jpg\" -vf \"scale=iw:ih\" -frames:v 1 /tmp/p01.png -y)",
+      "Bash(ffmpeg -i \"C:/Users/User/Desktop/KIU/plantas/02.jpg\" -vf \"scale=iw:ih\" -frames:v 1 /tmp/p02.png -y)",
+      "Bash(ffmpeg -i \"C:/Users/User/Desktop/KIU/plantas/03.jpg\" -vf \"scale=iw:ih\" -frames:v 1 /tmp/p03.png -y)",
+      "Bash(ffmpeg -i \"C:/Users/User/Desktop/KIU/plantas/04.jpg\" -vf \"scale=iw:ih\" -frames:v 1 /tmp/p04.png -y)",
+      "Bash(ffmpeg -i \"C:/Users/User/Desktop/KIU/plantas/05.jpg\" -vf \"scale=iw:ih\" -frames:v 1 /tmp/p05.png -y)",
+      "Bash(python3 *)"
     ]
   }
 }

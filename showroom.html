@@ -74,126 +74,71 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- ═══ FULL-SCREEN SCENE ═════════════════════════════════════ -->
 <div class="sr-scene" id="sr-scene">
 
-    <!-- ── BACK / EXPLORE-AGAIN BUTTON ─────────────────────── -->
-    <button class="sr-btn-back hidden" id="sr-btn-back" aria-label="Back">
-        <i class="fa fa-arrow-left"></i>
-        <span id="txt-back">Proyectos</span>
-    </button>
+    <!-- LAYER 1: building base (kiu-end.jpg) -->
+    <img class="sr-end-frame" id="sr-end-frame"
+         src="img/kiu/kiu-end.jpg" alt="KIU" draggable="false" />
 
-    <!-- ── PROJECT META (bottom-left) ──────────────────────── -->
+    <!-- LAYER 2a: apartment highlight overlays -->
+    <img class="sr-plant-overlay" id="sr-plant-01" src="img/kiu/plantas/01.jpg" alt="" draggable="false" />
+    <img class="sr-plant-overlay" id="sr-plant-02" src="img/kiu/plantas/02.jpg" alt="" draggable="false" />
+    <img class="sr-plant-overlay" id="sr-plant-04" src="img/kiu/plantas/04.jpg" alt="" draggable="false" />
+    <img class="sr-plant-overlay" id="sr-plant-05" src="img/kiu/plantas/05.jpg" alt="" draggable="false" />
+    <img class="sr-plant-overlay" id="sr-plant-06" src="img/kiu/plantas/06.jpg" alt="" draggable="false" />
+
+    <!-- LAYER 2b: SVG hotspots — coordinates pixel-matched to highlight images -->
+    <svg class="sr-plant-svg" id="sr-plant-svg"
+         viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+
+        <rect class="sr-unit-zone" data-unit="01" x="11.7" y="26.1" width="23.5" height="38.1" rx="0.5"/>
+        <rect class="sr-unit-zone" data-unit="02" x="33.4" y="45.3" width="16.6" height="18.3" rx="0.5"/>
+        <rect class="sr-unit-zone" data-unit="04" x="49.6" y="45.2" width="21.2" height="18.5" rx="0.5"/>
+        <rect class="sr-unit-zone" data-unit="05" x="67.2" y="26.2" width="26.6" height="37.4" rx="0.5"/>
+        <rect class="sr-unit-zone" data-unit="06" x="52.1" y="26.2" width="17.3" height="14.9" rx="0.5"/>
+
+    </svg>
+
+    <!-- LAYER 2c: sidebar floor view — crossfades (A/B swap) -->
+    <img class="sr-floor-img sr-floor-img-a" id="sr-floor-img-a" src="" alt="" draggable="false" />
+    <img class="sr-floor-img sr-floor-img-b" id="sr-floor-img-b" src="" alt="" draggable="false" />
+
+    <!-- LAYER 3: video transition -->
+    <video class="sr-video" id="sr-video"
+           src="videos/kiu/kiu-intro.mp4"
+           preload="auto" playsinline muted></video>
+
+    <!-- LAYER 4: first frame aerial (landing) -->
+    <img class="sr-start-frame" id="sr-start-frame"
+         src="img/kiu/kiu-start.jpg" alt="KIU — vista aérea" draggable="false" />
+
+    <!-- ── UI ──────────────────────────────────────────────── -->
+
+    <!-- Project meta (bottom-left) -->
     <div class="sr-project-meta" id="sr-project-meta">
         <h1 class="sr-project-name" id="sr-project-name"></h1>
         <p  class="sr-project-sub"  id="sr-project-sub"></p>
     </div>
 
-    <!-- ── ENTER BUTTON ─────────────────────────────────────── -->
+    <!-- Enter button -->
     <button class="sr-btn-enter" id="sr-btn-enter">
         <span id="txt-enter">Ingresar</span>
     </button>
 
-    <!-- ── FLOOR NAME TOOLTIP ───────────────────────────────── -->
-    <div class="sr-tooltip" id="sr-tooltip"></div>
+    <!-- Back button -->
+    <button class="sr-btn-back hidden" id="sr-btn-back" aria-label="Back">
+        <i class="fa fa-arrow-left"></i>
+        <span id="txt-back">Volver</span>
+    </button>
 
-    <!-- ══════════════════════════════════════════════════════
-         LANDING IMAGE  — full-screen aerial, clickable
-         Sits above the stage; fades out on zoom.
-    ═══════════════════════════════════════════════════════════ -->
-    <img class="sr-img-landing" id="sr-img-landing"
-         src="img/kiu/2025-12-19_Aerea.jpg"
-         alt="KIU Av. Italia — vista aérea"
-         draggable="false" />
-
-    <!-- ══════════════════════════════════════════════════════
-         BUILDING STAGE
-         Scales (zoom) and contains the frontal image + SVG.
-         Hidden behind the aerial on landing; revealed on zoom.
-    ═══════════════════════════════════════════════════════════ -->
-    <div class="sr-stage-wrap" id="sr-stage-wrap">
-        <div class="sr-stage" id="sr-stage">
-
-            <!-- Frontal view — floor SVG zones overlay on this -->
-            <img class="sr-building-img"
-                 id="sr-building-img"
-                 src="img/kiu/2025-12-19_Exterior Frontal.jpg"
-                 alt="KIU Av. Italia — exterior frontal"
-                 draggable="false" />
-
-            <!-- SVG FLOOR ZONES
-                 Positioned over the frontal building image.
-                 x, y, width, height → percentages of image size (0–100).
-                 Adjust y / height to align with your building's actual floor lines.
-                 data-fid must match each floor id in DATA.floors below. -->
-            <svg class="sr-floors-svg" id="sr-floors-svg"
-                 viewBox="0 0 100 100"
-                 preserveAspectRatio="none"
-                 aria-hidden="true">
-
-                <rect class="sr-floor-zone" data-fid="skybar"
-                      x="12" y="6"  width="76" height="14" rx="1"/>
-
-                <rect class="sr-floor-zone" data-fid="pisos-superiores"
-                      x="12" y="22" width="76" height="18" rx="1"/>
-
-                <rect class="sr-floor-zone" data-fid="pisos-medios"
-                      x="12" y="42" width="76" height="18" rx="1"/>
-
-                <rect class="sr-floor-zone" data-fid="planta-baja"
-                      x="12" y="62" width="76" height="16" rx="1"/>
-
-            </svg>
-
-        </div><!-- /.sr-stage -->
-    </div><!-- /.sr-stage-wrap -->
-
-    <!-- ══════════════════════════════════════════════════════
-         CONTENT DRAWER  (slides in from the right)
-    ═══════════════════════════════════════════════════════════ -->
-    <div class="sr-drawer" id="sr-drawer" aria-hidden="true">
-        <button class="sr-drawer-close" id="sr-drawer-close" aria-label="Close">
-            <i class="fa fa-times"></i>
-        </button>
-
-        <div class="sr-drawer-inner">
-            <p class="sr-drawer-label" id="txt-floor-label">Planta</p>
-            <h2 class="sr-drawer-title" id="sr-drawer-title"></h2>
-
-            <!-- Tour buttons -->
-            <div class="sr-drawer-actions" id="sr-drawer-actions"></div>
-
-            <!-- Renders gallery -->
-            <div class="sr-renders-grid" id="sr-renders-grid"></div>
-        </div>
-    </div>
+    <!-- RIGHT SIDEBAR — floor level navigation -->
+    <nav class="sr-sidebar" id="sr-sidebar" aria-label="Floor levels">
+        <!-- populated by JS -->
+    </nav>
 
 </div><!-- /.sr-scene -->
-
-<!-- ═══ LIGHTBOX ═════════════════════════════════════════════ -->
-<div class="sr-lightbox" id="sr-lightbox" role="dialog" aria-modal="true">
-    <button class="sr-lb-close" id="sr-lb-close" aria-label="Close"><i class="fa fa-times"></i></button>
-    <button class="sr-lb-prev"  id="sr-lb-prev"  aria-label="Previous"><i class="fa fa-chevron-left"></i></button>
-    <button class="sr-lb-next"  id="sr-lb-next"  aria-label="Next"><i class="fa fa-chevron-right"></i></button>
-    <div class="sr-lb-img-wrap">
-        <img id="sr-lb-img" src="" alt="" />
-    </div>
-</div>
-
-<!-- ═══ TOUR MODAL ════════════════════════════════════════════ -->
-<div class="sr-tour-modal" id="sr-tour-modal" role="dialog" aria-modal="true">
-    <button class="sr-tour-close" id="sr-tour-close" aria-label="Close tour">
-        <i class="fa fa-times"></i>
-    </button>
-    <iframe id="sr-tour-iframe" src="" allowfullscreen
-            allow="fullscreen; vr; xr; accelerometer; gyroscope"></iframe>
-</div>
 
 <!-- ═══════════════════════════════════════════════════════════
      DATA
      ══════════════════════════════════════════════════════════
-     FLOORS must be ordered top → bottom (highest floor first).
-     Each floor object:
-       id         → must match the data-fid on the SVG <rect>
-       label      → English name
-       labelEsp   → Spanish name
        renders    → array of image paths (can be empty [])
        layamaUrl  → Layama tour embed URL, or null
        tour360    → path to internal 360 page, or null
@@ -204,64 +149,30 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
        so they align with each floor band in your image.
 ═══════════════════════════════════════════════════════════ -->
 <script>
+/* ══════════════════════════════════════════════════════════════
+   DATA  —  floors ordered top → bottom
+   viewImage: full-screen image shown when this floor is selected
+              (null = keep building view)
+
+══════════════════════════════════════════════════════════════ */
 const DATA = {
-    buildingImage: "img/kiu/2025-12-19_Aerea.jpg",
-
     project: {
-        name:     "KIU",
-        nameEsp:  "KIU",
-        sub:      "Av. Italia, Montevideo · 2025",
-        subEsp:   "Av. Italia, Montevideo · 2025",
+        name: "KIU", nameEsp: "KIU",
+        sub: "Av. Italia, Montevideo · 2025",
+        subEsp: "Av. Italia, Montevideo · 2025",
     },
-
     floors: [
         {
-            id:       "skybar",
-            label:    "Skybar & Amenities",
-            labelEsp: "Skybar & Amenidades",
-            renders:  [
-                "img/kiu/2025-12-19_Skybar.jpg",
-                "img/kiu/2025-12-19_Barbacoa.jpg",
-            ],
-            layamaUrl: null,
-            tour360:   null,
+            id: "skybar",
+            label: "Skybar & Amenities", labelEsp: "Skybar & Amenidades",
+            viewImage: "img/kiu/amenities.jpg",
+            hasUnits: false,
         },
         {
-            id:       "pisos-superiores",
-            label:    "Upper Floors",
-            labelEsp: "Pisos Superiores",
-            renders:  [
-                "img/kiu/2025-12-19_Living piso  6.jpg",
-                "img/kiu/2025-12-19_Living comedor cocina piso  6.jpg",
-                "img/kiu/2025-12-19_Dormitorio n11.jpg",
-            ],
-            layamaUrl: null,
-            tour360:   "/360/KIU.html",
-        },
-        {
-            id:       "pisos-medios",
-            label:    "Middle Floors",
-            labelEsp: "Pisos Medios",
-            renders:  [
-                "img/kiu/2025-12-19_Living comedor cocina piso  5.jpg",
-                "img/kiu/2025-12-19_Dormitorio n05.jpg",
-                "img/kiu/2025-12-19_Cowork.jpg",
-            ],
-            layamaUrl: null,
-            tour360:   null,
-        },
-        {
-            id:       "planta-baja",
-            label:    "Ground Floor & Access",
-            labelEsp: "Planta Baja & Acceso",
-            renders:  [
-                "img/kiu/2025-12-19_Acceso.jpg",
-                "img/kiu/2025-12-19_Exterior Frontal.jpg",
-                "img/kiu/2025-12-19_Exterior Esquina.jpg",
-                "img/kiu/2025-12-19_Semi aerea.jpg",
-            ],
-            layamaUrl: null,
-            tour360:   null,
+            id: "pisos-medios",
+            label: "Middle Floors", labelEsp: "Pisos Medios",
+            viewImage: "img/kiu/middle-floor.jpg",
+            hasUnits: true,
         },
     ],
 };
@@ -270,314 +181,178 @@ const DATA = {
    STATE
 ══════════════════════════════════════════════════════════════ */
 const state = {
-    phase:  "landing",   /* "landing" | "zoomed" | "open" */
-    floor:  null,
-    lang:   (location.hash === "#esp") ? "esp" : "eng",
-    lbImages: [],
-    lbIndex:  0,
+    phase:       "landing",   /* landing | playing | explore */
+    activeFloor: null,
+    activeSlot:  "a",         /* A/B crossfade slot */
+    lang:        (location.hash === "#esp") ? "esp" : "eng",
 };
 
-/* ══════════════════════════════════════════════════════════════
-   DOM REFS
-══════════════════════════════════════════════════════════════ */
 const $ = id => document.getElementById(id);
-const scene        = $("sr-scene");
-const stageWrap    = $("sr-stage-wrap");
-const stage        = $("sr-stage");
-const buildingImg  = $("sr-building-img");
-const floorsSvg    = $("sr-floors-svg");
-const hint         = $("sr-hint");
-const tooltip      = $("sr-tooltip");
-const btnBack      = $("sr-btn-back");
-const drawer       = $("sr-drawer");
-const drawerTitle  = $("sr-drawer-title");
-const drawerAct    = $("sr-drawer-actions");
-const rendersGrid  = $("sr-renders-grid");
-const lightbox     = $("sr-lightbox");
-const lbImg        = $("sr-lb-img");
-const tourModal    = $("sr-tour-modal");
-const tourIframe   = $("sr-tour-iframe");
+const scene   = $("sr-scene");
+const btnBack = $("sr-btn-back");
+const imgA    = $("sr-floor-img-a");
+const imgB    = $("sr-floor-img-b");
 
 /* ══════════════════════════════════════════════════════════════
-   INIT
-══════════════════════════════════════════════════════════════ */
-function init() {
-    applyTexts();
-    bindFloorZones();
-
-    /* only the enter button triggers zoom */
-    $("sr-btn-enter").addEventListener("click", onStageClick);
-}
-
-/* ══════════════════════════════════════════════════════════════
-   TEXTS / TRANSLATIONS
+   TRANSLATIONS
 ══════════════════════════════════════════════════════════════ */
 const TEXTS = {
-    eng: { enter: "Enter", back: "Back", floor: "Floor",
-           virtualTour: "Virtual Tour", tour360: "360° Tour", viewRender: "View render" },
-    esp: { enter: "Ingresar", back: "Volver", floor: "Planta",
-           virtualTour: "Recorrido Virtual", tour360: "Recorrido 360°", viewRender: "Ver render" },
+    eng: { enter: "Enter",    back: "Back"   },
+    esp: { enter: "Ingresar", back: "Volver" },
 };
-
 function t(k) { return TEXTS[state.lang][k] || k; }
 
 function applyTexts() {
     const p = DATA.project;
     $("sr-project-name").textContent = state.lang === "esp" ? p.nameEsp : p.name;
     $("sr-project-sub").textContent  = state.lang === "esp" ? p.subEsp  : p.sub;
-    $("txt-enter").textContent       = t("enter");
-    $("txt-back").textContent        = t("back");
-    $("txt-floor-label").textContent = t("floor");
+    $("txt-enter").textContent = t("enter");
+    $("txt-back").textContent  = t("back");
 }
-
-function switchLang(lang) {
-    state.lang = lang;
-    applyTexts();
-    if (state.floor) renderDrawerContent(state.floor);
-}
+function switchLang(lang) { state.lang = lang; applyTexts(); buildSidebar(); }
 window.switchLang = switchLang;
 
 /* ══════════════════════════════════════════════════════════════
-   FLOOR ZONES  (SVG rects)
+   SIDEBAR
 ══════════════════════════════════════════════════════════════ */
-function bindFloorZones() {
-    document.querySelectorAll(".sr-floor-zone").forEach(rect => {
-        const fid   = rect.getAttribute("data-fid");
-        const floor = DATA.floors.find(f => f.id === fid);
-        if (!floor) return;
+function buildSidebar() {
+    const sidebar = $("sr-sidebar");
+    sidebar.innerHTML = "";
+    DATA.floors.forEach((floor, i) => {
+        const btn = document.createElement("button");
+        btn.className = "sr-floor-btn";
+        btn.setAttribute("data-fid", floor.id);
+        const label = state.lang === "esp" ? floor.labelEsp : floor.label;
+        btn.innerHTML = `
+            <span class="sr-floor-num">${String(i + 1).padStart(2,"0")}</span>
+            <span class="sr-floor-name">${label}</span>
+            <span class="sr-floor-arrow"><i class="fa fa-angle-right"></i></span>
+        `;
+        btn.addEventListener("click", () => selectFloor(floor.id));
+        sidebar.appendChild(btn);
+    });
+}
 
-        rect.addEventListener("mouseenter", () => showTooltip(floor, rect));
-        rect.addEventListener("mouseleave", hideTooltip);
-        rect.addEventListener("click",      (e) => {
-            e.stopPropagation();
-            if (state.phase !== "zoomed" && state.phase !== "open") return;
-            selectFloor(floor, rect);
+/* ══════════════════════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════════════════════ */
+function init() {
+    applyTexts();
+    buildSidebar();
+    bindUnitHotspots();
+
+    const video = $("sr-video");
+
+    $("sr-btn-enter").addEventListener("click", () => {
+        state.phase = "playing";
+        $("sr-btn-enter").classList.add("hidden");
+        video.currentTime = 0;
+        video.play();
+        // Wait for first decoded frame before fading start-frame — prevents black flash
+        video.addEventListener("timeupdate", () => {
+            scene.classList.add("is-playing");
+        }, { once: true });
+    });
+
+    video.addEventListener("ended", () => {
+        state.phase = "explore";
+        scene.classList.remove("is-playing");
+        scene.classList.add("is-explore");
+        btnBack.classList.remove("hidden");
+    });
+}
+
+/* ══════════════════════════════════════════════════════════════
+   UNIT HOTSPOTS — hover highlights individual apartments
+══════════════════════════════════════════════════════════════ */
+function bindUnitHotspots() {
+    document.querySelectorAll(".sr-unit-zone").forEach(rect => {
+        const unit = rect.getAttribute("data-unit");
+        const overlay = $("sr-plant-" + unit);
+        if (!overlay) return;
+
+        rect.addEventListener("mouseenter", () => {
+            if (state.phase !== "explore") return;
+            const floor = DATA.floors.find(f => f.id === state.activeFloor);
+            if (!floor || !floor.hasUnits) return;
+            overlay.classList.add("visible");
+        });
+        rect.addEventListener("mouseleave", () => {
+            overlay.classList.remove("visible");
         });
     });
 }
 
-function showTooltip(floor, rect) {
-    if (state.phase === "landing") return;
-    const label = state.lang === "esp" ? floor.labelEsp : floor.label;
-    tooltip.textContent = label;
-    tooltip.classList.add("visible");
-
-    /* position tooltip near the rect center */
-    const svgEl   = floorsSvg;
-    const svgRect = svgEl.getBoundingClientRect();
-    const vb      = svgEl.viewBox.baseVal; /* 0 0 100 100 */
-    const scaleX  = svgRect.width  / vb.width;
-    const scaleY  = svgRect.height / vb.height;
-
-    const rx = parseFloat(rect.getAttribute("x"));
-    const ry = parseFloat(rect.getAttribute("y"));
-    const rh = parseFloat(rect.getAttribute("height"));
-    const rw = parseFloat(rect.getAttribute("width"));
-
-    const cx = svgRect.left + (rx + rw / 2) * scaleX;
-    const cy = svgRect.top  + (ry + rh / 2) * scaleY;
-
-    tooltip.style.left = cx + "px";
-    tooltip.style.top  = cy + "px";
-}
-function hideTooltip() { tooltip.classList.remove("visible"); }
-
 /* ══════════════════════════════════════════════════════════════
-   STAGE CLICK → zoom in
+   SELECT FLOOR  — crossfade to viewImage (if any)
 ══════════════════════════════════════════════════════════════ */
-function onStageClick() {
-    if (state.phase !== "landing") return;
-    zoomIn();
+function selectFloor(fid) {
+    if (state.phase !== "explore") return;
+
+    const floor = DATA.floors.find(f => f.id === fid);
+    if (!floor) return;
+
+    /* highlight sidebar button */
+    document.querySelectorAll(".sr-floor-btn").forEach(b =>
+        b.classList.toggle("active", b.getAttribute("data-fid") === fid)
+    );
+
+    state.activeFloor = fid;
+
+    if (floor.viewImage) {
+        crossfadeTo(floor.viewImage);
+    } else {
+        /* no image — crossfade back to building */
+        clearFloorImage();
+    }
 }
 
-function zoomIn() {
-    state.phase = "zoomed";
+/* A/B crossfade */
+function crossfadeTo(src) {
+    const incoming = state.activeSlot === "a" ? imgB : imgA;
+    const outgoing = state.activeSlot === "a" ? imgA : imgB;
 
-    $("sr-btn-enter").classList.add("hidden");
-    btnBack.classList.remove("hidden");
+    incoming.src = src;
+    incoming.classList.add("visible");
 
-    scene.classList.add("is-zoomed");
-    floorsSvg.classList.add("visible");
+    outgoing.classList.remove("visible");
+
+    state.activeSlot = state.activeSlot === "a" ? "b" : "a";
+}
+
+function clearFloorImage() {
+    imgA.classList.remove("visible");
+    imgB.classList.remove("visible");
 }
 
 /* ══════════════════════════════════════════════════════════════
    BACK / RESET
 ══════════════════════════════════════════════════════════════ */
-btnBack.addEventListener("click", () => {
-    if (state.phase === "open") {
-        closeDrawer();
-    } else {
-        resetToLanding();
-    }
-});
+btnBack.addEventListener("click", resetToLanding);
 
 function resetToLanding() {
     state.phase = "landing";
-    state.floor = null;
+    state.activeFloor = null;
+    state.activeSlot = "a";
 
-    scene.classList.remove("is-zoomed", "is-open");
-    floorsSvg.classList.remove("visible");
+    const video = $("sr-video");
+    video.pause();
+    video.currentTime = 0;
+
+    clearFloorImage();
+    scene.classList.remove("is-playing", "is-explore");
     $("sr-btn-enter").classList.remove("hidden");
     btnBack.classList.add("hidden");
-    hideTooltip();
-
-    document.querySelectorAll(".sr-floor-zone").forEach(r =>
-        r.classList.remove("active", "dim")
-    );
+    document.querySelectorAll(".sr-floor-btn").forEach(b => b.classList.remove("active"));
 }
-
-/* ══════════════════════════════════════════════════════════════
-   SELECT FLOOR
-══════════════════════════════════════════════════════════════ */
-function selectFloor(floor, rect) {
-    state.floor = floor;
-    state.phase = "open";
-
-    /* highlight selected floor, dim others */
-    document.querySelectorAll(".sr-floor-zone").forEach(r => {
-        const isActive = r.getAttribute("data-fid") === floor.id;
-        r.classList.toggle("active", isActive);
-        r.classList.toggle("dim",    !isActive);
-    });
-
-    hideTooltip();
-    scene.classList.add("is-open");
-    openDrawer(floor);
-}
-
-/* ══════════════════════════════════════════════════════════════
-   DRAWER
-══════════════════════════════════════════════════════════════ */
-function openDrawer(floor) {
-    renderDrawerContent(floor);
-    drawer.classList.add("open");
-    drawer.setAttribute("aria-hidden", "false");
-}
-
-function closeDrawer() {
-    drawer.classList.remove("open");
-    drawer.setAttribute("aria-hidden", "true");
-    scene.classList.remove("is-open");
-    state.phase = "zoomed";
-    state.floor = null;
-
-    document.querySelectorAll(".sr-floor-zone").forEach(r =>
-        r.classList.remove("active", "dim")
-    );
-}
-
-function renderDrawerContent(floor) {
-    const label = state.lang === "esp" ? floor.labelEsp : floor.label;
-    drawerTitle.textContent = label;
-
-    /* action buttons */
-    drawerAct.innerHTML = "";
-    if (floor.layamaUrl) {
-        const btn = document.createElement("button");
-        btn.className = "sr-btn-tour sr-btn-layama";
-        btn.innerHTML = `<i class="fa fa-street-view"></i> ${t("virtualTour")}`;
-        btn.onclick = () => openTour(floor.layamaUrl);
-        drawerAct.appendChild(btn);
-    }
-    if (floor.tour360) {
-        const btn = document.createElement("button");
-        btn.className = "sr-btn-tour sr-btn-360";
-        btn.innerHTML = `<i class="fa fa-globe"></i> ${t("tour360")}`;
-        btn.onclick = () => openTour(floor.tour360);
-        drawerAct.appendChild(btn);
-    }
-
-    /* renders */
-    rendersGrid.innerHTML = "";
-    state.lbImages = floor.renders;
-
-    floor.renders.forEach((src, i) => {
-        const item = document.createElement("div");
-        item.className = "sr-render-item";
-        item.setAttribute("tabindex", "0");
-        item.innerHTML = `<img src="${src}" alt="Render ${i+1}" loading="lazy"/>
-                          <div class="sr-render-overlay"><i class="fa fa-expand"></i></div>`;
-        item.onclick = () => openLightbox(i);
-        item.onkeydown = e => { if (e.key === "Enter") openLightbox(i); };
-        rendersGrid.appendChild(item);
-    });
-
-    if (floor.renders.length === 0) {
-        rendersGrid.innerHTML = `<p class="sr-no-renders" id="txt-no-renders">No renders available</p>`;
-    }
-}
-
-$("sr-drawer-close").addEventListener("click", closeDrawer);
-
-/* ══════════════════════════════════════════════════════════════
-   TOUR MODAL
-══════════════════════════════════════════════════════════════ */
-function openTour(url) {
-    tourIframe.src = url;
-    tourModal.classList.add("active");
-    document.body.style.overflow = "hidden";
-}
-function closeTour() {
-    tourModal.classList.remove("active");
-    tourIframe.src = "";
-    document.body.style.overflow = "";
-}
-$("sr-tour-close").addEventListener("click", closeTour);
-tourModal.addEventListener("click", e => { if (e.target === tourModal) closeTour(); });
-
-/* ══════════════════════════════════════════════════════════════
-   LIGHTBOX
-══════════════════════════════════════════════════════════════ */
-function openLightbox(i) {
-    state.lbIndex = i;
-    updateLbImg();
-    lightbox.classList.add("active");
-    document.body.style.overflow = "hidden";
-}
-function closeLightbox() {
-    lightbox.classList.remove("active");
-    document.body.style.overflow = "";
-}
-function updateLbImg() {
-    lbImg.style.opacity = "0";
-    setTimeout(() => {
-        lbImg.src = state.lbImages[state.lbIndex];
-        lbImg.style.opacity = "1";
-    }, 120);
-    const many = state.lbImages.length > 1;
-    $("sr-lb-prev").style.display = many ? "flex" : "none";
-    $("sr-lb-next").style.display = many ? "flex" : "none";
-}
-$("sr-lb-close").addEventListener("click", closeLightbox);
-$("sr-lb-prev").addEventListener("click", () => {
-    state.lbIndex = (state.lbIndex - 1 + state.lbImages.length) % state.lbImages.length;
-    updateLbImg();
-});
-$("sr-lb-next").addEventListener("click", () => {
-    state.lbIndex = (state.lbIndex + 1) % state.lbImages.length;
-    updateLbImg();
-});
-lightbox.addEventListener("click", e => { if (e.target === lightbox) closeLightbox(); });
 
 /* ══════════════════════════════════════════════════════════════
    KEYBOARD
 ══════════════════════════════════════════════════════════════ */
 document.addEventListener("keydown", e => {
-    if (e.key === "Escape") {
-        if (tourModal.classList.contains("active"))    closeTour();
-        else if (lightbox.classList.contains("active")) closeLightbox();
-        else if (state.phase === "open")               closeDrawer();
-        else if (state.phase === "zoomed")             resetToLanding();
-    }
-    if (lightbox.classList.contains("active")) {
-        if (e.key === "ArrowLeft")  { state.lbIndex = (state.lbIndex - 1 + state.lbImages.length) % state.lbImages.length; updateLbImg(); }
-        if (e.key === "ArrowRight") { state.lbIndex = (state.lbIndex + 1) % state.lbImages.length; updateLbImg(); }
-    }
+    if (e.key === "Escape" && state.phase === "explore") resetToLanding();
 });
 
-/* ══════════════════════════════════════════════════════════════
-   START
-══════════════════════════════════════════════════════════════ */
 init();
 </script>
 
