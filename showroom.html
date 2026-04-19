@@ -74,34 +74,39 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- ═══ FULL-SCREEN SCENE ═════════════════════════════════════ -->
 <div class="sr-scene" id="sr-scene">
 
-    <!-- LAYER 1: building base (kiu-end.jpg) -->
-    <img class="sr-end-frame" id="sr-end-frame"
-         src="img/kiu/kiu-end.jpg" alt="KIU" draggable="false" />
+    <!-- CANVAS — maintains 16:9 so SVG hotspots stay aligned on all screen sizes -->
+    <div class="sr-canvas" id="sr-canvas">
 
-    <!-- LAYER 2a: apartment highlight overlays -->
-    <img class="sr-plant-overlay" id="sr-plant-01" src="img/kiu/plantas/01.jpg" alt="" draggable="false" />
-    <img class="sr-plant-overlay" id="sr-plant-02" src="img/kiu/plantas/02.jpg" alt="" draggable="false" />
-    <img class="sr-plant-overlay" id="sr-plant-03" src="img/kiu/plantas/03.jpg" alt="" draggable="false" />
-    <img class="sr-plant-overlay" id="sr-plant-04" src="img/kiu/plantas/04.jpg" alt="" draggable="false" />
-    <img class="sr-plant-overlay" id="sr-plant-05" src="img/kiu/plantas/05.jpg" alt="" draggable="false" />
-    <img class="sr-plant-overlay" id="sr-plant-06" src="img/kiu/plantas/06.jpg" alt="" draggable="false" />
+        <!-- LAYER 1: building base (kiu-end.jpg) -->
+        <img class="sr-end-frame" id="sr-end-frame"
+             src="img/kiu/kiu-end.jpg" alt="KIU" draggable="false" />
 
-    <!-- LAYER 2b: SVG hotspots — coordinates pixel-matched to highlight images -->
-    <svg class="sr-plant-svg" id="sr-plant-svg"
-         viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        <!-- LAYER 2a: apartment highlight overlays -->
+        <img class="sr-plant-overlay" id="sr-plant-01" src="img/kiu/plantas/01.jpg" alt="" draggable="false" />
+        <img class="sr-plant-overlay" id="sr-plant-02" src="img/kiu/plantas/02.jpg" alt="" draggable="false" />
+        <img class="sr-plant-overlay" id="sr-plant-03" src="img/kiu/plantas/03.jpg" alt="" draggable="false" />
+        <img class="sr-plant-overlay" id="sr-plant-04" src="img/kiu/plantas/04.jpg" alt="" draggable="false" />
+        <img class="sr-plant-overlay" id="sr-plant-05" src="img/kiu/plantas/05.jpg" alt="" draggable="false" />
+        <img class="sr-plant-overlay" id="sr-plant-06" src="img/kiu/plantas/06.jpg" alt="" draggable="false" />
 
-        <rect class="sr-unit-zone" data-unit="01" x="11.7" y="26.1" width="23.5" height="38.1" rx="0.5"/>
-        <rect class="sr-unit-zone" data-unit="02" x="33.4" y="45.3" width="16.6" height="18.3" rx="0.5"/>
-        <rect class="sr-unit-zone" data-unit="03" x="33.4" y="26.2" width="18.5" height="19.0" rx="0.5"/>
-        <rect class="sr-unit-zone" data-unit="04" x="49.6" y="45.2" width="21.2" height="18.5" rx="0.5"/>
-        <rect class="sr-unit-zone" data-unit="05" x="67.2" y="26.2" width="26.6" height="37.4" rx="0.5"/>
-        <rect class="sr-unit-zone" data-unit="06" x="52.1" y="26.2" width="17.3" height="14.9" rx="0.5"/>
+        <!-- LAYER 2b: SVG hotspots — coordinates pixel-matched to highlight images -->
+        <svg class="sr-plant-svg" id="sr-plant-svg"
+             viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
 
-    </svg>
+            <rect class="sr-unit-zone" data-unit="01" x="11.7" y="26.1" width="23.5" height="38.1" rx="0.5"/>
+            <rect class="sr-unit-zone" data-unit="02" x="33.4" y="45.3" width="16.6" height="18.3" rx="0.5"/>
+            <rect class="sr-unit-zone" data-unit="03" x="33.4" y="26.2" width="18.5" height="19.0" rx="0.5"/>
+            <rect class="sr-unit-zone" data-unit="04" x="49.6" y="45.2" width="21.2" height="18.5" rx="0.5"/>
+            <rect class="sr-unit-zone" data-unit="05" x="67.2" y="26.2" width="26.6" height="37.4" rx="0.5"/>
+            <rect class="sr-unit-zone" data-unit="06" x="52.1" y="26.2" width="17.3" height="14.9" rx="0.5"/>
 
-    <!-- LAYER 2c: sidebar floor view — crossfades (A/B swap) -->
-    <img class="sr-floor-img sr-floor-img-a" id="sr-floor-img-a" src="" alt="" draggable="false" />
-    <img class="sr-floor-img sr-floor-img-b" id="sr-floor-img-b" src="" alt="" draggable="false" />
+        </svg>
+
+        <!-- LAYER 2c: sidebar floor view — crossfades (A/B swap) -->
+        <img class="sr-floor-img sr-floor-img-a" id="sr-floor-img-a" src="" alt="" draggable="false" />
+        <img class="sr-floor-img sr-floor-img-b" id="sr-floor-img-b" src="" alt="" draggable="false" />
+
+    </div><!-- /.sr-canvas -->
 
     <!-- LAYER 3: video transition -->
     <video class="sr-video" id="sr-video"
@@ -382,6 +387,13 @@ function bindUnitHotspots() {
             if (state.openUnit === unit) return;
             overlay.classList.remove("visible");
         });
+        /* touch feedback: brief highlight before panel opens */
+        rect.addEventListener("touchstart", () => {
+            if (state.phase !== "explore" || state.openUnit) return;
+            const floor = DATA.floors.find(f => f.id === state.activeFloor);
+            if (!floor || !floor.hasUnits) return;
+            overlay.classList.add("visible");
+        }, { passive: true });
         rect.addEventListener("click", () => {
             if (state.phase !== "explore") return;
             const floor = DATA.floors.find(f => f.id === state.activeFloor);

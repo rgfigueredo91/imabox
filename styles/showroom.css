@@ -47,6 +47,13 @@ html, body {
     -webkit-user-drag: none;
 }
 
+/* Canvas — wraps building + overlays + SVG to keep 16:9 on all screens */
+.sr-canvas {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+}
+
 .sr-end-frame   { z-index: 1; }
 
 /* A/B crossfade images */
@@ -60,7 +67,7 @@ html, body {
 
 .sr-start-frame { z-index: 4; transition: opacity 0.8s ease; }
 .sr-scene.is-playing .sr-start-frame,
-.sr-scene.is-explore .sr-start-frame { opacity: 0; }
+.sr-scene.is-explore .sr-start-frame { opacity: 0; pointer-events: none; }
 
 /* ═══════════════════════════════════════════════════════════════
    PROJECT META
@@ -543,9 +550,45 @@ html, body {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   RESPONSIVE
+   RESPONSIVE — TABLET  (769 – 1024 px)
+   ═══════════════════════════════════════════════════════════════ */
+@media (min-width: 769px) and (max-width: 1024px) {
+    /* Canvas: 16:9, full width, centered vertically */
+    .sr-canvas {
+        inset: auto;
+        left: 0; right: 0;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        top: 50%;
+        transform: translateY(-50%);
+        height: auto;
+    }
+
+    .sr-unit-panel { width: 320px; }
+    .sr-up-header  { padding: 80px 22px 18px; }
+
+    .sr-tour-dialog {
+        width: 90vw;
+        height: 78vh;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE — MOBILE  (≤ 768 px)
    ═══════════════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
+    /* Canvas: 16:9, full width, sits at top leaving room for bottom bar */
+    .sr-canvas {
+        inset: auto;
+        left: 0; right: 0;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        top: 60px; /* below navbar */
+        transform: none;
+        height: auto;
+    }
+
+    /* Sidebar moves to bottom tab bar */
     .sr-sidebar {
         top: auto; right: 0; bottom: 0; left: 0;
         width: 100%; height: auto;
@@ -562,27 +605,49 @@ html, body {
         flex-direction: column;
         align-items: center;
         gap: 6px;
-        padding: 16px 8px;
+        padding: 16px 8px 20px;
         border-left: none;
         border-top: 2px solid rgba(255,255,255,0.1);
         text-align: center;
+        min-height: 72px;
     }
     .sr-floor-btn.active { border-top-color: #fff; }
     .sr-floor-btn + .sr-floor-btn { border-top-color: rgba(255,255,255,0.1); }
     .sr-floor-arrow { display: none; }
     .sr-floor-name  { font-size: 0.65rem; }
 
+    /* Push meta above the bottom tab bar */
     .sr-btn-back { top: 72px; left: 16px; }
-    .sr-project-meta { left: 20px; bottom: 80px; }
+    .sr-project-meta { left: 20px; bottom: 110px; }
 
+    /* Unit panel slides up as bottom sheet */
     .sr-unit-panel {
         width: 100%;
         top: auto;
-        height: 80vh;
+        height: 82vh;
         border-right: none;
         border-top: 1px solid rgba(255,255,255,0.08);
         transform: translateY(100%);
     }
     .sr-scene.is-open .sr-unit-panel { transform: translateY(0); }
     .sr-up-header { padding: 24px 20px 18px; }
+
+    /* Tour modal full-screen on mobile */
+    .sr-tour-dialog {
+        width: 100vw;
+        height: 100vh;
+        border: none;
+        border-radius: 0;
+    }
+
+    /* Larger tap targets on SVG hotspots */
+    .sr-unit-zone {
+        stroke: transparent;
+        stroke-width: 3;
+    }
+
+    /* Lightbox nav buttons easier to tap */
+    .sr-lightbox-prev { left: 8px; width: 52px; height: 52px; }
+    .sr-lightbox-next { right: 8px; width: 52px; height: 52px; }
+    .sr-lightbox-close { top: 16px; right: 16px; width: 48px; height: 48px; }
 }
