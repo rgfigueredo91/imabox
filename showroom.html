@@ -28,6 +28,18 @@
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMJRX79"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
+<!-- ═══ LOADER ════════════════════════════════════════════════ -->
+<div class="sr-loader" id="sr-loader">
+    <div class="sr-loader-inner">
+        <p class="sr-loader-label">Virtual Showroom</p>
+        <h1 class="sr-loader-name" id="sr-loader-name">KIU</h1>
+        <p class="sr-loader-sub" id="sr-loader-sub">Av. Italia, Montevideo</p>
+        <div class="sr-loader-track">
+            <div class="sr-loader-bar" id="sr-loader-bar"></div>
+        </div>
+    </div>
+</div>
+
 <!-- ═══ NAVBAR ════════════════════════════════════════════════ -->
 <header>
     <nav class="navbar">
@@ -376,9 +388,55 @@ function buildSidebar() {
 }
 
 /* ══════════════════════════════════════════════════════════════
+   LOADER  —  preloads critical assets before showing the scene
+══════════════════════════════════════════════════════════════ */
+function runLoader() {
+    const loader   = $("sr-loader");
+    const bar      = $("sr-loader-bar");
+    const p        = DATA.project;
+
+    $("sr-loader-name").textContent = p.name;
+    $("sr-loader-sub").textContent  = p.sub;
+
+    const critical = [
+        "img/kiu/kiu-start.jpg",
+        "img/kiu/kiu-end.jpg",
+    ];
+    let loaded = 0;
+    const total = critical.length + 1; /* +1 for video canplay */
+
+    function tick() {
+        loaded++;
+        bar.style.width = (loaded / total * 100) + "%";
+        if (loaded >= total) setTimeout(hideLoader, 350);
+    }
+
+    critical.forEach(src => {
+        const img = new Image();
+        img.onload = img.onerror = tick;
+        img.src = src;
+    });
+
+    const video = $("sr-video");
+    if (video.readyState >= 3) {
+        tick();
+    } else {
+        video.addEventListener("canplay", tick, { once: true });
+        video.addEventListener("error",   tick, { once: true });
+    }
+}
+
+function hideLoader() {
+    const loader = $("sr-loader");
+    loader.classList.add("sr-loader--out");
+    loader.addEventListener("transitionend", () => loader.remove(), { once: true });
+}
+
+/* ══════════════════════════════════════════════════════════════
    INIT
 ══════════════════════════════════════════════════════════════ */
 function init() {
+    runLoader();
     applyTexts();
     buildSidebar();
     bindUnitHotspots();

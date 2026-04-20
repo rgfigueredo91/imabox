@@ -3,6 +3,66 @@
    ═══════════════════════════════════════════════════════════════ */
 *, *::before, *::after { box-sizing: border-box; }
 
+/* ═══════════════════════════════════════════════════════════════
+   LOADER
+   ═══════════════════════════════════════════════════════════════ */
+.sr-loader {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: #0e0e0e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.7s ease;
+}
+.sr-loader--out {
+    opacity: 0;
+    pointer-events: none;
+}
+.sr-loader-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+}
+.sr-loader-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+    margin: 0;
+}
+.sr-loader-name {
+    font-size: clamp(3rem, 10vw, 7rem);
+    font-weight: 200;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    margin: 0;
+    color: #fff;
+    line-height: 1;
+}
+.sr-loader-sub {
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    margin: 0 0 24px;
+}
+.sr-loader-track {
+    width: 160px;
+    height: 1px;
+    background: rgba(255,255,255,0.1);
+    overflow: hidden;
+}
+.sr-loader-bar {
+    height: 100%;
+    width: 0%;
+    background: rgba(255,255,255,0.7);
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 html, body {
     margin: 0; padding: 0;
     width: 100%; height: 100%;
