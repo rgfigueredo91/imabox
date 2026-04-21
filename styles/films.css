@@ -39,6 +39,7 @@ body {
 	gap: 24px;
 	padding: 4vh 4vw;
 	flex: 1;
+	align-content: center;
 }
 
 /* ── Card ─────────────────────────────────────────── */
