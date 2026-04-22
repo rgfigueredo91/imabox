@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    <title>Masterplanes 3D | Imabox</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" type="image/png" href="favicon.png"/>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body {
+            width: 100%; height: 100%;
+            background: #000;
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+        }
+
+        .mp-scene {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+        }
+
+        /* ── IMAGE / VIDEO LAYERS ───────────────────────────────────
+           z1  static frames (A/B swap for crossfade between views)
+           z2  active video
+           z3  black overlay
+        ──────────────────────────────────────────────────────────── */
+        .mp-frame, .mp-video {
+            position: absolute;
+            inset: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            object-position: center;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        /* Two static frame slots for crossfading */
+        .mp-frame {
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+        .mp-frame.visible { opacity: 1; }
+
+        .mp-video {
+            z-index: 2;
+            opacity: 0;
+            transition: none;
+        }
+        .mp-scene.is-playing  .mp-video { opacity: 1; }
+        .mp-scene.is-fading   .mp-video { opacity: 0; transition: opacity 0.6s ease; }
+
+        /* Bridge — sits above video, covers black gap during src switch */
+        .mp-bridge {
+            position: absolute;
+            inset: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            object-position: center;
+            z-index: 4;
+            opacity: 0;
+            transition: opacity 0.35s ease;
+            pointer-events: none;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+        .mp-bridge.active { opacity: 1; }
+
+        /* Black overlay — fades out after Ingresar */
+        .mp-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 3;
+            background: #000;
+            transition: opacity 1.2s ease;
+            pointer-events: none;
+        }
+        .mp-scene.is-cover   .mp-overlay,
+        .mp-scene.is-playing .mp-overlay,
+        .mp-scene.is-done1   .mp-overlay,
+        .mp-scene.is-playing2 .mp-overlay,
+        .mp-scene.is-done2   .mp-overlay { opacity: 0; }
+
+        /* ── LANDING ─────────────────────────────────────────────── */
+        .mp-landing {
+            position: absolute;
+            inset: 0;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 48px;
+            transition: opacity 0.8s ease;
+        }
+        .mp-scene.is-cover    .mp-landing,
+        .mp-scene.is-playing  .mp-landing,
+        .mp-scene.is-done1    .mp-landing,
+        .mp-scene.is-playing2 .mp-landing,
+        .mp-scene.is-done2    .mp-landing { opacity: 0; pointer-events: none; }
+
+        .mp-title-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: fadeUp 1.2s ease 0.3s both;
+        }
+        .mp-title {
+            font-size: clamp(2.4rem, 8vw, 6rem);
+            font-weight: 200;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            line-height: 1;
+        }
+        .mp-subtitle {
+            font-size: clamp(0.65rem, 1.6vw, 0.95rem);
+            font-weight: 300;
+            letter-spacing: 0.55em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.4);
+            margin-top: 12px;
+            align-self: flex-end;
+        }
+
+        .mp-btn-enter {
+            background: rgba(0,0,0,0.4);
+            border: 1.5px solid rgba(255,255,255,0.65);
+            color: #fff;
+            font-family: inherit;
+            font-size: 0.78rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            padding: 16px 52px;
+            cursor: pointer;
+            animation: fadeUp 1.2s ease 0.6s both;
+            transition: background 0.3s, border-color 0.3s;
+        }
+        .mp-btn-enter:hover { background: rgba(0,0,0,0.65); border-color: #fff; }
+
+        /* ── INICIAR (center) ────────────────────────────────────── */
+        .mp-btn-iniciar {
+            position: absolute;
+            inset: 0; margin: auto;
+            width: fit-content; height: fit-content;
+            z-index: 10;
+            background: rgba(0,0,0,0.45);
+            border: 1.5px solid rgba(255,255,255,0.7);
+            color: #fff;
+            font-family: inherit;
+            font-size: 0.78rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            padding: 16px 52px;
+            cursor: pointer;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.8s ease 0.5s, background 0.3s, border-color 0.3s;
+        }
+        .mp-scene.is-cover .mp-btn-iniciar { opacity: 1; pointer-events: all; }
+        .mp-scene.is-playing .mp-btn-iniciar,
+        .mp-scene.is-done1   .mp-btn-iniciar,
+        .mp-scene.is-playing2 .mp-btn-iniciar,
+        .mp-scene.is-done2   .mp-btn-iniciar { opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        .mp-btn-iniciar:hover { background: rgba(0,0,0,0.65); border-color: #fff; }
+
+        /* ── NAV ARROWS (right / left sides, vertically centered) ── */
+        .mp-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+            background: rgba(0,0,0,0.35);
+            border: 1.5px solid rgba(255,255,255,0.5);
+            color: #fff;
+            width: 52px; height: 52px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            font-size: 1.3rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.7s ease, background 0.25s, border-color 0.25s;
+            font-family: inherit;
+        }
+        .mp-arrow:hover { background: rgba(0,0,0,0.65); border-color: #fff; }
+
+        .mp-arrow-right { right: 32px; }
+        .mp-arrow-left  { left: 32px; }
+
+        /* Show right arrow after video 1 ends */
+        .mp-scene.is-done1 .mp-arrow-right { opacity: 1; pointer-events: all; }
+
+        /* Show left arrow after video 2 ends */
+        .mp-scene.is-done2 .mp-arrow-left  { opacity: 1; pointer-events: all; }
+
+        /* ── ANIMATIONS ─────────────────────────────────────────── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(14px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="mp-scene" id="mp-scene">
+
+    <!-- Static frame layers (A/B crossfade) -->
+    <img class="mp-frame visible" id="mp-frame-a" src="img/masterplanes/start.jpg" alt="" draggable="false" />
+    <img class="mp-frame" id="mp-frame-b" src=""                            alt="" draggable="false" />
+
+    <!-- Video layer -->
+    <video class="mp-video" id="mp-video"
+           src="videos/masterplanes/zoom.mp4"
+           preload="auto" playsinline muted></video>
+
+    <!-- Black overlay -->
+    <div class="mp-overlay"></div>
+
+    <!-- Bridge: covers black gap while new video src loads -->
+    <img class="mp-bridge" id="mp-bridge" src="" alt="" draggable="false" />
+
+    <!-- Landing -->
+    <div class="mp-landing">
+        <div class="mp-title-wrap">
+            <h1 class="mp-title">masterplanes</h1>
+            <p class="mp-subtitle">3D</p>
+        </div>
+        <button class="mp-btn-enter" id="mp-btn-enter">Ingresar</button>
+    </div>
+
+    <!-- Iniciar -->
+    <button class="mp-btn-iniciar" id="mp-btn-iniciar">Iniciar</button>
+
+    <!-- Navigation arrows -->
+    <button class="mp-arrow mp-arrow-right" id="mp-arrow-right" aria-label="Siguiente">&#8250;</button>
+    <button class="mp-arrow mp-arrow-left"  id="mp-arrow-left"  aria-label="Volver">&#8249;</button>
+
+</div>
+
+<script>
+const scene      = document.getElementById("mp-scene");
+const video      = document.getElementById("mp-video");
+const frameA     = document.getElementById("mp-frame-a");
+const bridge     = document.getElementById("mp-bridge");
+const btnEnter   = document.getElementById("mp-btn-enter");
+const btnIniciar = document.getElementById("mp-btn-iniciar");
+const arrowRight = document.getElementById("mp-arrow-right");
+const arrowLeft  = document.getElementById("mp-arrow-left");
+
+/* Show bridge instantly (no transition) to match current view */
+function showBridge(src) {
+    bridge.style.transition = "none";
+    bridge.src = src;
+    bridge.classList.add("active");
+    bridge.offsetHeight; // force reflow
+    bridge.style.transition = "";
+}
+
+/* Hide bridge with fade once video first frame is ready */
+function hideBridgeOnReady() {
+    video.addEventListener("timeupdate", () => {
+        bridge.classList.remove("active");
+    }, { once: true });
+}
+
+function showStill(src) {
+    // Show high-quality still over the video, then hide video
+    showBridge(src);
+    scene.classList.remove("is-playing");
+}
+
+function playNext(src, bridgeSrc, onEnded) {
+    showBridge(bridgeSrc);
+    scene.classList.add("is-playing");
+    video.src = src;
+    video.load();
+    video.play();
+    hideBridgeOnReady();
+    video.addEventListener("ended", onEnded, { once: true });
+}
+
+/* ── Ingresar ───────────────────────────────────────────────── */
+btnEnter.addEventListener("click", () => {
+    scene.classList.add("is-cover");
+});
+
+/* ── Iniciar (video 1) ──────────────────────────────────────── */
+btnIniciar.addEventListener("click", () => {
+    scene.classList.remove("is-cover");
+    playNext("videos/masterplanes/zoom.mp4", "img/masterplanes/start.jpg", () => {
+        showStill("img/masterplanes/end1.jpg");
+        scene.classList.add("is-done1");
+    });
+});
+
+/* ── Arrow right → izquierda.mp4 forward ───────────────────── */
+arrowRight.addEventListener("click", () => {
+    scene.classList.remove("is-done1", "is-done2");
+    playNext("videos/masterplanes/izquierda.mp4", "img/masterplanes/end1.jpg", () => {
+        showStill("img/masterplanes/end2.jpg");
+        scene.classList.add("is-done2");
+    });
+});
+
+/* ── Arrow left → izquierda.mp4 reversed ───────────────────── */
+arrowLeft.addEventListener("click", () => {
+    scene.classList.remove("is-done1", "is-done2");
+    playNext("videos/masterplanes/izquierda-rev.mp4", "img/masterplanes/end2.jpg", () => {
+        showStill("img/masterplanes/end1.jpg");
+        scene.classList.add("is-done1");
+    });
+});
+</script>
+
+</body>
+</html>
