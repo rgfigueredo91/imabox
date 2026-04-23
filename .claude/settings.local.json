@@ -23,7 +23,10 @@
       "Bash(ffmpeg -i \"C:/Users/User/Desktop/KIU/plantas/03.jpg\" -vf \"scale=iw:ih\" -frames:v 1 /tmp/p03.png -y)",
       "Bash(ffmpeg -i \"C:/Users/User/Desktop/KIU/plantas/04.jpg\" -vf \"scale=iw:ih\" -frames:v 1 /tmp/p04.png -y)",
       "Bash(ffmpeg -i \"C:/Users/User/Desktop/KIU/plantas/05.jpg\" -vf \"scale=iw:ih\" -frames:v 1 /tmp/p05.png -y)",
-      "Bash(python3 *)"
+      "Bash(python3 *)",
+      "Read(//y/Beer - La Sencilla - 1492/01-Anteproyecto/**)",
+      "Read(//y/Beer - La Sencilla - 1492/**)",
+      "Bash(pdfinfo *)"
     ]
   }
 }

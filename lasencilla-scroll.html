@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>La Sencilla · Masterplan — GómezPlatero</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { overflow-x: hidden; }
+        body { font-family: 'Poppins', sans-serif; background: #080808; color: #fff; overflow-x: hidden; }
+        img { display: block; max-width: 100%; user-select: none; -webkit-user-drag: none; }
+
+        /* ── NAV ─────────────────────────────────────── */
+        .gp-nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+            height: 52px;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 48px;
+            background: rgba(8,8,8,0.92);
+            backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .gp-logo { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.05em; line-height: 1; }
+        .gp-logo span { display: block; font-size: 0.38rem; font-weight: 300; letter-spacing: 0.24em; text-transform: uppercase; opacity: 0.38; margin-top: 3px; }
+        .gp-nav-sec { font-size: 0.54rem; letter-spacing: 0.24em; text-transform: uppercase; opacity: 0.38; }
+
+        /* ── SECTION LABEL ───────────────────────────── */
+        .s-lbl {
+            display: flex; align-items: center; gap: 14px;
+            font-size: 0.5rem; letter-spacing: 0.3em; text-transform: uppercase; opacity: 0.45;
+        }
+        .s-lbl::before { content: ''; width: 28px; height: 1px; background: currentColor; flex-shrink: 0; }
+
+        /* ── HERO ────────────────────────────────────── */
+        .s-hero {
+            height: 100vh; min-height: 580px;
+            background: #080808;
+            display: flex; flex-direction: column; justify-content: center;
+            padding: 0 10vw;
+            position: relative; overflow: hidden;
+        }
+        .hero-eye {
+            font-size: clamp(0.54rem, 1vw, 0.7rem);
+            letter-spacing: 0.34em; text-transform: uppercase;
+            color: rgba(255,255,255,0.38);
+            margin-bottom: 22px; opacity: 0;
+        }
+        .hero-title-clip { overflow: hidden; margin-bottom: 18px; }
+        .hero-title {
+            font-size: clamp(5rem, 14.5vw, 13.5rem);
+            font-weight: 600; letter-spacing: -0.028em; line-height: 0.87;
+            clip-path: inset(0 0 100% 0);
+        }
+        .hero-sub {
+            font-size: clamp(1.6rem, 4.5vw, 4.5rem);
+            font-weight: 200; letter-spacing: 0.14em;
+            color: rgba(255,255,255,0.72);
+            margin-bottom: 32px; opacity: 0;
+        }
+        .hero-meta {
+            font-size: 0.62rem; letter-spacing: 0.22em; text-transform: uppercase;
+            color: rgba(255,255,255,0.3); opacity: 0;
+        }
+        .hero-logo-bl {
+            position: absolute; bottom: 44px; left: 10vw;
+            font-size: 0.65rem; font-weight: 600; letter-spacing: 0.05em;
+            opacity: 0; line-height: 1;
+        }
+        .hero-logo-bl span { display: block; font-size: 0.36rem; font-weight: 300; letter-spacing: 0.24em; text-transform: uppercase; opacity: 0.35; margin-top: 3px; }
+        .hero-scrl {
+            position: absolute; bottom: 44px; right: 10vw;
+            display: flex; flex-direction: column; align-items: center; gap: 10px;
+            font-size: 0.43rem; letter-spacing: 0.3em; text-transform: uppercase;
+            color: rgba(255,255,255,0.22); opacity: 0;
+        }
+        .hero-scrl::after {
+            content: ''; width: 1px; height: 50px; background: rgba(255,255,255,0.15);
+            animation: scrlLine 2.4s ease infinite;
+        }
+        @keyframes scrlLine {
+            0%   { transform: scaleY(0); transform-origin: top; opacity: 0; }
+            25%  { opacity: 1; }
+            55%  { transform: scaleY(1); transform-origin: top; }
+            56%  { transform-origin: bottom; }
+            100% { transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+        }
+
+        /* ── UBICACIÓN ───────────────────────────────── */
+        .s-ubicacion { background: #0d0d0d; padding: 110px 8vw 130px; }
+        .s-ubicacion .s-lbl { color: #fff; margin-bottom: 64px; }
+        .ub-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; }
+        .ub-map { overflow: hidden; aspect-ratio: 16/10; cursor: zoom-in; }
+        .ub-map img { width: 100%; height: 120%; object-fit: cover; object-position: center; will-change: transform; }
+
+        /* ── SITIO PINNED ────────────────────────────── */
+        .s-sitio-stick {
+            height: 100vh; overflow: hidden;
+            background: #050505; position: relative;
+        }
+        .sitio-frame {
+            position: absolute; inset: 0; opacity: 0; will-change: opacity;
+        }
+        .sitio-frame:first-child { opacity: 1; }
+        .sitio-frame img { width: 100%; height: 100%; object-fit: cover; object-position: center 18%; will-change: transform; }
+        .sitio-overlay {
+            position: absolute; inset: 0; z-index: 1; pointer-events: none;
+            background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 40%),
+                        linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, transparent 28%);
+        }
+        .sitio-hud { position: absolute; bottom: 48px; left: 8vw; z-index: 5; }
+        .sitio-hud .s-lbl { color: rgba(255,255,255,0.85); margin-bottom: 14px; }
+        .sitio-dots { display: flex; gap: 6px; margin-bottom: 12px; }
+        .sitio-dot { height: 4px; width: 30px; background: rgba(255,255,255,0.28); transition: width 0.4s ease, background 0.4s ease; }
+        .sitio-dot.on { width: 58px; background: #fff; }
+        .sitio-ctr { font-size: 0.52rem; letter-spacing: 0.22em; color: rgba(255,255,255,0.65); }
+
+        /* ── PROPUESTA ───────────────────────────────── */
+        .s-propuesta { background: #f1f0ec; color: #111; padding: 120px 8vw 140px; }
+        .s-propuesta .s-lbl { color: #111; margin-bottom: 56px; }
+        .prop-h { overflow: hidden; margin-bottom: 80px; }
+        .prop-h h2 { font-size: clamp(2.8rem, 6.5vw, 6rem); font-weight: 200; letter-spacing: 0.06em; line-height: 0.95; }
+        .prop-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
+        .prop-card { background: #e4e3df; overflow: hidden; cursor: zoom-in; }
+        .prop-card img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; transition: transform 0.7s ease; }
+        .prop-card:hover img { transform: scale(1.03); }
+        .prop-card-lbl { padding: 12px 16px; font-size: 0.5rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(17,17,17,0.38); }
+
+        /* ── AMENIDADES ──────────────────────────────── */
+        .s-amenidades { background: #eceae6; color: #111; padding: 90px 8vw 140px; border-top: 1px solid rgba(0,0,0,0.07); }
+        .s-amenidades .s-lbl { color: #111; margin-bottom: 56px; }
+        .amen-h { overflow: hidden; margin-bottom: 72px; }
+        .amen-h h2 { font-size: clamp(2.8rem, 6.5vw, 6rem); font-weight: 200; letter-spacing: 0.06em; line-height: 0.95; }
+        .amen-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; }
+        .amen-card { background: #dfdedd; overflow: hidden; cursor: zoom-in; }
+        .amen-card img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; transition: transform 0.7s ease; }
+        .amen-card:hover img { transform: scale(1.03); }
+        .amen-card.full { grid-column: 1/-1; }
+        .amen-card.full img { aspect-ratio: 16/7; }
+        .amen-card-lbl { padding: 11px 16px; font-size: 0.5rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(17,17,17,0.38); }
+
+        /* ── RENDERS PINNED ──────────────────────────── */
+        .s-renders-stick {
+            height: 100vh; overflow: hidden; background: #000; position: relative;
+        }
+        .render-frame { position: absolute; inset: 0; opacity: 0; will-change: opacity; }
+        .render-frame:first-child { opacity: 1; }
+        .render-frame img { width: 100%; height: 100%; object-fit: cover; will-change: transform; }
+        .render-vign {
+            position: absolute; inset: 0; z-index: 1; pointer-events: none;
+            background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 50%);
+        }
+        .render-hud { position: absolute; bottom: 52px; left: 8vw; z-index: 2; }
+        .render-hud .s-lbl { color: rgba(255,255,255,0.5); margin-bottom: 14px; }
+        .render-dots { display: flex; gap: 6px; margin-bottom: 16px; }
+        .render-dot { height: 4px; width: 30px; background: rgba(255,255,255,0.2); transition: width 0.4s ease, background 0.4s ease; }
+        .render-dot.on { width: 58px; background: #fff; }
+        .render-cap { font-size: clamp(1.6rem, 3.5vw, 3.2rem); font-weight: 200; letter-spacing: 0.08em; line-height: 1; }
+        .render-sub { font-size: 0.52rem; letter-spacing: 0.22em; color: rgba(255,255,255,0.28); margin-top: 10px; }
+
+        /* ── REFERENCIAS ─────────────────────────────── */
+        .s-referencias { background: #eeede9; color: #111; padding: 120px 8vw 140px; }
+        .s-referencias .s-lbl { color: #111; margin-bottom: 56px; }
+        .ref-h { overflow: hidden; margin-bottom: 72px; }
+        .ref-h h2 { font-size: clamp(2.8rem, 6.5vw, 6rem); font-weight: 200; letter-spacing: 0.06em; line-height: 0.95; }
+        .ref-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px; }
+        .ref-card { background: #e2e1dd; overflow: hidden; cursor: zoom-in; }
+        .ref-card img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; transition: transform 0.6s ease; }
+        .ref-card:hover img { transform: scale(1.04); }
+        .ref-card-lbl { padding: 10px 14px; font-size: 0.48rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(17,17,17,0.38); }
+        .ref-card.wide { grid-column: span 2; }
+        .ref-card.wide img { aspect-ratio: 8/3; }
+
+        /* ── ÁREAS ───────────────────────────────────── */
+        .s-areas { background: #0d0d0d; color: #fff; padding: 120px 8vw 140px; }
+        .s-areas .s-lbl { color: rgba(255,255,255,0.4); margin-bottom: 56px; }
+        .areas-h { overflow: hidden; margin-bottom: 72px; }
+        .areas-h h2 { font-size: clamp(2.8rem, 6.5vw, 6rem); font-weight: 200; letter-spacing: 0.06em; line-height: 0.95; }
+        .areas-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; }
+        .area-card { padding: 48px 44px; border: 1px solid rgba(255,255,255,0.04); }
+        .area-n { font-size: clamp(3.5rem, 7vw, 6.5rem); font-weight: 200; letter-spacing: -0.02em; line-height: 1; color: rgba(255,255,255,0.1); margin-bottom: 6px; }
+        .area-n sup { font-size: 0.35em; color: rgba(255,255,255,0.18); vertical-align: super; letter-spacing: 0; }
+        .area-name { font-size: 0.88rem; font-weight: 300; letter-spacing: 0.04em; margin-bottom: 6px; }
+        .area-pct { font-size: 0.5rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.28); }
+        .area-card.total {
+            grid-column: 1/-1; background: rgba(255,255,255,0.02);
+            display: flex; align-items: flex-end; justify-content: space-between; gap: 20px;
+        }
+        .area-card.total .area-n { font-size: clamp(5rem, 10vw, 9.5rem); color: rgba(255,255,255,0.88); }
+        .area-ext { text-align: right; padding-bottom: 8px; }
+        .area-ext-lbl { font-size: 0.48rem; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.22); margin-bottom: 6px; }
+        .area-ext-val { font-size: clamp(1.5rem, 3vw, 2.8rem); font-weight: 200; color: rgba(255,255,255,0.32); }
+
+        /* ── CIERRE ──────────────────────────────────── */
+        .s-cierre {
+            height: 100vh; background: #080808;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; gap: 30px;
+        }
+        .cierre-line { font-size: clamp(0.75rem, 1.8vw, 1.2rem); font-weight: 200; letter-spacing: 0.26em; text-transform: uppercase; color: rgba(255,255,255,0.42); }
+        .cierre-logo { font-size: 1rem; font-weight: 600; letter-spacing: 0.06em; line-height: 1; }
+        .cierre-logo span { display: block; font-size: 0.38rem; font-weight: 300; letter-spacing: 0.26em; text-transform: uppercase; opacity: 0.3; margin-top: 5px; }
+
+        /* ── LIGHTBOX ────────────────────────────────── */
+        .lb {
+            position: fixed; inset: 0; z-index: 9000;
+            background: rgba(0,0,0,0.96);
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease;
+            cursor: zoom-out;
+        }
+        .lb.open { opacity: 1; pointer-events: auto; }
+        .lb-img-wrap {
+            max-width: 92vw; max-height: 90vh;
+            display: flex; align-items: center; justify-content: center;
+            transform: scale(0.97);
+            transition: transform 0.35s ease;
+        }
+        .lb.open .lb-img-wrap { transform: scale(1); }
+        .lb-img-wrap img { max-width: 92vw; max-height: 90vh; object-fit: contain; display: block; cursor: default; }
+        .lb-close {
+            position: absolute; top: 22px; right: 28px;
+            background: none; border: 1px solid rgba(255,255,255,0.2);
+            color: rgba(255,255,255,0.55); font-family: inherit;
+            font-size: 0.52rem; letter-spacing: 0.2em; text-transform: uppercase;
+            padding: 8px 16px; cursor: pointer;
+            transition: color 0.2s, border-color 0.2s;
+        }
+        .lb-close:hover { color: #fff; border-color: rgba(255,255,255,0.6); }
+        .lb-nav {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: none; border: 1px solid rgba(255,255,255,0.15);
+            color: rgba(255,255,255,0.5); font-size: 1.5rem;
+            width: 44px; height: 44px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: color 0.2s, border-color 0.2s, background 0.2s;
+        }
+        .lb-nav:hover { color: #fff; border-color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.06); }
+        .lb-prev { left: 24px; }
+        .lb-next { right: 24px; }
+        .lb-nav.hidden { opacity: 0; pointer-events: none; }
+        .lb-counter { position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%); font-size: 0.5rem; letter-spacing: 0.22em; color: rgba(255,255,255,0.28); }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="gp-nav" id="gp-nav">
+    <div class="gp-logo">GómezPlatero<span>Arquitectura &amp; Urbanismo</span></div>
+    <div class="gp-nav-sec" id="gp-sec"></div>
+</nav>
+
+<!-- ─── HERO ──────────────────────────────────────── -->
+<section class="s-hero" id="s-hero">
+    <p class="hero-eye">Maldonado, Uruguay</p>
+    <div class="hero-title-clip"><h1 class="hero-title">La Sencilla</h1></div>
+    <p class="hero-sub">Masterplan</p>
+    <p class="hero-meta">Presentación 10 · 04.2026</p>
+    <div class="hero-logo-bl">GómezPlatero<span>Arquitectura &amp; Urbanismo</span></div>
+    <div class="hero-scrl">Scroll</div>
+</section>
+
+<!-- ─── UBICACIÓN ─────────────────────────────────── -->
+<section class="s-ubicacion" id="s-ubicacion">
+    <div class="s-lbl">01 · Ubicación</div>
+    <div class="ub-grid">
+        <div class="ub-map"><img src="img/lasencilla/slide-01.png" alt="Maldonado macro"/></div>
+        <div class="ub-map"><img src="img/lasencilla/slide-02.png" alt="Maldonado zoom"/></div>
+    </div>
+</section>
+
+<!-- ─── IMÁGENES DEL SITIO (pinned by GSAP) ──────── -->
+<div class="s-sitio-stick" id="s-sitio-stick">
+    <div class="sitio-frame"><img src="img/lasencilla/sitio-01.jpg" alt=""/></div>
+    <div class="sitio-frame"><img src="img/lasencilla/sitio-02.jpg" alt=""/></div>
+    <div class="sitio-frame"><img src="img/lasencilla/sitio-03.jpg" alt=""/></div>
+    <div class="sitio-frame"><img src="img/lasencilla/sitio-04.jpg" alt=""/></div>
+    <div class="sitio-frame"><img src="img/lasencilla/sitio-05.jpg" alt=""/></div>
+    <div class="sitio-frame"><img src="img/lasencilla/sitio-06.jpg" alt=""/></div>
+    <div class="sitio-frame"><img src="img/lasencilla/sitio-07.jpg" alt=""/></div>
+    <div class="sitio-overlay"></div>
+    <div class="sitio-hud">
+        <div class="s-lbl">02 · Imágenes del sitio</div>
+        <div class="sitio-dots" id="sitio-dots"></div>
+        <div class="sitio-ctr" id="sitio-ctr">01 — 07</div>
+    </div>
+</div>
+
+<!-- ─── PROPUESTA ─────────────────────────────────── -->
+<section class="s-propuesta" id="s-propuesta">
+    <div class="s-lbl">03 · Propuesta</div>
+    <div class="prop-h"><h2>Masterplan</h2></div>
+    <div class="prop-grid">
+        <div class="prop-card"><img src="img/lasencilla/slide-10.png" alt=""/><div class="prop-card-lbl">Escala 1 · 100</div></div>
+        <div class="prop-card"><img src="img/lasencilla/slide-11.png" alt=""/><div class="prop-card-lbl">Senderos</div></div>
+        <div class="prop-card"><img src="img/lasencilla/slide-15.png" alt=""/><div class="prop-card-lbl">Corte · Esc. 1 : 150</div></div>
+    </div>
+</section>
+
+<!-- ─── AMENIDADES ────────────────────────────────── -->
+<section class="s-amenidades" id="s-amenidades">
+    <div class="s-lbl">04 · Amenidades</div>
+    <div class="amen-h"><h2>Amenidades</h2></div>
+    <div class="amen-grid">
+        <div class="amen-card"><img src="img/lasencilla/slide-12.png" alt=""/><div class="amen-card-lbl">Versión 09</div></div>
+        <div class="amen-card"><img src="img/lasencilla/slide-13.png" alt=""/><div class="amen-card-lbl">Implantación</div></div>
+        <div class="amen-card full"><img src="img/lasencilla/slide-14.png" alt=""/><div class="amen-card-lbl">Planta · Esc. 1 : 500</div></div>
+    </div>
+</section>
+
+<!-- ─── VISUALIZACIÓN 3D (pinned by GSAP) ────────── -->
+<div class="s-renders-stick" id="s-renders-stick">
+    <div class="render-frame" data-cap="Acceso"><img src="img/lasencilla/slide-17.png" alt=""/></div>
+    <div class="render-frame" data-cap="Piscina"><img src="img/lasencilla/slide-18.png" alt=""/></div>
+    <div class="render-frame" data-cap="Patio interior"><img src="img/lasencilla/slide-19.png" alt=""/></div>
+    <div class="render-frame" data-cap="Mirador"><img src="img/lasencilla/slide-20.png" alt=""/></div>
+    <div class="render-vign"></div>
+    <div class="render-hud" id="render-hud">
+        <div class="s-lbl">05 · Visualización 3D</div>
+        <div class="render-dots" id="render-dots"></div>
+        <div class="render-cap" id="render-cap">Acceso</div>
+        <div class="render-sub" id="render-sub">01 — 04</div>
+    </div>
+</div>
+
+<!-- ─── REFERENCIAS ───────────────────────────────── -->
+<section class="s-referencias" id="s-referencias">
+    <div class="s-lbl">06 · Referencias</div>
+    <div class="ref-h"><h2>Referencias</h2></div>
+    <div class="ref-grid">
+        <div class="ref-card"><img src="img/lasencilla/slide-21.png" alt=""/><div class="ref-card-lbl">Mirador CH</div></div>
+        <div class="ref-card"><img src="img/lasencilla/slide-22.png" alt=""/><div class="ref-card-lbl">Juegos de niños</div></div>
+        <div class="ref-card"><img src="img/lasencilla/slide-23.png" alt=""/><div class="ref-card-lbl">Picnic</div></div>
+        <div class="ref-card"><img src="img/lasencilla/slide-24.png" alt=""/><div class="ref-card-lbl">Mariposario</div></div>
+        <div class="ref-card"><img src="img/lasencilla/slide-25.png" alt=""/><div class="ref-card-lbl">Fogones</div></div>
+        <div class="ref-card"><img src="img/lasencilla/slide-26.png" alt=""/><div class="ref-card-lbl">Sendero principal</div></div>
+        <div class="ref-card"><img src="img/lasencilla/slide-27.png" alt=""/><div class="ref-card-lbl">Sendero natural</div></div>
+        <div class="ref-card wide"><img src="img/lasencilla/slide-28.png" alt=""/><div class="ref-card-lbl">Borde de lago</div></div>
+        <div class="ref-card wide"><img src="img/lasencilla/slide-29.png" alt=""/><div class="ref-card-lbl">Borde de lago II</div></div>
+    </div>
+</section>
+
+<!-- ─── RESUMEN DE ÁREAS ───────────────────────────── -->
+<section class="s-areas" id="s-areas">
+    <div class="s-lbl">07 · Resumen de áreas</div>
+    <div class="areas-h"><h2>Resumen de áreas</h2></div>
+    <div class="areas-grid">
+        <div class="area-card">
+            <div class="area-n"><span class="cnt" data-to="232">0</span><sup>m²</sup></div>
+            <div class="area-name">Club House</div><div class="area-pct">31 %</div>
+        </div>
+        <div class="area-card">
+            <div class="area-n"><span class="cnt" data-to="170">0</span><sup>m²</sup></div>
+            <div class="area-name">Deportiva</div><div class="area-pct">22.5 %</div>
+        </div>
+        <div class="area-card">
+            <div class="area-n"><span class="cnt" data-to="174">0</span><sup>m²</sup></div>
+            <div class="area-name">Kids Club · Invernadero · Farm</div><div class="area-pct">23 %</div>
+        </div>
+        <div class="area-card">
+            <div class="area-n"><span class="cnt" data-to="178">0</span><sup>m²</sup></div>
+            <div class="area-name">Workshop · Cowork</div><div class="area-pct">23.5 %</div>
+        </div>
+        <div class="area-card total">
+            <div>
+                <div style="font-size:0.5rem;letter-spacing:0.24em;text-transform:uppercase;color:rgba(255,255,255,0.25);margin-bottom:12px;">Total área construida</div>
+                <div class="area-n"><span class="cnt" data-to="754">0</span><sup>m²</sup></div>
+            </div>
+            <div class="area-ext">
+                <div class="area-ext-lbl">Total exterior</div>
+                <div class="area-ext-val"><span class="cnt" data-to="849">0</span> m²</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ─── CIERRE ────────────────────────────────────── -->
+<section class="s-cierre" id="s-cierre">
+    <p class="cierre-line">Making Earth the Best Place to Live</p>
+    <div class="cierre-logo">GómezPlatero<span>Arquitectura &amp; Urbanismo</span></div>
+</section>
+
+<!-- ─── LIGHTBOX ──────────────────────────────────── -->
+<div class="lb" id="lb">
+    <div class="lb-img-wrap"><img id="lb-img" src="" alt=""/></div>
+    <button class="lb-close" id="lb-close">Cerrar ✕</button>
+    <button class="lb-nav lb-prev" id="lb-prev">&#8249;</button>
+    <button class="lb-nav lb-next" id="lb-next">&#8250;</button>
+    <div class="lb-counter" id="lb-counter"></div>
+</div>
+
+<!-- ─── SCRIPTS ───────────────────────────────────── -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+/* ── NAV ──────────────────────────────────────────── */
+const nav    = document.getElementById("gp-nav");
+const navSec = document.getElementById("gp-sec");
+
+[
+    ["#s-hero",""], ["#s-ubicacion","Ubicación"],
+    ["#s-sitio-stick","Imágenes del sitio"], ["#s-propuesta","Propuesta"],
+    ["#s-amenidades","Amenidades"], ["#s-renders-stick","Visualización 3D"],
+    ["#s-referencias","Referencias"], ["#s-areas","Resumen de áreas"], ["#s-cierre",""],
+].forEach(([sel, lbl]) => {
+    ScrollTrigger.create({
+        trigger: sel, start: "top 60%", end: "bottom 60%",
+        onEnter:     () => { navSec.textContent = lbl; },
+        onEnterBack: () => { navSec.textContent = lbl; },
+    });
+});
+
+/* ── HERO ─────────────────────────────────────────── */
+gsap.set([".hero-eye",".hero-sub",".hero-meta",".hero-logo-bl",".hero-scrl"], { autoAlpha: 0, y: 18 });
+const heroTl = gsap.timeline({ delay: 0.15 });
+heroTl
+    .to(".hero-title",   { clipPath: "inset(0 0 0% 0)", duration: 1.15, ease: "expo.out" })
+    .to(".hero-eye",     { autoAlpha: 1, y: 0, duration: 0.75, ease: "power2.out" }, "-=0.75")
+    .to(".hero-sub",     { autoAlpha: 1, y: 0, duration: 0.75, ease: "power2.out" }, "-=0.6")
+    .to(".hero-meta",    { autoAlpha: 1, y: 0, duration: 0.6,  ease: "power2.out" }, "-=0.48")
+    .to(".hero-logo-bl", { autoAlpha: 1, y: 0, duration: 0.55, ease: "power2.out" }, "-=0.38")
+    .to(".hero-scrl",    { autoAlpha: 1, y: 0, duration: 0.5,  ease: "power2.out" }, "-=0.28");
+
+gsap.to([".hero-eye",".hero-sub",".hero-meta"], {
+    y: -50, autoAlpha: 0, ease: "none",
+    scrollTrigger: { trigger: "#s-hero", start: "top top", end: "50% top", scrub: 0.9 }
+});
+gsap.to(".hero-title", {
+    y: -110, ease: "none",
+    scrollTrigger: { trigger: "#s-hero", start: "top top", end: "bottom top", scrub: 0.8 }
+});
+
+/* ── UBICACIÓN ────────────────────────────────────── */
+gsap.from(".s-ubicacion .s-lbl", {
+    x: -44, autoAlpha: 0, duration: 0.9,
+    scrollTrigger: { trigger: ".s-ubicacion", start: "top 78%", toggleActions: "play none none reverse" }
+});
+gsap.from(".ub-map", {
+    y: 70, autoAlpha: 0, stagger: 0.14, duration: 1, ease: "power3.out",
+    scrollTrigger: { trigger: ".ub-grid", start: "top 82%", toggleActions: "play none none reverse" }
+});
+document.querySelectorAll(".ub-map img").forEach((img, i) => {
+    gsap.to(img, {
+        y: -55, ease: "none",
+        scrollTrigger: { trigger: ".s-ubicacion", start: "top bottom", end: "bottom top", scrub: 0.5 + i * 0.25 }
+    });
+});
+
+/* ── SITIO PINNED ─────────────────────────────────── */
+const sitioFrames = Array.from(document.querySelectorAll(".sitio-frame"));
+const N_S = sitioFrames.length;
+const dotsWrap = document.getElementById("sitio-dots");
+const sitioEl  = document.getElementById("sitio-ctr");
+
+const dotEls = sitioFrames.map((_, i) => {
+    const d = document.createElement("div");
+    d.className = "sitio-dot" + (i === 0 ? " on" : "");
+    dotsWrap.appendChild(d);
+    return d;
+});
+
+function applyZoom(frames, progress, N, startScale = 1.22) {
+    const exact = progress * (N - 1);
+    frames.forEach((f, i) => {
+        const img = f.querySelector('img');
+        if (!img) return;
+        const d = exact - i;
+        let s;
+        if (d < -0.5)     s = startScale;
+        else if (d < 0)   s = startScale + (1 - startScale) * ((d + 0.5) / 0.5);
+        else              s = 1;
+        img.style.transform = `scale(${s.toFixed(4)})`;
+    });
+}
+
+function crossfade(frames, progress, N) {
+    const exact = progress * (N - 1);
+    const lo = Math.floor(exact), hi = Math.min(lo + 1, N - 1);
+    const raw = exact - lo;
+    const t = raw < 0.18 ? 0 : raw > 0.82 ? 1 : (raw - 0.18) / 0.64;
+    frames.forEach((f, i) => { f.style.opacity = i === lo ? 1 - t : i === hi ? t : 0; });
+    return t > 0.5 ? hi : lo;
+}
+
+ScrollTrigger.create({
+    trigger: "#s-sitio-stick",
+    pin: true,
+    anticipatePin: 1,
+    start: "top top",
+    end: "+=600%",
+    scrub: 0.8,
+    invalidateOnRefresh: true,
+    onUpdate(self) {
+        const active = crossfade(sitioFrames, self.progress, N_S);
+        applyZoom(sitioFrames, self.progress, N_S);
+        dotEls.forEach((d, i) => d.classList.toggle("on", i === active));
+        sitioEl.textContent = `${String(active + 1).padStart(2,"0")} — ${String(N_S).padStart(2,"0")}`;
+    }
+});
+sitioFrames.forEach((f, i) => {
+    const img = f.querySelector('img');
+    if (img) img.style.transform = i === 0 ? 'scale(1)' : 'scale(1.22)';
+});
+
+/* ── PROPUESTA ────────────────────────────────────── */
+gsap.from(".s-propuesta .s-lbl", {
+    x: -44, autoAlpha: 0,
+    scrollTrigger: { trigger: ".s-propuesta", start: "top 78%", toggleActions: "play none none reverse" }
+});
+gsap.from(".prop-h h2", {
+    y: "108%", duration: 1.05, ease: "expo.out",
+    scrollTrigger: { trigger: ".prop-h", start: "top 86%", toggleActions: "play none none reverse" }
+});
+gsap.from(".prop-card", {
+    y: 64, autoAlpha: 0, stagger: 0.12, duration: 1, ease: "power3.out",
+    scrollTrigger: { trigger: ".prop-grid", start: "top 83%", toggleActions: "play none none reverse" }
+});
+
+/* ── AMENIDADES ───────────────────────────────────── */
+gsap.from(".s-amenidades .s-lbl", {
+    x: -44, autoAlpha: 0,
+    scrollTrigger: { trigger: ".s-amenidades", start: "top 78%", toggleActions: "play none none reverse" }
+});
+gsap.from(".amen-h h2", {
+    y: "108%", duration: 1.05, ease: "expo.out",
+    scrollTrigger: { trigger: ".amen-h", start: "top 86%", toggleActions: "play none none reverse" }
+});
+gsap.from(".amen-card", {
+    y: 64, autoAlpha: 0, stagger: 0.1, duration: 1, ease: "power3.out",
+    scrollTrigger: { trigger: ".amen-grid", start: "top 83%", toggleActions: "play none none reverse" }
+});
+
+/* ── RENDERS PINNED ───────────────────────────────── */
+const renderFrames = Array.from(document.querySelectorAll(".render-frame"));
+const N_R = renderFrames.length;
+const caps         = renderFrames.map(f => f.dataset.cap);
+const capEl        = document.getElementById("render-cap");
+const subEl        = document.getElementById("render-sub");
+const rDotsWrap    = document.getElementById("render-dots");
+
+const rDotEls = renderFrames.map((_, i) => {
+    const d = document.createElement("div");
+    d.className = "render-dot" + (i === 0 ? " on" : "");
+    rDotsWrap.appendChild(d);
+    return d;
+});
+
+gsap.set([".render-hud .s-lbl",".render-dots",".render-cap",".render-sub"], { autoAlpha: 0, y: 20 });
+
+ScrollTrigger.create({
+    trigger: "#s-renders-stick",
+    pin: true,
+    anticipatePin: 1,
+    start: "top top",
+    end: "+=300%",
+    scrub: 0.8,
+    invalidateOnRefresh: true,
+    onEnter: () => gsap.to([".render-hud .s-lbl",".render-dots",".render-cap",".render-sub"], {
+        autoAlpha: 1, y: 0, stagger: 0.1, duration: 0.85, ease: "power2.out"
+    }),
+    onLeaveBack: () => gsap.to([".render-hud .s-lbl",".render-dots",".render-cap",".render-sub"], { autoAlpha: 0, y: 20, duration: 0.4 }),
+    onUpdate(self) {
+        const active = crossfade(renderFrames, self.progress, N_R);
+        applyZoom(renderFrames, self.progress, N_R);
+        rDotEls.forEach((d, i) => d.classList.toggle("on", i === active));
+        capEl.textContent = caps[active];
+        subEl.textContent = `${String(active + 1).padStart(2,"0")} — ${String(N_R).padStart(2,"0")}`;
+    }
+});
+renderFrames.forEach((f, i) => {
+    const img = f.querySelector('img');
+    if (img) img.style.transform = i === 0 ? 'scale(1)' : 'scale(1.22)';
+});
+
+/* ── REFERENCIAS ──────────────────────────────────── */
+gsap.from(".s-referencias .s-lbl", {
+    x: -44, autoAlpha: 0,
+    scrollTrigger: { trigger: ".s-referencias", start: "top 78%", toggleActions: "play none none reverse" }
+});
+gsap.from(".ref-h h2", {
+    y: "108%", duration: 1.05, ease: "expo.out",
+    scrollTrigger: { trigger: ".ref-h", start: "top 86%", toggleActions: "play none none reverse" }
+});
+gsap.from(".ref-card", {
+    y: 55, autoAlpha: 0, stagger: { amount: 0.7 }, duration: 0.85, ease: "power3.out",
+    scrollTrigger: { trigger: ".ref-grid", start: "top 83%", toggleActions: "play none none reverse" }
+});
+
+/* ── ÁREAS ────────────────────────────────────────── */
+gsap.from(".s-areas .s-lbl", {
+    x: -44, autoAlpha: 0,
+    scrollTrigger: { trigger: ".s-areas", start: "top 78%", toggleActions: "play none none reverse" }
+});
+gsap.from(".areas-h h2", {
+    y: "108%", duration: 1.05, ease: "expo.out",
+    scrollTrigger: { trigger: ".areas-h", start: "top 86%", toggleActions: "play none none reverse" }
+});
+gsap.from(".area-card", {
+    y: 55, autoAlpha: 0, stagger: 0.1, duration: 0.9, ease: "power3.out",
+    scrollTrigger: { trigger: ".areas-grid", start: "top 82%", toggleActions: "play none none reverse" }
+});
+document.querySelectorAll(".cnt").forEach(el => {
+    const to = parseInt(el.dataset.to);
+    ScrollTrigger.create({
+        trigger: el, start: "top 88%", once: true,
+        onEnter: () => gsap.to({ v: 0 }, {
+            v: to, duration: 2, ease: "power2.out",
+            onUpdate() { el.textContent = Math.round(this.targets()[0].v); }
+        })
+    });
+});
+
+/* ── CIERRE ───────────────────────────────────────── */
+gsap.from(".cierre-line", {
+    y: 34, autoAlpha: 0, duration: 1.1,
+    scrollTrigger: { trigger: ".s-cierre", start: "top 72%", toggleActions: "play none none reverse" }
+});
+gsap.from(".cierre-logo", {
+    y: 22, autoAlpha: 0, duration: 0.9,
+    scrollTrigger: { trigger: ".s-cierre", start: "top 68%", toggleActions: "play none none reverse" }
+});
+
+/* ── LIGHTBOX ─────────────────────────────────────── */
+const lb       = document.getElementById("lb");
+const lbImg    = document.getElementById("lb-img");
+const lbClose  = document.getElementById("lb-close");
+const lbPrev   = document.getElementById("lb-prev");
+const lbNext   = document.getElementById("lb-next");
+const lbCtr    = document.getElementById("lb-counter");
+
+/* Collect all lightbox-eligible images in order */
+const lbSrcs = [];
+const lbSelectors = [
+    ".ub-map img",
+    ".prop-card img",
+    ".amen-card img",
+    ".ref-card img",
+];
+lbSelectors.forEach(sel => {
+    document.querySelectorAll(sel).forEach(img => {
+        lbSrcs.push(img.src);
+        img.closest(".ub-map, .prop-card, .amen-card, .ref-card").addEventListener("click", (e) => {
+            e.stopPropagation();
+            openLb(lbSrcs.indexOf(img.src));
+        });
+    });
+});
+
+let lbIdx = 0;
+
+function openLb(idx) {
+    lbIdx = Math.max(0, Math.min(idx, lbSrcs.length - 1));
+    lbImg.src = lbSrcs[lbIdx];
+    lb.classList.add("open");
+    updateLbNav();
+}
+function closeLb() {
+    lb.classList.remove("open");
+    setTimeout(() => { lbImg.src = ""; }, 320);
+}
+function updateLbNav() {
+    lbCtr.textContent = `${String(lbIdx + 1).padStart(2,"0")} / ${String(lbSrcs.length).padStart(2,"0")}`;
+    lbPrev.classList.toggle("hidden", lbIdx === 0);
+    lbNext.classList.toggle("hidden", lbIdx === lbSrcs.length - 1);
+}
+
+lbClose.addEventListener("click", closeLb);
+lb.addEventListener("click", e => { if (e.target === lb) closeLb(); });
+lbPrev.addEventListener("click", e => { e.stopPropagation(); openLb(lbIdx - 1); });
+lbNext.addEventListener("click", e => { e.stopPropagation(); openLb(lbIdx + 1); });
+document.addEventListener("keydown", e => {
+    if (!lb.classList.contains("open")) return;
+    if (e.key === "Escape")      closeLb();
+    if (e.key === "ArrowLeft")   openLb(lbIdx - 1);
+    if (e.key === "ArrowRight")  openLb(lbIdx + 1);
+});
+</script>
+</body>
+</html>
