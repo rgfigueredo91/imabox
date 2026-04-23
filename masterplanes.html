@@ -235,9 +235,53 @@
             from { opacity: 0; transform: translateY(14px); }
             to   { opacity: 1; transform: translateY(0); }
         }
+
+        /* ── LOADER ──────────────────────────────────────────────── */
+        .mp-loader {
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            transition: opacity 0.9s ease;
+        }
+        .mp-loader.done { opacity: 0; pointer-events: none; }
+
+        .mp-loader-label {
+            font-size: 0.6rem;
+            letter-spacing: 0.45em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.3);
+        }
+
+        .mp-loader-track {
+            width: 180px;
+            height: 1px;
+            background: rgba(255,255,255,0.12);
+            position: relative;
+        }
+        .mp-loader-bar {
+            position: absolute;
+            inset: 0;
+            width: 0%;
+            background: rgba(255,255,255,0.75);
+            transition: width 0.25s ease;
+        }
     </style>
 </head>
 <body>
+
+<!-- Loader -->
+<div class="mp-loader" id="mp-loader">
+    <span class="mp-loader-label">cargando</span>
+    <div class="mp-loader-track">
+        <div class="mp-loader-bar" id="mp-loader-bar"></div>
+    </div>
+</div>
 
 <div class="mp-scene" id="mp-scene">
 
@@ -385,6 +429,56 @@ arrowLeft.addEventListener("click", () => {
         scene.classList.add("is-done1");
     });
 });
+
+/* ── Preload ─────────────────────────────────────────────────── */
+(function () {
+    const loader = document.getElementById("mp-loader");
+    const bar    = document.getElementById("mp-loader-bar");
+
+    const imgSrcs = [
+        "img/masterplanes/start.jpg",
+        "img/masterplanes/end1.jpg",
+        "img/masterplanes/end2.jpg",
+        "img/masterplanes/hovers/w1.webp",
+        "img/masterplanes/hovers/w2.webp",
+        "img/masterplanes/hovers/w3.webp",
+        "img/masterplanes/hovers/w5.webp",
+        "img/masterplanes/hovers/w6.webp",
+        "img/masterplanes/hovers/w7.webp",
+        "img/masterplanes/hovers/w8.webp",
+        "img/masterplanes/hovers/w9.webp",
+    ];
+
+    const total = imgSrcs.length + 1; // +1 for first video
+    let done = 0;
+
+    function tick() {
+        done++;
+        bar.style.width = (done / total * 100) + "%";
+    }
+
+    const imgPromises = imgSrcs.map(src => new Promise(res => {
+        const i = new Image();
+        i.onload = i.onerror = () => { tick(); res(); };
+        i.src = src;
+    }));
+
+    const videoReady = new Promise(res => {
+        let settled = false;
+        function once() { if (settled) return; settled = true; tick(); res(); }
+        video.addEventListener("canplay", once, { once: true });
+        video.addEventListener("error",   once, { once: true });
+        setTimeout(once, 12000);
+    });
+
+    Promise.all([...imgPromises, videoReady]).then(() => {
+        bar.style.width = "100%";
+        setTimeout(() => {
+            loader.classList.add("done");
+            setTimeout(() => loader.remove(), 950);
+        }, 350);
+    });
+})();
 
 /* ── Zone hover ─────────────────────────────────────────────── */
 let activeHover = null;
