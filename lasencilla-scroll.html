@@ -1215,14 +1215,14 @@ function initViewer() {
     bar.style.width = '5%';
     const mtl = new MTLLoader();
     mtl.setPath('3d/lasencilla/');
-    mtl.load('maqueta.mtl', mats => {
+    mtl.load('Untitled.mtl', mats => {
         mats.preload();
         bar.style.width = '35%';
         loadTxt.textContent = 'Cargando geometría…';
         const obj = new OBJLoader();
         obj.setMaterials(mats);
         obj.setPath('3d/lasencilla/');
-        obj.load('maqueta.obj', onModelLoaded,
+        obj.load('Untitled.obj', onModelLoaded,
             xhr => {
                 if (xhr.lengthComputable) {
                     const p = 35 + (xhr.loaded / xhr.total) * 60;
@@ -1491,26 +1491,31 @@ async function fetchTerrain() {
 }
 
 async function fetchSatTiles(cx, cy, Z, GRID) {
-    const half = Math.floor(GRID/2);
+    /* Fetch one zoom level higher: same geographic coverage, 4× more pixels */
+    const SAT_Z = Z + 1;
+    const SAT_GRID = GRID * 2;          // 6×6 = 36 tiles → 1536×1536px canvas
+    const [scx, scy] = latLonToTile(GEO.lat, GEO.lon, SAT_Z);
+    const half = Math.floor(SAT_GRID / 2);
     const TILE = 256;
     const canvas2 = document.createElement('canvas');
-    canvas2.width = TILE * GRID; canvas2.height = TILE * GRID;
+    canvas2.width = TILE * SAT_GRID; canvas2.height = TILE * SAT_GRID;
     const ctx2 = canvas2.getContext('2d');
     const loads = [];
-    for (let row = 0; row < GRID; row++) {
-        for (let col = 0; col < GRID; col++) {
-            const tx = cx + (col - half), ty = cy + (row - half);
+    for (let row = 0; row < SAT_GRID; row++) {
+        for (let col = 0; col < SAT_GRID; col++) {
+            const tx = scx + (col - half), ty = scy + (row - half);
             loads.push(new Promise(res => {
                 const img2 = new Image(); img2.crossOrigin = 'anonymous';
                 img2.onload = () => { ctx2.drawImage(img2, col*TILE, row*TILE, TILE, TILE); res(); };
                 img2.onerror = () => res();
-                img2.src = `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${Z}/${ty}/${tx}`;
+                img2.src = `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${SAT_Z}/${ty}/${tx}`;
             }));
         }
     }
     await Promise.all(loads);
     satTexture = new THREE.CanvasTexture(canvas2);
     satTexture.flipY = false;
+    satTexture.anisotropy = 16;
     satTexture.needsUpdate = true;
 }
 
@@ -1527,6 +1532,7 @@ function setTerrainExag(factor) {
 
 function applyTerrainSatellite() {
     if (!terrain || !satTexture) return;
+    satTexture.anisotropy = renderer.capabilities.getMaxAnisotropy();
     terrain.material.vertexColors = false;
     terrain.material.map = satTexture;
     terrain.material.color.set(0xffffff);
