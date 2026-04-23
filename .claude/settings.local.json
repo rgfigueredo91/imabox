@@ -26,7 +26,8 @@
       "Bash(python3 *)",
       "Read(//y/Beer - La Sencilla - 1492/01-Anteproyecto/**)",
       "Read(//y/Beer - La Sencilla - 1492/**)",
-      "Bash(pdfinfo *)"
+      "Bash(pdfinfo *)",
+      "Bash(git *)"
     ]
   }
 }

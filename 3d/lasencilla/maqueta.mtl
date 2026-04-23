@@ -1,0 +1,956 @@
+﻿# 3ds Max Wavefront OBJ Exporter v0.99 - (c)2007 guruware
+# File Created: 22.04.2026 23:11:21
+
+newmtl _2
+	Kd 0.3569 0.4078 0.1294
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/116_Grass_1000.jpg
+
+newmtl _
+	Kd 0.6431 0.4784 0.3137
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/92_deck-mu copy.jpg
+
+newmtl Empty_material
+	Kd 0.5000 0.5000 0.5000
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+
+newmtl Forest_Floor_01_1K
+	Kd 0.5000 0.5000 0.5000
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/85_0_Forrest_Floor_01_1K_alb.png
+
+newmtl _3
+	Kd 0.5000 0.5000 0.5000
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/123_0_030a4942b8.jpg
+
+newmtl Concrete_06_1K
+	Kd 0.5000 0.5000 0.5000
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/94_0_Concrete_06_1K_alb.png
+
+newmtl _1
+	Kd 0.5098 0.4118 0.2667
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/114_0_deck-mu-90.jpg
+
+newmtl Concrete_02_1K
+	Kd 0.2314 0.2235 0.2078
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/99_0_Concrete_02_1K_alb.png
+	map_d C:\Users\User\Documents\3ds Max 2025\sceneassets\images\99_0_Concrete_02_1K_alb.png
+
+newmtl Glass_Basic_01
+	Kd 0.6314 0.6784 0.7294
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.7500
+	d 0.2500
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+
+newmtl Tile_Interior_14_1K
+	Kd 0.5000 0.5000 0.5000
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/125_0_Tile_Interior_14_1K_alb.png
+
+newmtl Asphalt_02_1K
+	Kd 0.6275 0.5529 0.4980
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/104_0_Asphalt_02_1K_alb.png
+	map_d C:\Users\User\Documents\3ds Max 2025\sceneassets\images\104_0_Asphalt_02_1K_alb.png
+
+newmtl Glass_Sky_Reflection_01
+	Kd 0.5000 0.5000 0.5000
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.7500
+	d 0.2500
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/90_0_Translucent_Glass_Sky_Reflection_.jpg
+
+newmtl Plywood_01_1K
+	Kd 0.5333 0.4431 0.3412
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/109_0_Plywood_01_1K_alb.png
+	map_d C:\Users\User\Documents\3ds Max 2025\sceneassets\images\109_0_Plywood_01_1K_alb.png
+
+newmtl H08_Emerald_Abyss
+	Kd 0.0000 0.4000 0.4000
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+
+newmtl M09_Shadow_Night
+	Kd 0.0000 0.0000 0.0000
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+
+newmtl Metal_06_1K
+	Kd 0.2627 0.2549 0.2314
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/129_0_Metal_06_1K_alb.png
+	map_d C:\Users\User\Documents\3ds Max 2025\sceneassets\images\129_0_Metal_06_1K_alb.png
+
+newmtl 01___Default1
+	Kd 0.5000 0.5000 0.5000
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/144_0_BEECH.BMP
+
+newmtl alderbark
+	Kd 0.5000 0.5000 0.5000
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/156_alderbark_extractedTex.jpg
+
+newmtl alder_br
+	Kd 0.5000 0.5000 0.5000
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/152_alder_br_extractedTex.png
+	map_d C:\Users\User\Documents\3ds Max 2025\sceneassets\images\152_alder_br_extractedTex.png
+
+newmtl CORDA
+	Kd 0.4275 0.4196 0.4196
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/253_Fabric 01.jpg
+
+newmtl Color_A01
+	Kd 0.3176 0.2863 0.2784
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+
+newmtl _4
+	Kd 0.6980 0.6784 0.6745
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/255_LINHO.PNG
+	map_d C:\Users\User\Documents\3ds Max 2025\sceneassets\images\255_LINHO.PNG
+
+newmtl 90e09662a7c2ab4fa562f8f853e8d841
+	Kd 0.5000 0.5000 0.5000
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/224_90e09662a7c2ab4fa562f8f853e8d841.jpg
+
+newmtl blackened_steel2
+	Kd 0.0196 0.0196 0.0196
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+
+newmtl grey_cloth1
+	Kd 0.2784 0.2784 0.2863
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/240_Lana-gris_1.jpg
+
+newmtl DE_PX2SLR_AD_LTE_GRA_Feather_Gray_Fabric
+	Kd 0.8000 0.7922 0.7647
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/229_Feather Gray Fabric.jpg
+
+newmtl DE_PX2SLR_AD_LTE_GRA_Dark_Gray_Regatta_Cord_02
+	Kd 0.5000 0.5000 0.5000
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/231_box.png
+	map_d C:\Users\User\Documents\3ds Max 2025\sceneassets\images\231_box.png
+
+newmtl DE_PX2SLR_AD_LTE_GRA_Weathered_Eucalyptus
+	Kd 0.5882 0.5137 0.4431
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/227_Weathered Eucalyptus.jpg
+
+newmtl DE_PX2SLR_AD_LTE_GRA_Dark_Gray_Regatta_Cord_01
+	Kd 0.5000 0.5000 0.5000
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/233_01.jpg
+
+newmtl DE_PX2S_AD_LTE_GRA_Dark_Gray_Cord_01
+	Kd 0.5000 0.5000 0.5000
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/209_01.jpg
+
+newmtl DE_PX2S_AD_LTE_GRA_Feather_Gray_Fabric
+	Kd 0.8000 0.7922 0.7647
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/203_Feather Gray Fabric.jpg
+
+newmtl DE_PX2S_AD_LTE_GRA_Weathered_Eucalyptus
+	Kd 0.5882 0.5137 0.4431
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/205_Weathered Eucalyptus.jpg
+
+newmtl DE_PX2S_AD_LTE_GRA_Dark_Gray_Cord_02
+	Kd 0.5000 0.5000 0.5000
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/215_box.png
+	map_d C:\Users\User\Documents\3ds Max 2025\sceneassets\images\215_box.png
+
+newmtl DE_PX1S_AD_LTE_GRA_Material_01
+	Kd 0.5000 0.5000 0.5000
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/213_Feather Gray Fabric.jpg
+
+newmtl DE_PX1S_AD_LTE_GRA_Material_04
+	Kd 0.5000 0.5000 0.5000
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/201_Weathered Eucalyptus.jpg
+
+newmtl DE_PX1S_AD_LTE_GRA_Material_03
+	Kd 0.5000 0.5000 0.5000
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/207_rod texture.jpg
+
+newmtl DE_PX1S_AD_LTE_GRA_Material_02
+	Kd 0.5000 0.5000 0.5000
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/211_png  texture.png
+	map_d C:\Users\User\Documents\3ds Max 2025\sceneassets\images\211_png  texture.png
+
+newmtl Wood_Cherry_Original
+	Kd 0.5000 0.5000 0.5000
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/222_Wood_Cherry_Original.jpg
+
+newmtl M07_Charcoal_Gleam
+	Kd 0.2275 0.2275 0.2275
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+
+newmtl White
+	Kd 1.0000 1.0000 1.0000
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+
+newmtl _Wavy_Crosshatch_
+	Kd 0.5000 0.5000 0.5000
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.4500
+	d 0.5500
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/267_Wavy_Crosshatch.jpg
+
+newmtl _Charcoal_
+	Kd 0.1373 0.1373 0.1373
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+
+newmtl Color_A13
+	Kd 0.6000 0.2392 0.2392
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+
+newmtl _DimGray_
+	Kd 0.4118 0.4118 0.4118
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+
+newmtl _LightGray_
+	Kd 0.6627 0.6627 0.6627
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+
+newmtl _5
+	Kd 0.1373 0.5176 0.3216
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+
+newmtl _MediumSeaGreen_
+	Kd 0.2118 0.3529 0.6392
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+
+newmtl Fencing_Chain_Link
+	Kd 0.5000 0.5000 0.5000
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/261_Fencing_Chain_Link.png
+	map_d C:\Users\User\Documents\3ds Max 2025\sceneassets\images\261_Fencing_Chain_Link.png
+
+newmtl _Burnt_Umber_1
+	Kd 0.0275 0.0118 0.0078
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+
+newmtl _FireBrick_
+	Kd 0.7176 0.3843 0.3294
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+
+newmtl Fencing_Diamond_Mesh
+	Kd 0.5000 0.5000 0.5000
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/263_Fencing_Diamond_Mesh.png
+	map_d C:\Users\User\Documents\3ds Max 2025\sceneassets\images\263_Fencing_Diamond_Mesh.png
+
+newmtl Color_000
+	Kd 1.0000 1.0000 1.0000
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+
+newmtl PDM_Glass_thin1
+	Kd 0.8000 0.8000 0.8000
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.8500
+	d 0.1500
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+
+newmtl Vegetation_Grass_Artificial
+	Kd 0.2941 0.3647 0.5608
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/283_Vegetation_Grass_Artificial.jpg
+
+newmtl Color_F21
+	Kd 0.0980 0.2000 0.0000
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+
+newmtl _Fencing_Construction_1
+	Kd 1.0000 0.9333 0.8784
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/288_Fencing_Construction.png
+	map_d C:\Users\User\Documents\3ds Max 2025\sceneassets\images\288_Fencing_Construction.png
+
+newmtl Fencing_Construction
+	Kd 0.9529 0.9451 0.9608
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/286_Fencing_Construction.png
+	map_d C:\Users\User\Documents\3ds Max 2025\sceneassets\images\286_Fencing_Construction.png
+
+newmtl Metal_Seamed
+	Kd 0.5000 0.5000 0.5000
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/290_Metal_Seamed.jpg
+
+newmtl Translucent_Glass_Gray
+	Kd 0.5020 0.5020 0.5020
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.5000
+	d 0.5000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+
+newmtl apole__93__1
+	Kd 0.5000 0.5000 0.5000
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/189_apole _93_.jpg
+
+newmtl apole__102__2
+	Kd 0.4314 0.4235 0.4235
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/185_apole _102_.jpg
+
+newmtl apole__175__1
+	Kd 0.5000 0.5000 0.5000
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/197_apole _175_.jpg
+
+newmtl apole__56__1
+	Kd 0.5000 0.5000 0.5000
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/191_apole _56_.jpg
+
+newmtl apole__102__1
+	Kd 0.5000 0.5000 0.5000
+	Ks 1.0000 1.0000 1.0000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.0000
+	Pm 0.0000
+	Pc 0.0000
+	Pcr 0.0000
+	Ni 1.5200
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd textures/199_apole _102_.jpg
+
