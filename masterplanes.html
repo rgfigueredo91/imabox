@@ -198,6 +198,38 @@
         /* Show left arrow after video 2 ends */
         .mp-scene.is-done2 .mp-arrow-left  { opacity: 1; pointer-events: all; }
 
+        /* ── HOVER OVERLAY IMAGES ────────────────────────────────── */
+        .mp-hover-img {
+            position: absolute;
+            inset: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            object-position: center;
+            z-index: 5;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+            pointer-events: none;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+        .mp-hover-img.on { opacity: 1; }
+
+        /* ── ZONA HOVER — solo activa en is-done1 ────────────────── */
+        .mp-zone-layer {
+            position: absolute;
+            inset: 0;
+            width: 100%; height: 100%;
+            z-index: 7;
+            pointer-events: none;
+        }
+        .mp-scene.is-done1 .mp-zone-layer { pointer-events: all; }
+
+        .mp-zone {
+            position: absolute;
+            cursor: default;
+            /* para debug: background: rgba(255,0,0,0.18); */
+        }
+
         /* ── ANIMATIONS ─────────────────────────────────────────── */
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(14px); }
@@ -213,10 +245,48 @@
     <img class="mp-frame visible" id="mp-frame-a" src="img/masterplanes/start.jpg" alt="" draggable="false" />
     <img class="mp-frame" id="mp-frame-b" src=""                            alt="" draggable="false" />
 
+    <!-- WebP hover overlays con alpha — se superponen sobre la imagen base -->
+    <img class="mp-hover-img" id="mp-h1" src="img/masterplanes/hovers/w1.webp" draggable="false" />
+    <img class="mp-hover-img" id="mp-h2" src="img/masterplanes/hovers/w2.webp" draggable="false" />
+    <img class="mp-hover-img" id="mp-h3" src="img/masterplanes/hovers/w3.webp" draggable="false" />
+    <img class="mp-hover-img" id="mp-h5" src="img/masterplanes/hovers/w5.webp" draggable="false" />
+    <img class="mp-hover-img" id="mp-h6" src="img/masterplanes/hovers/w6.webp" draggable="false" />
+    <img class="mp-hover-img" id="mp-h7" src="img/masterplanes/hovers/w7.webp" draggable="false" />
+    <img class="mp-hover-img" id="mp-h8" src="img/masterplanes/hovers/w8.webp" draggable="false" />
+    <img class="mp-hover-img" id="mp-h9" src="img/masterplanes/hovers/w9.webp" draggable="false" />
+
     <!-- Video layer -->
     <video class="mp-video" id="mp-video"
            src="videos/masterplanes/zoom.mp4"
            preload="auto" playsinline muted></video>
+
+    <!-- Zonas invisibles — bounding box exacto leído del alpha de cada WebP -->
+    <div class="mp-zone-layer">
+        <!-- w1: trapecio arriba-izq -->
+        <div class="mp-zone" data-hover="mp-h1"
+             style="left:19.5%;top:21.5%;width:9%;height:6.5%"></div>
+        <!-- w2: rectángulo pequeño más arriba -->
+        <div class="mp-zone" data-hover="mp-h2"
+             style="left:19.5%;top:13.5%;width:9%;height:4.8%"></div>
+        <!-- w3: blob centro -->
+        <div class="mp-zone" data-hover="mp-h3"
+             style="left:33.5%;top:44%;width:6.5%;height:4.5%"></div>
+        <!-- w5: forma alta centro-izq -->
+        <div class="mp-zone" data-hover="mp-h5"
+             style="left:30.5%;top:20%;width:6%;height:17.5%"></div>
+        <!-- w6: ala pequeña centro-arriba -->
+        <div class="mp-zone" data-hover="mp-h6"
+             style="left:39.5%;top:14.5%;width:7%;height:5%"></div>
+        <!-- w7: franja vertical fina — ancho ajustado -->
+        <div class="mp-zone" data-hover="mp-h7"
+             style="left:43.5%;top:19.5%;width:2.5%;height:14%"></div>
+        <!-- w8: curva pequeña -->
+        <div class="mp-zone" data-hover="mp-h8"
+             style="left:44%;top:39%;width:5.5%;height:3.5%"></div>
+        <!-- w9: forma arriba-izq baja -->
+        <div class="mp-zone" data-hover="mp-h9"
+             style="left:5%;top:54%;width:5%;height:7%"></div>
+    </div>
 
     <!-- Black overlay -->
     <div class="mp-overlay"></div>
@@ -313,6 +383,25 @@ arrowLeft.addEventListener("click", () => {
     playNext("videos/masterplanes/izquierda-rev.mp4", "img/masterplanes/end2.jpg", () => {
         showStill("img/masterplanes/end1.jpg");
         scene.classList.add("is-done1");
+    });
+});
+
+/* ── Zone hover ─────────────────────────────────────────────── */
+let activeHover = null;
+
+document.querySelectorAll(".mp-zone").forEach(zone => {
+    const imgEl = document.getElementById(zone.dataset.hover);
+    if (!imgEl) return;
+
+    zone.addEventListener("mouseenter", () => {
+        if (activeHover && activeHover !== imgEl) activeHover.classList.remove("on");
+        activeHover = imgEl;
+        imgEl.classList.add("on");
+    });
+
+    zone.addEventListener("mouseleave", () => {
+        imgEl.classList.remove("on");
+        activeHover = null;
     });
 });
 </script>

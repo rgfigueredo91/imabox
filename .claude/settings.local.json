@@ -27,7 +27,8 @@
       "Read(//y/Beer - La Sencilla - 1492/01-Anteproyecto/**)",
       "Read(//y/Beer - La Sencilla - 1492/**)",
       "Bash(pdfinfo *)",
-      "Bash(git *)"
+      "Bash(git *)",
+      "Bash(curl -s \"https://estudiopmb.com/sencilla.html\")"
     ]
   }
 }
