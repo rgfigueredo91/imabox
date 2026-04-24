@@ -229,6 +229,36 @@
             cursor: pointer;
         }
 
+        /* ── DRAW PANEL ──────────────────────────────────────── */
+        .gp-colors {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+        .gp-color-swatch {
+            width: 17px; height: 17px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border-color 0.15s, transform 0.15s;
+            flex-shrink: 0;
+        }
+        .gp-color-swatch:hover { transform: scale(1.15); }
+        .gp-color-swatch.active { border-color: rgba(255,255,255,0.85); }
+        #draw-color-pick {
+            width: 17px; height: 17px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.2);
+            padding: 0;
+            cursor: pointer;
+            background: none;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        body.mode-draw { cursor: crosshair; }
+
         /* ── MEASURE LABEL ───────────────────────────────────── */
         .gp-measure-label {
             position: fixed;
@@ -280,6 +310,7 @@
         }
 
         body.mode-measure { cursor: crosshair; }
+        body.mode-draw    { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Ccircle cx='10' cy='10' r='4' fill='white' stroke='%23333' stroke-width='1.5'/%3E%3C/svg%3E") 10 10, crosshair; }
     </style>
 </head>
 <body>
@@ -320,6 +351,25 @@
     </div>
 
     <div class="gp-section">
+        <div class="gp-section-title">Dibujo</div>
+        <div class="gp-colors">
+            <div class="gp-color-swatch active" data-color="#ffffff" style="background:#fff"></div>
+            <div class="gp-color-swatch" data-color="#ff3333" style="background:#f33"></div>
+            <div class="gp-color-swatch" data-color="#ffcc00" style="background:#fc0"></div>
+            <div class="gp-color-swatch" data-color="#33ff88" style="background:#3f8"></div>
+            <div class="gp-color-swatch" data-color="#3388ff" style="background:#38f"></div>
+            <div class="gp-color-swatch" data-color="#ff66cc" style="background:#f6c"></div>
+            <input type="color" id="draw-color-pick" value="#ffffff" title="Color personalizado">
+        </div>
+        <div class="gp-row">
+            <span class="gp-row-label">Espesor</span>
+            <span class="gp-popup-value" id="draw-w-val">3</span>
+        </div>
+        <input type="range" class="gp-slider" id="draw-width" min="1" max="16" value="3" style="margin-top:7px">
+        <button class="gp-cam-btn" id="draw-clear" style="margin-top:14px">Limpiar trazos</button>
+    </div>
+
+    <div class="gp-section">
         <div class="gp-section-title">Cámara</div>
         <button class="gp-cam-btn" id="cam-persp">Perspectiva</button>
         <button class="gp-cam-btn" id="cam-top">Vista superior</button>
@@ -349,6 +399,9 @@
     <div class="gp-tool" id="tool-measure" title="Medir">
         <svg viewBox="0 0 24 24"><line x1="5" y1="19" x2="19" y2="5"/><polyline points="5,13 5,19 11,19"/><polyline points="13,5 19,5 19,11"/><line x1="10" y1="10" x2="14" y2="14"/></svg>
     </div>
+    <div class="gp-tool" id="tool-draw" title="Dibujar">
+        <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z"/><path d="M20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+    </div>
     <div class="gp-sep"></div>
     <div class="gp-tool" id="tool-sun" title="Sol / Iluminación">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/><line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/></svg>
@@ -375,6 +428,9 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { OBJLoader }     from 'three/addons/loaders/OBJLoader.js';
 import { MTLLoader }     from 'three/addons/loaders/MTLLoader.js';
+import { Line2 }         from 'three/addons/lines/Line2.js';
+import { LineGeometry }  from 'three/addons/lines/LineGeometry.js';
+import { LineMaterial }  from 'three/addons/lines/LineMaterial.js';
 
 /* ── CONFIG ──────────────────────────────────────────────────────── */
 const BASE = '3d/gomplat/';
@@ -718,21 +774,23 @@ document.getElementById('cam-front').addEventListener('click', () => {
 
 /* ── TOOLS ───────────────────────────────────────────────────────── */
 let activeTool = 'orbit';
-const toolEls  = ['orbit', 'measure', 'sun', 'screenshot'].reduce((o, id) => {
+const toolEls  = ['orbit', 'measure', 'sun', 'screenshot', 'draw'].reduce((o, id) => {
     o[id] = document.getElementById('tool-' + id); return o;
 }, {});
 
 function setTool(name) {
     activeTool = name;
-    Object.entries(toolEls).forEach(([k, el]) => el.classList.toggle('active', k === name));
-    document.body.className = name === 'measure' ? 'mode-measure' : '';
-    controls.enabled = name !== 'measure';
+    Object.entries(toolEls).forEach(([k, el]) => el && el.classList.toggle('active', k === name));
+    document.body.className = name === 'measure' ? 'mode-measure' : (name === 'draw' ? 'mode-draw' : '');
+    controls.enabled = (name !== 'measure' && name !== 'draw');
     if (name !== 'sun') document.getElementById('gp-sun-popup').classList.remove('on');
     if (name !== 'measure') resetMeasure();
+    if (name !== 'draw') endDraw();
 }
 
 toolEls.orbit.addEventListener('click', () => setTool('orbit'));
 toolEls.measure.addEventListener('click', () => setTool(activeTool === 'measure' ? 'orbit' : 'measure'));
+toolEls.draw.addEventListener('click', () => setTool(activeTool === 'draw' ? 'orbit' : 'draw'));
 toolEls.sun.addEventListener('click', () => {
     const popup = document.getElementById('gp-sun-popup');
     const on = popup.classList.toggle('on');
@@ -814,6 +872,127 @@ canvas.addEventListener('click', e => {
         measureLabel.style.top     = (scr.y - 12) + 'px';
         measureLabel.innerHTML     = `3D: <b>${a.distanceTo(b).toFixed(1)} m</b> &nbsp;|&nbsp; H: ${Math.sqrt((a.x-b.x)**2+(a.z-b.z)**2).toFixed(1)} m &nbsp;|&nbsp; Δ: ${Math.abs(a.y-b.y).toFixed(1)} m`;
     }
+});
+
+/* ── DRAW ────────────────────────────────────────────────────────── */
+let drawColor  = '#ffffff';
+let drawWidth  = 3;
+let drawActive = false;
+let drawPts    = [];
+let drawCurrent= null;   // Line2 being built
+const allLines = [];
+
+function getTerrainHit(e) {
+    const rect = canvas.getBoundingClientRect();
+    mouse2D.x =  ((e.clientX - rect.left) / rect.width)  * 2 - 1;
+    mouse2D.y = -((e.clientY - rect.top)  / rect.height) * 2 + 1;
+    raycaster.setFromCamera(mouse2D, camera);
+    const meshes = [];
+    scene.traverse(c => { if (c.isMesh && c.visible) meshes.push(c); });
+    const hits = raycaster.intersectObjects(meshes, false);
+    return hits.length ? hits[0].point.clone() : null;
+}
+
+function buildLine2(pts, color, width) {
+    const positions = [];
+    pts.forEach(p => positions.push(p.x, p.y, p.z));
+    const geo = new LineGeometry();
+    geo.setPositions(positions);
+    const mat = new LineMaterial({
+        color: new THREE.Color(color),
+        linewidth: width,
+        resolution: new THREE.Vector2(window.innerWidth, window.innerHeight),
+        depthTest: false,
+    });
+    const line = new Line2(geo, mat);
+    line.computeLineDistances();
+    return line;
+}
+
+function startDraw(e) {
+    if (activeTool !== 'draw') return;
+    const pt = getTerrainHit(e);
+    if (!pt) return;
+    drawActive = true;
+    drawPts = [pt, pt.clone()];
+    drawCurrent = buildLine2(drawPts, drawColor, drawWidth);
+    scene.add(drawCurrent);
+}
+
+function continueDraw(e) {
+    if (!drawActive || activeTool !== 'draw') return;
+    const pt = getTerrainHit(e);
+    if (!pt) return;
+    drawPts.push(pt);
+    // rebuild geometry with new point
+    const positions = [];
+    drawPts.forEach(p => positions.push(p.x, p.y, p.z));
+    drawCurrent.geometry.setPositions(positions);
+    drawCurrent.computeLineDistances();
+}
+
+function endDraw() {
+    if (drawCurrent) {
+        if (drawPts.length >= 2) allLines.push(drawCurrent);
+        else scene.remove(drawCurrent);
+    }
+    drawActive  = false;
+    drawPts     = [];
+    drawCurrent = null;
+}
+
+canvas.addEventListener('mousedown', e => { if (activeTool === 'draw') startDraw(e); });
+canvas.addEventListener('mousemove', e => { if (drawActive)             continueDraw(e); });
+canvas.addEventListener('mouseup',   e => { if (activeTool === 'draw') endDraw(); });
+canvas.addEventListener('mouseleave',e => { if (drawActive)             endDraw(); });
+
+// touch support
+canvas.addEventListener('touchstart', e => {
+    if (activeTool !== 'draw') return;
+    e.preventDefault();
+    startDraw(e.touches[0]);
+}, { passive: false });
+canvas.addEventListener('touchmove', e => {
+    if (!drawActive) return;
+    e.preventDefault();
+    continueDraw(e.touches[0]);
+}, { passive: false });
+canvas.addEventListener('touchend', e => { if (activeTool === 'draw') endDraw(); });
+
+// color swatches
+document.querySelectorAll('.gp-color-swatch').forEach(sw => {
+    sw.addEventListener('click', () => {
+        document.querySelectorAll('.gp-color-swatch').forEach(s => s.classList.remove('active'));
+        sw.classList.add('active');
+        drawColor = sw.dataset.color;
+        document.getElementById('draw-color-pick').value = drawColor;
+    });
+});
+document.getElementById('draw-color-pick').addEventListener('input', e => {
+    drawColor = e.target.value;
+    document.querySelectorAll('.gp-color-swatch').forEach(s => s.classList.remove('active'));
+});
+
+// thickness slider
+const drawWidthSlider = document.getElementById('draw-width');
+const drawWVal        = document.getElementById('draw-w-val');
+drawWidthSlider.addEventListener('input', () => {
+    drawWidth = parseInt(drawWidthSlider.value);
+    drawWVal.textContent = drawWidth;
+});
+
+// clear button
+document.getElementById('draw-clear').addEventListener('click', () => {
+    allLines.forEach(l => scene.remove(l));
+    allLines.length = 0;
+    if (drawCurrent) { scene.remove(drawCurrent); drawCurrent = null; }
+    drawActive = false; drawPts = [];
+});
+
+// keep LineMaterial resolution in sync on resize
+window.addEventListener('resize', () => {
+    allLines.forEach(l => l.material.resolution.set(window.innerWidth, window.innerHeight));
+    if (drawCurrent) drawCurrent.material.resolution.set(window.innerWidth, window.innerHeight);
 });
 
 </script>
