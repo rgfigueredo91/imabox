@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viewer | Gomez Platero</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body {
+            width: 100%; height: 100%;
+            background: #0a0a0a;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            color: #fff;
+        }
+
+        #gp-canvas { position: fixed; inset: 0; display: block; }
+
+        /* ── BRAND ───────────────────────────────────────────── */
+        .gp-brand {
+            position: fixed;
+            top: 28px; left: 32px;
+            z-index: 10;
+            pointer-events: none;
+        }
+        .gp-brand-name {
+            display: block;
+            font-size: 0.68rem;
+            font-weight: 300;
+            letter-spacing: 0.38em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.85);
+        }
+        .gp-brand-project {
+            display: block;
+            font-size: 0.5rem;
+            font-weight: 200;
+            letter-spacing: 0.32em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.3);
+            margin-top: 4px;
+        }
+
+        /* ── RIGHT PANEL ─────────────────────────────────────── */
+        .gp-panel {
+            position: fixed;
+            top: 0; right: 0;
+            width: 210px; height: 100%;
+            background: rgba(8,8,8,0.94);
+            border-left: 1px solid rgba(255,255,255,0.07);
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            padding: 32px 0 28px;
+            overflow-y: auto;
+        }
+        .gp-panel::-webkit-scrollbar { width: 2px; }
+        .gp-panel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); }
+
+        .gp-section {
+            padding: 0 20px 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            margin-bottom: 24px;
+        }
+        .gp-section:last-child { border-bottom: none; margin-bottom: 0; }
+
+        .gp-section-title {
+            font-size: 0.46rem;
+            letter-spacing: 0.44em;
+            color: rgba(255,255,255,0.22);
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+        
+
+        /* Mode buttons — Radio style, one active at a time */
+        .gp-mode-btn {
+            display: block;
+            width: 100%;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.38);
+            font-family: inherit;
+            font-size: 0.58rem;
+            font-weight: 300;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            padding: 10px 14px;
+            cursor: pointer;
+            text-align: left;
+            margin-bottom: 6px;
+            transition: background 0.2s, color 0.2s, border-color 0.2s;
+        }
+        .gp-mode-btn:last-child { margin-bottom: 0; }
+        .gp-mode-btn:hover { color: rgba(255,255,255,0.7); border-color: rgba(255,255,255,0.2); }
+        .gp-mode-btn.active {
+            color: #fff;
+            border-color: rgba(255,255,255,0.5);
+            background: rgba(255,255,255,0.06);
+        }
+
+        /* Curvas toggle row */
+        .gp-layer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            user-select: none;
+        }
+        .gp-layer-label {
+            font-size: 0.58rem;
+            font-weight: 300;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.38);
+            transition: color 0.2s;
+        }
+        .gp-layer.active .gp-layer-label { color: rgba(255,255,255,0.9); }
+
+        .gp-toggle {
+            width: 26px; height: 13px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 7px;
+            position: relative;
+            flex-shrink: 0;
+            transition: background 0.25s;
+        }
+        .gp-toggle::after {
+            content: '';
+            position: absolute;
+            top: 2px; left: 2px;
+            width: 9px; height: 9px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.25);
+            transition: transform 0.25s, background 0.25s;
+        }
+        .gp-layer.active .gp-toggle { background: rgba(255,255,255,0.18); }
+        .gp-layer.active .gp-toggle::after { transform: translateX(13px); background: #fff; }
+
+        /* Camera buttons */
+        .gp-cam-btn {
+            display: block;
+            width: 100%;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.07);
+            color: rgba(255,255,255,0.38);
+            font-family: inherit;
+            font-size: 0.5rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            padding: 8px 12px;
+            cursor: pointer;
+            text-align: left;
+            margin-bottom: 6px;
+            transition: background 0.2s, color 0.2s, border-color 0.2s;
+        }
+        .gp-cam-btn:last-child { margin-bottom: 0; }
+        .gp-cam-btn:hover { background: rgba(255,255,255,0.07); color: #fff; border-color: rgba(255,255,255,0.18); }
+
+        /* ── BOTTOM TOOLBAR ──────────────────────────────────── */
+        .gp-toolbar {
+            position: fixed;
+            bottom: 28px;
+            left: calc(50% - 105px);
+            transform: translateX(-50%);
+            z-index: 10;
+            display: flex;
+            align-items: stretch;
+            background: rgba(8,8,8,0.9);
+            border: 1px solid rgba(255,255,255,0.09);
+            padding: 5px;
+            gap: 2px;
+        }
+        .gp-tool {
+            width: 42px; height: 42px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            color: rgba(255,255,255,0.38);
+            border: 1px solid transparent;
+            transition: color 0.2s, background 0.2s, border-color 0.2s;
+        }
+        .gp-tool:hover { color: rgba(255,255,255,0.75); background: rgba(255,255,255,0.04); }
+        .gp-tool.active { color: #fff; border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.06); }
+        .gp-tool svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.4; }
+        .gp-sep { width: 1px; background: rgba(255,255,255,0.07); margin: 4px 1px; }
+
+        /* ── SUN POPUP ───────────────────────────────────────── */
+        .gp-sun-popup {
+            position: fixed;
+            bottom: 84px;
+            left: calc(50% - 105px);
+            transform: translateX(-50%);
+            z-index: 10;
+            background: rgba(8,8,8,0.94);
+            border: 1px solid rgba(255,255,255,0.09);
+            padding: 18px 20px;
+            width: 210px;
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .gp-sun-popup.on { display: flex; }
+        .gp-popup-label {
+            font-size: 0.44rem;
+            letter-spacing: 0.35em;
+            color: rgba(255,255,255,0.28);
+            text-transform: uppercase;
+        }
+        .gp-popup-value {
+            font-size: 0.56rem;
+            letter-spacing: 0.1em;
+            color: rgba(255,255,255,0.55);
+            margin-top: -4px;
+        }
+        .gp-slider {
+            -webkit-appearance: none;
+            width: 100%; height: 1px;
+            background: rgba(255,255,255,0.14);
+            outline: none; cursor: pointer;
+        }
+        .gp-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: #fff;
+            cursor: pointer;
+        }
+
+        /* ── MEASURE LABEL ───────────────────────────────────── */
+        .gp-measure-label {
+            position: fixed;
+            z-index: 15;
+            background: rgba(8,8,8,0.88);
+            border: 1px solid rgba(255,255,255,0.18);
+            padding: 6px 12px;
+            font-size: 0.56rem;
+            letter-spacing: 0.1em;
+            pointer-events: none;
+            display: none;
+            white-space: nowrap;
+        }
+
+        /* ── LOADER ──────────────────────────────────────────── */
+        .gp-loader {
+            position: fixed; inset: 0;
+            z-index: 200;
+            background: #0a0a0a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            transition: opacity 0.9s ease;
+        }
+        .gp-loader.done { opacity: 0; pointer-events: none; }
+        .gp-loader-name {
+            font-size: 0.65rem; font-weight: 300;
+            letter-spacing: 0.42em; text-transform: uppercase;
+            color: rgba(255,255,255,0.8);
+        }
+        .gp-loader-status {
+            font-size: 0.46rem; letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.22);
+            min-height: 1em;
+        }
+        .gp-loader-track {
+            width: 160px; height: 1px;
+            background: rgba(255,255,255,0.1);
+            position: relative;
+        }
+        .gp-loader-bar {
+            position: absolute; inset: 0;
+            width: 0%;
+            background: rgba(255,255,255,0.65);
+            transition: width 0.3s ease;
+        }
+
+        body.mode-measure { cursor: crosshair; }
+    </style>
+</head>
+<body>
+
+<!-- Loader -->
+<div class="gp-loader" id="gp-loader">
+    <div class="gp-loader-name">Gomez Platero</div>
+    <div class="gp-loader-status" id="gp-status">cargando terreno</div>
+    <div class="gp-loader-track">
+        <div class="gp-loader-bar" id="gp-bar"></div>
+    </div>
+</div>
+
+<canvas id="gp-canvas"></canvas>
+
+<!-- Brand -->
+<div class="gp-brand">
+    <span class="gp-brand-name">Gomez Platero</span>
+    <span class="gp-brand-project">MP 223 Ha</span>
+</div>
+
+<!-- Right panel -->
+<div class="gp-panel">
+
+    <div class="gp-section">
+        <div class="gp-section-title">Modo</div>
+        <button class="gp-mode-btn active" data-mode="real">Existente</button>
+        <button class="gp-mode-btn" data-mode="proyecto">Proyecto</button>
+        <button class="gp-mode-btn" data-mode="blanco">Blanco</button>
+    </div>
+
+    <div class="gp-section">
+        <div class="gp-section-title">Capas</div>
+        <div class="gp-layer" id="layer-curvas">
+            <span class="gp-layer-label" id="curvas-label">Curvas de nivel</span>
+            <div class="gp-toggle"></div>
+        </div>
+    </div>
+
+    <div class="gp-section">
+        <div class="gp-section-title">Cámara</div>
+        <button class="gp-cam-btn" id="cam-persp">Perspectiva</button>
+        <button class="gp-cam-btn" id="cam-top">Vista superior</button>
+        <button class="gp-cam-btn" id="cam-front">Vista frontal</button>
+        <button class="gp-cam-btn" id="cam-reset">Resetear</button>
+    </div>
+
+</div>
+
+<!-- Sun popup -->
+<div class="gp-sun-popup" id="gp-sun-popup">
+    <span class="gp-popup-label">Hora del día</span>
+    <span class="gp-popup-value" id="gp-sun-time">10:00 h</span>
+    <input type="range" class="gp-slider" id="gp-sun-slider" min="5" max="20" step="0.1" value="10">
+    <span class="gp-popup-label" style="margin-top:4px">Ángulo solar</span>
+    <span class="gp-popup-value" id="gp-sun-elev-val">45°</span>
+    <input type="range" class="gp-slider" id="gp-elev-slider" min="5" max="85" step="1" value="45">
+    <span class="gp-popup-label" style="margin-top:4px">Intensidad ambiente</span>
+    <input type="range" class="gp-slider" id="gp-ambient-slider" min="0" max="100" step="1" value="40">
+</div>
+
+<!-- Toolbar -->
+<div class="gp-toolbar">
+    <div class="gp-tool active" id="tool-orbit" title="Orbitar">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><ellipse cx="12" cy="12" rx="3.5" ry="8"/><line x1="4" y1="12" x2="20" y2="12"/></svg>
+    </div>
+    <div class="gp-tool" id="tool-measure" title="Medir">
+        <svg viewBox="0 0 24 24"><line x1="5" y1="19" x2="19" y2="5"/><polyline points="5,13 5,19 11,19"/><polyline points="13,5 19,5 19,11"/><line x1="10" y1="10" x2="14" y2="14"/></svg>
+    </div>
+    <div class="gp-sep"></div>
+    <div class="gp-tool" id="tool-sun" title="Sol / Iluminación">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/><line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/></svg>
+    </div>
+    <div class="gp-sep"></div>
+    <div class="gp-tool" id="tool-screenshot" title="Captura">
+        <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="12" cy="12" r="3"/><path d="M9 5l1.5-2h3L15 5"/></svg>
+    </div>
+</div>
+
+<div class="gp-measure-label" id="gp-measure-label"></div>
+
+<script type="importmap">
+{
+    "imports": {
+        "three":         "https://cdn.jsdelivr.net/npm/three@0.163.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.163.0/examples/jsm/"
+    }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { OBJLoader }     from 'three/addons/loaders/OBJLoader.js';
+import { MTLLoader }     from 'three/addons/loaders/MTLLoader.js';
+
+/* ── CONFIG ──────────────────────────────────────────────────────── */
+const BASE = '3d/gomplat/';
+const CFG = {
+    terrain: { obj: BASE + 'terrain.obj', mtl: BASE + 'terrain.mtl' },
+    blanco:  { obj: BASE + 'blanco.obj',  mtl: BASE + 'blanco.mtl'  },
+    curvas:  { obj: BASE + 'curvas.obj',  mtl: BASE + 'curvas.mtl'  },
+    texReal:     BASE + 'terrain.jpg',
+    texProyecto: BASE + 'proposal.jpg',
+    zUp: false,
+};
+
+/* ── RENDERER ────────────────────────────────────────────────────── */
+const canvas   = document.getElementById('gp-canvas');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled   = true;
+renderer.shadowMap.type      = THREE.PCFSoftShadowMap;
+renderer.toneMapping         = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.1;
+
+/* ── SCENE ───────────────────────────────────────────────────────── */
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0a0a0a);
+
+/* ── CAMERA ──────────────────────────────────────────────────────── */
+const camera = new THREE.PerspectiveCamera(45, 1, 1, 10000);
+camera.position.set(0, 800, 1200);
+
+/* ── CONTROLS ────────────────────────────────────────────────────── */
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping  = true;
+controls.dampingFactor  = 0.05;
+controls.rotateSpeed    = 0.6;
+controls.zoomSpeed      = 1.2;
+controls.minDistance    = 10;
+controls.maxDistance    = 6000;
+
+/* ── LIGHTS ──────────────────────────────────────────────────────── */
+const ambient = new THREE.AmbientLight(0xffffff, 0.4);
+scene.add(ambient);
+
+const sun = new THREE.DirectionalLight(0xfff8e8, 1.5);
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+sun.shadow.bias = -0.0003;
+scene.add(sun);
+scene.add(sun.target);
+
+function setSun(hour, elevDeg) {
+    const az = ((hour - 6) / 14) * Math.PI;
+    const el = THREE.MathUtils.degToRad(Math.max(1, elevDeg));
+    const R  = 2000;
+    sun.position.set(Math.cos(el) * Math.sin(az) * R, Math.sin(el) * R, Math.cos(el) * Math.cos(az) * R);
+    sun.target.position.set(0, 0, 0);
+    sun.target.updateMatrixWorld();
+}
+setSun(10, 45);
+
+/* ── RESIZE ──────────────────────────────────────────────────────── */
+function resize() {
+    const w = window.innerWidth, h = window.innerHeight;
+    renderer.setSize(w, h);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+}
+window.addEventListener('resize', resize);
+resize();
+
+/* ── ANIMATE ─────────────────────────────────────────────────────── */
+let measureMid = null;
+function animate() {
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene, camera);
+    if (measureMid) {
+        const scr = worldToScreen(measureMid);
+        const lbl = document.getElementById('gp-measure-label');
+        lbl.style.left = (scr.x + 14) + 'px';
+        lbl.style.top  = (scr.y - 12) + 'px';
+    }
+}
+animate();
+
+/* ── LOADER UI ───────────────────────────────────────────────────── */
+const loaderEl  = document.getElementById('gp-loader');
+const loaderBar = document.getElementById('gp-bar');
+const statusEl  = document.getElementById('gp-status');
+
+function showLoader(msg) { statusEl.textContent = msg; }
+function hideLoader() {
+    loaderBar.style.width = '100%';
+    setTimeout(() => {
+        loaderEl.classList.add('done');
+        setTimeout(() => loaderEl.remove(), 950);
+    }, 350);
+}
+
+/* ── GZIP DECOMPRESSOR (works with file:// and http://) ──────────── */
+function decompressGzip(buffer) {
+    const ds = new DecompressionStream('gzip');
+    const writer = ds.writable.getWriter();
+    writer.write(new Uint8Array(buffer));
+    writer.close();
+    return new Response(ds.readable).text();
+}
+
+/* ── LOAD OBJ.GZ + MTL ───────────────────────────────────────────── */
+function loadOBJ(cfg, onProgress, onLoad) {
+    const folder  = cfg.mtl.substring(0, cfg.mtl.lastIndexOf('/') + 1);
+    const mtlFile = cfg.mtl.split('/').pop();
+    const gzUrl   = cfg.obj + '.gz';
+    const maxAniso = renderer.capabilities.getMaxAnisotropy();
+
+    new MTLLoader().setPath(folder).load(mtlFile, mats => {
+        mats.preload();
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', gzUrl, true);
+        xhr.responseType = 'arraybuffer';
+        xhr.onprogress = e => { if (onProgress && e.total) onProgress(e.loaded / e.total); };
+        xhr.onload = async () => {
+            try {
+                const text  = await decompressGzip(xhr.response);
+                const group = new OBJLoader().setMaterials(mats).parse(text);
+                if (CFG.zUp) group.rotation.x = -Math.PI / 2;
+                group.traverse(child => {
+                    if (!child.isMesh) return;
+                    child.castShadow = child.receiveShadow = true;
+                    const arr = Array.isArray(child.material) ? child.material : [child.material];
+                    arr.forEach(m => {
+                        if (!m) return;
+                        m.side = THREE.DoubleSide;
+                        [m.map, m.normalMap].forEach(t => { if (t) { t.anisotropy = maxAniso; t.needsUpdate = true; } });
+                        m.needsUpdate = true;
+                    });
+                });
+                group.updateMatrixWorld(true);
+                onLoad(group);
+            } catch(e) {
+                console.error('OBJ load error:', e);
+                onLoad(null);
+            }
+        };
+        xhr.onerror = () => onLoad(null);
+        xhr.send();
+    }, undefined, () => onLoad(null));
+}
+
+/* ── CENTER GROUP AT ORIGIN ──────────────────────────────────────── */
+function centerGroup(group) {
+    group.updateMatrixWorld(true);
+    const box    = new THREE.Box3().setFromObject(group);
+    const center = box.getCenter(new THREE.Vector3());
+    group.position.set(-center.x, -center.y, -center.z);
+    group.updateMatrixWorld(true);
+    return box.getSize(new THREE.Vector3());
+}
+
+/* ── FIT CAMERA ──────────────────────────────────────────────────── */
+let CAM_INIT = { pos: new THREE.Vector3(0, 800, 1200), target: new THREE.Vector3() };
+
+function fitCamera(size) {
+    const dim = Math.max(size.x, size.y, size.z);
+    controls.target.set(0, 0, 0);
+    camera.position.set(dim * 0.5, dim * 0.55, dim * 0.75);
+    camera.near = dim * 0.001;
+    camera.far  = dim * 10;
+    camera.updateProjectionMatrix();
+    controls.maxDistance = dim * 5;
+
+    sun.shadow.camera.left = sun.shadow.camera.bottom = -dim * 1.1;
+    sun.shadow.camera.right = sun.shadow.camera.top   =  dim * 1.1;
+    sun.shadow.camera.far = dim * 5;
+    sun.shadow.camera.updateProjectionMatrix();
+
+    CAM_INIT = { pos: camera.position.clone(), target: new THREE.Vector3() };
+}
+
+/* ── TEXTURES ────────────────────────────────────────────────────── */
+const texCache = {};
+
+function loadTex(url, cb) {
+    if (texCache[url]) { cb(texCache[url]); return; }
+    new THREE.TextureLoader().load(url, tex => {
+        tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+        tex.flipY = false;
+        tex.needsUpdate = true;
+        texCache[url] = tex;
+        cb(tex);
+    });
+}
+
+/* ── STATE ───────────────────────────────────────────────────────── */
+let terrainGroup = null;
+let blancoGroup  = null;
+let curvasGroup  = null;
+let blancoLoaded = false;
+let curvasLoaded = false;
+let curvasOn     = false;
+let currentMode  = 'real';
+let origTerrainTex = null; // captured from MTL load
+
+/* ── APPLY MODE ──────────────────────────────────────────────────── */
+function applyMode(mode) {
+    if (!terrainGroup) return;
+    currentMode = mode;
+
+    // Hide all terrain variants, show the right one
+    if (terrainGroup) terrainGroup.visible = (mode !== 'blanco');
+    if (blancoGroup)  blancoGroup.visible  = (mode === 'blanco');
+
+    // Texture swap on textured terrain
+    if (mode === 'real' || mode === 'proyecto') {
+        const url = mode === 'real' ? CFG.texReal : CFG.texProyecto;
+        loadTex(url, tex => {
+            terrainGroup.traverse(child => {
+                if (!child.isMesh) return;
+                const arr = Array.isArray(child.material) ? child.material : [child.material];
+                arr.forEach(m => {
+                    if (!m) return;
+                    m.map = tex;
+                    m.color.set(0xffffff);
+                    m.needsUpdate = true;
+                });
+            });
+        });
+    }
+
+    // Blanco mode: lazy load blanco OBJ
+    if (mode === 'blanco' && !blancoLoaded) {
+        blancoLoaded = true;
+        loadOBJ(CFG.blanco, null, group => {
+            if (!group) return;
+            blancoGroup = group;
+            const box    = new THREE.Box3().setFromObject(terrainGroup);
+            const center = box.getCenter(new THREE.Vector3());
+            // match terrain position (already centered at origin)
+            blancoGroup.position.set(0, 0, 0);
+            blancoGroup.updateMatrixWorld(true);
+            // center blanco the same way terrain was centered
+            centerGroup(blancoGroup);
+            blancoGroup.visible = (currentMode === 'blanco');
+            scene.add(blancoGroup);
+        });
+    }
+
+    // Update mode buttons
+    document.querySelectorAll('.gp-mode-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.mode === mode);
+    });
+}
+
+/* ── TOGGLE CURVAS ───────────────────────────────────────────────── */
+function toggleCurvas() {
+    curvasOn = !curvasOn;
+    const el    = document.getElementById('layer-curvas');
+    const label = document.getElementById('curvas-label');
+    el.classList.toggle('active', curvasOn);
+
+    if (curvasOn && !curvasLoaded) {
+        curvasLoaded = true;
+        label.textContent = 'cargando…';
+        loadOBJ(CFG.curvas, null, group => {
+            label.textContent = 'Curvas de nivel';
+            if (!group) { curvasOn = false; el.classList.remove('active'); return; }
+            curvasGroup = group;
+
+            // Override material to white lines
+            group.traverse(child => {
+                if (!child.isMesh) return;
+                child.material = new THREE.MeshBasicMaterial({ color: 0xffffff, opacity: 0.7, transparent: true });
+            });
+
+            centerGroup(group);
+            group.visible = curvasOn;
+            scene.add(group);
+        });
+        return;
+    }
+
+    if (curvasGroup) curvasGroup.visible = curvasOn;
+}
+
+/* ── LOAD TERRAIN ────────────────────────────────────────────────── */
+showLoader('cargando terreno');
+
+loadOBJ(CFG.terrain,
+    p => { loaderBar.style.width = (p * 90) + '%'; },
+    group => {
+        if (!group) { hideLoader(); return; }
+        terrainGroup = group;
+        scene.add(group);
+
+        const size = centerGroup(group);
+        fitCamera(size);
+
+        // Capture the original texture from loaded material
+        group.traverse(child => {
+            if (!child.isMesh || origTerrainTex) return;
+            const m = Array.isArray(child.material) ? child.material[0] : child.material;
+            if (m && m.map) origTerrainTex = m.map;
+        });
+
+        hideLoader();
+
+        // Pre-load proposal texture in background
+        loadTex(CFG.texProyecto, () => {});
+    }
+);
+
+/* ── MODE BUTTONS ────────────────────────────────────────────────── */
+document.querySelectorAll('.gp-mode-btn').forEach(btn => {
+    btn.addEventListener('click', () => applyMode(btn.dataset.mode));
+});
+
+/* ── CURVAS TOGGLE ───────────────────────────────────────────────── */
+document.getElementById('layer-curvas').addEventListener('click', toggleCurvas);
+
+/* ── CAMERA PRESETS ──────────────────────────────────────────────── */
+document.getElementById('cam-reset').addEventListener('click', () => {
+    camera.position.copy(CAM_INIT.pos);
+    controls.target.copy(CAM_INIT.target);
+});
+document.getElementById('cam-persp').addEventListener('click', () => {
+    camera.position.copy(CAM_INIT.pos);
+    controls.target.copy(CAM_INIT.target);
+});
+document.getElementById('cam-top').addEventListener('click', () => {
+    const box  = new THREE.Box3().setFromObject(terrainGroup || scene);
+    const size = box.getSize(new THREE.Vector3());
+    const h    = Math.max(size.x, size.z) * 0.9;
+    controls.target.set(0, 0, 0);
+    camera.position.set(0, h, 0.001);
+});
+document.getElementById('cam-front').addEventListener('click', () => {
+    const box  = new THREE.Box3().setFromObject(terrainGroup || scene);
+    const size = box.getSize(new THREE.Vector3());
+    controls.target.set(0, 0, 0);
+    camera.position.set(0, size.y * 0.2, size.z * 1.2);
+});
+
+/* ── TOOLS ───────────────────────────────────────────────────────── */
+let activeTool = 'orbit';
+const toolEls  = ['orbit', 'measure', 'sun', 'screenshot'].reduce((o, id) => {
+    o[id] = document.getElementById('tool-' + id); return o;
+}, {});
+
+function setTool(name) {
+    activeTool = name;
+    Object.entries(toolEls).forEach(([k, el]) => el.classList.toggle('active', k === name));
+    document.body.className = name === 'measure' ? 'mode-measure' : '';
+    controls.enabled = name !== 'measure';
+    if (name !== 'sun') document.getElementById('gp-sun-popup').classList.remove('on');
+    if (name !== 'measure') resetMeasure();
+}
+
+toolEls.orbit.addEventListener('click', () => setTool('orbit'));
+toolEls.measure.addEventListener('click', () => setTool(activeTool === 'measure' ? 'orbit' : 'measure'));
+toolEls.sun.addEventListener('click', () => {
+    const popup = document.getElementById('gp-sun-popup');
+    const on = popup.classList.toggle('on');
+    toolEls.sun.classList.toggle('active', on);
+    if (!on && activeTool === 'sun') setTool('orbit');
+    else { activeTool = 'sun'; controls.enabled = true; }
+});
+toolEls.screenshot.addEventListener('click', () => {
+    renderer.render(scene, camera);
+    const a = document.createElement('a');
+    a.href = canvas.toDataURL('image/png');
+    a.download = 'gomplat.png';
+    a.click();
+});
+
+/* ── SUN ─────────────────────────────────────────────────────────── */
+const sunSlider  = document.getElementById('gp-sun-slider');
+const elevSlider = document.getElementById('gp-elev-slider');
+const ambSlider  = document.getElementById('gp-ambient-slider');
+
+function updateSun() {
+    const h = parseFloat(sunSlider.value), el = parseFloat(elevSlider.value);
+    document.getElementById('gp-sun-time').textContent     = `${String(Math.floor(h)).padStart(2,'0')}:${String(Math.round((h%1)*60)).padStart(2,'0')} h`;
+    document.getElementById('gp-sun-elev-val').textContent = `${Math.round(el)}°`;
+    setSun(h, el);
+}
+sunSlider.addEventListener('input', updateSun);
+elevSlider.addEventListener('input', updateSun);
+ambSlider.addEventListener('input', () => { ambient.intensity = parseFloat(ambSlider.value) / 100 * 1.2; });
+
+/* ── MEASURE ─────────────────────────────────────────────────────── */
+const raycaster = new THREE.Raycaster();
+const mouse2D   = new THREE.Vector2();
+let measurePts  = [], measureMarkers = [], measureLine = null;
+const measureLabel = document.getElementById('gp-measure-label');
+
+function worldToScreen(v3) {
+    const v = v3.clone().project(camera);
+    return { x: (v.x * .5 + .5) * window.innerWidth, y: (v.y * -.5 + .5) * window.innerHeight };
+}
+
+function resetMeasure() {
+    measurePts = [];
+    measureMarkers.forEach(m => scene.remove(m));
+    measureMarkers = [];
+    if (measureLine) { scene.remove(measureLine); measureLine = null; }
+    measureLabel.style.display = 'none';
+    measureMid = null;
+}
+
+canvas.addEventListener('click', e => {
+    if (activeTool !== 'measure') return;
+    const rect = canvas.getBoundingClientRect();
+    mouse2D.x =  ((e.clientX - rect.left) / rect.width)  * 2 - 1;
+    mouse2D.y = -((e.clientY - rect.top)  / rect.height) * 2 + 1;
+    raycaster.setFromCamera(mouse2D, camera);
+    const meshes = [];
+    scene.traverse(c => { if (c.isMesh && c.visible) meshes.push(c); });
+    const hits = raycaster.intersectObjects(meshes, false);
+    if (!hits.length) return;
+    if (measurePts.length >= 2) resetMeasure();
+
+    const pt = hits[0].point.clone();
+    measurePts.push(pt);
+    const dot = new THREE.Mesh(new THREE.SphereGeometry(1, 8, 8), new THREE.MeshBasicMaterial({ color: 0xffffff }));
+    dot.position.copy(pt);
+    scene.add(dot);
+    measureMarkers.push(dot);
+
+    if (measurePts.length === 2) {
+        const [a, b] = measurePts;
+        const lg = new THREE.BufferGeometry().setFromPoints([a, b]);
+        measureLine = new THREE.Line(lg, new THREE.LineBasicMaterial({ color: 0xffffff }));
+        scene.add(measureLine);
+        measureMid = new THREE.Vector3().addVectors(a, b).multiplyScalar(0.5);
+        const scr = worldToScreen(measureMid);
+        measureLabel.style.display = 'block';
+        measureLabel.style.left    = (scr.x + 14) + 'px';
+        measureLabel.style.top     = (scr.y - 12) + 'px';
+        measureLabel.innerHTML     = `3D: <b>${a.distanceTo(b).toFixed(1)} m</b> &nbsp;|&nbsp; H: ${Math.sqrt((a.x-b.x)**2+(a.z-b.z)**2).toFixed(1)} m &nbsp;|&nbsp; Δ: ${Math.abs(a.y-b.y).toFixed(1)} m`;
+    }
+});
+
+</script>
+</body>
+</html>
