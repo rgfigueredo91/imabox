@@ -10,5 +10,5 @@ newmtl mapa
 	Kd 0.6980 0.6980 0.6980
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka terrain.jpg
-	map_Kd terrain.jpg
+	map_Ka terrain2.jpg
+	map_Kd terrain2.jpg

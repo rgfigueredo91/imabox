@@ -382,8 +382,8 @@ const CFG = {
     terrain: { obj: BASE + 'terrain.obj', mtl: BASE + 'terrain.mtl' },
     blanco:  { obj: BASE + 'blanco.obj',  mtl: BASE + 'blanco.mtl'  },
     curvas:  { obj: BASE + 'curvas.obj',  mtl: BASE + 'curvas.mtl'  },
-    texReal:     BASE + 'terrain.jpg',
-    texProyecto: BASE + 'proposal.jpg',
+    texReal:     BASE + 'terrain2.jpg',
+    texProyecto: BASE + 'proposal2.jpg',
     zUp: false,
 };
 
@@ -561,7 +561,6 @@ function loadTex(url, cb) {
     if (texCache[url]) { cb(texCache[url]); return; }
     new THREE.TextureLoader().load(url, tex => {
         tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
-        tex.flipY = false;
         tex.needsUpdate = true;
         texCache[url] = tex;
         cb(tex);
