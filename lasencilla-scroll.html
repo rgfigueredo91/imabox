@@ -230,6 +230,30 @@
         .sw-frame img {
             width: 100%; height: 100%; object-fit: cover; object-position: center 18%;
         }
+        /* masterplan video + wipe — contain sobre blanco */
+        #sv-planta { background: #fff; }
+        #sv-planta .sv-video,
+        #sv-planta .sv-img { object-fit: contain; background: #fff; }
+        #sv-planta .sv-overlay { display: none; }
+        #sv-planta .sv-hud .s-lbl { color: rgba(0,0,0,0.45); }
+
+        #s-masterplan-wipe { background: #fff; }
+        #s-masterplan-wipe .sw-frame img {
+            object-fit: contain; object-position: center center; background: #fff;
+        }
+        #s-masterplan-wipe .sw-overlay { display: none; }
+        #s-masterplan-wipe .sw-hud .s-lbl { color: rgba(0,0,0,0.45); }
+        #s-masterplan-wipe .sw-dot { background: rgba(0,0,0,0.18); }
+        #s-masterplan-wipe .sw-dot.on { background: #111; }
+        #s-masterplan-wipe .sw-ctr { color: rgba(0,0,0,0.45); }
+
+        /* proyecto video + wipe — contain sobre blanco */
+        #sv-planta2 { background: #fff; }
+        #sv-planta2 .sv-video,
+        #sv-planta2 .sv-img { object-fit: contain; background: #fff; }
+        #sv-planta2 .sv-overlay { display: none; }
+        #sv-planta2 .sv-hud .s-lbl { color: rgba(0,0,0,0.45); }
+
         #s-proyecto-wipe { background: #fff; }
         #s-proyecto-wipe .sw-frame img {
             object-fit: contain; object-position: center center; background: #fff;
@@ -784,7 +808,7 @@
 <div class="s-caratula" id="sc-proyecto">
     <div class="sc-inner">
         <div class="sc-num">04</div>
-        <div class="sc-title-wrap"><h2 class="sc-title">Proyecto</h2></div>
+        <div class="sc-title-wrap"><h2 class="sc-title">Proyecto y<br>Referencias</h2></div>
         <div class="sc-sub">Visualización 3D</div>
     </div>
 </div>
