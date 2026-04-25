@@ -272,6 +272,43 @@
             transition: width 0.25s ease;
         }
 
+        /* ── HOTSPOTS ─────────────────────────────────────────────── */
+        .mp-hotspot {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 10px; height: 10px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .mp-scene.is-done1 .mp-hotspot { opacity: 1; }
+        .mp-zone:hover .mp-hotspot { opacity: 0; }
+
+        /* inner dot */
+        .mp-hotspot::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 0 0 6px rgba(255,255,255,0.6);
+        }
+        /* outer ring — animates outward and fades */
+        .mp-hotspot::after {
+            content: '';
+            position: absolute;
+            inset: -7px;
+            border-radius: 50%;
+            border: 1.5px solid rgba(255,255,255,0.7);
+            animation: hotspot-pulse 2.2s ease-out infinite;
+            animation-delay: inherit;
+        }
+        @keyframes hotspot-pulse {
+            0%   { transform: scale(1);   opacity: 0.8; }
+            100% { transform: scale(2.6); opacity: 0;   }
+        }
+
         /* ── ZOOM TRANSITION ──────────────────────────────────────── */
         .mp-scene {
             transition: transform 0.3s cubic-bezier(0.4, 0, 1, 1);
@@ -483,7 +520,6 @@
 
     <!-- WebP hover overlays con alpha — se superponen sobre la imagen base -->
     <img class="mp-hover-img" id="mp-h1" src="img/masterplanes/hovers/w1.webp" draggable="false" />
-    <img class="mp-hover-img" id="mp-h2" src="img/masterplanes/hovers/w2.webp" draggable="false" />
     <img class="mp-hover-img" id="mp-h3" src="img/masterplanes/hovers/w3.webp" draggable="false" />
     <img class="mp-hover-img" id="mp-h5" src="img/masterplanes/hovers/w5.webp" draggable="false" />
     <img class="mp-hover-img" id="mp-h6" src="img/masterplanes/hovers/w6.webp" draggable="false" />
@@ -505,46 +541,56 @@
         <div class="mp-zone" data-hover="mp-h1"
              data-label="Reserva de Mar — Country Marítimo"
              data-click-img="img/masterplanes/detail/Gemini_Generated_Image_cl1lvbcl1lvbcl1l.jpg"
-             style="left:19.5%;top:21.5%;width:9%;height:6.5%"></div>
-        <!-- w2: rectángulo pequeño más arriba -->
-        <div class="mp-zone" data-hover="mp-h2"
-             data-label="Reserva de Mar — Country Marítimo"
-             data-click-img="img/masterplanes/detail/Gemini_Generated_Image_cl1lvbcl1lvbcl1l.jpg"
-             style="left:19.5%;top:13.5%;width:9%;height:4.8%"></div>
+             style="left:19.5%;top:21.5%;width:9%;height:6.5%">
+            <div class="mp-hotspot" style="--d:0s"></div>
+        </div>
         <!-- w3: blob centro — zoom → still → play button → animate -->
         <div class="mp-zone" data-hover="mp-h3"
              data-label="Reserva de Mar — Country Marítimo"
              data-click-img="img/masterplanes/detail/Gemini_Generated_Image_dxn5ubdxn5ubdxn5.jpg"
              data-click-video="img/masterplanes/detail/animate_slow_zoom_202604232050.mp4"
-             style="left:33.5%;top:44%;width:6.5%;height:4.5%"></div>
+             style="left:33.5%;top:44%;width:6.5%;height:4.5%">
+            <div class="mp-hotspot" style="animation-delay:0.3s"></div>
+        </div>
         <!-- w5: forma alta centro-izq -->
         <div class="mp-zone" data-hover="mp-h5"
              data-label="Reserva de Mar — Country Marítimo"
              data-click-img="img/masterplanes/detail/Gemini_Generated_Image_cl1lvbcl1lvbcl1l.jpg"
-             style="left:30.5%;top:20%;width:6%;height:17.5%"></div>
-        <!-- w6: ala pequeña centro-arriba — zoom → still → play button → animate -->
+             style="left:30.5%;top:20%;width:6%;height:17.5%">
+            <div class="mp-hotspot" style="animation-delay:0.6s"></div>
+        </div>
+        <!-- w6: ala pequeña centro-arriba — intro video → still → play button → animate -->
         <div class="mp-zone" data-hover="mp-h6"
              data-label="Reserva de Mar — Country Marítimo"
+             data-intro-video="img/masterplanes/detail/fast_cinematic_zoom_out.mp4"
              data-click-img="img/masterplanes/detail/Gemini_Generated_Image_b4wkzlb4wkzlb4wk.jpg"
              data-click-video="img/masterplanes/detail/animate_slow_zoom_202604222231.mp4"
-             style="left:39.5%;top:14.5%;width:7%;height:5%"></div>
+             style="left:39.5%;top:14.5%;width:7%;height:5%">
+            <div class="mp-hotspot" style="animation-delay:0.9s"></div>
+        </div>
         <!-- w7: franja vertical fina — intro video → still → play button → animate -->
         <div class="mp-zone" data-hover="mp-h7"
              data-label="Reserva de Mar — Country Marítimo"
              data-intro-video="img/masterplanes/detail/zoom_in_smooth_202604242001.mp4"
              data-click-img="img/masterplanes/detail/Gemini_Generated_Image_cl1lvbcl1lvbcl1l.jpg"
              data-click-video="img/masterplanes/detail/Animate_slow_zoom_202604231030.mp4"
-             style="left:43.5%;top:19.5%;width:2.5%;height:14%"></div>
+             style="left:43.5%;top:19.5%;width:2.5%;height:14%">
+            <div class="mp-hotspot" style="animation-delay:1.2s"></div>
+        </div>
         <!-- w8: curva pequeña -->
         <div class="mp-zone" data-hover="mp-h8"
              data-label="Reserva de Mar — Country Marítimo"
              data-click-img="img/masterplanes/detail/Gemini_Generated_Image_cl1lvbcl1lvbcl1l.jpg"
-             style="left:44%;top:39%;width:5.5%;height:3.5%"></div>
+             style="left:44%;top:39%;width:5.5%;height:3.5%">
+            <div class="mp-hotspot" style="animation-delay:1.5s"></div>
+        </div>
         <!-- w9: forma arriba-izq baja -->
         <div class="mp-zone" data-hover="mp-h9"
              data-label="Reserva de Mar — Country Marítimo"
              data-click-img="img/masterplanes/detail/Gemini_Generated_Image_cl1lvbcl1lvbcl1l.jpg"
-             style="left:5%;top:54%;width:5%;height:7%"></div>
+             style="left:5%;top:54%;width:5%;height:7%">
+            <div class="mp-hotspot" style="animation-delay:1.8s"></div>
+        </div>
     </div>
 
     <!-- Black overlay -->
