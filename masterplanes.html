@@ -271,6 +271,93 @@
             background: rgba(255,255,255,0.75);
             transition: width 0.25s ease;
         }
+
+        /* ── ZOOM TRANSITION ──────────────────────────────────────── */
+        .mp-scene {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 1, 1);
+        }
+
+        /* ── ZONE CLICKABLE CURSOR ────────────────────────────────── */
+        .mp-scene.is-done1 .mp-zone { cursor: pointer; }
+
+        /* ── DETAIL VIEW ──────────────────────────────────────────── */
+        .mp-detail {
+            position: fixed;
+            inset: 0;
+            z-index: 60;
+            background: #000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+        }
+        .mp-detail.on { opacity: 1; pointer-events: all; }
+
+        .mp-detail-img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+        }
+
+        .mp-detail-close {
+            position: absolute;
+            top: 24px;
+            right: 32px;
+            background: rgba(0,0,0,0.45);
+            border: 1.5px solid rgba(255,255,255,0.55);
+            color: #fff;
+            font-family: inherit;
+            font-size: 1rem;
+            width: 44px; height: 44px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+            z-index: 2;
+        }
+        .mp-detail-close:hover { background: rgba(0,0,0,0.75); border-color: #fff; }
+
+        /* ── PLAY BUTTON centrado sobre la imagen ─────────────────── */
+        .mp-play-btn {
+            position: absolute;
+            inset: 0;
+            margin: auto;
+            width: 80px; height: 80px;
+            z-index: 2;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.75);
+            background: rgba(0,0,0,0.35);
+            backdrop-filter: blur(6px);
+            transition: background 0.25s, border-color 0.25s, transform 0.2s;
+            animation: mp-pulse 2.4s ease-in-out infinite;
+        }
+        .mp-play-btn:hover {
+            background: rgba(0,0,0,0.65);
+            border-color: #fff;
+            transform: scale(1.08);
+            animation: none;
+        }
+        .mp-play-btn svg { margin-left: 5px; }
+
+        @keyframes mp-pulse {
+            0%,100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.25); }
+            50%      { box-shadow: 0 0 0 18px rgba(255,255,255,0); }
+        }
+
+        /* ── VIDEO PLAYER sobre la imagen ─────────────────────────── */
+        .mp-detail-video {
+            position: absolute;
+            inset: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            object-position: center;
+            z-index: 3;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        .mp-detail-video.on { opacity: 1; pointer-events: all; }
     </style>
 </head>
 <body>
@@ -308,27 +395,39 @@
     <div class="mp-zone-layer">
         <!-- w1: trapecio arriba-izq -->
         <div class="mp-zone" data-hover="mp-h1"
+             data-click-img="img/masterplanes/detail/Gemini_Generated_Image_cl1lvbcl1lvbcl1l.jpg"
              style="left:19.5%;top:21.5%;width:9%;height:6.5%"></div>
         <!-- w2: rectángulo pequeño más arriba -->
         <div class="mp-zone" data-hover="mp-h2"
+             data-click-img="img/masterplanes/detail/Gemini_Generated_Image_cl1lvbcl1lvbcl1l.jpg"
              style="left:19.5%;top:13.5%;width:9%;height:4.8%"></div>
-        <!-- w3: blob centro -->
+        <!-- w3: blob centro — zoom → still → play button → animate -->
         <div class="mp-zone" data-hover="mp-h3"
+             data-click-img="img/masterplanes/detail/Gemini_Generated_Image_dxn5ubdxn5ubdxn5.jpg"
+             data-click-video="img/masterplanes/detail/animate_slow_zoom_202604232050.mp4"
              style="left:33.5%;top:44%;width:6.5%;height:4.5%"></div>
         <!-- w5: forma alta centro-izq -->
         <div class="mp-zone" data-hover="mp-h5"
+             data-click-img="img/masterplanes/detail/Gemini_Generated_Image_cl1lvbcl1lvbcl1l.jpg"
              style="left:30.5%;top:20%;width:6%;height:17.5%"></div>
-        <!-- w6: ala pequeña centro-arriba -->
+        <!-- w6: ala pequeña centro-arriba — zoom → still → play button → animate -->
         <div class="mp-zone" data-hover="mp-h6"
+             data-click-img="img/masterplanes/detail/Gemini_Generated_Image_b4wkzlb4wkzlb4wk.jpg"
+             data-click-video="img/masterplanes/detail/animate_slow_zoom_202604222231.mp4"
              style="left:39.5%;top:14.5%;width:7%;height:5%"></div>
-        <!-- w7: franja vertical fina — ancho ajustado -->
+        <!-- w7: franja vertical fina — intro video → still → play button → animate -->
         <div class="mp-zone" data-hover="mp-h7"
+             data-intro-video="img/masterplanes/detail/zoom_in_smooth_202604242001.mp4"
+             data-click-img="img/masterplanes/detail/Gemini_Generated_Image_cl1lvbcl1lvbcl1l.jpg"
+             data-click-video="img/masterplanes/detail/Animate_slow_zoom_202604231030.mp4"
              style="left:43.5%;top:19.5%;width:2.5%;height:14%"></div>
         <!-- w8: curva pequeña -->
         <div class="mp-zone" data-hover="mp-h8"
+             data-click-img="img/masterplanes/detail/Gemini_Generated_Image_cl1lvbcl1lvbcl1l.jpg"
              style="left:44%;top:39%;width:5.5%;height:3.5%"></div>
         <!-- w9: forma arriba-izq baja -->
         <div class="mp-zone" data-hover="mp-h9"
+             data-click-img="img/masterplanes/detail/Gemini_Generated_Image_cl1lvbcl1lvbcl1l.jpg"
              style="left:5%;top:54%;width:5%;height:7%"></div>
     </div>
 
@@ -337,6 +436,25 @@
 
     <!-- Bridge: covers black gap while new video src loads -->
     <img class="mp-bridge" id="mp-bridge" src="" alt="" draggable="false" />
+
+    <!-- Detail view (post-zoom fullscreen image) -->
+    <div class="mp-detail" id="mp-detail">
+        <img class="mp-detail-img" id="mp-detail-img" src="" alt="" draggable="false" />
+
+        <!-- Animated play button -->
+        <button class="mp-play-btn" id="mp-play-btn" aria-label="Ver animación">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="8,4 24,14 8,24" fill="white"/>
+            </svg>
+        </button>
+
+        <!-- Animation video (plays over the still image) -->
+        <video class="mp-detail-video" id="mp-detail-video"
+               src="img/masterplanes/detail/Animate_slow_zoom_202604231030.mp4"
+               playsinline preload="none"></video>
+
+        <button class="mp-detail-close" id="mp-detail-close">&#10005;</button>
+    </div>
 
     <!-- Landing -->
     <div class="mp-landing">
@@ -480,11 +598,73 @@ arrowLeft.addEventListener("click", () => {
     });
 })();
 
-/* ── Zone hover ─────────────────────────────────────────────── */
+/* ── Zone hover + click ──────────────────────────────────────── */
 let activeHover = null;
 
+const detailEl    = document.getElementById("mp-detail");
+const detailImg   = document.getElementById("mp-detail-img");
+const detailClose = document.getElementById("mp-detail-close");
+const detailVideo = document.getElementById("mp-detail-video");
+const playBtn     = document.getElementById("mp-play-btn");
+
+// pendingStill / pendingPlayVideo hold the next still/video for after intro ends
+let pendingStill     = "";
+let pendingPlayVideo = "";
+
+function resetVideo() {
+    detailVideo.pause();
+    detailVideo.removeAttribute("src");
+    detailVideo.load();
+    detailVideo.classList.remove("on");
+}
+
+function showStillWithPlay(imgSrc, playVideoSrc) {
+    pendingPlayVideo = playVideoSrc || "";
+    detailImg.src    = imgSrc;
+    detailImg.style.opacity = "1";
+    playBtn.style.display   = playVideoSrc ? "" : "none";
+}
+
+function closeDetail() {
+    resetVideo();
+    detailEl.classList.remove("on");
+    detailImg.style.opacity = "";
+    playBtn.style.display   = "";
+    setTimeout(() => { detailImg.src = ""; }, 350);
+}
+
+// Video ended handler — decides what comes next
+detailVideo.addEventListener("ended", () => {
+    resetVideo();
+    if (pendingStill) {
+        showStillWithPlay(pendingStill, pendingPlayVideo);
+        pendingStill = "";
+    }
+});
+
+// Play button → launch the second animation video over the still
+playBtn.addEventListener("click", () => {
+    if (!pendingPlayVideo) return;
+    playBtn.style.display   = "none";
+    detailImg.style.opacity = "0";
+    detailVideo.src = pendingPlayVideo;
+    detailVideo.load();
+    detailVideo.classList.add("on");
+    detailVideo.play();
+    // pendingStill = current still so ended handler restores it with play button
+    pendingStill = detailImg.src;
+    // pendingPlayVideo kept so play button reappears after video ends
+});
+
+detailClose.addEventListener("click", closeDetail);
+detailEl.addEventListener("click", e => { if (e.target === detailEl || e.target === detailImg) closeDetail(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeDetail(); });
+
 document.querySelectorAll(".mp-zone").forEach(zone => {
-    const imgEl = document.getElementById(zone.dataset.hover);
+    const imgEl      = document.getElementById(zone.dataset.hover);
+    const introVideo = zone.dataset.introVideo;  // plays immediately, no zoom
+    const clickImg   = zone.dataset.clickImg;    // still shown after intro / with play btn
+    const clickVideo = zone.dataset.clickVideo;  // plays when user hits play btn
     if (!imgEl) return;
 
     zone.addEventListener("mouseenter", () => {
@@ -492,10 +672,41 @@ document.querySelectorAll(".mp-zone").forEach(zone => {
         activeHover = imgEl;
         imgEl.classList.add("on");
     });
-
     zone.addEventListener("mouseleave", () => {
         imgEl.classList.remove("on");
         activeHover = null;
+    });
+
+    zone.addEventListener("click", e => {
+        if (introVideo) {
+            // Intro-video flow: open overlay instantly, play intro video,
+            // then reveal still + play button when done
+            pendingStill     = clickImg   || "";
+            pendingPlayVideo = clickVideo || "";
+            detailImg.src    = "";
+            detailImg.style.opacity = "0";
+            playBtn.style.display   = "none";
+            detailEl.classList.add("on");
+            detailVideo.src = introVideo;
+            detailVideo.load();
+            detailVideo.classList.add("on");
+            detailVideo.play();
+
+        } else if (clickImg) {
+            // Zoom-then-still flow: CSS zoom transform → show still + optional play btn
+            pendingStill     = "";
+            pendingPlayVideo = clickVideo || "";
+            scene.style.transformOrigin = `${e.clientX}px ${e.clientY}px`;
+            scene.style.transition = "transform 0.28s cubic-bezier(0.4,0,1,1)";
+            scene.style.transform  = "scale(5)";
+            setTimeout(() => {
+                scene.style.transition      = "none";
+                scene.style.transform       = "";
+                scene.style.transformOrigin = "";
+                showStillWithPlay(clickImg, clickVideo || "");
+                detailEl.classList.add("on");
+            }, 280);
+        }
     });
 });
 </script>
