@@ -316,6 +316,111 @@
         }
         .mp-detail-close:hover { background: rgba(0,0,0,0.75); border-color: #fff; }
 
+        /* ── GOMEZ PLATERO header ─────────────────────────────────── */
+        .mp-brand {
+            position: absolute;
+            top: 28px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            pointer-events: none;
+        }
+        .mp-brand-name {
+            font-size: clamp(0.6rem, 1.4vw, 0.85rem);
+            font-weight: 200;
+            letter-spacing: 0.5em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.85);
+        }
+        .mp-brand-line {
+            width: 32px;
+            height: 1px;
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* ── PROYECTO / TERRENO tabs ──────────────────────────────── */
+        .mp-tabs {
+            position: absolute;
+            top: 28px;
+            right: 36px;
+            z-index: 20;
+            display: flex;
+            gap: 2px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+        .mp-scene.is-done1 .mp-tabs { opacity: 1; pointer-events: all; }
+
+        .mp-tab {
+            font-family: inherit;
+            font-size: 0.62rem;
+            font-weight: 300;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.45);
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid transparent;
+            padding: 6px 14px 5px;
+            cursor: pointer;
+            transition: color 0.25s, border-color 0.25s;
+        }
+        .mp-tab:hover { color: rgba(255,255,255,0.75); }
+        .mp-tab.active {
+            color: #fff;
+            border-bottom-color: rgba(255,255,255,0.6);
+        }
+
+        /* Terreno image layer — above hover overlays (z5), below zone layer (z7) */
+        .mp-terreno {
+            position: absolute;
+            inset: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            object-position: center;
+            z-index: 6;
+            opacity: 0;
+            transition: opacity 0.7s ease;
+            pointer-events: none;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+        .mp-terreno.on { opacity: 1; }
+
+        /* Hide right arrow when on terreno tab */
+        .mp-scene.is-terreno .mp-arrow-right { opacity: 0 !important; pointer-events: none !important; }
+
+        /* ── LOCATION LABEL ───────────────────────────────────────── */
+        .mp-location {
+            position: absolute;
+            bottom: 32px;
+            right: 36px;
+            text-align: right;
+            z-index: 21;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+        .mp-scene.is-done1 .mp-location,
+        .mp-scene.is-done2 .mp-location { opacity: 1; }
+
+        .mp-location-name {
+            font-size: clamp(1.6rem, 4vw, 3.2rem);
+            font-weight: 200;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.75);
+            line-height: 1.15;
+            transition: opacity 0.3s ease;
+            max-width: 52vw;
+        }
+        .mp-location-name.fade { opacity: 0; }
+
         /* ── PLAY BUTTON centrado sobre la imagen ─────────────────── */
         .mp-play-btn {
             position: absolute;
@@ -386,6 +491,9 @@
     <img class="mp-hover-img" id="mp-h8" src="img/masterplanes/hovers/w8.webp" draggable="false" />
     <img class="mp-hover-img" id="mp-h9" src="img/masterplanes/hovers/w9.webp" draggable="false" />
 
+    <!-- Terreno image layer -->
+    <img class="mp-terreno" id="mp-terreno" src="img/masterplanes/terreno.jpg" alt="" draggable="false" />
+
     <!-- Video layer -->
     <video class="mp-video" id="mp-video"
            src="videos/masterplanes/zoom.mp4"
@@ -395,38 +503,46 @@
     <div class="mp-zone-layer">
         <!-- w1: trapecio arriba-izq -->
         <div class="mp-zone" data-hover="mp-h1"
+             data-label="Reserva de Mar — Country Marítimo"
              data-click-img="img/masterplanes/detail/Gemini_Generated_Image_cl1lvbcl1lvbcl1l.jpg"
              style="left:19.5%;top:21.5%;width:9%;height:6.5%"></div>
         <!-- w2: rectángulo pequeño más arriba -->
         <div class="mp-zone" data-hover="mp-h2"
+             data-label="Reserva de Mar — Country Marítimo"
              data-click-img="img/masterplanes/detail/Gemini_Generated_Image_cl1lvbcl1lvbcl1l.jpg"
              style="left:19.5%;top:13.5%;width:9%;height:4.8%"></div>
         <!-- w3: blob centro — zoom → still → play button → animate -->
         <div class="mp-zone" data-hover="mp-h3"
+             data-label="Reserva de Mar — Country Marítimo"
              data-click-img="img/masterplanes/detail/Gemini_Generated_Image_dxn5ubdxn5ubdxn5.jpg"
              data-click-video="img/masterplanes/detail/animate_slow_zoom_202604232050.mp4"
              style="left:33.5%;top:44%;width:6.5%;height:4.5%"></div>
         <!-- w5: forma alta centro-izq -->
         <div class="mp-zone" data-hover="mp-h5"
+             data-label="Reserva de Mar — Country Marítimo"
              data-click-img="img/masterplanes/detail/Gemini_Generated_Image_cl1lvbcl1lvbcl1l.jpg"
              style="left:30.5%;top:20%;width:6%;height:17.5%"></div>
         <!-- w6: ala pequeña centro-arriba — zoom → still → play button → animate -->
         <div class="mp-zone" data-hover="mp-h6"
+             data-label="Reserva de Mar — Country Marítimo"
              data-click-img="img/masterplanes/detail/Gemini_Generated_Image_b4wkzlb4wkzlb4wk.jpg"
              data-click-video="img/masterplanes/detail/animate_slow_zoom_202604222231.mp4"
              style="left:39.5%;top:14.5%;width:7%;height:5%"></div>
         <!-- w7: franja vertical fina — intro video → still → play button → animate -->
         <div class="mp-zone" data-hover="mp-h7"
+             data-label="Reserva de Mar — Country Marítimo"
              data-intro-video="img/masterplanes/detail/zoom_in_smooth_202604242001.mp4"
              data-click-img="img/masterplanes/detail/Gemini_Generated_Image_cl1lvbcl1lvbcl1l.jpg"
              data-click-video="img/masterplanes/detail/Animate_slow_zoom_202604231030.mp4"
              style="left:43.5%;top:19.5%;width:2.5%;height:14%"></div>
         <!-- w8: curva pequeña -->
         <div class="mp-zone" data-hover="mp-h8"
+             data-label="Reserva de Mar — Country Marítimo"
              data-click-img="img/masterplanes/detail/Gemini_Generated_Image_cl1lvbcl1lvbcl1l.jpg"
              style="left:44%;top:39%;width:5.5%;height:3.5%"></div>
         <!-- w9: forma arriba-izq baja -->
         <div class="mp-zone" data-hover="mp-h9"
+             data-label="Reserva de Mar — Country Marítimo"
              data-click-img="img/masterplanes/detail/Gemini_Generated_Image_cl1lvbcl1lvbcl1l.jpg"
              style="left:5%;top:54%;width:5%;height:7%"></div>
     </div>
@@ -456,6 +572,23 @@
         <button class="mp-detail-close" id="mp-detail-close">&#10005;</button>
     </div>
 
+    <!-- Gomez Platero brand -->
+    <div class="mp-brand">
+        <span class="mp-brand-name">Gomez Platero</span>
+        <div class="mp-brand-line"></div>
+    </div>
+
+    <!-- Proyecto / Terreno tabs -->
+    <div class="mp-tabs">
+        <button class="mp-tab active" id="mp-tab-proyecto">Proyecto</button>
+        <button class="mp-tab"        id="mp-tab-terreno">Terreno</button>
+    </div>
+
+    <!-- Location label -->
+    <div class="mp-location">
+        <span class="mp-location-name" id="mp-location-name">Reserva de Mar — Country Marítimo</span>
+    </div>
+
     <!-- Landing -->
     <div class="mp-landing">
         <div class="mp-title-wrap">
@@ -483,6 +616,50 @@ const btnEnter   = document.getElementById("mp-btn-enter");
 const btnIniciar = document.getElementById("mp-btn-iniciar");
 const arrowRight = document.getElementById("mp-arrow-right");
 const arrowLeft  = document.getElementById("mp-arrow-left");
+const terrenoImg = document.getElementById("mp-terreno");
+const tabProyecto= document.getElementById("mp-tab-proyecto");
+const tabTerreno = document.getElementById("mp-tab-terreno");
+const locationEl = document.getElementById("mp-location-name");
+
+const DEFAULT_LABEL = "Reserva de Mar — Country Marítimo";
+let locationTimer  = null;
+let currentLabel   = DEFAULT_LABEL;
+
+function setLocationLabel(label) {
+    if (label === currentLabel) return;
+    clearTimeout(locationTimer);
+    locationTimer = setTimeout(() => {
+        locationEl.classList.add("fade");
+        setTimeout(() => {
+            locationEl.textContent = label;
+            currentLabel = label;
+            locationEl.classList.remove("fade");
+        }, 300);
+    }, 60); // small delay cancels flicker between adjacent zones
+}
+
+/* ── Proyecto / Terreno tabs ─────────────────────────────────────── */
+tabProyecto.addEventListener("click", () => {
+    tabProyecto.classList.add("active");
+    tabTerreno.classList.remove("active");
+    terrenoImg.classList.remove("on");
+    scene.classList.remove("is-terreno");
+});
+
+tabTerreno.addEventListener("click", () => {
+    tabTerreno.classList.add("active");
+    tabProyecto.classList.remove("active");
+    terrenoImg.classList.add("on");
+    scene.classList.add("is-terreno");
+});
+
+/* Reset tabs when leaving is-done1 state */
+function resetTabs() {
+    tabProyecto.classList.add("active");
+    tabTerreno.classList.remove("active");
+    terrenoImg.classList.remove("on");
+    scene.classList.remove("is-terreno");
+}
 
 /* Show bridge instantly (no transition) to match current view */
 function showBridge(src) {
@@ -532,6 +709,7 @@ btnIniciar.addEventListener("click", () => {
 
 /* ── Arrow right → izquierda.mp4 forward ───────────────────── */
 arrowRight.addEventListener("click", () => {
+    resetTabs();
     scene.classList.remove("is-done1", "is-done2");
     playNext("videos/masterplanes/izquierda.mp4", "img/masterplanes/end1.jpg", () => {
         showStill("img/masterplanes/end2.jpg");
@@ -671,10 +849,12 @@ document.querySelectorAll(".mp-zone").forEach(zone => {
         if (activeHover && activeHover !== imgEl) activeHover.classList.remove("on");
         activeHover = imgEl;
         imgEl.classList.add("on");
+        setLocationLabel(zone.dataset.label || DEFAULT_LABEL);
     });
     zone.addEventListener("mouseleave", () => {
         imgEl.classList.remove("on");
         activeHover = null;
+        setLocationLabel(DEFAULT_LABEL);
     });
 
     zone.addEventListener("click", e => {
