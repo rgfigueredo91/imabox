@@ -709,12 +709,11 @@
     <div class="sw-frame"><img src="img/lasencilla/sitio-04.webp" alt="Sitio 04"/></div>
     <div class="sw-frame"><img src="img/lasencilla/sitio-05.webp" alt="Sitio 05"/></div>
     <div class="sw-frame"><img src="img/lasencilla/sitio-06.webp" alt="Sitio 06"/></div>
-    <div class="sw-frame"><img src="img/lasencilla/sitio-07.webp" alt="Sitio 07"/></div>
     <div class="sw-overlay"></div>
     <div class="sw-hud">
         <div class="s-lbl">02 · Imágenes del sitio</div>
         <div class="sw-dots" id="sw-dots"></div>
-        <div class="sw-ctr" id="sw-ctr">01 — 07</div>
+        <div class="sw-ctr" id="sw-ctr">01 — 06</div>
     </div>
 </div>
 
@@ -737,6 +736,27 @@
 
 
 <!-- ─── CARÁTULA MASTERPLAN ─────────────────────── -->
+<div class="s-caratula" id="sc-masterplan">
+    <div class="sc-inner">
+        <div class="sc-num">03</div>
+        <div class="sc-title-wrap"><h2 class="sc-title">Masterplan</h2></div>
+        <div class="sc-sub">Visualización del proyecto</div>
+    </div>
+</div>
+
+<!-- ─── PLANTA TRANSITION VIDEO ─────────────────── -->
+<div class="sv-wrap" id="sv-planta">
+    <img class="sv-img" id="svimg-planta-first" src="videos/lasencilla/planta-transition-frame1.png" alt="Planta inicio">
+    <video class="sv-video" id="svvid-planta" muted playsinline preload="auto">
+        <source src="videos/lasencilla/planta-transition.mp4" type="video/mp4">
+    </video>
+    <img class="sv-img" id="svimg-planta-last" src="videos/lasencilla/planta-transition-framelast.png" alt="Planta fin" style="opacity:0;">
+    <div class="sv-overlay"></div>
+    <div class="sv-hud">
+        <div class="s-lbl">03 · Masterplan</div>
+    </div>
+    <div class="sv-progress"><div class="sv-progress-bar" id="svbar-planta"></div></div>
+</div>
 
 <!-- ─── CARÁTULA IMÁGENES PROYECTO ─────────────── -->
 <div class="s-caratula" id="sc-imagenes">
@@ -1075,6 +1095,7 @@ setupVideoScrub({ wrapperId:'sv-sitio',     videoId:'svvid-sitio',     firstImgI
         }
     });
 })();
+setupVideoScrub({ wrapperId:'sv-planta',    videoId:'svvid-planta',    firstImgId:'svimg-planta-first',    lastImgId:'svimg-planta-last',    barId:'svbar-planta',    scrollEnd:'+=280%' });
 /* ── CARÁTULAS ────────────────────────────────────── */
 document.querySelectorAll('.s-caratula').forEach(function(el) {
     ScrollTrigger.create({
@@ -1097,6 +1118,8 @@ const navSec = document.getElementById("gp-sec");
     ["#sc-sitio",        "Sitio"],
     ["#sv-sitio",        "Sitio"],
     ["#s-sitio-wipe",    "Sitio"],
+    ["#sc-masterplan",   "Masterplan"],
+    ["#sv-planta",       "Masterplan"],
     ["#sc-imagenes",     "Imágenes Proyecto"],
     ["#s-renders-stick", "Imágenes Proyecto"],
     ["#s-modelo",        "Maqueta Digital"],
