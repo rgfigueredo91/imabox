@@ -200,24 +200,84 @@
 
 
         /* ── ÁREAS ───────────────────────────────────── */
-        .s-areas { background: #0d0d0d; color: #fff; padding: 120px 8vw 140px; }
-        .s-areas .s-lbl { color: rgba(255,255,255,0.4); margin-bottom: 56px; }
-        .areas-h { overflow: hidden; margin-bottom: 72px; }
-        .areas-h h2 { font-size: clamp(2.8rem, 6.5vw, 6rem); font-weight: 200; letter-spacing: 0.06em; line-height: 0.95; }
-        .areas-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; }
-        .area-card { padding: 48px 44px; border: 1px solid rgba(255,255,255,0.04); }
-        .area-n { font-size: clamp(3.5rem, 7vw, 6.5rem); font-weight: 200; letter-spacing: -0.02em; line-height: 1; color: rgba(255,255,255,0.1); margin-bottom: 6px; }
-        .area-n sup { font-size: 0.35em; color: rgba(255,255,255,0.18); vertical-align: super; letter-spacing: 0; }
-        .area-name { font-size: 0.88rem; font-weight: 300; letter-spacing: 0.04em; margin-bottom: 6px; }
-        .area-pct { font-size: 0.5rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.28); }
-        .area-card.total {
-            grid-column: 1/-1; background: rgba(255,255,255,0.02);
-            display: flex; align-items: flex-end; justify-content: space-between; gap: 20px;
+        /* ── ÁREAS ───────────────────────────────────── */
+        .s-areas { background: #f7f6f2; color: #111; padding: 120px 8vw 140px; }
+        .s-areas .s-lbl { color: rgba(0,0,0,0.35); margin-bottom: 56px; }
+        .areas-h { overflow: hidden; margin-bottom: 64px; }
+        .areas-h h2 { font-size: clamp(2.8rem, 6.5vw, 6rem); font-weight: 200; letter-spacing: 0.06em; line-height: 0.95; color: #111; }
+
+        /* accordion */
+        .ac-list { list-style: none; margin: 0 0 3px; padding: 0; }
+        .ac-item { border-top: 1px solid rgba(0,0,0,0.10); overflow: hidden; }
+        .ac-item:last-child { border-bottom: 1px solid rgba(0,0,0,0.10); }
+        .ac-header {
+            display: flex; align-items: center; gap: 0;
+            padding: 0; cursor: pointer; user-select: none;
+            background: none; border: none; width: 100%; text-align: left;
         }
-        .area-card.total .area-n { font-size: clamp(5rem, 10vw, 9.5rem); color: rgba(255,255,255,0.88); }
-        .area-ext { text-align: right; padding-bottom: 8px; }
-        .area-ext-lbl { font-size: 0.48rem; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.22); margin-bottom: 6px; }
-        .area-ext-val { font-size: clamp(1.5rem, 3vw, 2.8rem); font-weight: 200; color: rgba(255,255,255,0.32); }
+        .ac-accent {
+            width: 5px; align-self: stretch; flex-shrink: 0;
+            border-radius: 0; transition: opacity 0.3s;
+        }
+        .ac-header-inner {
+            flex: 1; display: flex; align-items: center;
+            justify-content: space-between; padding: 28px 32px;
+            gap: 24px;
+        }
+        .ac-left { display: flex; align-items: center; gap: 20px; }
+        .ac-name {
+            font-size: clamp(1.1rem, 2.2vw, 1.6rem);
+            font-weight: 300; letter-spacing: 0.02em; color: #111;
+        }
+        .ac-badge {
+            font-size: clamp(1.4rem, 2.8vw, 2.2rem);
+            font-weight: 200; letter-spacing: -0.01em; color: #111;
+            white-space: nowrap;
+        }
+        .ac-badge sup { font-size: 0.42em; vertical-align: super; }
+        .ac-right { display: flex; align-items: center; gap: 32px; flex-shrink: 0; }
+        .ac-pct {
+            font-size: 0.5rem; letter-spacing: 0.22em; text-transform: uppercase;
+            color: rgba(0,0,0,0.38);
+        }
+        .ac-ext {
+            font-size: 0.46rem; letter-spacing: 0.18em; text-transform: uppercase;
+            color: rgba(0,0,0,0.30); text-align: right;
+        }
+        .ac-chevron {
+            width: 20px; height: 20px; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+            color: rgba(0,0,0,0.35);
+        }
+        .ac-item.open .ac-chevron { transform: rotate(180deg); }
+
+        /* panel */
+        .ac-panel {
+            max-height: 0; overflow: hidden;
+            transition: max-height 0.55s cubic-bezier(0.16,1,0.3,1);
+        }
+        .ac-item.open .ac-panel { max-height: 600px; }
+        .ac-rows { padding: 0 32px 28px 37px; }
+        .ac-row {
+            display: flex; justify-content: space-between; align-items: baseline;
+            padding: 9px 0; border-bottom: 1px solid rgba(0,0,0,0.05);
+            font-size: 0.78rem; font-weight: 300; color: #333; letter-spacing: 0.01em;
+        }
+        .ac-row:last-child { border-bottom: none; }
+        .ac-row-val { font-weight: 400; color: #111; white-space: nowrap; margin-left: 16px; }
+
+        /* total bar */
+        .areas-total {
+            margin-top: 40px; padding: 36px 32px;
+            background: #111; color: #fff; border-radius: 2px;
+            display: flex; align-items: center; justify-content: space-between; gap: 24px;
+        }
+        .areas-total-lbl { font-size: 0.5rem; letter-spacing: 0.28em; text-transform: uppercase; opacity: 0.45; margin-bottom: 8px; }
+        .areas-total-num { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 200; letter-spacing: -0.01em; }
+        .areas-total-num sup { font-size: 0.38em; vertical-align: super; }
+        .areas-total-right { text-align: right; }
+        .areas-total-note { margin-top: 20px; font-size: 0.42rem; letter-spacing: 0.14em; color: rgba(0,0,0,0.35); }
 
         /* ── CIERRE ──────────────────────────────────── */
         .s-cierre {
@@ -1093,34 +1153,159 @@
 <section class="s-areas" id="s-areas">
     <div class="s-lbl">08 · Resumen de áreas</div>
     <div class="areas-h"><h2>Resumen de áreas</h2></div>
-    <div class="areas-grid">
-        <div class="area-card">
-            <div class="area-n"><span class="cnt" data-to="232">0</span><sup>m²</sup></div>
-            <div class="area-name">Club House</div><div class="area-pct">31 %</div>
-        </div>
-        <div class="area-card">
-            <div class="area-n"><span class="cnt" data-to="170">0</span><sup>m²</sup></div>
-            <div class="area-name">Deportiva</div><div class="area-pct">22.5 %</div>
-        </div>
-        <div class="area-card">
-            <div class="area-n"><span class="cnt" data-to="174">0</span><sup>m²</sup></div>
-            <div class="area-name">Kids Club · Invernadero · Farm</div><div class="area-pct">23 %</div>
-        </div>
-        <div class="area-card">
-            <div class="area-n"><span class="cnt" data-to="178">0</span><sup>m²</sup></div>
-            <div class="area-name">Workshop · Cowork</div><div class="area-pct">23.5 %</div>
-        </div>
-        <div class="area-card total">
-            <div>
-                <div style="font-size:0.5rem;letter-spacing:0.24em;text-transform:uppercase;color:rgba(255,255,255,0.25);margin-bottom:12px;">Total área construida</div>
-                <div class="area-n"><span class="cnt" data-to="754">0</span><sup>m²</sup></div>
+
+    <ul class="ac-list">
+
+        <!-- Club House -->
+        <li class="ac-item">
+            <button class="ac-header" aria-expanded="false">
+                <div class="ac-accent" style="background:#f4a4a4;"></div>
+                <div class="ac-header-inner">
+                    <div class="ac-left">
+                        <span class="ac-name">Club House</span>
+                    </div>
+                    <div class="ac-right">
+                        <span class="ac-pct">31 %</span>
+                        <span class="ac-ext">228 m² ext.</span>
+                        <span class="ac-badge"><span class="cnt" data-to="232">0</span><sup>m²</sup></span>
+                        <span class="ac-chevron"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+                    </div>
+                </div>
+            </button>
+            <div class="ac-panel">
+                <div class="ac-rows">
+                    <div class="ac-row"><span>Área Interior</span><span class="ac-row-val">166 m²</span></div>
+                    <div class="ac-row"><span>Área Pérgola</span><span class="ac-row-val">76 m²</span></div>
+                    <div class="ac-row"><span>Área Piscina adultos</span><span class="ac-row-val">63 m²</span></div>
+                    <div class="ac-row"><span>Área Piscina niños</span><span class="ac-row-val">18 m²</span></div>
+                    <div class="ac-row"><span>Área Solarium</span><span class="ac-row-val">71 m²</span></div>
+                    <div class="ac-row"><span>Área Parrillero y Depósito Exterior</span><span class="ac-row-val">28 m²</span></div>
+                    <div class="ac-row"><span>Área Depósito Piscina</span><span class="ac-row-val">14 m²</span></div>
+                    <div class="ac-row"><span>Área Depósito Acceso</span><span class="ac-row-val">24 m²</span></div>
+                </div>
             </div>
-            <div class="area-ext">
-                <div class="area-ext-lbl">Total exterior</div>
-                <div class="area-ext-val"><span class="cnt" data-to="849">0</span> m²</div>
+        </li>
+
+        <!-- Deportiva -->
+        <li class="ac-item">
+            <button class="ac-header" aria-expanded="false">
+                <div class="ac-accent" style="background:#a4c4f4;"></div>
+                <div class="ac-header-inner">
+                    <div class="ac-left">
+                        <span class="ac-name">Deportiva</span>
+                    </div>
+                    <div class="ac-right">
+                        <span class="ac-pct">22.5 %</span>
+                        <span class="ac-ext">34 m² ext.</span>
+                        <span class="ac-badge"><span class="cnt" data-to="170">0</span><sup>m²</sup></span>
+                        <span class="ac-chevron"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+                    </div>
+                </div>
+            </button>
+            <div class="ac-panel">
+                <div class="ac-rows">
+                    <div class="ac-row"><span>Área SPA interior</span><span class="ac-row-val">55.50 m²</span></div>
+                    <div class="ac-row"><span>Área SSHH y vestuarios</span><span class="ac-row-val">37.00 m²</span></div>
+                    <div class="ac-row"><span>Área Gym interior</span><span class="ac-row-val">77.50 m²</span></div>
+                    <div class="ac-row"><span>Área Gym deck exterior</span><span class="ac-row-val">34.00 m²</span></div>
+                </div>
             </div>
+        </li>
+
+        <!-- Kids Club -->
+        <li class="ac-item">
+            <button class="ac-header" aria-expanded="false">
+                <div class="ac-accent" style="background:#a4e0b4;"></div>
+                <div class="ac-header-inner">
+                    <div class="ac-left">
+                        <span class="ac-name">Kids Club · Invernadero · Farm</span>
+                    </div>
+                    <div class="ac-right">
+                        <span class="ac-pct">23 %</span>
+                        <span class="ac-ext">186 m² ext.</span>
+                        <span class="ac-badge"><span class="cnt" data-to="174">0</span><sup>m²</sup></span>
+                        <span class="ac-chevron"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+                    </div>
+                </div>
+            </button>
+            <div class="ac-panel">
+                <div class="ac-rows">
+                    <div class="ac-row"><span>Área Kids Club</span><span class="ac-row-val">65.50 m²</span></div>
+                    <div class="ac-row"><span>Área Kids Exterior</span><span class="ac-row-val">96.00 m²</span></div>
+                    <div class="ac-row"><span>Área Invernadero Interior</span><span class="ac-row-val">65.00 m²</span></div>
+                    <div class="ac-row"><span>Área Invernadero exterior techado</span><span class="ac-row-val">45.00 m²</span></div>
+                    <div class="ac-row"><span>Área Farm interior</span><span class="ac-row-val">36.00 m²</span></div>
+                    <div class="ac-row"><span>Área Farm depósito</span><span class="ac-row-val">7.50 m²</span></div>
+                    <div class="ac-row"><span>Área Farm corral</span><span class="ac-row-val">42.00 m²</span></div>
+                </div>
+            </div>
+        </li>
+
+        <!-- Workshop -->
+        <li class="ac-item">
+            <button class="ac-header" aria-expanded="false">
+                <div class="ac-accent" style="background:#f4d4a4;"></div>
+                <div class="ac-header-inner">
+                    <div class="ac-left">
+                        <span class="ac-name">Workshop · Cowork</span>
+                    </div>
+                    <div class="ac-right">
+                        <span class="ac-pct">23.5 %</span>
+                        <span class="ac-ext">78 m² ext.</span>
+                        <span class="ac-badge"><span class="cnt" data-to="178">0</span><sup>m²</sup></span>
+                        <span class="ac-chevron"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+                    </div>
+                </div>
+            </button>
+            <div class="ac-panel">
+                <div class="ac-rows">
+                    <div class="ac-row"><span>Área Workshop interior</span><span class="ac-row-val">76.50 m²</span></div>
+                    <div class="ac-row"><span>Área Exterior techada</span><span class="ac-row-val">78.00 m²</span></div>
+                    <div class="ac-row"><span>Área SSHH Workshop</span><span class="ac-row-val">4.00 m²</span></div>
+                    <div class="ac-row"><span>Área Workshop depósito</span><span class="ac-row-val">24.00 m²</span></div>
+                    <div class="ac-row"><span>Área Cowork</span><span class="ac-row-val">63.00 m²</span></div>
+                    <div class="ac-row"><span>Área SSHH Cowork</span><span class="ac-row-val">4.00 m²</span></div>
+                    <div class="ac-row"><span>Área Cowork depósito</span><span class="ac-row-val">6.00 m²</span></div>
+                </div>
+            </div>
+        </li>
+
+        <!-- Galería -->
+        <li class="ac-item">
+            <button class="ac-header" aria-expanded="false">
+                <div class="ac-accent" style="background:#d4a4f4;"></div>
+                <div class="ac-header-inner">
+                    <div class="ac-left">
+                        <span class="ac-name">Galería</span>
+                    </div>
+                    <div class="ac-right">
+                        <span class="ac-pct">—</span>
+                        <span class="ac-ext">322 m² ext.</span>
+                        <span class="ac-badge"><span class="cnt" data-to="322">0</span><sup>m²</sup></span>
+                        <span class="ac-chevron"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+                    </div>
+                </div>
+            </button>
+            <div class="ac-panel">
+                <div class="ac-rows">
+                    <div class="ac-row"><span>Área exterior techada</span><span class="ac-row-val">322.00 m²</span></div>
+                </div>
+            </div>
+        </li>
+
+    </ul>
+
+    <div class="areas-total">
+        <div>
+            <div class="areas-total-lbl">Total área construida</div>
+            <div class="areas-total-num"><span class="cnt" data-to="754">0</span><sup>m²</sup></div>
+        </div>
+        <div class="areas-total-right">
+            <div class="areas-total-lbl">Total exterior</div>
+            <div class="areas-total-num"><span class="cnt" data-to="848">0</span> m²</div>
         </div>
     </div>
+    <p class="areas-total-note">Las áreas serán ajustadas durante el desarrollo del anteproyecto arquitectónico avanzado.</p>
 </section>
 
 <!-- ─── CIERRE ────────────────────────────────────── -->
@@ -1568,9 +1753,13 @@ gsap.from(".areas-h h2", {
     y: "108%", duration: 1.05, ease: "expo.out",
     scrollTrigger: { trigger: ".areas-h", start: "top 86%", toggleActions: "play none none reverse" }
 });
-gsap.from(".area-card", {
-    y: 55, autoAlpha: 0, stagger: 0.1, duration: 0.9, ease: "power3.out",
-    scrollTrigger: { trigger: ".areas-grid", start: "top 82%", toggleActions: "play none none reverse" }
+gsap.from(".ac-item", {
+    y: 30, autoAlpha: 0, stagger: 0.08, duration: 0.8, ease: "power3.out",
+    scrollTrigger: { trigger: ".ac-list", start: "top 82%", toggleActions: "play none none reverse" }
+});
+gsap.from(".areas-total", {
+    y: 24, autoAlpha: 0, duration: 0.9, ease: "power3.out",
+    scrollTrigger: { trigger: ".areas-total", start: "top 88%", toggleActions: "play none none reverse" }
 });
 document.querySelectorAll(".cnt").forEach(el => {
     const to = parseInt(el.dataset.to);
@@ -1643,6 +1832,22 @@ document.addEventListener("keydown", e => {
     if (e.key === "Escape")      closeLb();
     if (e.key === "ArrowLeft")   openLb(lbIdx - 1);
     if (e.key === "ArrowRight")  openLb(lbIdx + 1);
+});
+
+/* ── ÁREAS ACCORDION ─────────────────────────────── */
+document.querySelectorAll('.ac-item').forEach(function(item) {
+    var btn = item.querySelector('.ac-header');
+    btn.addEventListener('click', function() {
+        var isOpen = item.classList.contains('open');
+        document.querySelectorAll('.ac-item.open').forEach(function(other) {
+            other.classList.remove('open');
+            other.querySelector('.ac-header').setAttribute('aria-expanded', 'false');
+        });
+        if (!isOpen) {
+            item.classList.add('open');
+            btn.setAttribute('aria-expanded', 'true');
+        }
+    });
 });
 
 /* ── HAMBURGER MENU ───────────────────────────────── */
