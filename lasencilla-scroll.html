@@ -780,6 +780,36 @@
     </div>
 </div>
 
+<!-- ─── PLANTA 2 TRANSITION VIDEO ────────────────── -->
+<div class="sv-wrap" id="sv-planta2">
+    <img class="sv-img" id="svimg-planta2-first" src="videos/lasencilla/planta2-transition-frame1.png" alt="Proyecto inicio">
+    <video class="sv-video" id="svvid-planta2" muted playsinline preload="auto">
+        <source src="videos/lasencilla/planta2-transition.mp4" type="video/mp4">
+    </video>
+    <img class="sv-img" id="svimg-planta2-last" src="videos/lasencilla/planta2-transition-framelast.png" alt="Proyecto fin" style="opacity:0;">
+    <div class="sv-overlay"></div>
+    <div class="sv-hud">
+        <div class="s-lbl">04 · Proyecto</div>
+    </div>
+    <div class="sv-progress"><div class="sv-progress-bar" id="svbar-planta2"></div></div>
+</div>
+
+<!-- ─── PROYECTO WIPE — imágenes barrido ─────────── -->
+<div class="s-sitio-wipe" id="s-proyecto-wipe">
+    <div class="sw-frame"><img src="img/lasencilla/proyecto-ref1.png" alt="Proyecto 01"/></div>
+    <div class="sw-frame"><img src="img/lasencilla/proyecto-ref2.png" alt="Proyecto 02"/></div>
+    <div class="sw-frame"><img src="img/lasencilla/proyecto-ref3.png" alt="Proyecto 03"/></div>
+    <div class="sw-frame"><img src="img/lasencilla/proyecto-ref4.png" alt="Proyecto 04"/></div>
+    <div class="sw-frame"><img src="img/lasencilla/proyecto-ref5.png" alt="Proyecto 05"/></div>
+    <div class="sw-frame"><img src="img/lasencilla/proyecto-ref6.png" alt="Proyecto 06"/></div>
+    <div class="sw-overlay"></div>
+    <div class="sw-hud">
+        <div class="s-lbl">04 · Proyecto</div>
+        <div class="sw-dots" id="swp-dots"></div>
+        <div class="sw-ctr" id="swp-ctr">01 — 06</div>
+    </div>
+</div>
+
 <!-- ─── CARÁTULA IMÁGENES PROYECTO ─────────────── -->
 <div class="s-caratula" id="sc-imagenes">
     <div class="sc-inner">
@@ -1155,6 +1185,44 @@ setupVideoScrub({ wrapperId:'sv-planta',    videoId:'svvid-planta',    firstImgI
     });
 })();
 
+setupVideoScrub({ wrapperId:'sv-planta2',   videoId:'svvid-planta2',   firstImgId:'svimg-planta2-first',   lastImgId:'svimg-planta2-last',   barId:'svbar-planta2',   scrollEnd:'+=280%' });
+
+/* PROYECTO WIPE */
+(function () {
+    var swFrames = Array.from(document.querySelectorAll('#s-proyecto-wipe .sw-frame'));
+    var N_SW     = swFrames.length;
+    var swDotsEl = document.getElementById('swp-dots');
+    var swCtrEl  = document.getElementById('swp-ctr');
+    var swDotEls = swFrames.map(function(_, i) {
+        var d = document.createElement('div');
+        d.className = 'sw-dot' + (i === 0 ? ' on' : '');
+        swDotsEl.appendChild(d);
+        return d;
+    });
+    swFrames.forEach(function(f, i) {
+        f.style.clipPath = i === 0 ? 'inset(0 0% 0 0)' : 'inset(0 100% 0 0)';
+    });
+    ScrollTrigger.create({
+        trigger: '#s-proyecto-wipe',
+        pin: true, anticipatePin: 1,
+        start: 'top top', end: '+=650%',
+        scrub: 0.85, invalidateOnRefresh: true,
+        onUpdate: function(self) {
+            var p = self.progress, playEnd = 0.80;
+            var wp = Math.min(p / playEnd, 1.0);
+            var segSize = 1 / (N_SW - 1);
+            swFrames.forEach(function(f, i) {
+                if (i === 0) { f.style.clipPath = 'inset(0 0% 0 0)'; return; }
+                var sp = Math.max(0, Math.min(1, (wp - (i - 1) * segSize) / segSize));
+                f.style.clipPath = 'inset(0 ' + ((1 - sp) * 100).toFixed(2) + '% 0 0)';
+            });
+            var activeIdx = Math.min(Math.round(wp * (N_SW - 1)), N_SW - 1);
+            swDotEls.forEach(function(d, i) { d.classList.toggle('on', i === activeIdx); });
+            swCtrEl.textContent = (String(activeIdx + 1).padStart(2, '0')) + ' — ' + (String(N_SW).padStart(2, '0'));
+        }
+    });
+})();
+
 /* ── CARÁTULAS ────────────────────────────────────── */
 document.querySelectorAll('.s-caratula').forEach(function(el) {
     ScrollTrigger.create({
@@ -1181,6 +1249,8 @@ const navSec = document.getElementById("gp-sec");
     ["#sv-planta",       "Masterplan"],
     ["#s-masterplan-wipe","Masterplan"],
     ["#sc-proyecto",     "Proyecto"],
+    ["#sv-planta2",      "Proyecto"],
+    ["#s-proyecto-wipe", "Proyecto"],
     ["#sc-imagenes",     "Imágenes Proyecto"],
     ["#s-renders-stick", "Imágenes Proyecto"],
     ["#s-modelo",        "Maqueta Digital"],
