@@ -230,6 +230,15 @@
         .sw-frame img {
             width: 100%; height: 100%; object-fit: cover; object-position: center 18%;
         }
+        #s-proyecto-wipe { background: #fff; }
+        #s-proyecto-wipe .sw-frame img {
+            object-fit: contain; object-position: center center; background: #fff;
+        }
+        #s-proyecto-wipe .sw-overlay { display: none; }
+        #s-proyecto-wipe .sw-hud .s-lbl { color: rgba(0,0,0,0.45); }
+        #s-proyecto-wipe .sw-dot { background: rgba(0,0,0,0.18); }
+        #s-proyecto-wipe .sw-dot.on { background: #111; }
+        #s-proyecto-wipe .sw-ctr { color: rgba(0,0,0,0.45); }
         .sw-overlay {
             position: absolute; inset: 0; z-index: 1; pointer-events: none;
             background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 40%),
