@@ -354,6 +354,24 @@
         }
         .mp-detail-close:hover { background: rgba(0,0,0,0.75); border-color: #fff; }
 
+        /* ── DETAIL LOCATION LABEL ────────────────────────────────── */
+        .mp-detail-location {
+            position: absolute;
+            bottom: 32px;
+            left: 36px;
+            z-index: 4;
+            pointer-events: none;
+        }
+        .mp-detail-location-name {
+            font-size: clamp(1.6rem, 4vw, 3.2rem);
+            font-weight: 200;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.75);
+            line-height: 1.15;
+            max-width: 52vw;
+        }
+
         /* ── GOMEZ PLATERO header ─────────────────────────────────── */
         .mp-brand {
             position: absolute;
@@ -574,6 +592,7 @@
         <!-- w7: franja vertical fina — intro video → still → play button → animate -->
         <div class="mp-zone" data-hover="mp-h7"
              data-label="Reserva de Mar — Country Marítimo"
+             data-detail-label="Bulevar Principal"
              data-intro-video="img/masterplanes/detail/zoom_in_smooth_202604242001.mp4"
              data-click-img="img/masterplanes/detail/Gemini_Generated_Image_cl1lvbcl1lvbcl1l.jpg"
              data-click-video="img/masterplanes/detail/Animate_slow_zoom_202604231030.mp4"
@@ -617,6 +636,10 @@
         <video class="mp-detail-video" id="mp-detail-video"
                src="img/masterplanes/detail/Animate_slow_zoom_202604231030.mp4"
                playsinline preload="none"></video>
+
+        <div class="mp-detail-location">
+            <span class="mp-detail-location-name" id="mp-detail-location-name"></span>
+        </div>
 
         <button class="mp-detail-close" id="mp-detail-close">&#10005;</button>
     </div>
@@ -828,10 +851,11 @@ arrowLeft.addEventListener("click", () => {
 /* ── Zone hover + click ──────────────────────────────────────── */
 let activeHover = null;
 
-const detailEl    = document.getElementById("mp-detail");
-const detailImg   = document.getElementById("mp-detail-img");
-const detailClose = document.getElementById("mp-detail-close");
-const detailVideo = document.getElementById("mp-detail-video");
+const detailEl        = document.getElementById("mp-detail");
+const detailImg       = document.getElementById("mp-detail-img");
+const detailClose     = document.getElementById("mp-detail-close");
+const detailVideo     = document.getElementById("mp-detail-video");
+const detailLocName   = document.getElementById("mp-detail-location-name");
 const playBtn     = document.getElementById("mp-play-btn");
 
 // pendingStill / pendingPlayVideo hold the next still/video for after intro ends
@@ -888,10 +912,11 @@ detailEl.addEventListener("click", e => { if (e.target === detailEl || e.target 
 document.addEventListener("keydown", e => { if (e.key === "Escape") closeDetail(); });
 
 document.querySelectorAll(".mp-zone").forEach(zone => {
-    const imgEl      = document.getElementById(zone.dataset.hover);
-    const introVideo = zone.dataset.introVideo;  // plays immediately, no zoom
-    const clickImg   = zone.dataset.clickImg;    // still shown after intro / with play btn
-    const clickVideo = zone.dataset.clickVideo;  // plays when user hits play btn
+    const imgEl       = document.getElementById(zone.dataset.hover);
+    const introVideo  = zone.dataset.introVideo;
+    const clickImg    = zone.dataset.clickImg;
+    const clickVideo  = zone.dataset.clickVideo;
+    const detailLabel = zone.dataset.detailLabel || "";
     if (!imgEl) return;
 
     zone.addEventListener("mouseenter", () => {
@@ -907,9 +932,9 @@ document.querySelectorAll(".mp-zone").forEach(zone => {
     });
 
     zone.addEventListener("click", e => {
+        detailLocName.textContent = detailLabel;
+
         if (introVideo) {
-            // Intro-video flow: open overlay instantly, play intro video,
-            // then reveal still + play button when done
             pendingStill     = clickImg   || "";
             pendingPlayVideo = clickVideo || "";
             detailImg.src    = "";
@@ -922,7 +947,6 @@ document.querySelectorAll(".mp-zone").forEach(zone => {
             detailVideo.play();
 
         } else if (clickImg) {
-            // Zoom-then-still flow: CSS zoom transform → show still + optional play btn
             pendingStill     = "";
             pendingPlayVideo = clickVideo || "";
             scene.style.transformOrigin = `${e.clientX}px ${e.clientY}px`;
