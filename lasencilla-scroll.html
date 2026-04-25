@@ -26,6 +26,69 @@
         .gp-logo span { display: block; font-size: 0.38rem; font-weight: 300; letter-spacing: 0.24em; text-transform: uppercase; opacity: 0.38; margin-top: 3px; }
         .gp-nav-sec { font-size: 0.54rem; letter-spacing: 0.24em; text-transform: uppercase; opacity: 0.38; }
 
+        /* ── HAMBURGER ───────────────────────────────── */
+        .gp-burger {
+            display: flex; flex-direction: column; justify-content: center; gap: 5px;
+            width: 36px; height: 36px; cursor: pointer; padding: 4px;
+            background: none; border: none; flex-shrink: 0;
+        }
+        .gp-burger span {
+            display: block; height: 1.5px; background: rgba(255,255,255,0.85);
+            transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), opacity 0.3s ease, width 0.4s ease;
+            transform-origin: center;
+        }
+        .gp-burger span:nth-child(3) { width: 60%; }
+        .gp-burger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+        .gp-burger.open span:nth-child(2) { opacity: 0; }
+        .gp-burger.open span:nth-child(3) { width: 100%; transform: translateY(-6.5px) rotate(-45deg); }
+
+        /* ── MENU PANEL ──────────────────────────────── */
+        .gp-menu {
+            position: fixed; top: 52px; left: 0; right: 0; bottom: 0;
+            z-index: 499;
+            background: rgba(6,6,6,0.97);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            display: flex; flex-direction: column; justify-content: center;
+            padding: 0 8vw;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.45s cubic-bezier(0.16,1,0.3,1);
+        }
+        .gp-menu.open { opacity: 1; pointer-events: all; }
+        .gp-menu-list { list-style: none; margin: 0; padding: 0; }
+        .gp-menu-item {
+            overflow: hidden;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+        }
+        .gp-menu-item:first-child { border-top: 1px solid rgba(255,255,255,0.07); }
+        .gp-menu-link {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 22px 0;
+            font-size: clamp(1.6rem, 4vw, 3rem);
+            font-weight: 200; letter-spacing: 0.04em;
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            transform: translateY(30px);
+            opacity: 0;
+            transition: transform 0.6s cubic-bezier(0.16,1,0.3,1), opacity 0.6s ease, color 0.25s ease;
+        }
+        .gp-menu-link:hover { color: #fff; }
+        .gp-menu-link .gp-menu-num {
+            font-size: 0.48rem; letter-spacing: 0.28em;
+            color: rgba(255,255,255,0.25); align-self: flex-end; padding-bottom: 8px;
+        }
+        .gp-menu.open .gp-menu-link {
+            transform: translateY(0); opacity: 1;
+        }
+        .gp-menu.open .gp-menu-item:nth-child(1) .gp-menu-link { transition-delay: 0.05s; }
+        .gp-menu.open .gp-menu-item:nth-child(2) .gp-menu-link { transition-delay: 0.10s; }
+        .gp-menu.open .gp-menu-item:nth-child(3) .gp-menu-link { transition-delay: 0.15s; }
+        .gp-menu.open .gp-menu-item:nth-child(4) .gp-menu-link { transition-delay: 0.20s; }
+        .gp-menu.open .gp-menu-item:nth-child(5) .gp-menu-link { transition-delay: 0.25s; }
+        .gp-menu.open .gp-menu-item:nth-child(6) .gp-menu-link { transition-delay: 0.30s; }
+        .gp-menu.open .gp-menu-item:nth-child(7) .gp-menu-link { transition-delay: 0.35s; }
+        .gp-menu.open .gp-menu-item:nth-child(8) .gp-menu-link { transition-delay: 0.40s; }
+
         /* ── SECTION LABEL ───────────────────────────── */
         .s-lbl {
             display: flex; align-items: center; gap: 14px;
@@ -661,7 +724,23 @@
 <nav class="gp-nav" id="gp-nav">
     <div class="gp-logo">GómezPlatero<span>Arquitectura &amp; Urbanismo</span></div>
     <div class="gp-nav-sec" id="gp-sec"></div>
+    <button class="gp-burger" id="gp-burger" aria-label="Menú">
+        <span></span><span></span><span></span>
+    </button>
 </nav>
+
+<div class="gp-menu" id="gp-menu">
+    <ul class="gp-menu-list">
+        <li class="gp-menu-item"><a class="gp-menu-link" href="#s-hero">La Sencilla <span class="gp-menu-num">00</span></a></li>
+        <li class="gp-menu-item"><a class="gp-menu-link" href="#sc-ubicacion">Ubicación <span class="gp-menu-num">01</span></a></li>
+        <li class="gp-menu-item"><a class="gp-menu-link" href="#sc-sitio">Sitio <span class="gp-menu-num">02</span></a></li>
+        <li class="gp-menu-item"><a class="gp-menu-link" href="#sc-masterplan">Masterplan <span class="gp-menu-num">03</span></a></li>
+        <li class="gp-menu-item"><a class="gp-menu-link" href="#sc-proyecto">Proyecto y Referencias <span class="gp-menu-num">04</span></a></li>
+        <li class="gp-menu-item"><a class="gp-menu-link" href="#sc-imagenes">Imágenes Proyecto <span class="gp-menu-num">05</span></a></li>
+        <li class="gp-menu-item"><a class="gp-menu-link" href="#s-modelo">Maqueta Digital <span class="gp-menu-num">06</span></a></li>
+        <li class="gp-menu-item"><a class="gp-menu-link" href="#s-areas">Resumen de Áreas <span class="gp-menu-num">07</span></a></li>
+    </ul>
+</div>
 
 <!-- ─── HERO ──────────────────────────────────────── -->
 <section class="s-hero" id="s-hero">
@@ -1565,6 +1644,46 @@ document.addEventListener("keydown", e => {
     if (e.key === "ArrowLeft")   openLb(lbIdx - 1);
     if (e.key === "ArrowRight")  openLb(lbIdx + 1);
 });
+
+/* ── HAMBURGER MENU ───────────────────────────────── */
+(function () {
+    var burger = document.getElementById('gp-burger');
+    var menu   = document.getElementById('gp-menu');
+    var links  = menu.querySelectorAll('.gp-menu-link');
+
+    function openMenu() {
+        burger.classList.add('open');
+        menu.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeMenu() {
+        burger.classList.remove('open');
+        menu.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+    function toggleMenu() {
+        menu.classList.contains('open') ? closeMenu() : openMenu();
+    }
+
+    burger.addEventListener('click', toggleMenu);
+
+    links.forEach(function(link) {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            var target = document.querySelector(link.getAttribute('href'));
+            closeMenu();
+            if (!target) return;
+            setTimeout(function() {
+                var y = target.getBoundingClientRect().top + window.scrollY - 52;
+                window.scrollTo({ top: y, behavior: 'smooth' });
+            }, 300);
+        });
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && menu.classList.contains('open')) closeMenu();
+    });
+})();
 </script>
 
 <!-- ─── THREE.JS IMPORTMAP ────────────────────────── -->
