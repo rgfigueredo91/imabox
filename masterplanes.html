@@ -448,8 +448,26 @@
         }
         .mp-terreno.on { opacity: 1; }
 
-        /* Hide right arrow when on terreno tab */
-        .mp-scene.is-terreno .mp-arrow-right { opacity: 0 !important; pointer-events: none !important; }
+        /* Hide right arrow when on terreno or nocturna tab */
+        .mp-scene.is-terreno  .mp-arrow-right { opacity: 0 !important; pointer-events: none !important; }
+        .mp-scene.is-nocturna .mp-arrow-right { opacity: 0 !important; pointer-events: none !important; }
+        .mp-scene.is-nocturna .mp-hotspot     { opacity: 0; }
+
+        /* Nocturna image layer — same stack as terreno (z6) */
+        .mp-nocturna {
+            position: absolute;
+            inset: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            object-position: center;
+            z-index: 6;
+            opacity: 0;
+            transition: opacity 0.7s ease;
+            pointer-events: none;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+        .mp-nocturna.on { opacity: 1; }
 
         /* ── LOCATION LABEL ───────────────────────────────────────── */
         .mp-location {
@@ -548,6 +566,9 @@
 
     <!-- Terreno image layer -->
     <img class="mp-terreno" id="mp-terreno" src="img/masterplanes/terreno.jpg" alt="" draggable="false" />
+
+    <!-- Nocturna image layer -->
+    <img class="mp-nocturna" id="mp-nocturna" src="img/masterplanes/noche.jpg" alt="" draggable="false" />
 
     <!-- Video layer -->
     <video class="mp-video" id="mp-video"
@@ -654,10 +675,11 @@
         <div class="mp-brand-line"></div>
     </div>
 
-    <!-- Proyecto / Terreno tabs -->
+    <!-- Proyecto / Terreno / Nocturna tabs -->
     <div class="mp-tabs">
         <button class="mp-tab active" id="mp-tab-proyecto">Proyecto</button>
         <button class="mp-tab"        id="mp-tab-terreno">Terreno</button>
+        <button class="mp-tab"        id="mp-tab-nocturna">Nocturna</button>
     </div>
 
     <!-- Location label -->
@@ -692,9 +714,11 @@ const btnEnter   = document.getElementById("mp-btn-enter");
 const btnIniciar = document.getElementById("mp-btn-iniciar");
 const arrowRight = document.getElementById("mp-arrow-right");
 const arrowLeft  = document.getElementById("mp-arrow-left");
-const terrenoImg = document.getElementById("mp-terreno");
-const tabProyecto= document.getElementById("mp-tab-proyecto");
-const tabTerreno = document.getElementById("mp-tab-terreno");
+const terrenoImg  = document.getElementById("mp-terreno");
+const nocturnaImg = document.getElementById("mp-nocturna");
+const tabProyecto = document.getElementById("mp-tab-proyecto");
+const tabTerreno  = document.getElementById("mp-tab-terreno");
+const tabNocturna = document.getElementById("mp-tab-nocturna");
 const locationEl = document.getElementById("mp-location-name");
 
 const DEFAULT_LABEL = "Reserva de Mar — Country Marítimo";
@@ -714,27 +738,44 @@ function setLocationLabel(label) {
     }, 60); // small delay cancels flicker between adjacent zones
 }
 
-/* ── Proyecto / Terreno tabs ─────────────────────────────────────── */
+/* ── Proyecto / Terreno / Nocturna tabs ──────────────────────────── */
 tabProyecto.addEventListener("click", () => {
     tabProyecto.classList.add("active");
     tabTerreno.classList.remove("active");
+    tabNocturna.classList.remove("active");
     terrenoImg.classList.remove("on");
-    scene.classList.remove("is-terreno");
+    nocturnaImg.classList.remove("on");
+    scene.classList.remove("is-terreno", "is-nocturna");
 });
 
 tabTerreno.addEventListener("click", () => {
     tabTerreno.classList.add("active");
     tabProyecto.classList.remove("active");
+    tabNocturna.classList.remove("active");
     terrenoImg.classList.add("on");
+    nocturnaImg.classList.remove("on");
     scene.classList.add("is-terreno");
+    scene.classList.remove("is-nocturna");
+});
+
+tabNocturna.addEventListener("click", () => {
+    tabNocturna.classList.add("active");
+    tabProyecto.classList.remove("active");
+    tabTerreno.classList.remove("active");
+    nocturnaImg.classList.add("on");
+    terrenoImg.classList.remove("on");
+    scene.classList.add("is-nocturna");
+    scene.classList.remove("is-terreno");
 });
 
 /* Reset tabs when leaving is-done1 state */
 function resetTabs() {
     tabProyecto.classList.add("active");
     tabTerreno.classList.remove("active");
+    tabNocturna.classList.remove("active");
     terrenoImg.classList.remove("on");
-    scene.classList.remove("is-terreno");
+    nocturnaImg.classList.remove("on");
+    scene.classList.remove("is-terreno", "is-nocturna");
 }
 
 /* Show bridge instantly (no transition) to match current view */
