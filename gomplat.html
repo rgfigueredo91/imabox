@@ -1041,7 +1041,9 @@ canvas.addEventListener('click', e => {
     mouse2D.y = -((e.clientY - rect.top)  / rect.height) * 2 + 1;
     raycaster.setFromCamera(mouse2D, camera);
     const meshes = [];
-    scene.traverse(c => { if (c.isMesh && c.visible) meshes.push(c); });
+    [terrainGroup, blancoGroup, curvasGroup].forEach(g => {
+        if (g) g.traverse(c => { if (c.isMesh && c.visible) meshes.push(c); });
+    });
     const hits = raycaster.intersectObjects(meshes, false);
     if (!hits.length) return;
     if (measurePts.length >= 2) resetMeasure();
@@ -1081,7 +1083,9 @@ function getTerrainHit(e) {
     mouse2D.y = -((e.clientY - rect.top)  / rect.height) * 2 + 1;
     raycaster.setFromCamera(mouse2D, camera);
     const meshes = [];
-    scene.traverse(c => { if (c.isMesh && c.visible) meshes.push(c); });
+    [terrainGroup, blancoGroup, curvasGroup].forEach(g => {
+        if (g) g.traverse(c => { if (c.isMesh && c.visible) meshes.push(c); });
+    });
     const hits = raycaster.intersectObjects(meshes, false);
     return hits.length ? hits[0].point.clone() : null;
 }
@@ -1107,21 +1111,27 @@ function startDraw(e) {
     const pt = getTerrainHit(e);
     if (!pt) return;
     drawActive = true;
-    drawPts = [pt, pt.clone()];
-    drawCurrent = buildLine2(drawPts, drawColor, drawWidth);
-    scene.add(drawCurrent);
+    drawPts = [pt];
+    drawCurrent = null;
 }
 
 function continueDraw(e) {
     if (!drawActive || activeTool !== 'draw') return;
     const pt = getTerrainHit(e);
     if (!pt) return;
+    const last = drawPts[drawPts.length - 1];
+    if (last && pt.distanceTo(last) < terrainDim * 0.0008) return;
     drawPts.push(pt);
-    // rebuild geometry with new point
-    const positions = [];
-    drawPts.forEach(p => positions.push(p.x, p.y, p.z));
-    drawCurrent.geometry.setPositions(positions);
-    drawCurrent.computeLineDistances();
+    if (drawPts.length < 2) return;
+    const positions = new Float32Array(drawPts.length * 3);
+    drawPts.forEach((p, i) => { positions[i*3]=p.x; positions[i*3+1]=p.y; positions[i*3+2]=p.z; });
+    if (!drawCurrent) {
+        drawCurrent = buildLine2(drawPts, drawColor, drawWidth);
+        scene.add(drawCurrent);
+    } else {
+        drawCurrent.geometry.setPositions(positions);
+        drawCurrent.computeLineDistances();
+    }
 }
 
 function endDraw() {
