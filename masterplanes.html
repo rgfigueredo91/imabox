@@ -358,7 +358,8 @@
         .mp-detail-location {
             position: absolute;
             bottom: 32px;
-            left: 36px;
+            right: 36px;
+            text-align: right;
             z-index: 4;
             pointer-events: none;
         }
@@ -562,6 +563,26 @@
             transform: scale(1.06);
         }
 
+        /* Video thumb wrapper */
+        .mp-slider-item {
+            position: relative;
+            flex-shrink: 0;
+            width: 110px;
+            height: 72px;
+        }
+        .mp-slider-item .mp-slider-thumb {
+            width: 100%; height: 100%;
+        }
+        .mp-slider-item .mp-slider-play {
+            position: absolute;
+            inset: 0;
+            display: flex; align-items: center; justify-content: center;
+            pointer-events: none;
+        }
+        .mp-slider-item .mp-slider-play svg {
+            filter: drop-shadow(0 1px 4px rgba(0,0,0,0.7));
+        }
+
         /* ── SLIDER LIGHTBOX ───────────────────────────────────────── */
         .mp-lightbox {
             position: absolute;
@@ -721,12 +742,13 @@
              style="left:43.5%;top:19.5%;width:2.5%;height:14%">
             <div class="mp-hotspot" style="animation-delay:1.2s"></div>
         </div>
-        <!-- w8: curva pequeña — intro video invertido → still → play button → animate -->
+        <!-- w8: curva pequeña — intro video invertido → still → play button → animate + slider -->
         <div class="mp-zone" data-hover="mp-h8"
              data-label="Reserva de Mar — Country Marítimo"
              data-intro-video="img/masterplanes/detail/zoom_out_smooth_w8_rev.mp4"
              data-click-img="img/masterplanes/detail/w8_still.jpg"
              data-click-video="img/masterplanes/detail/animate_slow_zoom_202604251626.mp4"
+             data-slider="img/masterplanes/detail/w8/s1.png,img/masterplanes/detail/w8/s1.png|video:img/masterplanes/detail/w8/v1.mp4"
              style="left:44%;top:39%;width:5.5%;height:3.5%">
             <div class="mp-hotspot" style="animation-delay:1.5s"></div>
         </div>
@@ -764,9 +786,10 @@
         <!-- Image slider (per-zone) -->
         <div class="mp-slider" id="mp-slider"></div>
 
-        <!-- Lightbox for expanded slider image -->
+        <!-- Lightbox for expanded slider image / video -->
         <div class="mp-lightbox" id="mp-lightbox">
             <img class="mp-lightbox-img" id="mp-lightbox-img" src="" alt="" draggable="false" />
+            <video class="mp-lightbox-img" id="mp-lightbox-video" src="" playsinline controls style="display:none;background:#000;"></video>
             <button class="mp-lightbox-arrow prev" id="mp-lb-prev">&#8249;</button>
             <button class="mp-lightbox-arrow next" id="mp-lb-next">&#8250;</button>
             <button class="mp-lightbox-close" id="mp-lb-close">&#10005;</button>
@@ -1015,46 +1038,87 @@ const playBtn         = document.getElementById("mp-play-btn");
 const sliderEl        = document.getElementById("mp-slider");
 const lightboxEl      = document.getElementById("mp-lightbox");
 const lightboxImg     = document.getElementById("mp-lightbox-img");
+const lightboxVideo   = document.getElementById("mp-lightbox-video");
 const lbPrev          = document.getElementById("mp-lb-prev");
 const lbNext          = document.getElementById("mp-lb-next");
 const lbClose         = document.getElementById("mp-lb-close");
 
-let sliderImages = [];
+// Each item: { thumb, video } — video is null for plain images
+let sliderItems = [];
 let lightboxIndex = 0;
 
-function buildSlider(images) {
-    sliderImages = images;
+function buildSlider(rawList) {
+    sliderItems = rawList.map(entry => {
+        const parts = entry.split("|video:");
+        return { thumb: parts[0], video: parts[1] || null };
+    });
     sliderEl.innerHTML = "";
-    images.forEach((src, i) => {
+    sliderItems.forEach((item, i) => {
+        const wrap = document.createElement("div");
+        wrap.className = "mp-slider-item";
         const img = document.createElement("img");
         img.className = "mp-slider-thumb";
-        img.src = src;
+        img.src = item.thumb;
         img.draggable = false;
-        img.addEventListener("click", () => openLightbox(i));
-        sliderEl.appendChild(img);
+        wrap.appendChild(img);
+        if (item.video) {
+            const playIcon = document.createElement("div");
+            playIcon.className = "mp-slider-play";
+            playIcon.innerHTML = `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="13" fill="rgba(0,0,0,0.5)" stroke="rgba(255,255,255,0.8)" stroke-width="1.5"/><polygon points="11,8 22,14 11,20" fill="white"/></svg>`;
+            wrap.appendChild(playIcon);
+        }
+        wrap.addEventListener("click", () => openLightbox(i));
+        sliderEl.appendChild(wrap);
     });
+}
+
+function setLightboxItem(index) {
+    const item = sliderItems[index];
+    if (item.video) {
+        lightboxImg.style.display   = "none";
+        lightboxVideo.style.display = "";
+        lightboxVideo.src = item.video;
+        lightboxVideo.load();
+        lightboxVideo.play();
+        lbPrev.style.display = "none";
+        lbNext.style.display = "none";
+    } else {
+        lightboxVideo.pause();
+        lightboxVideo.src = "";
+        lightboxVideo.style.display = "none";
+        lightboxImg.style.display   = "";
+        lightboxImg.src = item.thumb;
+        lbPrev.style.display = sliderItems.length > 1 ? "" : "none";
+        lbNext.style.display = sliderItems.length > 1 ? "" : "none";
+    }
 }
 
 function openLightbox(index) {
     lightboxIndex = index;
-    lightboxImg.src = sliderImages[lightboxIndex];
+    setLightboxItem(lightboxIndex);
     lightboxEl.classList.add("on");
 }
 
 function lightboxStep(dir) {
-    lightboxIndex = (lightboxIndex + dir + sliderImages.length) % sliderImages.length;
-    lightboxImg.src = sliderImages[lightboxIndex];
+    lightboxIndex = (lightboxIndex + dir + sliderItems.length) % sliderItems.length;
+    setLightboxItem(lightboxIndex);
 }
 
-lbClose.addEventListener("click", () => lightboxEl.classList.remove("on"));
+function closeLightbox() {
+    lightboxVideo.pause();
+    lightboxVideo.src = "";
+    lightboxEl.classList.remove("on");
+}
+
+lbClose.addEventListener("click", closeLightbox);
 lbPrev.addEventListener("click",  () => lightboxStep(-1));
 lbNext.addEventListener("click",  () => lightboxStep(1));
-lightboxEl.addEventListener("click", e => { if (e.target === lightboxEl) lightboxEl.classList.remove("on"); });
+lightboxEl.addEventListener("click", e => { if (e.target === lightboxEl) closeLightbox(); });
 document.addEventListener("keydown", e => {
     if (!lightboxEl.classList.contains("on")) return;
     if (e.key === "ArrowLeft")  lightboxStep(-1);
     if (e.key === "ArrowRight") lightboxStep(1);
-    if (e.key === "Escape")     lightboxEl.classList.remove("on");
+    if (e.key === "Escape")     closeLightbox();
 });
 
 // pendingStill / pendingPlayVideo hold the next still/video for after intro ends
@@ -1077,10 +1141,10 @@ function showStillWithPlay(imgSrc, playVideoSrc) {
 
 function closeDetail() {
     resetVideo();
-    lightboxEl.classList.remove("on");
+    closeLightbox();
     sliderEl.classList.remove("on");
     sliderEl.innerHTML = "";
-    sliderImages = [];
+    sliderItems = [];
     detailEl.classList.remove("on");
     detailImg.style.opacity = "";
     playBtn.style.display   = "";
