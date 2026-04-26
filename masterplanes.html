@@ -657,7 +657,7 @@
 
 <!-- Loader -->
 <div class="mp-loader" id="mp-loader">
-    <span class="mp-loader-label">cargando</span>
+    <span class="mp-loader-label" id="mp-loader-label">cargando</span>
     <div class="mp-loader-track">
         <div class="mp-loader-bar" id="mp-loader-bar"></div>
     </div>
@@ -981,45 +981,89 @@ arrowLeft.addEventListener("click", () => {
 (function () {
     const loader = document.getElementById("mp-loader");
     const bar    = document.getElementById("mp-loader-bar");
+    const label  = document.getElementById("mp-loader-label");
 
-    const imgSrcs = [
-        "img/masterplanes/start.webp",
-        "img/masterplanes/end1.webp",
-        "img/masterplanes/end2.webp",
-        "img/masterplanes/hovers/w1.webp",
-        "img/masterplanes/hovers/w2.webp",
-        "img/masterplanes/hovers/w3.webp",
-        "img/masterplanes/hovers/w5.webp",
-        "img/masterplanes/hovers/w6.webp",
-        "img/masterplanes/hovers/w7.webp",
-        "img/masterplanes/hovers/w8.webp",
-        "img/masterplanes/hovers/w9.webp",
+    // url + exact byte size for weighted byte-accurate progress
+    const assets = [
+        // Main images
+        { url: "img/masterplanes/start.webp",      b: 656998 },
+        { url: "img/masterplanes/end1.webp",        b: 504598 },
+        { url: "img/masterplanes/end2.webp",        b: 544320 },
+        { url: "img/masterplanes/noche.webp",       b: 348186 },
+        { url: "img/masterplanes/terreno.webp",     b: 500890 },
+        // Hovers
+        { url: "img/masterplanes/hovers/w1.webp",   b:  27976 },
+        { url: "img/masterplanes/hovers/w3.webp",   b:  26126 },
+        { url: "img/masterplanes/hovers/w5.webp",   b:  28394 },
+        { url: "img/masterplanes/hovers/w6.webp",   b:  26224 },
+        { url: "img/masterplanes/hovers/w7.webp",   b:  26788 },
+        { url: "img/masterplanes/hovers/w8.webp",   b:  25860 },
+        // Detail stills
+        { url: "img/masterplanes/detail/Gemini_Generated_Image_dih2xedih2xedih2.webp", b: 1126904 },
+        { url: "img/masterplanes/detail/Gemini_Generated_Image_dxn5ubdxn5ubdxn5.webp", b:  835226 },
+        { url: "img/masterplanes/detail/Gemini_Generated_Image_b4wkzlb4wkzlb4wk.webp", b: 1276020 },
+        { url: "img/masterplanes/detail/Gemini_Generated_Image_cl1lvbcl1lvbcl1l.webp", b: 1020966 },
+        { url: "img/masterplanes/detail/w8_still.webp",                                 b:  659248 },
+        { url: "img/masterplanes/detail/omni-6f803821-a455-4c84-8c9d-99863e33c64f.webp",b: 2569416 },
+        // Slider images
+        { url: "img/masterplanes/detail/w1/s1.webp", b: 1152848 },
+        { url: "img/masterplanes/detail/w1/s2.webp", b: 1614332 },
+        { url: "img/masterplanes/detail/w1/s3.webp", b: 1697962 },
+        { url: "img/masterplanes/detail/w3/s1.webp", b:  668168 },
+        { url: "img/masterplanes/detail/w3/s2.webp", b:  835226 },
+        { url: "img/masterplanes/detail/w3/s3.webp", b:  875818 },
+        { url: "img/masterplanes/detail/w3/s4.webp", b: 1032760 },
+        { url: "img/masterplanes/detail/w5/s1.webp", b: 2545710 },
+        { url: "img/masterplanes/detail/w5/s2.webp", b: 3043820 },
+        { url: "img/masterplanes/detail/w6/s1.webp", b:  678624 },
+        { url: "img/masterplanes/detail/w7/s1.webp", b: 2380154 },
+        { url: "img/masterplanes/detail/w7/s2.webp", b: 2354634 },
+        { url: "img/masterplanes/detail/w8/s1.webp", b: 1226424 },
+        // Main navigation videos
+        { url: "videos/masterplanes/zoom.mp4",          b: 5731192 },
+        { url: "videos/masterplanes/izquierda.mp4",     b: 2408453 },
+        { url: "videos/masterplanes/izquierda-rev.mp4", b: 2178161 },
+        // Detail videos
+        { url: "img/masterplanes/detail/fast_cinematic_zoom_out.mp4",        b: 3961702 },
+        { url: "img/masterplanes/detail/animate_slow_zoom_202604222231.mp4",  b: 5519241 },
+        { url: "img/masterplanes/detail/animate_slow_zoom_202604222317.mp4",  b: 5351046 },
+        { url: "img/masterplanes/detail/animate_slow_zoom_202604232050.mp4",  b: 3554662 },
+        { url: "img/masterplanes/detail/animate_slow_zoom_202604232102.mp4",  b: 5570385 },
+        { url: "img/masterplanes/detail/animate_slow_zoom_202604251626.mp4",  b: 3350624 },
+        { url: "img/masterplanes/detail/Animate_slow_zoom_202604231030.mp4",  b: 4395132 },
+        { url: "img/masterplanes/detail/zoom_in_smooth_202604242001.mp4",     b: 3598973 },
+        { url: "img/masterplanes/detail/zoom_out_smooth_w8_rev.mp4",          b: 3612865 },
+        { url: "img/masterplanes/detail/w8/v1.mp4",                           b: 2657908 },
     ];
 
-    const total = imgSrcs.length + 1; // +1 for first video
-    let done = 0;
+    const totalBytes = assets.reduce((s, a) => s + a.b, 0);
+    let loadedBytes = 0;
 
-    function tick() {
-        done++;
-        bar.style.width = (done / total * 100) + "%";
+    function addBytes(n) {
+        loadedBytes = Math.min(loadedBytes + n, totalBytes);
+        const pct = Math.round(loadedBytes / totalBytes * 100);
+        bar.style.width = pct + "%";
+        label.textContent = pct + "%";
     }
 
-    const imgPromises = imgSrcs.map(src => new Promise(res => {
-        const i = new Image();
-        i.onload = i.onerror = () => { tick(); res(); };
-        i.src = src;
-    }));
+    async function fetchAsset({ url, b }) {
+        try {
+            const res = await fetch(url);
+            if (!res.ok || !res.body) { addBytes(b); return; }
+            const reader = res.body.getReader();
+            for (;;) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                addBytes(value.length);
+            }
+        } catch {
+            addBytes(b);
+        }
+    }
 
-    const videoReady = new Promise(res => {
-        let settled = false;
-        function once() { if (settled) return; settled = true; tick(); res(); }
-        video.addEventListener("canplay", once, { once: true });
-        video.addEventListener("error",   once, { once: true });
-        setTimeout(once, 12000);
-    });
-
-    Promise.all([...imgPromises, videoReady]).then(() => {
+    Promise.all(assets.map(fetchAsset)).then(() => {
         bar.style.width = "100%";
+        label.textContent = "100%";
         setTimeout(() => {
             loader.classList.add("done");
             setTimeout(() => loader.remove(), 950);
