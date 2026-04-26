@@ -348,6 +348,10 @@
             <span class="gp-layer-label" id="curvas-label">Curvas de nivel</span>
             <div class="gp-toggle"></div>
         </div>
+        <div class="gp-layer active" id="layer-contexto" style="margin-top:10px">
+            <span class="gp-layer-label">Contexto mundial</span>
+            <div class="gp-toggle"></div>
+        </div>
     </div>
 
     <div class="gp-section">
@@ -598,9 +602,9 @@ function fitCamera(size) {
     controls.target.set(0, 0, 0);
     camera.position.set(dim * 0.5, dim * 0.55, dim * 0.75);
     camera.near = dim * 0.001;
-    camera.far  = dim * 10;
+    camera.far  = Math.max(dim * 10, 100000);
     camera.updateProjectionMatrix();
-    controls.maxDistance = dim * 5;
+    controls.maxDistance = Math.max(dim * 5, 40000);
 
     sun.shadow.camera.left = sun.shadow.camera.bottom = -dim * 1.1;
     sun.shadow.camera.right = sun.shadow.camera.top   =  dim * 1.1;
@@ -683,6 +687,112 @@ function applyMode(mode) {
     });
 }
 
+/* ── WORLD CONTEXT TERRAIN ───────────────────────────────────────── */
+const CTX = { lat: -34.852569, lon: -54.749697, zoom: 14, half: 3 };
+const R_EARTH = 6378137;
+
+function lonToTx(lon, z) { return Math.floor((lon + 180) / 360 * (1 << z)); }
+function latToTy(lat, z) {
+    const r = lat * Math.PI / 180;
+    return Math.floor((1 - Math.log(Math.tan(r) + 1/Math.cos(r)) / Math.PI) / 2 * (1 << z));
+}
+function txToLon(tx, z) { return tx / (1 << z) * 360 - 180; }
+function tyToLat(ty, z) { return Math.atan(Math.sinh(Math.PI*(1 - 2*ty/(1<<z)))) * 180/Math.PI; }
+
+function geoToXZ(lat, lon) {
+    const cosLat = Math.cos(CTX.lat * Math.PI / 180);
+    return { x: (lon-CTX.lon)*Math.PI/180*R_EARTH*cosLat, z: -(lat-CTX.lat)*Math.PI/180*R_EARTH };
+}
+
+async function loadCrossImg(url) {
+    return new Promise(res => {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload  = () => res(img);
+        img.onerror = () => res(null);
+        img.src = url;
+    });
+}
+
+function terrariumHeights(img, seg) {
+    if (!img) return null;
+    const cv = document.createElement('canvas'); cv.width = cv.height = 256;
+    const c2 = cv.getContext('2d'); c2.drawImage(img, 0, 0);
+    const d = c2.getImageData(0,0,256,256).data;
+    const n = seg+1; const h = new Float32Array(n*n);
+    for (let iy=0; iy<n; iy++) for (let ix=0; ix<n; ix++) {
+        const sx=Math.min(Math.round(ix/seg*255),255), sy=Math.min(Math.round(iy/seg*255),255);
+        const i=(sy*256+sx)*4;
+        h[iy*n+ix] = d[i]*256 + d[i+1] + d[i+2]/256 - 32768;
+    }
+    return h;
+}
+
+function buildTileMesh(sw, sh, seg, heights, satImg) {
+    const n=seg+1, verts=new Float32Array(n*n*3), uvs=new Float32Array(n*n*2), idx=[];
+    for (let iy=0; iy<n; iy++) for (let ix=0; ix<n; ix++) {
+        const i=iy*n+ix, u=ix/seg, v=iy/seg;
+        verts[i*3]=(u-.5)*sw; verts[i*3+1]=heights?heights[i]:0; verts[i*3+2]=(v-.5)*sh;
+        uvs[i*2]=u; uvs[i*2+1]=1-v;
+    }
+    for (let iy=0; iy<seg; iy++) for (let ix=0; ix<seg; ix++) {
+        const a=iy*n+ix,b=a+1,c=a+n,d=c+1; idx.push(a,d,b,a,c,d);
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(verts,3));
+    geo.setAttribute('uv',       new THREE.BufferAttribute(uvs,2));
+    geo.setIndex(idx); geo.computeVertexNormals();
+    let mat;
+    if (satImg) {
+        const tex = new THREE.Texture(satImg);
+        tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+        tex.needsUpdate = true;
+        mat = new THREE.MeshLambertMaterial({ map: tex });
+    } else {
+        mat = new THREE.MeshLambertMaterial({ color: 0x1a3320 });
+    }
+    const mesh = new THREE.Mesh(geo, mat); mesh.receiveShadow = true;
+    return mesh;
+}
+
+const contextGroup  = new THREE.Group();
+scene.add(contextGroup);
+let contextOn       = true;
+let contextBuilt    = false;
+let terrainYOffset  = 0;
+let terrainDim      = 1000;
+
+async function buildContextTerrain() {
+    if (contextBuilt) return; contextBuilt = true;
+    const cx=lonToTx(CTX.lon,CTX.zoom), cy=latToTy(CTX.lat,CTX.zoom);
+    const SEG=128, cosLat=Math.cos(CTX.lat*Math.PI/180);
+    let centerElev = null;
+    const ps=[];
+    for (let dy=-CTX.half; dy<=CTX.half; dy++) {
+        for (let dx=-CTX.half; dx<=CTX.half; dx++) {
+            const tx=cx+dx, ty=cy+dy;
+            const lon0=txToLon(tx,CTX.zoom),  lon1=txToLon(tx+1,CTX.zoom);
+            const lat0=tyToLat(ty,CTX.zoom),  lat1=tyToLat(ty+1,CTX.zoom);
+            const cPos=geoToXZ((lat0+lat1)/2,(lon0+lon1)/2);
+            const sw=Math.abs((lon1-lon0)*Math.PI/180*R_EARTH*cosLat);
+            const sh=Math.abs((lat0-lat1)*Math.PI/180*R_EARTH);
+            const isCenter=(dx===0&&dy===0);
+            ps.push(Promise.all([
+                loadCrossImg(`https://s3.amazonaws.com/elevation-tiles-prod/terrarium/${CTX.zoom}/${tx}/${ty}.png`),
+                loadCrossImg(`https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${CTX.zoom}/${ty}/${tx}`)
+            ]).then(([elevImg,satImg]) => {
+                const heights=terrariumHeights(elevImg,SEG);
+                if (isCenter&&heights) { const m=Math.floor(SEG/2); centerElev=heights[m*(SEG+1)+m]; }
+                const mesh=buildTileMesh(sw,sh,SEG,heights,satImg);
+                mesh.position.set(cPos.x,0,cPos.z);
+                contextGroup.add(mesh);
+            }));
+        }
+    }
+    await Promise.all(ps);
+    contextGroup.position.y = terrainYOffset - terrainDim * 0.005;
+}
+
 /* ── TOGGLE CURVAS ───────────────────────────────────────────────── */
 function toggleCurvas() {
     curvasOn = !curvasOn;
@@ -725,6 +835,8 @@ loadOBJ(CFG.terrain,
         scene.add(group);
 
         const size = centerGroup(group);
+        terrainYOffset = group.position.y;
+        terrainDim = Math.max(size.x, size.z);
         fitCamera(size);
 
         // Capture the original texture from loaded material
@@ -738,6 +850,9 @@ loadOBJ(CFG.terrain,
 
         // Pre-load proposal texture in background
         loadTex(CFG.texProyecto, () => {});
+
+        // Build world context terrain tiles
+        buildContextTerrain();
     }
 );
 
@@ -748,6 +863,13 @@ document.querySelectorAll('.gp-mode-btn').forEach(btn => {
 
 /* ── CURVAS TOGGLE ───────────────────────────────────────────────── */
 document.getElementById('layer-curvas').addEventListener('click', toggleCurvas);
+
+/* ── CONTEXTO TOGGLE ─────────────────────────────────────────────── */
+document.getElementById('layer-contexto').addEventListener('click', () => {
+    contextOn = !contextOn;
+    document.getElementById('layer-contexto').classList.toggle('active', contextOn);
+    contextGroup.visible = contextOn;
+});
 
 /* ── CAMERA PRESETS ──────────────────────────────────────────────── */
 document.getElementById('cam-reset').addEventListener('click', () => {
