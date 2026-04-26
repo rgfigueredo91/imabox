@@ -348,8 +348,8 @@
             <span class="gp-layer-label" id="curvas-label">Curvas de nivel</span>
             <div class="gp-toggle"></div>
         </div>
-        <div class="gp-layer active" id="layer-contexto" style="margin-top:10px">
-            <span class="gp-layer-label">Contexto mundial</span>
+        <div class="gp-layer" id="layer-contexto" style="margin-top:10px">
+            <span class="gp-layer-label">Mapa general</span>
             <div class="gp-toggle"></div>
         </div>
     </div>
@@ -687,8 +687,8 @@ function applyMode(mode) {
     });
 }
 
-/* ── WORLD CONTEXT TERRAIN ───────────────────────────────────────── */
-const CTX = { lat: -34.852569, lon: -54.749697, zoom: 14, half: 3 };
+/* ── WORLD CONTEXT TERRAIN — dynamic LOD (Google Earth style) ──────── */
+const CTX = { lat: -34.852569, lon: -54.749697 };
 const R_EARTH = 6378137;
 
 function lonToTx(lon, z) { return Math.floor((lon + 180) / 360 * (1 << z)); }
@@ -703,6 +703,10 @@ function geoToXZ(lat, lon) {
     const cosLat = Math.cos(CTX.lat * Math.PI / 180);
     return { x: (lon-CTX.lon)*Math.PI/180*R_EARTH*cosLat, z: -(lat-CTX.lat)*Math.PI/180*R_EARTH };
 }
+function xzToGeo(x, z) {
+    const cosLat = Math.cos(CTX.lat * Math.PI / 180);
+    return { lat: CTX.lat - z/R_EARTH*(180/Math.PI), lon: CTX.lon + x/(R_EARTH*cosLat)*(180/Math.PI) };
+}
 
 async function loadCrossImg(url) {
     return new Promise(res => {
@@ -714,14 +718,17 @@ async function loadCrossImg(url) {
     });
 }
 
-function terrariumHeights(img, seg) {
+function terrariumHeights(img, seg, region) {
     if (!img) return null;
     const cv = document.createElement('canvas'); cv.width = cv.height = 256;
     const c2 = cv.getContext('2d'); c2.drawImage(img, 0, 0);
     const d = c2.getImageData(0,0,256,256).data;
     const n = seg+1; const h = new Float32Array(n*n);
+    const x0 = region ? region.x0*255 : 0, x1 = region ? region.x1*255 : 255;
+    const y0 = region ? region.y0*255 : 0, y1 = region ? region.y1*255 : 255;
     for (let iy=0; iy<n; iy++) for (let ix=0; ix<n; ix++) {
-        const sx=Math.min(Math.round(ix/seg*255),255), sy=Math.min(Math.round(iy/seg*255),255);
+        const sx=Math.min(Math.round(x0+(x1-x0)*ix/seg),255);
+        const sy=Math.min(Math.round(y0+(y1-y0)*iy/seg),255);
         const i=(sy*256+sx)*4;
         h[iy*n+ix] = d[i]*256 + d[i+1] + d[i+2]/256 - 32768;
     }
@@ -755,43 +762,105 @@ function buildTileMesh(sw, sh, seg, heights, satImg) {
     return mesh;
 }
 
-const contextGroup  = new THREE.Group();
-scene.add(contextGroup);
-let contextOn       = true;
-let contextBuilt    = false;
-let terrainYOffset  = 0;
-let terrainDim      = 1000;
+function disposeTile(mesh) {
+    if (!mesh) return;
+    mesh.geometry.dispose();
+    if (mesh.material.map) mesh.material.map.dispose();
+    mesh.material.dispose();
+}
 
-async function buildContextTerrain() {
-    if (contextBuilt) return; contextBuilt = true;
-    const cx=lonToTx(CTX.lon,CTX.zoom), cy=latToTy(CTX.lat,CTX.zoom);
-    const SEG=128, cosLat=Math.cos(CTX.lat*Math.PI/180);
-    let centerElev = null;
-    const ps=[];
-    for (let dy=-CTX.half; dy<=CTX.half; dy++) {
-        for (let dx=-CTX.half; dx<=CTX.half; dx++) {
-            const tx=cx+dx, ty=cy+dy;
-            const lon0=txToLon(tx,CTX.zoom),  lon1=txToLon(tx+1,CTX.zoom);
-            const lat0=tyToLat(ty,CTX.zoom),  lat1=tyToLat(ty+1,CTX.zoom);
-            const cPos=geoToXZ((lat0+lat1)/2,(lon0+lon1)/2);
-            const sw=Math.abs((lon1-lon0)*Math.PI/180*R_EARTH*cosLat);
-            const sh=Math.abs((lat0-lat1)*Math.PI/180*R_EARTH);
-            const isCenter=(dx===0&&dy===0);
-            ps.push(Promise.all([
-                loadCrossImg(`https://s3.amazonaws.com/elevation-tiles-prod/terrarium/${CTX.zoom}/${tx}/${ty}.png`),
-                loadCrossImg(`https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${CTX.zoom}/${ty}/${tx}`)
-            ]).then(([elevImg,satImg]) => {
-                const heights=terrariumHeights(elevImg,SEG);
-                if (isCenter&&heights) { const m=Math.floor(SEG/2); centerElev=heights[m*(SEG+1)+m]; }
-                const mesh=buildTileMesh(sw,sh,SEG,heights,satImg);
-                mesh.position.set(cPos.x,0,cPos.z);
-                contextGroup.add(mesh);
-            }));
+const contextGroup = new THREE.Group();
+scene.add(contextGroup);
+let contextOn      = false;
+let terrainYOffset = 0;
+let terrainDim     = 1000;
+
+// Tile state
+const tileCache    = new Map(); // "z/tx/ty" → mesh|null(loading)
+let lastState      = { zoom:-1, cx:-1, cy:-1 };
+let tilesPending   = false;
+
+function tileZoomForDist(dist) {
+    const d = dist / terrainDim;
+    if (d < 0.08) return 18;
+    if (d < 0.18) return 17;
+    if (d < 0.4)  return 16;
+    if (d < 1.0)  return 15;
+    if (d < 2.5)  return 14;
+    if (d < 7)    return 13;
+    if (d < 20)   return 12;
+    if (d < 60)   return 11;
+    return 10;
+}
+
+function updateContextTiles() {
+    if (!contextOn || terrainDim === 0) return;
+    const dist = camera.position.distanceTo(controls.target);
+    const zoom = Math.min(tileZoomForDist(dist), 18);
+    const geo  = xzToGeo(controls.target.x, controls.target.z);
+    const cx   = lonToTx(geo.lon, zoom);
+    const cy   = latToTy(geo.lat, zoom);
+    const HALF = 2; // always 5×5 grid
+
+    if (zoom === lastState.zoom && cx === lastState.cx && cy === lastState.cy) return;
+    lastState = { zoom, cx, cy };
+
+    // Tiles we want
+    const wanted = new Set();
+    for (let dy=-HALF; dy<=HALF; dy++)
+        for (let dx=-HALF; dx<=HALF; dx++)
+            wanted.add(`${zoom}/${cx+dx}/${cy+dy}`);
+
+    // Remove stale
+    for (const [key, mesh] of tileCache) {
+        if (!wanted.has(key)) {
+            contextGroup.remove(mesh);
+            disposeTile(mesh);
+            tileCache.delete(key);
         }
     }
-    await Promise.all(ps);
-    contextGroup.position.y = terrainYOffset - terrainDim * 0.005;
+
+    // Load missing
+    const cosLat = Math.cos(CTX.lat * Math.PI / 180);
+    for (const key of wanted) {
+        if (tileCache.has(key)) continue;
+        tileCache.set(key, null); // mark in-flight
+        const [z,tx,ty] = key.split('/').map(Number);
+        const lon0=txToLon(tx,z), lon1=txToLon(tx+1,z);
+        const lat0=tyToLat(ty,z), lat1=tyToLat(ty+1,z);
+        const cPos=geoToXZ((lat0+lat1)/2,(lon0+lon1)/2);
+        const sw=Math.abs((lon1-lon0)*Math.PI/180*R_EARTH*cosLat);
+        const sh=Math.abs((lat0-lat1)*Math.PI/180*R_EARTH);
+        const SEG = z >= 16 ? 128 : z >= 14 ? 96 : z >= 12 ? 64 : 32;
+        // Terrarium caps at zoom 15 — subsample the correct quadrant for higher zooms
+        const elevZ  = Math.min(z, 15);
+        const zDiff  = z - elevZ;
+        const scale  = 1 << zDiff;
+        const tx_e   = Math.floor(tx / scale), ty_e = Math.floor(ty / scale);
+        const region = zDiff > 0 ? {
+            x0: (tx % scale) / scale, y0: (ty % scale) / scale,
+            x1: (tx % scale + 1) / scale, y1: (ty % scale + 1) / scale
+        } : null;
+        Promise.all([
+            loadCrossImg(`https://s3.amazonaws.com/elevation-tiles-prod/terrarium/${elevZ}/${tx_e}/${ty_e}.png`),
+            loadCrossImg(`https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${z}/${ty}/${tx}`)
+        ]).then(([elevImg, satImg]) => {
+            if (!tileCache.has(key)) return; // evicted while loading
+            const heights = terrariumHeights(elevImg, SEG, region);
+            const mesh = buildTileMesh(sw, sh, SEG, heights, satImg);
+            mesh.position.set(cPos.x, terrainYOffset - terrainDim*0.005, cPos.z);
+            tileCache.set(key, mesh);
+            if (contextOn) contextGroup.add(mesh);
+        });
+    }
 }
+
+// Debounced update on camera move
+let ctxDebounce = null;
+controls.addEventListener('change', () => {
+    clearTimeout(ctxDebounce);
+    ctxDebounce = setTimeout(updateContextTiles, 250);
+});
 
 /* ── TOGGLE CURVAS ───────────────────────────────────────────────── */
 function toggleCurvas() {
@@ -847,12 +916,13 @@ loadOBJ(CFG.terrain,
         });
 
         hideLoader();
+        applyMode('real');
 
         // Pre-load proposal texture in background
         loadTex(CFG.texProyecto, () => {});
 
-        // Build world context terrain tiles
-        buildContextTerrain();
+        // Initial context terrain load
+        updateContextTiles();
     }
 );
 
@@ -869,6 +939,7 @@ document.getElementById('layer-contexto').addEventListener('click', () => {
     contextOn = !contextOn;
     document.getElementById('layer-contexto').classList.toggle('active', contextOn);
     contextGroup.visible = contextOn;
+    if (contextOn) updateContextTiles();
 });
 
 /* ── CAMERA PRESETS ──────────────────────────────────────────────── */
