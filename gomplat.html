@@ -375,6 +375,8 @@
         <div class="gp-section-title">Modo</div>
         <button class="gp-mode-btn active" data-mode="real">Existente</button>
         <button class="gp-mode-btn" data-mode="proyecto">Proyecto</button>
+        <button class="gp-mode-btn" data-mode="proyecto2">Proyecto 2</button>
+        <button class="gp-mode-btn" data-mode="proyecto3">Proyecto 3</button>
         <button class="gp-mode-btn" data-mode="blanco">Blanco</button>
     </div>
 
@@ -507,8 +509,10 @@ const CFG = {
     terrain: { obj: BASE + 'terrain.obj', mtl: BASE + 'terrain.mtl' },
     blanco:  { obj: BASE + 'blanco.obj',  mtl: BASE + 'blanco.mtl'  },
     curvas:  { obj: BASE + 'curvas.obj',  mtl: BASE + 'curvas.mtl'  },
-    texReal:     BASE + 'terrain2.jpg',
-    texProyecto: BASE + 'proposal2.jpg',
+    texReal:      BASE + 'terrain2.jpg',
+    texProyecto:  BASE + 'proposal2.jpg',
+    texProyecto2: BASE + 'proposal3.jpg',
+    texProyecto3: BASE + 'proposal4.jpg',
     zUp: false,
 };
 
@@ -717,8 +721,10 @@ function applyMode(mode) {
     if (blancoGroup)  blancoGroup.visible  = (mode === 'blanco');
 
     // Texture swap on textured terrain
-    if (mode === 'real' || mode === 'proyecto') {
-        const url = mode === 'real' ? CFG.texReal : CFG.texProyecto;
+    if (mode === 'real' || mode === 'proyecto' || mode === 'proyecto2' || mode === 'proyecto3') {
+        const url = mode === 'real'      ? CFG.texReal :
+                    mode === 'proyecto'  ? CFG.texProyecto :
+                    mode === 'proyecto2' ? CFG.texProyecto2 : CFG.texProyecto3;
         loadTex(url, tex => {
             terrainGroup.traverse(child => {
                 if (!child.isMesh) return;
@@ -988,8 +994,10 @@ loadOBJ(CFG.terrain,
         hideLoader();
         applyMode('real');
 
-        // Pre-load proposal texture in background
-        loadTex(CFG.texProyecto, () => {});
+        // Pre-load proposal textures in background
+        loadTex(CFG.texProyecto,  () => {});
+        loadTex(CFG.texProyecto2, () => {});
+        loadTex(CFG.texProyecto3, () => {});
 
         // Initial context terrain load
         updateContextTiles();
