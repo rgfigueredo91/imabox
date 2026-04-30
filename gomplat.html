@@ -437,6 +437,7 @@
             padding: 6px 8px; outline: none; margin-bottom: 10px;
         }
         .gp-api-input:focus { border-color: rgba(255,255,255,0.18); color: rgba(255,255,255,0.5); }
+        .gp-api-input option { background: #111; color: rgba(255,255,255,0.8); }
         .gp-ai-img-wrap { padding: 0 20px 20px; }
         #ai-img {
             width: 100%; display: block;
@@ -498,12 +499,14 @@
         <div class="gp-section-title">IA · Render</div>
         <div class="gp-ai-status" id="ai-status">listo</div>
         <select class="gp-api-input" id="ai-quality" style="color:rgba(255,255,255,0.5);cursor:pointer;margin-bottom:12px">
-            <option value="nano">Nano Banana 2 (rápido)</option>
+            <option value="nano">Nano Banana Pro 1K (rápido)</option>
+            <option value="nano2k">Nano Banana Pro 2K</option>
+            <option value="nano4k">Nano Banana Pro 4K</option>
             <option value="fast">FLUX Dev (28 pasos, ~5s)</option>
             <option value="quality">FLUX Dev HD (50 pasos, ~10s)</option>
             <option value="pro">FLUX General (~8s)</option>
         </select>
-        <textarea class="gp-ai-prompt" id="ai-prompt" placeholder="architectural render, photorealistic, soft light..."></textarea>
+        <textarea class="gp-ai-prompt" id="ai-prompt" placeholder="aerial masterplan render, photorealistic, lush green vegetation, natural landscape, soft golden hour light, high resolution, architectural visualization"></textarea>
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
             <span class="gp-popup-label">Intensidad</span>
             <span class="gp-popup-value" id="ai-str-val">75%</span>
@@ -1853,7 +1856,7 @@ async function generateAI() {
     if (aiPending) return;
     const key      = document.getElementById('ai-key').value.trim();
     const prompt   = document.getElementById('ai-prompt').value.trim()
-                     || 'photorealistic architectural render, aerial view, soft natural light';
+                     || 'aerial masterplan render, photorealistic, lush green vegetation, natural landscape, soft golden hour light, high resolution, architectural visualization';
     const strength = parseFloat(document.getElementById('ai-strength').value) / 100;
     if (!key) { setAiStatus('ingresá la API key'); return; }
 
@@ -1866,16 +1869,16 @@ async function generateAI() {
     try {
         let res;
 
-        if (quality === 'nano') {
-            // Nano Banana 2 — usa image_urls (lista), sin strength ni steps
-            res = await fetch('https://fal.run/fal-ai/nano-banana-2/edit', {
+        if (quality === 'nano' || quality === 'nano2k' || quality === 'nano4k') {
+            const resolution = quality === 'nano4k' ? '4K' : quality === 'nano2k' ? '2K' : '1K';
+            res = await fetch('https://fal.run/fal-ai/nano-banana-pro/edit', {
                 method: 'POST',
                 headers: { 'Authorization': `Key ${key}`, 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     prompt,
                     image_urls:    [thumb],
                     num_images:    1,
-                    resolution:    '1K',
+                    resolution,
                     output_format: 'jpeg'
                 })
             });
