@@ -1485,7 +1485,7 @@ document.getElementById('profile-svg').addEventListener('mousemove', e => {
     txt.textContent = `${s.elev.toFixed(1)} m · ${s.dist.toFixed(0)} m`;
 
     // Marcador 3D sobre el terreno
-    cutHoverMarker.position.set(s.x, s.elev + terrainDim * 0.01, s.z);
+    cutHoverMarker.position.set(s.x, s.elev, s.z);
     cutHoverMarker.visible = true;
 });
 document.getElementById('profile-svg').addEventListener('mouseleave', () => {
