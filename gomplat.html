@@ -896,9 +896,17 @@ resize();
 
 /* ── ANIMATE ─────────────────────────────────────────────────────── */
 let measureMid = null;
+const allDotMarkers = [];   // acumula todas las esferas de corte y medición
+
+function screenRadius(worldPos, pixels) {
+    const dist = camera.position.distanceTo(worldPos);
+    return dist * Math.tan(camera.fov * Math.PI / 360) * pixels / (canvas.height * 0.5);
+}
+
 function animate() {
     requestAnimationFrame(animate);
     controls.update();
+    allDotMarkers.forEach(m => m.scale.setScalar(screenRadius(m.position, 6)));
     renderer.render(scene, camera);
     if (measureMid) {
         const scr = worldToScreen(measureMid);
@@ -1046,6 +1054,7 @@ const cutHoverMarker = new THREE.Mesh(
 cutHoverMarker.renderOrder = 999;
 cutHoverMarker.visible = false;
 scene.add(cutHoverMarker);
+allDotMarkers.push(cutHoverMarker);
 
 /* ── APPLY MODE ──────────────────────────────────────────────────── */
 function applyMode(mode) {
@@ -1436,7 +1445,7 @@ function updateCutLine3D(pts) {
 
 function clearCut() {
     cutPts.length = 0;
-    cutMarkers.forEach(m => { scene.remove(m); m.geometry.dispose(); m.material.dispose(); });
+    cutMarkers.forEach(m => { scene.remove(m); m.geometry.dispose(); m.material.dispose(); allDotMarkers.splice(allDotMarkers.indexOf(m), 1); });
     cutMarkers.length = 0;
     if (cutLine3D) { scene.remove(cutLine3D); cutLine3D.geometry.dispose(); cutLine3D.material.dispose(); cutLine3D = null; }
     const svg = document.getElementById('profile-svg');
@@ -1600,7 +1609,7 @@ function worldToScreen(v3) {
 
 function resetMeasure() {
     measurePts = [];
-    measureMarkers.forEach(m => scene.remove(m));
+    measureMarkers.forEach(m => { scene.remove(m); allDotMarkers.splice(allDotMarkers.indexOf(m), 1); });
     measureMarkers = [];
     if (measureLine) { scene.remove(measureLine); measureLine = null; }
     measureLabel.style.display = 'none';
@@ -1621,12 +1630,12 @@ canvas.addEventListener('click', e => {
         if (!hits.length) return;
         const pt = hits[0].point.clone();
         cutPts.push(pt);
-        const r   = terrainDim * 0.004;
-        const dot = new THREE.Mesh(new THREE.SphereGeometry(r, 8, 8),
-                                   new THREE.MeshBasicMaterial({ color: 0xffffff }));
+        const dot = new THREE.Mesh(new THREE.SphereGeometry(1, 8, 8),
+                                   new THREE.MeshBasicMaterial({ color: 0xffffff, depthTest: false }));
         dot.position.copy(pt);
         scene.add(dot);
         cutMarkers.push(dot);
+        allDotMarkers.push(dot);
         if (cutPts.length >= 2) {
             updateCutLine3D(cutPts);
             drawProfile(sampleProfile(cutPts));
@@ -1652,6 +1661,7 @@ canvas.addEventListener('click', e => {
     dot.position.copy(pt);
     scene.add(dot);
     measureMarkers.push(dot);
+    allDotMarkers.push(dot);
 
     if (measurePts.length === 2) {
         const [a, b] = measurePts;
@@ -1955,7 +1965,7 @@ function updateNavUI() {
     const prevEl  = document.getElementById('gp-ai-nav-prev');
     const nextEl  = document.getElementById('gp-ai-nav-next');
     const countEl = document.getElementById('gp-ai-nav-count');
-    const show    = aiOverlayOn && count > 1;
+    const show    = count > 1;
     prevEl.classList.toggle('visible',  show && aiHistIdx > 0);
     nextEl.classList.toggle('visible',  show && aiHistIdx < count - 1);
     countEl.classList.toggle('visible', show);
@@ -1970,10 +1980,9 @@ function applyHistoryImg(idx) {
     img.onload = () => img.classList.add('visible');
     img.src = src;
     document.getElementById('lightbox-img').src = src;
+    document.getElementById('overlay-img').src = src;
     if (aiOverlayOn) {
-        const ov = document.getElementById('overlay-img');
-        ov.onload = () => document.getElementById('gp-ai-overlay').classList.add('visible');
-        ov.src = src;
+        document.getElementById('gp-ai-overlay').classList.add('visible');
     }
     updateNavUI();
 }
@@ -2000,9 +2009,9 @@ document.getElementById('ai-overlay-layer').addEventListener('click', () => {
     updateNavUI();
 });
 
-// Al empezar a orbitar: ocultar overlay
-controls.addEventListener('start', () => {
-    document.getElementById('gp-ai-overlay').classList.remove('visible');
+// Al mover la cámara: ocultar overlay
+controls.addEventListener('change', () => {
+    if (!aiPending) document.getElementById('gp-ai-overlay').classList.remove('visible');
 });
 
 // Lightbox
