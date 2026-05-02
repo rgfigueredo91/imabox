@@ -753,6 +753,46 @@ body.custom-cursor-active * { cursor: none !important; }
 
 #cursor-ring.size-edge #cursor-arrow { opacity: 1; }
 
+/* ═══════════════════════════════════════════════════════════
+   PRELOADER
+   ═══════════════════════════════════════════════════════════ */
+#ix-loader {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: #0e0e0e;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    transition: opacity 0.7s ease;
+}
+#ix-loader.ix-loader--out {
+    opacity: 0;
+    pointer-events: none;
+}
+.ix-loader-brand {
+    font-family: 'neue-haas-grotesk-display', 'Poppins', sans-serif;
+    font-size: clamp(2.4rem, 7vw, 4.5rem);
+    font-weight: 200;
+    letter-spacing: 0.22em;
+    color: #fff;
+}
+.ix-loader-bar-track {
+    width: 140px;
+    height: 1px;
+    background: rgba(255,255,255,0.1);
+    overflow: hidden;
+}
+.ix-loader-bar {
+    height: 100%;
+    width: 0%;
+    background: rgba(255,255,255,0.65);
+    transition: width 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+
+
 @media (hover: none), (pointer: coarse) {
   body.custom-cursor-active,
   body.custom-cursor-active * { cursor: auto !important; }

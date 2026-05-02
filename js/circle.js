@@ -78,6 +78,14 @@
       window.scrollBy({ top: window.innerHeight, behavior: 'smooth' });
     } else if (currentEdge === 'top') {
       window.scrollBy({ top: -window.innerHeight, behavior: 'smooth' });
+    } else if (currentEdge === 'left' || currentEdge === 'right') {
+      const visible = Array.from(document.querySelectorAll('.carousel')).find(function (c) {
+        const r = c.getBoundingClientRect();
+        return r.top < window.innerHeight && r.bottom > 0;
+      });
+      if (visible && visible._carouselNav) {
+        currentEdge === 'left' ? visible._carouselNav.prev() : visible._carouselNav.next();
+      }
     }
   });
 

@@ -37,14 +37,38 @@
 			})(window,document,'script','dataLayer','GTM-NMJRX79');</script>
 		<!-- End Google Tag Manager -->
 
-		<script>				window.addEventListener('load', function () {
-			let newVideo = document.getElementById('videoElementId');
-				newVideo.addEventListener('ended', function () {
-					this.currentTime = 0;
-					this.play();
-				}, false);
-				newVideo.play();
-});</script>
+		<script>
+		window.addEventListener('load', function () {
+			const video  = document.getElementById('videoElementId');
+			const loader = document.getElementById('ix-loader');
+			const bar    = document.getElementById('ix-loader-bar');
+
+			let prog = 0;
+			const ticker = setInterval(() => {
+				prog = Math.min(prog + Math.random() * 12, 88);
+				bar.style.width = prog + '%';
+			}, 180);
+
+			function hideLoader() {
+				clearInterval(ticker);
+				bar.style.width = '100%';
+				setTimeout(() => {
+					loader.classList.add('ix-loader--out');
+					loader.addEventListener('transitionend', () => loader.remove(), { once: true });
+				}, 300);
+			}
+
+			video.addEventListener('canplay',  hideLoader, { once: true });
+			video.addEventListener('error',    hideLoader, { once: true });
+			setTimeout(hideLoader, 6000);
+
+			video.addEventListener('ended', function () {
+				this.currentTime = 0;
+				this.play();
+			}, false);
+			video.play();
+		});
+		</script>
 
 		<script type="application/ld+json">
 {
@@ -70,6 +94,12 @@
 </script>
 </head>
 	<body>
+<!-- PRELOADER -->
+<div id="ix-loader">
+    <span class="ix-loader-brand">imabox.</span>
+    <div class="ix-loader-bar-track"><div class="ix-loader-bar" id="ix-loader-bar"></div></div>
+</div>
+
 <!-- WhatsApp Floating Button + Chat Panel -->
 <div id="imabox-chat" aria-live="polite">
   <!-- Floating Button -->

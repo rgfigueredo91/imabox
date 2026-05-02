@@ -51,6 +51,12 @@ let carousels = document.querySelectorAll('.carousel');
 								setActiveDot();
 							}
 
-							createDots(); // Call the createDots function to generate dots
+							createDots();
 							moveSlides();
+
+							/* expose nav so circle.js can drive it via edge clicks */
+							carousel._carouselNav = {
+								next: function () { currentSlide = (currentSlide + 1) % slides.length; moveSlides(); setActiveDot(); },
+								prev: function () { currentSlide = (currentSlide - 1 + slides.length) % slides.length; moveSlides(); setActiveDot(); }
+							};
 							});
