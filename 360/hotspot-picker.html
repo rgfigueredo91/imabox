@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Hotspot Picker — IMABOX</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: #080808;
+            color: #fff;
+            font-family: 'Courier New', monospace;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* ── Drop zone ── */
+        #drop-zone {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+            background: #080808;
+            gap: 12px;
+        }
+
+        #drop-zone h1 {
+            color: #1cb5f1;
+            font-size: 1.1rem;
+            letter-spacing: 6px;
+        }
+
+        #drop-zone .sub {
+            color: #333;
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            margin-bottom: 8px;
+        }
+
+        .drop-area {
+            border: 1px dashed #2a2a2a;
+            border-radius: 6px;
+            padding: 50px 80px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        .drop-area:hover,
+        .drop-area.dragover {
+            border-color: #1cb5f1;
+            background: rgba(28, 181, 241, 0.04);
+        }
+
+        .drop-area .icon {
+            font-size: 2.5rem;
+            margin-bottom: 14px;
+            opacity: 0.3;
+        }
+
+        .drop-area p {
+            font-size: 0.8rem;
+            color: #444;
+            line-height: 1.8;
+        }
+
+        .drop-area span { color: #1cb5f1; }
+
+        #file-input { display: none; }
+
+        /* ── Viewer ── */
+        #viewer-wrap {
+            display: none;
+            position: fixed;
+            inset: 0;
+        }
+
+        #pano-container {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        #pano-container canvas {
+            display: block;
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        /* ── Crosshair ── */
+        #crosshair {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 28px;
+            height: 28px;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        #crosshair::before,
+        #crosshair::after {
+            content: '';
+            position: absolute;
+            background: rgba(28, 181, 241, 0.85);
+        }
+
+        #crosshair::before { width: 1px; height: 100%; left: 50%; top: 0; }
+        #crosshair::after  { height: 1px; width: 100%; top: 50%; left: 0; }
+
+        #crosshair .dot {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 4px; height: 4px;
+            border-radius: 50%;
+            background: #1cb5f1;
+            transform: translate(-50%, -50%);
+        }
+
+        /* ── Logo & back ── */
+        #top-left {
+            position: fixed;
+            top: 14px;
+            left: 16px;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #logo {
+            color: #1cb5f1;
+            font-size: 0.8rem;
+            letter-spacing: 4px;
+        }
+
+        .btn-ghost {
+            background: none;
+            border: 1px solid #222;
+            color: #444;
+            font-family: 'Courier New', monospace;
+            font-size: 0.62rem;
+            padding: 3px 9px;
+            border-radius: 3px;
+            cursor: pointer;
+            letter-spacing: 1px;
+            transition: all 0.15s;
+        }
+
+        .btn-ghost:hover {
+            border-color: #555;
+            color: #aaa;
+        }
+
+        /* ── Coords panel ── */
+        #coords-panel {
+            position: fixed;
+            top: 14px;
+            right: 16px;
+            background: rgba(8, 8, 8, 0.9);
+            border: 1px solid #1a1a1a;
+            border-radius: 6px;
+            padding: 12px 14px;
+            z-index: 10;
+            min-width: 290px;
+            backdrop-filter: blur(12px);
+        }
+
+        .panel-label {
+            font-size: 0.58rem;
+            color: #333;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        #vec3-live {
+            font-size: 0.92rem;
+            color: #1cb5f1;
+            margin-bottom: 3px;
+            letter-spacing: 0.5px;
+        }
+
+        #angles-live {
+            font-size: 0.68rem;
+            color: #444;
+            margin-bottom: 10px;
+        }
+
+        #btn-save {
+            width: 100%;
+            background: #1cb5f1;
+            color: #000;
+            border: none;
+            padding: 7px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.72rem;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        #btn-save:hover { background: #10a0d8; }
+        #btn-save.saved { background: #3ddc84; color: #000; }
+
+        /* ── Tip ── */
+        #tip {
+            position: fixed;
+            bottom: 178px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.6rem;
+            color: #252525;
+            letter-spacing: 1.5px;
+            z-index: 10;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        /* ── Hotspot panel ── */
+        #hs-panel {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(8, 8, 8, 0.95);
+            border-top: 1px solid #141414;
+            z-index: 10;
+            backdrop-filter: blur(12px);
+        }
+
+        #hs-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 7px 16px;
+            border-bottom: 1px solid #111;
+        }
+
+        #hs-header .hs-title {
+            font-size: 0.58rem;
+            color: #333;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        #hs-header .hs-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        #btn-export {
+            background: none;
+            border: 1px solid #1cb5f1;
+            color: #1cb5f1;
+            font-family: 'Courier New', monospace;
+            font-size: 0.6rem;
+            padding: 3px 9px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        #btn-export:hover {
+            background: rgba(28,181,241,0.1);
+        }
+
+        #hs-list {
+            overflow-y: auto;
+            max-height: 120px;
+            padding: 6px 16px 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .hs-empty {
+            font-size: 0.65rem;
+            color: #222;
+            padding: 6px 0;
+            letter-spacing: 1px;
+        }
+
+        .hs-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .hs-num {
+            font-size: 0.62rem;
+            color: #333;
+            width: 16px;
+            flex-shrink: 0;
+            text-align: right;
+        }
+
+        .hs-name-input {
+            background: #111;
+            border: 1px solid #1c1c1c;
+            color: #666;
+            font-family: 'Courier New', monospace;
+            font-size: 0.68rem;
+            padding: 3px 7px;
+            border-radius: 3px;
+            width: 90px;
+            flex-shrink: 0;
+        }
+
+        .hs-name-input:focus {
+            outline: none;
+            border-color: #333;
+            color: #aaa;
+        }
+
+        .hs-code {
+            flex: 1;
+            font-size: 0.72rem;
+            color: #555;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .hs-code em {
+            color: #1cb5f1;
+            font-style: normal;
+        }
+
+        .hs-btn {
+            background: none;
+            border: 1px solid #1e1e1e;
+            color: #444;
+            font-family: 'Courier New', monospace;
+            font-size: 0.6rem;
+            padding: 2px 7px;
+            border-radius: 3px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.15s;
+            flex-shrink: 0;
+        }
+
+        .hs-btn:hover {
+            border-color: #1cb5f1;
+            color: #1cb5f1;
+        }
+
+        .hs-btn.ok {
+            border-color: #3ddc84;
+            color: #3ddc84;
+        }
+
+        .hs-del {
+            background: none;
+            border: none;
+            color: #222;
+            font-size: 0.9rem;
+            cursor: pointer;
+            padding: 1px 5px;
+            border-radius: 3px;
+            line-height: 1;
+            flex-shrink: 0;
+            transition: color 0.15s;
+        }
+
+        .hs-del:hover { color: #e05555; }
+
+        /* ── Export modal ── */
+        #export-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 300;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #export-modal.open { display: flex; }
+
+        .modal-box {
+            background: #0e0e0e;
+            border: 1px solid #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            width: 580px;
+            max-width: 95vw;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .modal-box h2 {
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            color: #1cb5f1;
+            text-transform: uppercase;
+        }
+
+        #export-code {
+            background: #060606;
+            border: 1px solid #1a1a1a;
+            border-radius: 4px;
+            padding: 14px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.75rem;
+            color: #888;
+            flex: 1;
+            overflow-y: auto;
+            white-space: pre;
+            min-height: 160px;
+            max-height: 360px;
+            line-height: 1.7;
+            resize: none;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+
+        .modal-btn {
+            background: #1cb5f1;
+            color: #000;
+            border: none;
+            font-family: 'Courier New', monospace;
+            font-size: 0.7rem;
+            font-weight: bold;
+            padding: 7px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            letter-spacing: 1px;
+        }
+
+        .modal-btn.secondary {
+            background: none;
+            border: 1px solid #222;
+            color: #555;
+        }
+
+        .modal-btn.secondary:hover { border-color: #555; color: #aaa; }
+    </style>
+</head>
+<body>
+
+<!-- Drop zone -->
+<div id="drop-zone">
+    <h1>HOTSPOT PICKER</h1>
+    <div class="sub">imabox — panolens tools</div>
+    <div class="drop-area" id="drop-area">
+        <div class="icon">⊕</div>
+        <p>Arrastrá una imagen 360 equirectangular acá</p>
+        <p>o <span>hacé click para seleccionar</span></p>
+    </div>
+    <input type="file" id="file-input" accept="image/*">
+</div>
+
+<!-- Viewer -->
+<div id="viewer-wrap">
+    <div id="pano-container"></div>
+
+    <div id="crosshair"><div class="dot"></div></div>
+
+    <div id="top-left">
+        <span id="logo">IMABOX</span>
+        <button class="btn-ghost" onclick="goBack()">↩ cargar otra</button>
+    </div>
+
+    <div id="coords-panel">
+        <div class="panel-label">Vector3 — centro de vista</div>
+        <div id="vec3-live">new THREE.Vector3(0, 0, 0)</div>
+        <div id="angles-live">yaw: 0°  |  pitch: 0°</div>
+        <button id="btn-save" onclick="saveHotspot()">+ GUARDAR HOTSPOT &nbsp;[doble click]</button>
+    </div>
+
+    <div id="tip">ARRASTRÁ para girar &nbsp;·&nbsp; DOBLE CLICK para guardar hotspot</div>
+
+    <div id="hs-panel">
+        <div id="hs-header">
+            <span class="hs-title">hotspots guardados</span>
+            <div class="hs-actions">
+                <button id="btn-export" onclick="openExport()">exportar código</button>
+                <button class="btn-ghost" onclick="clearAll()">limpiar</button>
+            </div>
+        </div>
+        <div id="hs-list">
+            <div class="hs-empty">— todavía no guardaste ningún hotspot —</div>
+        </div>
+    </div>
+</div>
+
+<!-- Export modal -->
+<div id="export-modal">
+    <div class="modal-box">
+        <h2>código panolens</h2>
+        <textarea id="export-code" readonly></textarea>
+        <div class="modal-actions">
+            <button class="modal-btn secondary" onclick="closeExport()">cerrar</button>
+            <button class="modal-btn" onclick="copyExport(this)">copiar todo</button>
+        </div>
+    </div>
+</div>
+
+<script src="/js/three.min.js"></script>
+<script src="/js/panolens.min.js"></script>
+
+<script>
+let viewer   = null;
+let panorama = null;
+let hotspots = [];   // { id, name, x, y, z, spot, drawFn }
+let counter  = 0;
+let loopStarted = false;
+
+/* ══════════════════════════════════════════════
+   ANIMATED HOTSPOT TEXTURE
+   Dot blanco + anillo que pulsa hacia afuera.
+══════════════════════════════════════════════ */
+function createHotspotTexture() {
+    const SIZE = 256, C = 128;
+    const canvas = document.createElement('canvas');
+    canvas.width = canvas.height = SIZE;
+    const ctx = canvas.getContext('2d');
+    const t0  = performance.now();
+
+    function draw() {
+        const phase = ((performance.now() - t0) % 2200) / 2200;
+        ctx.clearRect(0, 0, SIZE, SIZE);
+
+        const grd = ctx.createRadialGradient(C, C, 2, C, C, 28);
+        grd.addColorStop(0, 'rgba(255,255,255,0.35)');
+        grd.addColorStop(1, 'rgba(255,255,255,0)');
+        ctx.beginPath(); ctx.arc(C, C, 28, 0, Math.PI * 2);
+        ctx.fillStyle = grd; ctx.fill();
+
+        ctx.beginPath(); ctx.arc(C, C, 14 + phase * 22, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(255,255,255,${(0.75*(1-phase)).toFixed(3)})`;
+        ctx.lineWidth = 2; ctx.stroke();
+
+        ctx.beginPath(); ctx.arc(C, C, 8, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,255,255,0.95)';
+        ctx.shadowColor = 'rgba(255,255,255,0.7)';
+        ctx.shadowBlur  = 8;
+        ctx.fill(); ctx.shadowBlur = 0;
+    }
+
+    draw(); // frame inicial para el dataURL
+    const dataURL = canvas.toDataURL('image/png');
+    const tex = new THREE.CanvasTexture(canvas);
+
+    return { tex, draw, dataURL };
+}
+
+/* ══════════════════════════════════════════════
+   FILE LOADING
+══════════════════════════════════════════════ */
+const dropArea = document.getElementById('drop-area');
+const fileInput = document.getElementById('file-input');
+
+dropArea.addEventListener('click', () => fileInput.click());
+dropArea.addEventListener('dragover', e => { e.preventDefault(); dropArea.classList.add('dragover'); });
+dropArea.addEventListener('dragleave', () => dropArea.classList.remove('dragover'));
+dropArea.addEventListener('drop', e => {
+    e.preventDefault();
+    dropArea.classList.remove('dragover');
+    const f = e.dataTransfer.files[0];
+    if (f && f.type.startsWith('image/')) startViewer(URL.createObjectURL(f));
+});
+fileInput.addEventListener('change', e => {
+    if (e.target.files[0]) startViewer(URL.createObjectURL(e.target.files[0]));
+});
+
+/* ══════════════════════════════════════════════
+   VIEWER
+══════════════════════════════════════════════ */
+function startViewer(url) {
+    document.getElementById('drop-zone').style.display = 'none';
+    document.getElementById('viewer-wrap').style.display = 'block';
+
+    // Limpiar viewer anterior
+    if (viewer) {
+        try { viewer.destroy(); } catch(e) {}
+        const c = document.getElementById('pano-container');
+        while (c.firstChild) c.removeChild(c.firstChild);
+        viewer = null; panorama = null;
+    }
+    // Limpiar hotspots sin llamar al DOM de panorama (ya fue destruido)
+    hotspots = []; counter = 0;
+    renderList();
+
+    // Dos frames para que el browser termine el layout
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+        panorama = new PANOLENS.ImagePanorama(url);
+
+        viewer = new PANOLENS.Viewer({
+            container: document.getElementById('pano-container'),
+            controlBar: false,
+            output: 'console'
+        });
+
+        viewer.add(panorama);
+        window.dispatchEvent(new Event('resize'));
+
+        if (!loopStarted) { loopStarted = true; loop(); }
+    }));
+}
+
+function goBack() {
+    if (viewer) {
+        try { viewer.destroy(); } catch(e) {}
+        document.getElementById('pano-container').innerHTML = '';
+        viewer = null; panorama = null;
+    }
+    hotspots = []; counter = 0;
+    renderList();
+    document.getElementById('viewer-wrap').style.display = 'none';
+    document.getElementById('drop-zone').style.display   = 'flex';
+    fileInput.value = '';
+}
+
+/* ── Doble click para guardar ── */
+document.getElementById('viewer-wrap').addEventListener('dblclick', e => {
+    if (e.target.closest('#coords-panel') ||
+        e.target.closest('#hs-panel')     ||
+        e.target.closest('#top-left'))    return;
+    saveHotspot();
+});
+
+/* ══════════════════════════════════════════════
+   LOOP PRINCIPAL — coords + texturas animadas
+══════════════════════════════════════════════ */
+function loop() {
+    requestAnimationFrame(loop);
+    if (!viewer || !viewer.camera) return;
+
+    // Coordenadas en tiempo real
+    const dir = new THREE.Vector3();
+    viewer.camera.getWorldDirection(dir);
+
+    const x = Math.round(dir.x * 10000);
+    const y = Math.round(dir.y * 10000);
+    const z = Math.round(dir.z * 10000);
+    const yaw   = Math.round(Math.atan2(dir.x, -dir.z) * 180 / Math.PI);
+    const pitch = Math.round(Math.asin(Math.max(-1, Math.min(1, dir.y))) * 180 / Math.PI);
+
+    document.getElementById('vec3-live').textContent   = `new THREE.Vector3(${x}, ${y}, ${z})`;
+    document.getElementById('angles-live').textContent = `yaw: ${yaw}°  |  pitch: ${pitch}°`;
+
+    // Redibujar texturas animadas de cada hotspot guardado
+    hotspots.forEach(h => h.drawFn && h.drawFn());
+}
+
+/* ══════════════════════════════════════════════
+   GUARDAR HOTSPOT
+══════════════════════════════════════════════ */
+function saveHotspot() {
+    if (!viewer || !viewer.camera || !panorama) return;
+
+    const dir = new THREE.Vector3();
+    viewer.camera.getWorldDirection(dir);
+
+    const x = Math.round(dir.x * 10000);
+    const y = Math.round(dir.y * 10000);
+    const z = Math.round(dir.z * 10000);
+
+    counter++;
+    const hs = {
+        id: counter,
+        name: `panorama${counter === 1 ? '' : counter}`,
+        x, y, z,
+        spot:   null,
+        drawFn: null
+    };
+
+    // Crear infospot animado en el visor
+    const { tex, draw, dataURL } = createHotspotTexture();
+    panorama.link(panorama, new THREE.Vector3(x, y, z), 320, dataURL);
+    const spot = panorama.children[panorama.children.length - 1];
+    spot.addHoverText(`#${counter}`);
+
+    // Animar sobreescribiendo el mapa cada frame
+    const animateFn = () => {
+        draw();
+        tex.needsUpdate = true;
+        if (spot && spot.material) spot.material.map = tex;
+    };
+
+    hs.spot   = spot;
+    hs.drawFn = animateFn;
+    hotspots.push(hs);
+    renderList();
+
+    // Flash botón
+    const btn = document.getElementById('btn-save');
+    btn.textContent = '✓  GUARDADO';
+    btn.classList.add('saved');
+    setTimeout(() => {
+        btn.textContent = '+ GUARDAR HOTSPOT  [doble click]';
+        btn.classList.remove('saved');
+    }, 900);
+}
+
+function deleteHotspot(id) {
+    const hs = hotspots.find(h => h.id === id);
+    if (hs && hs.spot && panorama) {
+        try { panorama.remove(hs.spot); } catch(e) {}
+    }
+    hotspots = hotspots.filter(h => h.id !== id);
+    renderList();
+}
+
+function clearAll() {
+    hotspots.forEach(hs => {
+        if (hs.spot && panorama) try { panorama.remove(hs.spot); } catch(e) {}
+    });
+    hotspots = []; counter = 0;
+    renderList();
+}
+
+function updateName(id, val) {
+    const h = hotspots.find(h => h.id === id);
+    if (h && val.trim()) h.name = val.trim();
+}
+
+/* ══════════════════════════════════════════════
+   LISTA DE HOTSPOTS
+══════════════════════════════════════════════ */
+function renderList() {
+    const list = document.getElementById('hs-list');
+    if (!hotspots.length) {
+        list.innerHTML = '<div class="hs-empty">— todavía no guardaste ningún hotspot —</div>';
+        return;
+    }
+    list.innerHTML = hotspots.map(h => `
+        <div class="hs-item" id="item-${h.id}">
+            <span class="hs-num">${h.id}</span>
+            <input class="hs-name-input"
+                value="${h.name}"
+                onchange="updateName(${h.id}, this.value)"
+                title="nombre de la variable panorama">
+            <span class="hs-code">
+                <em>new THREE.Vector3(</em>${h.x}, ${h.y}, ${h.z}<em>)</em>
+            </span>
+            <button class="hs-btn" onclick="copyVec3(${h.id}, this)">vec3</button>
+            <button class="hs-btn" onclick="copyLink(${h.id}, this)">link()</button>
+            <button class="hs-del" onclick="deleteHotspot(${h.id})">×</button>
+        </div>
+    `).join('');
+}
+
+/* ══════════════════════════════════════════════
+   COPY HELPERS
+══════════════════════════════════════════════ */
+function flashBtn(btn) {
+    const orig = btn.textContent;
+    btn.textContent = '✓ ok';
+    btn.classList.add('ok');
+    setTimeout(() => { btn.textContent = orig; btn.classList.remove('ok'); }, 1400);
+}
+
+function copyVec3(id, btn) {
+    const h = hotspots.find(h => h.id === id);
+    if (!h) return;
+    copy(`new THREE.Vector3(${h.x}, ${h.y}, ${h.z})`);
+    flashBtn(btn);
+}
+
+function copyLink(id, btn) {
+    const h   = hotspots.find(h => h.id === id);
+    if (!h) return;
+    const idx  = hotspots.indexOf(h);
+    const next = hotspots[idx + 1] || hotspots[idx - 1];
+    const dest = next ? next.name : 'panoramaDest';
+    copy(`${h.name}.link( ${dest}, new THREE.Vector3(${h.x}, ${h.y}, ${h.z}) );`);
+    flashBtn(btn);
+}
+
+function copy(text) {
+    navigator.clipboard.writeText(text).catch(() => {
+        const ta = document.createElement('textarea');
+        ta.value = text; document.body.appendChild(ta);
+        ta.select(); document.execCommand('copy');
+        document.body.removeChild(ta);
+    });
+}
+
+/* ══════════════════════════════════════════════
+   EXPORT MODAL
+   Genera el bloque Panolens listo para pegar,
+   usando makeHotspot() con hotspots animados.
+══════════════════════════════════════════════ */
+const HOTSPOT_HELPER = `/* ── Hotspot animado (dot + anillo pulsante) ──────────────────
+   Uso: makeHotspot(panoramaOrigen, panoramaDestino, x, y, z)
+─────────────────────────────────────────────────────────── */
+function makeHotspot(from, to, x, y, z) {
+    const S = 256, C = 128;
+    const cv  = document.createElement('canvas');
+    cv.width  = cv.height = S;
+    const ctx = cv.getContext('2d');
+    const tex = new THREE.CanvasTexture(cv);
+    const t0  = performance.now();
+    (function draw() {
+        requestAnimationFrame(draw);
+        const p = ((performance.now() - t0) % 2200) / 2200;
+        ctx.clearRect(0, 0, S, S);
+        // halo
+        const g = ctx.createRadialGradient(C,C,2,C,C,28);
+        g.addColorStop(0,'rgba(255,255,255,0.35)');
+        g.addColorStop(1,'rgba(255,255,255,0)');
+        ctx.beginPath(); ctx.arc(C,C,28,0,Math.PI*2);
+        ctx.fillStyle=g; ctx.fill();
+        // anillo pulsante
+        ctx.beginPath(); ctx.arc(C,C,14+p*22,0,Math.PI*2);
+        ctx.strokeStyle=\`rgba(255,255,255,\${(0.75*(1-p)).toFixed(3)})\`;
+        ctx.lineWidth=2; ctx.stroke();
+        // dot central
+        ctx.beginPath(); ctx.arc(C,C,8,0,Math.PI*2);
+        ctx.fillStyle='rgba(255,255,255,0.95)';
+        ctx.shadowColor='rgba(255,255,255,0.7)'; ctx.shadowBlur=8;
+        ctx.fill(); ctx.shadowBlur=0;
+        tex.needsUpdate=true;
+    })();
+    from.link(to, new THREE.Vector3(x, y, z), 320, PANOLENS.DataImage.Arrow);
+    const spot = from.children[from.children.length - 1];
+    spot.material.map = tex;
+    spot.material.needsUpdate = true;
+}`;
+
+function buildExportCode() {
+    if (!hotspots.length) return '// No hay hotspots guardados.';
+
+    const decls = hotspots.map(h =>
+        `const ${h.name} = new PANOLENS.ImagePanorama( 'img/tu-imagen.jpg' );`
+    ).join('\n');
+
+    const links = hotspots.map((h, i) => {
+        const next = hotspots[i + 1];
+        if (!next) return `// ${h.name} no tiene siguiente → agregá el link de vuelta manualmente`;
+        return `makeHotspot( ${h.name}, ${next.name}, ${h.x}, ${h.y}, ${h.z} );`;
+    }).join('\n');
+
+    const allNames = hotspots.map(h => h.name).join(', ');
+
+    return [
+        HOTSPOT_HELPER,
+        '',
+        '/* ── Panoramas ── */',
+        decls,
+        '',
+        '/* ── Links ── */',
+        links,
+        '',
+        '/* ── Viewer ── */',
+        `viewer = new PANOLENS.Viewer();`,
+        `viewer.add( ${allNames} );`
+    ].join('\n');
+}
+
+function openExport() {
+    document.getElementById('export-code').value = buildExportCode();
+    document.getElementById('export-modal').classList.add('open');
+}
+
+function closeExport() {
+    document.getElementById('export-modal').classList.remove('open');
+}
+
+function copyExport(btn) {
+    copy(document.getElementById('export-code').value);
+    const orig = btn.textContent;
+    btn.textContent = '✓ copiado';
+    setTimeout(() => btn.textContent = orig, 1500);
+}
+
+document.getElementById('export-modal').addEventListener('click', e => {
+    if (e.target === document.getElementById('export-modal')) closeExport();
+});
+</script>
+
+</body>
+</html>
