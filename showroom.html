@@ -157,12 +157,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="sr-unit-panel" id="sr-unit-panel" aria-hidden="true">
         <div class="sr-up-header">
             <div class="sr-up-meta">
-                <p class="sr-up-label">Tipología</p>
+                <p class="sr-up-label" id="sr-up-label">Tipología</p>
                 <h2 class="sr-up-name" id="sr-up-name">KIU</h2>
             </div>
-            <button class="sr-up-close" id="sr-up-close" aria-label="Cerrar">
-                <i class="fa fa-times"></i>
-            </button>
+            <div class="sr-up-header-right">
+                <span class="sr-up-status" id="sr-up-status"></span>
+                <button class="sr-up-close" id="sr-up-close" aria-label="Cerrar">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
         </div>
 
         <div class="sr-up-specs" id="sr-up-specs">
@@ -187,6 +190,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="sr-up-tabs">
             <button class="sr-up-tab active" data-tab="planta">Planta</button>
             <button class="sr-up-tab" data-tab="galeria">Imágenes</button>
+            <button class="sr-up-tab" id="sr-tab-videos-btn" data-tab="videos">Videos</button>
         </div>
 
         <div class="sr-up-body">
@@ -198,16 +202,29 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     <!-- populated by JS -->
                 </div>
             </div>
+            <div class="sr-up-content" id="sr-tab-videos">
+                <div class="sr-up-gallery sr-up-gallery--videos" id="sr-up-gallery-videos">
+                    <!-- populated by JS -->
+                </div>
+            </div>
         </div>
 
-        <div class="sr-up-actions">
-            <a href="contact.html" class="sr-up-btn sr-up-btn--primary">
+        <div class="sr-up-actions" id="sr-up-actions">
+            <a href="contact.html" class="sr-up-btn sr-up-btn--primary" id="sr-up-btn-contact">
                 <i class="fa fa-envelope-o"></i>
                 <span>Consultar precio</span>
             </a>
             <button id="sr-btn-tour" class="sr-up-btn sr-up-btn--secondary">
                 <i class="fa fa-street-view"></i>
                 <span>Tour virtual</span>
+            </button>
+            <a id="sr-up-btn-pdf" href="#" class="sr-up-btn sr-up-btn--ghost">
+                <i class="fa fa-file-pdf-o"></i>
+                <span>Descargar ficha</span>
+            </a>
+            <button id="sr-up-btn-share" class="sr-up-btn sr-up-btn--ghost">
+                <i class="fa fa-share-alt"></i>
+                <span>Compartir</span>
             </button>
         </div>
     </div>
@@ -233,6 +250,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <button class="sr-lightbox-close" id="sr-lb-close"><i class="fa fa-times"></i></button>
     <button class="sr-lightbox-prev"  id="sr-lb-prev"><i class="fa fa-angle-left"></i></button>
     <img id="sr-lb-img" src="" alt="" />
+    <video id="sr-lb-video" controls playsinline></video>
     <button class="sr-lightbox-next"  id="sr-lb-next"><i class="fa fa-angle-right"></i></button>
 </div>
 
@@ -252,13 +270,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 /* ══════════════════════════════════════════════════════════════
    DATA  —  edit this block to adapt to any building
    ══════════════════════════════════════════════════════════════
-   defaults  → fallback images/tour used when a unit doesn't
-               override them (use same assets while new ones
-               aren't ready, swap per-unit when they are)
-   units     → keyed by the data-unit value on each SVG rect;
-               omit any key to use the default fallback
-   floors    → ordered top → bottom; hasUnits: true shows SVG
-               hotspots and opens the unit panel on click
+   defaults  → fallback images/tour/videos when a unit doesn't override
+   units     → keyed by data-unit; add status / videos / pdfUrl per unit
+   floors    → ordered top→bottom; hasUnits:true activates SVG hotspots;
+               images/videos populate a floor gallery panel on click
 ══════════════════════════════════════════════════════════════ */
 const DATA = {
     project: {
@@ -267,7 +282,6 @@ const DATA = {
         subEsp: "Av. Italia, Montevideo · 2025",
     },
 
-    /* ── Fallbacks (shared until per-unit assets are ready) ── */
     defaults: {
         tourUrl: "app-files2/index.html",
         interiorImages: [
@@ -277,33 +291,44 @@ const DATA = {
             "img/kiu/2025-12-19_Dormitorio n05.jpg",
             "img/kiu/2025-12-19_Dormitorio n11.jpg",
         ],
+        videos: [
+            "videos/kiu/lifestyle-sofa.mp4",
+            "videos/kiu/lifestyle-people.mp4",
+            "videos/kiu/lifestyle-coffee.mp4",
+            "videos/kiu/lifestyle-window.mp4",
+        ],
     },
 
-    /* ── Per-unit data — add interiorImages / tourUrl to override ── */
     units: {
         "01": {
             label: "Tipología A", plantaImage: "img/kiu/planta.jpg",
             area: 72, terraza: 18, dorms: 2, banos: 1,
+            status: "disponible", videos: [], pdfUrl: null,
         },
         "02": {
             label: "Tipología B", plantaImage: "img/kiu/planta-02.jpg",
             area: 58, terraza: 10, dorms: 1, banos: 1,
+            status: "disponible", videos: [], pdfUrl: null,
         },
         "03": {
             label: "Tipología C", plantaImage: "img/kiu/planta-03.jpg",
             area: 65, terraza: 12, dorms: 2, banos: 1,
+            status: "reservada", videos: [], pdfUrl: null,
         },
         "04": {
             label: "Tipología D", plantaImage: "img/kiu/planta-04.jpg",
             area: 80, terraza: 20, dorms: 2, banos: 2,
+            status: "disponible", videos: [], pdfUrl: null,
         },
         "05": {
             label: "Tipología E", plantaImage: "img/kiu/planta-05.jpg",
             area: 95, terraza: 25, dorms: 3, banos: 2,
+            status: "vendida", videos: [], pdfUrl: null,
         },
         "06": {
             label: "Tipología A", plantaImage: "img/kiu/planta.jpg",
             area: 72, terraza: 18, dorms: 2, banos: 1,
+            status: "disponible", videos: [], pdfUrl: null,
         },
     },
 
@@ -313,18 +338,40 @@ const DATA = {
             label: "Complete Building", labelEsp: "Edificio Completo",
             viewImage: null,
             hasUnits: false,
+            images: [
+                "img/kiu/2025-12-19_Exterior Frontal.jpg",
+                "img/kiu/2025-12-19_Exterior Esquina.jpg",
+                "img/kiu/2025-12-19_Semi aerea.jpg",
+                "img/kiu/2025-12-19_Aerea.jpg",
+                "img/kiu/2025-12-19_Acceso.jpg",
+            ],
+            videos: [
+                "videos/kiu/kiu-intro.mp4",
+                "videos/kiu/exterior-orbit.mp4",
+                "videos/kiu/exterior-cinematic.mp4",
+            ],
         },
         {
             id: "skybar",
             label: "Skybar & Amenities", labelEsp: "Skybar & Amenidades",
             viewImage: "img/kiu/amenities.jpg",
             hasUnits: false,
+            images: [
+                "img/kiu/2025-12-19_Skybar.jpg",
+                "img/kiu/2025-12-19_Barbacoa.jpg",
+                "img/kiu/2025-12-19_Cowork.jpg",
+            ],
+            videos: [
+                "videos/kiu/amenities-terrace.mp4",
+            ],
         },
         {
             id: "pisos-medios",
             label: "Middle Floors", labelEsp: "Pisos Medios",
             viewImage: "img/kiu/middle-floor.jpg",
             hasUnits: true,
+            images: [],
+            videos: [],
         },
     ],
 };
@@ -333,10 +380,11 @@ const DATA = {
    STATE
 ══════════════════════════════════════════════════════════════ */
 const state = {
-    phase:          "landing",   /* landing | playing | explore */
+    phase:          "landing",
     activeFloor:    null,
     activeSlot:     "a",
     openUnit:       null,
+    openFloor:      null,
     currentTourUrl: null,
     lang:           (location.hash === "#esp") ? "esp" : "eng",
 };
@@ -382,28 +430,25 @@ function buildSidebar() {
             <span class="sr-floor-name">${label}</span>
             <span class="sr-floor-arrow"><i class="fa fa-angle-right"></i></span>
         `;
-        btn.addEventListener("click", () => selectFloor(floor.id));
+        btn.addEventListener("click", () => selectFloor(floor.id, true));
         sidebar.appendChild(btn);
     });
 }
 
 /* ══════════════════════════════════════════════════════════════
-   LOADER  —  preloads critical assets before showing the scene
+   LOADER
 ══════════════════════════════════════════════════════════════ */
 function runLoader() {
-    const loader   = $("sr-loader");
-    const bar      = $("sr-loader-bar");
-    const p        = DATA.project;
+    const loader = $("sr-loader");
+    const bar    = $("sr-loader-bar");
+    const p      = DATA.project;
 
     $("sr-loader-name").textContent = p.name;
     $("sr-loader-sub").textContent  = p.sub;
 
-    const critical = [
-        "img/kiu/kiu-start.jpg",
-        "img/kiu/kiu-end.jpg",
-    ];
+    const critical = ["img/kiu/kiu-start.jpg", "img/kiu/kiu-end.jpg"];
     let loaded = 0;
-    const total = critical.length + 1; /* +1 for video canplay */
+    const total = critical.length + 1;
 
     function tick() {
         loaded++;
@@ -418,9 +463,8 @@ function runLoader() {
     });
 
     const video = $("sr-video");
-    if (video.readyState >= 3) {
-        tick();
-    } else {
+    if (video.readyState >= 3) { tick(); }
+    else {
         video.addEventListener("canplay", tick, { once: true });
         video.addEventListener("error",   tick, { once: true });
     }
@@ -442,7 +486,6 @@ function init() {
     bindUnitHotspots();
     buildGallery(DATA.defaults.interiorImages);
 
-    /* planta image opens in lightbox on click */
     $("sr-planta-img").addEventListener("click", () => {
         const src = $("sr-planta-img").src;
         if (src) openLightbox([src], 0);
@@ -455,7 +498,6 @@ function init() {
         $("sr-btn-enter").classList.add("hidden");
         video.currentTime = 0;
         video.play();
-        // Wait for first decoded frame before fading start-frame — prevents black flash
         video.addEventListener("timeupdate", () => {
             scene.classList.add("is-playing");
         }, { once: true });
@@ -466,16 +508,34 @@ function init() {
         scene.classList.remove("is-playing");
         scene.classList.add("is-explore");
         btnBack.classList.remove("hidden");
-        selectFloor("edificio");
+        selectFloor("edificio", false);
     });
+
+    /* URL params — direct link: ?unit=03 or ?floor=skybar */
+    const params     = new URLSearchParams(location.search);
+    const unitParam  = params.get("unit");
+    const floorParam = params.get("floor");
+    if (unitParam || floorParam) {
+        state.phase = "explore";
+        scene.classList.add("is-explore");
+        $("sr-btn-enter").classList.add("hidden");
+        btnBack.classList.remove("hidden");
+        if (unitParam && DATA.units[unitParam]) {
+            const unitsFloor = DATA.floors.find(f => f.hasUnits);
+            if (unitsFloor) selectFloor(unitsFloor.id, false);
+            openUnitPanel(unitParam);
+        } else if (floorParam) {
+            selectFloor(floorParam, true);
+        }
+    }
 }
 
 /* ══════════════════════════════════════════════════════════════
-   UNIT HOTSPOTS — hover highlights + click opens panel
+   UNIT HOTSPOTS
 ══════════════════════════════════════════════════════════════ */
 function bindUnitHotspots() {
     document.querySelectorAll(".sr-unit-zone").forEach(rect => {
-        const unit = rect.getAttribute("data-unit");
+        const unit    = rect.getAttribute("data-unit");
         const overlay = $("sr-plant-" + unit);
         if (!overlay) return;
 
@@ -489,7 +549,6 @@ function bindUnitHotspots() {
             if (state.openUnit === unit) return;
             overlay.classList.remove("visible");
         });
-        /* touch feedback: brief highlight before panel opens */
         rect.addEventListener("touchstart", () => {
             if (state.phase !== "explore" || state.openUnit) return;
             const floor = DATA.floors.find(f => f.id === state.activeFloor);
@@ -506,7 +565,16 @@ function bindUnitHotspots() {
 }
 
 /* ══════════════════════════════════════════════════════════════
-   UNIT PANEL
+   STATUS
+══════════════════════════════════════════════════════════════ */
+const STATUS_LABELS = {
+    disponible: { eng: "Available",  esp: "Disponible" },
+    reservada:  { eng: "Reserved",   esp: "Reservada"  },
+    vendida:    { eng: "Sold",        esp: "Vendida"    },
+};
+
+/* ══════════════════════════════════════════════════════════════
+   GALLERY BUILDERS
 ══════════════════════════════════════════════════════════════ */
 function buildGallery(images) {
     const gallery = $("sr-up-gallery");
@@ -515,55 +583,44 @@ function buildGallery(images) {
         const item = document.createElement("div");
         item.className = "sr-up-gallery-item";
         const img = document.createElement("img");
-        img.src = src;
-        img.alt = "Interior " + (i + 1);
-        img.loading = "lazy";
+        img.src = src; img.alt = "Interior " + (i + 1); img.loading = "lazy";
         img.addEventListener("click", () => openLightbox(images, i));
         item.appendChild(img);
         gallery.appendChild(item);
     });
 }
 
-function openUnitPanel(unit) {
-    state.openUnit = unit;
-
-    const unitData = DATA.units[unit] || {};
-    const plantaSrc   = unitData.plantaImage   || "img/kiu/planta.jpg";
-    const images      = unitData.interiorImages || DATA.defaults.interiorImages;
-    state.currentTourUrl = unitData.tourUrl     || DATA.defaults.tourUrl;
-
-    /* update panel header */
-    $("sr-up-name").textContent = unitData.label || DATA.project.name;
-
-    /* update specs */
-    $("spec-area").textContent    = unitData.area    ?? "—";
-    $("spec-terraza").textContent = unitData.terraza ?? "—";
-    $("spec-dorms").textContent   = unitData.dorms   ?? "—";
-    $("spec-banos").textContent   = unitData.banos   ?? "—";
-
-    /* update planta image */
-    const plantaEl = $("sr-planta-img");
-    plantaEl.src = plantaSrc;
-    plantaEl.dataset.src = plantaSrc;
-
-    /* rebuild gallery with unit images */
-    buildGallery(images);
-
-    document.querySelectorAll(".sr-plant-overlay").forEach(el => el.classList.remove("visible"));
-    const overlay = $("sr-plant-" + unit);
-    if (overlay) overlay.classList.add("visible");
-    scene.classList.add("is-open");
-    $("sr-unit-panel").removeAttribute("aria-hidden");
+function buildVideoGallery(videos) {
+    const gallery = $("sr-up-gallery-videos");
+    gallery.innerHTML = "";
+    if (!videos || !videos.length) return;
+    videos.forEach((src, i) => {
+        const item = document.createElement("div");
+        item.className = "sr-up-gallery-item sr-up-gallery-item--video";
+        const vid = document.createElement("video");
+        vid.src = src; vid.preload = "metadata"; vid.muted = true;
+        const overlay = document.createElement("div");
+        overlay.className = "sr-video-play-overlay";
+        overlay.innerHTML = '<i class="fa fa-play-circle"></i>';
+        item.appendChild(vid);
+        item.appendChild(overlay);
+        item.addEventListener("click", () => openLightboxVideo(videos, i));
+        gallery.appendChild(item);
+    });
 }
 
-function closeUnitPanel() {
-    state.openUnit = null;
-    scene.classList.remove("is-open");
-    $("sr-unit-panel").setAttribute("aria-hidden", "true");
-    document.querySelectorAll(".sr-plant-overlay").forEach(el => el.classList.remove("visible"));
+/* ══════════════════════════════════════════════════════════════
+   TABS
+══════════════════════════════════════════════════════════════ */
+function resetTabs(activeTabName) {
+    document.querySelectorAll(".sr-up-tab").forEach(t =>
+        t.classList.toggle("active", t.getAttribute("data-tab") === activeTabName)
+    );
+    document.querySelectorAll(".sr-up-content").forEach(c =>
+        c.classList.toggle("active", c.id === "sr-tab-" + activeTabName)
+    );
 }
 
-/* Tabs */
 document.querySelectorAll(".sr-up-tab").forEach(tab => {
     tab.addEventListener("click", () => {
         const target = tab.getAttribute("data-tab");
@@ -573,7 +630,134 @@ document.querySelectorAll(".sr-up-tab").forEach(tab => {
         );
     });
 });
+
+/* ══════════════════════════════════════════════════════════════
+   UNIT PANEL
+══════════════════════════════════════════════════════════════ */
+function openUnitPanel(unit) {
+    state.openUnit  = unit;
+    state.openFloor = null;
+
+    const unitData = DATA.units[unit] || {};
+    const plantaSrc  = unitData.plantaImage   || "img/kiu/planta.jpg";
+    const images     = unitData.interiorImages || DATA.defaults.interiorImages;
+    const videos     = unitData.videos?.length  ? unitData.videos : (DATA.defaults.videos || []);
+    state.currentTourUrl = unitData.tourUrl || DATA.defaults.tourUrl;
+
+    /* panel mode */
+    const panel = $("sr-unit-panel");
+    panel.classList.remove("sr-unit-panel--floor");
+
+    /* header */
+    $("sr-up-label").textContent = "Tipología";
+    $("sr-up-name").textContent  = unitData.label || DATA.project.name;
+
+    /* status badge */
+    const statusEl = $("sr-up-status");
+    const s = unitData.status || "disponible";
+    statusEl.textContent = STATUS_LABELS[s]?.[state.lang] || s;
+    statusEl.className   = "sr-up-status sr-up-status--" + s;
+    statusEl.style.display = "";
+
+    /* specs */
+    $("spec-area").textContent    = unitData.area    ?? "—";
+    $("spec-terraza").textContent = unitData.terraza ?? "—";
+    $("spec-dorms").textContent   = unitData.dorms   ?? "—";
+    $("spec-banos").textContent   = unitData.banos   ?? "—";
+    $("sr-up-specs").style.display = "";
+
+    /* planta */
+    const plantaEl = $("sr-planta-img");
+    plantaEl.src = plantaSrc; plantaEl.dataset.src = plantaSrc;
+
+    /* tabs */
+    $("sr-tab-videos-btn").style.display = videos.length ? "" : "none";
+    resetTabs("planta");
+
+    /* galleries */
+    buildGallery(images);
+    buildVideoGallery(videos);
+
+    /* actions */
+    $("sr-up-actions").style.display = "";
+    $("sr-btn-tour").style.display   = state.currentTourUrl ? "" : "none";
+
+    const pdfBtn = $("sr-up-btn-pdf");
+    pdfBtn.style.display = "";
+    if (unitData.pdfUrl) {
+        pdfBtn.href = unitData.pdfUrl;
+        pdfBtn.setAttribute("download", "");
+        pdfBtn.classList.remove("sr-up-btn--pending");
+    } else {
+        pdfBtn.removeAttribute("href");
+        pdfBtn.removeAttribute("download");
+        pdfBtn.classList.add("sr-up-btn--pending");
+    }
+
+    document.querySelectorAll(".sr-plant-overlay").forEach(el => el.classList.remove("visible"));
+    const overlay = $("sr-plant-" + unit);
+    if (overlay) overlay.classList.add("visible");
+
+    scene.classList.add("is-open");
+    panel.removeAttribute("aria-hidden");
+}
+
+/* ══════════════════════════════════════════════════════════════
+   FLOOR PANEL  —  gallery for non-unit floors (Skybar, etc.)
+══════════════════════════════════════════════════════════════ */
+function openFloorPanel(floor) {
+    state.openFloor = floor.id;
+    state.openUnit  = null;
+
+    const panel = $("sr-unit-panel");
+    panel.classList.add("sr-unit-panel--floor");
+
+    /* header */
+    $("sr-up-label").textContent = state.lang === "esp" ? floor.labelEsp : floor.label;
+    $("sr-up-name").textContent  = "";
+    $("sr-up-status").style.display = "none";
+
+    /* hide specs */
+    $("sr-up-specs").style.display = "none";
+
+    /* tabs: hide planta, show/hide videos */
+    $("sr-tab-videos-btn").style.display = (floor.videos && floor.videos.length) ? "" : "none";
+    resetTabs("galeria");
+
+    /* galleries */
+    buildGallery(floor.images || []);
+    buildVideoGallery(floor.videos || []);
+
+    /* hide unit-only actions */
+    $("sr-up-actions").style.display = "none";
+
+    scene.classList.add("is-open");
+    panel.removeAttribute("aria-hidden");
+}
+
+function closeUnitPanel() {
+    state.openUnit  = null;
+    state.openFloor = null;
+    scene.classList.remove("is-open");
+    const panel = $("sr-unit-panel");
+    panel.setAttribute("aria-hidden", "true");
+    panel.classList.remove("sr-unit-panel--floor");
+    document.querySelectorAll(".sr-plant-overlay").forEach(el => el.classList.remove("visible"));
+}
+
 $("sr-up-close").addEventListener("click", closeUnitPanel);
+
+$("sr-up-btn-share").addEventListener("click", () => {
+    if (!state.openUnit) return;
+    const url = location.origin + location.pathname + "?unit=" + state.openUnit;
+    navigator.clipboard.writeText(url).then(() => {
+        const span = $("sr-up-btn-share").querySelector("span");
+        span.textContent = "¡Copiado!";
+        setTimeout(() => { span.textContent = "Compartir"; }, 2000);
+    }).catch(() => {
+        prompt("Copiá este link:", url);
+    });
+});
 
 /* ══════════════════════════════════════════════════════════════
    TOUR MODAL
@@ -603,26 +787,55 @@ tourMaxBtn.addEventListener("click", () => {
 });
 
 /* ══════════════════════════════════════════════════════════════
-   LIGHTBOX  — works for gallery images and planta (single image)
+   LIGHTBOX  —  images + video
 ══════════════════════════════════════════════════════════════ */
-let lbImages = [];
-let lbIndex  = 0;
-const lb     = $("sr-lightbox");
-const lbImg  = $("sr-lb-img");
+let lbItems = [];
+let lbIndex = 0;
+let lbMode  = "image";
+const lb    = $("sr-lightbox");
+const lbImg = $("sr-lb-img");
+const lbVid = $("sr-lb-video");
 
 function openLightbox(images, i) {
-    lbImages = Array.isArray(images) ? images : [images];
-    lbIndex  = i || 0;
-    lbImg.src = lbImages[lbIndex];
+    lbMode  = "image";
+    lbItems = Array.isArray(images) ? images : [images];
+    lbIndex = i || 0;
+    lbImg.src = lbItems[lbIndex];
+    lbImg.style.display = "";
+    lbVid.style.display = "none";
+    lbVid.pause && lbVid.pause();
     lb.classList.add("active");
-    const single = lbImages.length <= 1;
+    const single = lbItems.length <= 1;
     $("sr-lb-prev").style.display = single ? "none" : "";
     $("sr-lb-next").style.display = single ? "none" : "";
 }
-function closeLightbox() { lb.classList.remove("active"); }
+
+function openLightboxVideo(videos, i) {
+    lbMode  = "video";
+    lbItems = Array.isArray(videos) ? videos : [videos];
+    lbIndex = i || 0;
+    lbVid.src = lbItems[lbIndex];
+    lbVid.style.display = "block";
+    lbImg.style.display = "none";
+    lb.classList.add("active");
+    const single = lbItems.length <= 1;
+    $("sr-lb-prev").style.display = single ? "none" : "";
+    $("sr-lb-next").style.display = single ? "none" : "";
+    lbVid.play();
+}
+
+function closeLightbox() {
+    lb.classList.remove("active");
+    if (lbMode === "video") { lbVid.pause(); lbVid.src = ""; }
+}
+
 function lbStep(dir) {
-    lbIndex = (lbIndex + dir + lbImages.length) % lbImages.length;
-    lbImg.src = lbImages[lbIndex];
+    lbIndex = (lbIndex + dir + lbItems.length) % lbItems.length;
+    if (lbMode === "video") {
+        lbVid.pause(); lbVid.src = lbItems[lbIndex]; lbVid.play();
+    } else {
+        lbImg.src = lbItems[lbIndex];
+    }
 }
 $("sr-lb-close").addEventListener("click", closeLightbox);
 $("sr-lb-prev").addEventListener("click", () => lbStep(-1));
@@ -630,44 +843,41 @@ $("sr-lb-next").addEventListener("click", () => lbStep(1));
 lb.addEventListener("click", e => { if (e.target === lb) closeLightbox(); });
 
 /* ══════════════════════════════════════════════════════════════
-   SELECT FLOOR  — crossfade to viewImage (if any)
+   SELECT FLOOR
 ══════════════════════════════════════════════════════════════ */
-function selectFloor(fid) {
+function selectFloor(fid, openPanel) {
     if (state.phase !== "explore") return;
-
     const floor = DATA.floors.find(f => f.id === fid);
     if (!floor) return;
 
-    /* highlight sidebar button */
+    /* close any open panel */
+    if (state.openUnit || state.openFloor) closeUnitPanel();
+
     document.querySelectorAll(".sr-floor-btn").forEach(b =>
         b.classList.toggle("active", b.getAttribute("data-fid") === fid)
     );
-
     state.activeFloor = fid;
 
-    if (floor.viewImage) {
-        crossfadeTo(floor.viewImage);
-    } else {
-        /* no image — crossfade back to building */
-        clearFloorImage();
+    if (floor.viewImage) { crossfadeTo(floor.viewImage); }
+    else { clearFloorImage(); }
+
+    /* open floor gallery panel if requested and floor has content */
+    const hasContent = (floor.images && floor.images.length) || (floor.videos && floor.videos.length);
+    if (openPanel && !floor.hasUnits && hasContent) {
+        openFloorPanel(floor);
     }
 }
 
-/* A/B crossfade — outgoing stays opaque until incoming is fully visible,
-   then snaps to hidden (prevents background bleeding through) */
 function crossfadeTo(src) {
     const incoming = state.activeSlot === "a" ? imgB : imgA;
     const outgoing = state.activeSlot === "a" ? imgA : imgB;
-
     incoming.src = src;
     incoming.classList.add("visible");
-
     setTimeout(() => {
         outgoing.classList.add("no-fade");
         outgoing.classList.remove("visible");
         requestAnimationFrame(() => outgoing.classList.remove("no-fade"));
     }, 720);
-
     state.activeSlot = state.activeSlot === "a" ? "b" : "a";
 }
 
@@ -685,12 +895,9 @@ function resetToLanding() {
     closeUnitPanel();
     state.phase = "landing";
     state.activeFloor = null;
-    state.activeSlot = "a";
-
+    state.activeSlot  = "a";
     const video = $("sr-video");
-    video.pause();
-    video.currentTime = 0;
-
+    video.pause(); video.currentTime = 0;
     clearFloorImage();
     scene.classList.remove("is-playing", "is-explore", "is-open");
     $("sr-btn-enter").classList.remove("hidden");
@@ -705,7 +912,7 @@ document.addEventListener("keydown", e => {
     if (e.key === "Escape") {
         if (tourModal.classList.contains("active")) { closeTour(); return; }
         if (lb.classList.contains("active"))        { closeLightbox(); return; }
-        if (state.openUnit)                         { closeUnitPanel(); return; }
+        if (state.openUnit || state.openFloor)      { closeUnitPanel(); return; }
         if (state.phase === "explore")               resetToLanding();
     }
 });

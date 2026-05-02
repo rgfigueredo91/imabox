@@ -742,3 +742,111 @@ html, body {
     .sr-lightbox-next { right: 8px; width: 52px; height: 52px; }
     .sr-lightbox-close { top: 16px; right: 16px; width: 48px; height: 48px; }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   UNIT PANEL HEADER — right side (status + close stacked)
+   ═══════════════════════════════════════════════════════════════ */
+.sr-up-header-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   STATUS BADGE
+   ═══════════════════════════════════════════════════════════════ */
+.sr-up-status {
+    font-size: 0.54rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 3px;
+    font-weight: 400;
+    white-space: nowrap;
+}
+.sr-up-status--disponible {
+    background: rgba(76, 175, 80, 0.12);
+    color: #81c784;
+    border: 1px solid rgba(76, 175, 80, 0.28);
+}
+.sr-up-status--reservada {
+    background: rgba(255, 152, 0, 0.12);
+    color: #ffb74d;
+    border: 1px solid rgba(255, 152, 0, 0.28);
+}
+.sr-up-status--vendida {
+    background: rgba(244, 67, 54, 0.12);
+    color: #e57373;
+    border: 1px solid rgba(244, 67, 54, 0.28);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   VIDEO GALLERY ITEMS
+   ═══════════════════════════════════════════════════════════════ */
+.sr-up-gallery-item--video {
+    position: relative;
+    background: #0a0a0a;
+    cursor: pointer;
+}
+.sr-up-gallery-item--video video {
+    width: 100%;
+    display: block;
+    max-height: 200px;
+    object-fit: cover;
+    pointer-events: none;
+}
+.sr-video-play-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.38);
+    transition: background 0.2s;
+    pointer-events: none;
+}
+.sr-up-gallery-item--video:hover .sr-video-play-overlay { background: rgba(0, 0, 0, 0.18); }
+.sr-video-play-overlay i { font-size: 2.8rem; color: rgba(255, 255, 255, 0.85); }
+
+/* ═══════════════════════════════════════════════════════════════
+   LIGHTBOX VIDEO
+   ═══════════════════════════════════════════════════════════════ */
+#sr-lb-video {
+    display: none;
+    max-width: 92vw;
+    max-height: 88vh;
+    outline: none;
+    background: #000;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   GHOST BUTTON (PDF download)
+   ═══════════════════════════════════════════════════════════════ */
+.sr-up-btn--ghost {
+    background: none;
+    color: rgba(255, 255, 255, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+.sr-up-btn--ghost:hover {
+    color: rgba(255, 255, 255, 0.75);
+    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.03);
+}
+.sr-up-btn--pending {
+    opacity: 0.35;
+    cursor: default;
+    pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FLOOR PANEL MODE — hides unit-only header elements via CSS
+   ═══════════════════════════════════════════════════════════════ */
+.sr-unit-panel--floor .sr-up-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    color: rgba(255, 255, 255, 0.65);
+}
+.sr-unit-panel--floor .sr-up-name { display: none; }
