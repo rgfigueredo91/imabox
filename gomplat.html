@@ -392,6 +392,192 @@
             border: 1px solid rgba(255,255,255,0.1);
             padding: 0 2px; cursor: pointer; background: none;
         }
+
+        /* ── AI PANEL ────────────────────────────────────────────── */
+        .gp-ai-panel {
+            position: fixed;
+            top: 0; left: 0;
+            width: 260px; height: 100%;
+            background: rgba(8,8,8,0.94);
+            border-right: 1px solid rgba(255,255,255,0.07);
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            padding: 32px 0 28px;
+            overflow-y: auto;
+            transform: translateX(-100%);
+            transition: transform 0.32s cubic-bezier(.4,0,.2,1);
+        }
+        .gp-ai-panel.on { transform: translateX(0); }
+        .gp-ai-panel::-webkit-scrollbar { width: 2px; }
+        .gp-ai-panel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); }
+        .gp-ai-status {
+            font-size: 0.44rem; letter-spacing: 0.28em;
+            color: rgba(255,255,255,0.22); text-transform: uppercase;
+            margin-bottom: 14px; min-height: 1.1em;
+        }
+        .gp-ai-prompt {
+            width: 100%;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.75);
+            font-family: inherit; font-size: 0.52rem;
+            letter-spacing: 0.04em;
+            padding: 8px 10px; outline: none;
+            resize: none; line-height: 1.65; min-height: 62px;
+            margin-bottom: 12px;
+        }
+        .gp-ai-prompt:focus { border-color: rgba(255,255,255,0.28); }
+        .gp-ai-prompt::placeholder { color: rgba(255,255,255,0.15); }
+        .gp-api-input {
+            width: 100%; background: transparent;
+            border: 1px solid rgba(255,255,255,0.07);
+            color: rgba(255,255,255,0.22);
+            font-family: monospace; font-size: 0.42rem;
+            padding: 6px 8px; outline: none; margin-bottom: 10px;
+        }
+        .gp-api-input:focus { border-color: rgba(255,255,255,0.18); color: rgba(255,255,255,0.5); }
+        .gp-api-input option { background: #111; color: rgba(255,255,255,0.8); }
+        .gp-ai-img-wrap { padding: 0 20px 20px; }
+        #ai-img {
+            width: 100%; display: block;
+            border: 1px solid rgba(255,255,255,0.07);
+            opacity: 0; transition: opacity 0.5s ease;
+            cursor: zoom-in;
+        }
+        #ai-img.visible { opacity: 1; }
+
+        /* ── AI LOADING ──────────────────────────────────────────────── */
+        #gp-ai-loading {
+            position: fixed; inset: 0;
+            z-index: 8;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            background: rgba(0,0,0,0.18);
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        #gp-ai-loading.on { opacity: 1; pointer-events: auto; }
+        .gp-spinner {
+            width: 36px; height: 36px;
+            border: 1.5px solid rgba(255,255,255,0.12);
+            border-top-color: rgba(255,255,255,0.75);
+            border-radius: 50%;
+            animation: gp-spin 0.8s linear infinite;
+        }
+        @keyframes gp-spin { to { transform: rotate(360deg); } }
+
+        /* ── SKETCH CANVAS ──────────────────────────────────────────── */
+        #gp-sketch-canvas {
+            position: fixed; inset: 0;
+            z-index: 6;
+            pointer-events: none;
+        }
+        body.mode-sketch #gp-sketch-canvas { pointer-events: auto; }
+        body.mode-sketch { cursor: crosshair; }
+
+        /* ── SKETCH POPUP ────────────────────────────────────────────── */
+        .gp-sketch-popup {
+            position: fixed;
+            bottom: 84px;
+            left: calc(50% + 64px);
+            transform: translateX(-50%);
+            z-index: 10;
+            background: rgba(8,8,8,0.94);
+            border: 1px solid rgba(255,255,255,0.09);
+            padding: 18px 20px;
+            width: 210px;
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .gp-sketch-popup.on { display: flex; }
+        .gp-sketch-colors { display: flex; gap: 8px; flex-wrap: wrap; }
+        .gp-swatch {
+            width: 22px; height: 22px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            cursor: pointer; flex-shrink: 0;
+            transition: border-color 0.15s;
+        }
+        .gp-swatch.active { border-color: rgba(255,255,255,0.75); }
+        .gp-swatch:hover  { border-color: rgba(255,255,255,0.4); }
+        .gp-sketch-sizes { display: flex; gap: 6px; }
+        .gp-size-btn {
+            flex: 1; text-align: center;
+            padding: 5px 0;
+            font-family: inherit;
+            font-size: 0.5rem; letter-spacing: 0.1em;
+            color: rgba(255,255,255,0.38);
+            border: 1px solid rgba(255,255,255,0.1);
+            cursor: pointer; background: transparent;
+            transition: color 0.15s, border-color 0.15s;
+        }
+        .gp-size-btn.active { color: #fff; border-color: rgba(255,255,255,0.4); }
+        .gp-size-btn:hover  { color: rgba(255,255,255,0.7); }
+
+        /* ── AI OVERLAY ──────────────────────────────────────────── */
+        #gp-ai-overlay {
+            position: fixed; inset: 0;
+            z-index: 5;
+            opacity: 0;
+            transition: opacity 0.45s ease;
+            pointer-events: none;
+        }
+        #gp-ai-overlay img {
+            width: 100%; height: 100%;
+            object-fit: cover; display: block;
+        }
+        #gp-ai-overlay.visible { opacity: 1; }
+
+        /* ── AI HISTORY NAV ─────────────────────────────────────────── */
+        .gp-ai-nav {
+            position: fixed;
+            top: 50%; transform: translateY(-50%);
+            z-index: 9;
+            background: rgba(0,0,0,0.35);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.7);
+            width: 36px; height: 64px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.25s, background 0.15s;
+        }
+        .gp-ai-nav:hover { background: rgba(0,0,0,0.6); color: #fff; }
+        .gp-ai-nav.visible { opacity: 1; pointer-events: auto; }
+        #gp-ai-nav-prev { left: 0; border-left: none; border-radius: 0 3px 3px 0; }
+        #gp-ai-nav-next { right: 0; border-right: none; border-radius: 3px 0 0 3px; }
+        #gp-ai-nav-count {
+            position: fixed;
+            bottom: 24px; left: 50%; transform: translateX(-50%);
+            z-index: 9;
+            font-size: 0.44rem; letter-spacing: 0.3em;
+            color: rgba(255,255,255,0.45);
+            text-transform: uppercase;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.25s;
+        }
+        #gp-ai-nav-count.visible { opacity: 1; }
+
+        /* ── LIGHTBOX ─────────────────────────────────────────────── */
+        .gp-lightbox {
+            position: fixed; inset: 0;
+            z-index: 500;
+            background: rgba(0,0,0,0.92);
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.2s ease;
+            cursor: zoom-out;
+        }
+        .gp-lightbox.on { opacity: 1; pointer-events: all; }
+        .gp-lightbox img {
+            max-width: 90vw; max-height: 90vh;
+            display: block;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 0 80px rgba(0,0,0,0.8);
+        }
     </style>
 </head>
 <body>
@@ -405,6 +591,37 @@
         <button class="gp-profile-clear" id="profile-clear-btn">Limpiar</button>
     </div>
     <svg id="profile-svg"></svg>
+</div>
+
+<!-- AI Render Panel -->
+<div class="gp-ai-panel" id="gp-ai-panel">
+    <div class="gp-section">
+        <div class="gp-section-title">IA · Render</div>
+        <div class="gp-ai-status" id="ai-status">listo</div>
+        <select class="gp-api-input" id="ai-quality" style="color:rgba(255,255,255,0.5);cursor:pointer;margin-bottom:12px">
+            <option value="nano">Nano Banana Pro 1K (rápido)</option>
+            <option value="nano2k">Nano Banana Pro 2K</option>
+            <option value="nano4k">Nano Banana Pro 4K</option>
+            <option value="fast">FLUX Dev (28 pasos, ~5s)</option>
+            <option value="quality">FLUX Dev HD (50 pasos, ~10s)</option>
+            <option value="pro">FLUX General (~8s)</option>
+        </select>
+        <textarea class="gp-ai-prompt" id="ai-prompt" placeholder="aerial masterplan render, photorealistic, lush green vegetation, natural landscape, soft golden hour light, high resolution, architectural visualization"></textarea>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+            <span class="gp-popup-label">Intensidad</span>
+            <span class="gp-popup-value" id="ai-str-val">75%</span>
+        </div>
+        <input type="range" class="gp-slider" id="ai-strength" min="30" max="95" value="75" style="margin-bottom:16px">
+        <div class="gp-layer active" id="ai-overlay-layer" style="margin-bottom:14px">
+            <span class="gp-layer-label">Overlay 3D</span>
+            <div class="gp-toggle"></div>
+        </div>
+        <button class="gp-cam-btn" id="ai-generate-btn">Generar</button>
+        <input type="password" class="gp-api-input" id="ai-key" placeholder="API key" style="margin-top:10px">
+    </div>
+    <div class="gp-ai-img-wrap">
+        <img id="ai-img" alt="">
+    </div>
 </div>
 
 <!-- Loader -->
@@ -539,9 +756,54 @@
     <div class="gp-tool" id="tool-screenshot" title="Captura">
         <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="12" cy="12" r="3"/><path d="M9 5l1.5-2h3L15 5"/></svg>
     </div>
+    <div class="gp-tool" id="tool-sketch" title="Boceto IA">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+    </div>
+    <div class="gp-sep"></div>
+    <div class="gp-tool" id="tool-ai" title="IA Render">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><circle cx="5" cy="5" r="1.5"/><circle cx="19" cy="5" r="1.5"/><circle cx="5" cy="19" r="1.5"/><circle cx="19" cy="19" r="1.5"/><line x1="12" y1="12" x2="6.1" y2="6.1"/><line x1="12" y1="12" x2="17.9" y2="6.1"/><line x1="12" y1="12" x2="6.1" y2="17.9"/><line x1="12" y1="12" x2="17.9" y2="17.9"/></svg>
+    </div>
 </div>
 
 <div class="gp-measure-label" id="gp-measure-label"></div>
+
+<div id="gp-ai-overlay"><img id="overlay-img" alt=""></div>
+
+<div class="gp-ai-nav" id="gp-ai-nav-prev">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+</div>
+<div class="gp-ai-nav" id="gp-ai-nav-next">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+</div>
+<div id="gp-ai-nav-count"></div>
+
+<div id="gp-ai-loading"><div class="gp-spinner"></div></div>
+
+<canvas id="gp-sketch-canvas"></canvas>
+
+<!-- Sketch popup -->
+<div class="gp-sketch-popup" id="gp-sketch-popup">
+    <span class="gp-popup-label">Color</span>
+    <div class="gp-sketch-colors">
+        <div class="gp-swatch active" data-color="#ffffff" style="background:#fff"></div>
+        <div class="gp-swatch" data-color="#000000" style="background:#000;border-color:rgba(255,255,255,0.18)"></div>
+        <div class="gp-swatch" data-color="#ff4444" style="background:#ff4444"></div>
+        <div class="gp-swatch" data-color="#ffcc00" style="background:#ffcc00"></div>
+        <div class="gp-swatch" data-color="#44dd88" style="background:#44dd88"></div>
+        <div class="gp-swatch" data-color="#4488ff" style="background:#4488ff"></div>
+    </div>
+    <span class="gp-popup-label">Tamaño</span>
+    <div class="gp-sketch-sizes">
+        <button class="gp-size-btn active" data-size="4">S</button>
+        <button class="gp-size-btn" data-size="12">M</button>
+        <button class="gp-size-btn" data-size="24">L</button>
+    </div>
+    <button class="gp-cam-btn" id="sketch-clear-btn" style="margin-top:4px">Limpiar</button>
+</div>
+
+<div class="gp-lightbox" id="gp-lightbox">
+    <img id="lightbox-img" alt="">
+</div>
 
 <script type="importmap">
 {
@@ -634,9 +896,17 @@ resize();
 
 /* ── ANIMATE ─────────────────────────────────────────────────────── */
 let measureMid = null;
+const allDotMarkers = [];   // acumula todas las esferas de corte y medición
+
+function screenRadius(worldPos, pixels) {
+    const dist = camera.position.distanceTo(worldPos);
+    return dist * Math.tan(camera.fov * Math.PI / 360) * pixels / (canvas.height * 0.5);
+}
+
 function animate() {
     requestAnimationFrame(animate);
     controls.update();
+    allDotMarkers.forEach(m => m.scale.setScalar(screenRadius(m.position, 6)));
     renderer.render(scene, camera);
     if (measureMid) {
         const scr = worldToScreen(measureMid);
@@ -784,6 +1054,7 @@ const cutHoverMarker = new THREE.Mesh(
 cutHoverMarker.renderOrder = 999;
 cutHoverMarker.visible = false;
 scene.add(cutHoverMarker);
+allDotMarkers.push(cutHoverMarker);
 
 /* ── APPLY MODE ──────────────────────────────────────────────────── */
 function applyMode(mode) {
@@ -1174,7 +1445,7 @@ function updateCutLine3D(pts) {
 
 function clearCut() {
     cutPts.length = 0;
-    cutMarkers.forEach(m => { scene.remove(m); m.geometry.dispose(); m.material.dispose(); });
+    cutMarkers.forEach(m => { scene.remove(m); m.geometry.dispose(); m.material.dispose(); allDotMarkers.splice(allDotMarkers.indexOf(m), 1); });
     cutMarkers.length = 0;
     if (cutLine3D) { scene.remove(cutLine3D); cutLine3D.geometry.dispose(); cutLine3D.material.dispose(); cutLine3D = null; }
     const svg = document.getElementById('profile-svg');
@@ -1214,7 +1485,7 @@ document.getElementById('profile-svg').addEventListener('mousemove', e => {
     txt.textContent = `${s.elev.toFixed(1)} m · ${s.dist.toFixed(0)} m`;
 
     // Marcador 3D sobre el terreno
-    cutHoverMarker.position.set(s.x, s.elev + terrainDim * 0.01, s.z);
+    cutHoverMarker.position.set(s.x, s.elev, s.z);
     cutHoverMarker.visible = true;
 });
 document.getElementById('profile-svg').addEventListener('mouseleave', () => {
@@ -1263,7 +1534,7 @@ document.getElementById('cam-front').addEventListener('click', () => {
 
 /* ── TOOLS ───────────────────────────────────────────────────────── */
 let activeTool = 'orbit';
-const toolEls  = ['orbit', 'measure', 'sun', 'screenshot', 'draw', 'box', 'cut'].reduce((o, id) => {
+const toolEls  = ['orbit', 'measure', 'sun', 'screenshot', 'draw', 'box', 'cut', 'sketch'].reduce((o, id) => {
     o[id] = document.getElementById('tool-' + id); return o;
 }, {});
 
@@ -1275,9 +1546,11 @@ function setTool(name) {
     document.body.className = name === 'measure' ? 'mode-measure' :
                               name === 'draw'    ? 'mode-draw'    :
                               name === 'box'     ? 'mode-box'     :
-                              name === 'cut'     ? 'mode-cut'     : '';
-    controls.enabled = (name !== 'measure' && name !== 'draw' && name !== 'cut');
-    if (name !== 'sun') document.getElementById('gp-sun-popup').classList.remove('on');
+                              name === 'cut'     ? 'mode-cut'     :
+                              name === 'sketch'  ? 'mode-sketch'  : '';
+    controls.enabled = (name !== 'measure' && name !== 'draw' && name !== 'cut' && name !== 'sketch');
+    if (name !== 'sun')    document.getElementById('gp-sun-popup').classList.remove('on');
+    if (name !== 'sketch') document.getElementById('gp-sketch-popup').classList.remove('on');
     if (name !== 'measure') resetMeasure();
     if (name !== 'draw') endDraw();
     document.getElementById('gp-profile').classList.toggle('on', name === 'cut');
@@ -1288,6 +1561,11 @@ toolEls.measure.addEventListener('click', () => setTool(activeTool === 'measure'
 toolEls.draw.addEventListener('click', () => setTool(activeTool === 'draw' ? 'orbit' : 'draw'));
 toolEls.box.addEventListener('click', () => setTool(activeTool === 'box' ? 'orbit' : 'box'));
 toolEls.cut.addEventListener('click', () => setTool(activeTool === 'cut' ? 'orbit' : 'cut'));
+toolEls.sketch.addEventListener('click', () => {
+    const on = activeTool !== 'sketch';
+    setTool(on ? 'sketch' : 'orbit');
+    document.getElementById('gp-sketch-popup').classList.toggle('on', on);
+});
 toolEls.sun.addEventListener('click', () => {
     const popup = document.getElementById('gp-sun-popup');
     const on = popup.classList.toggle('on');
@@ -1331,7 +1609,7 @@ function worldToScreen(v3) {
 
 function resetMeasure() {
     measurePts = [];
-    measureMarkers.forEach(m => scene.remove(m));
+    measureMarkers.forEach(m => { scene.remove(m); allDotMarkers.splice(allDotMarkers.indexOf(m), 1); });
     measureMarkers = [];
     if (measureLine) { scene.remove(measureLine); measureLine = null; }
     measureLabel.style.display = 'none';
@@ -1352,12 +1630,12 @@ canvas.addEventListener('click', e => {
         if (!hits.length) return;
         const pt = hits[0].point.clone();
         cutPts.push(pt);
-        const r   = terrainDim * 0.004;
-        const dot = new THREE.Mesh(new THREE.SphereGeometry(r, 8, 8),
-                                   new THREE.MeshBasicMaterial({ color: 0xffffff }));
+        const dot = new THREE.Mesh(new THREE.SphereGeometry(1, 8, 8),
+                                   new THREE.MeshBasicMaterial({ color: 0xffffff, depthTest: false }));
         dot.position.copy(pt);
         scene.add(dot);
         cutMarkers.push(dot);
+        allDotMarkers.push(dot);
         if (cutPts.length >= 2) {
             updateCutLine3D(cutPts);
             drawProfile(sampleProfile(cutPts));
@@ -1383,6 +1661,7 @@ canvas.addEventListener('click', e => {
     dot.position.copy(pt);
     scene.add(dot);
     measureMarkers.push(dot);
+    allDotMarkers.push(dot);
 
     if (measurePts.length === 2) {
         const [a, b] = measurePts;
@@ -1452,15 +1731,13 @@ function continueDraw(e) {
     if (last && pt.distanceTo(last) < terrainDim * 0.0008) return;
     drawPts.push(pt);
     if (drawPts.length < 2) return;
-    const positions = new Float32Array(drawPts.length * 3);
-    drawPts.forEach((p, i) => { positions[i*3]=p.x; positions[i*3+1]=p.y; positions[i*3+2]=p.z; });
-    if (!drawCurrent) {
-        drawCurrent = buildLine2(drawPts, drawColor, drawWidth);
-        scene.add(drawCurrent);
-    } else {
-        drawCurrent.geometry.setPositions(positions);
-        drawCurrent.computeLineDistances();
+    if (drawCurrent) {
+        scene.remove(drawCurrent);
+        drawCurrent.geometry.dispose();
+        drawCurrent.material.dispose();
     }
+    drawCurrent = buildLine2(drawPts, drawColor, drawWidth);
+    scene.add(drawCurrent);
 }
 
 function endDraw() {
@@ -1647,6 +1924,241 @@ window.addEventListener('keydown', e => {
     }
     if (e.key === 'Escape' && activeTool === 'box') deselectBox();
     if (e.key === 'Escape' && activeTool === 'cut') clearCut();
+});
+
+/* ── AI RENDER ──────────────────────────────────────────────────────── */
+let aiPending = false;
+
+{
+    const saved = localStorage.getItem('gp_key_fal-ai');
+    if (saved) document.getElementById('ai-key').value = saved;
+}
+document.getElementById('ai-key').addEventListener('change', e =>
+    localStorage.setItem('gp_key_fal-ai', e.target.value.trim())
+);
+document.getElementById('ai-strength').addEventListener('input', function () {
+    document.getElementById('ai-str-val').textContent = this.value + '%';
+});
+
+function captureThumb() {
+    renderer.render(scene, camera);
+    const MAX = 768;
+    const w = canvas.width, h = canvas.height;
+    const off = document.createElement('canvas');
+    if (w >= h) { off.width = MAX; off.height = Math.round(MAX * h / w); }
+    else        { off.height = MAX; off.width  = Math.round(MAX * w / h); }
+    const ctx = off.getContext('2d');
+    ctx.drawImage(canvas, 0, 0, off.width, off.height);
+    const sk = document.getElementById('gp-sketch-canvas');
+    if (sk) ctx.drawImage(sk, 0, 0, off.width, off.height);
+    return off.toDataURL('image/jpeg', 0.85);
+}
+
+function setAiStatus(msg) { document.getElementById('ai-status').textContent = msg; }
+
+let aiOverlayOn = true;
+const aiHistory  = [];
+let   aiHistIdx  = -1;
+
+function updateNavUI() {
+    const count   = aiHistory.length;
+    const prevEl  = document.getElementById('gp-ai-nav-prev');
+    const nextEl  = document.getElementById('gp-ai-nav-next');
+    const countEl = document.getElementById('gp-ai-nav-count');
+    const show    = count > 1;
+    prevEl.classList.toggle('visible',  show && aiHistIdx > 0);
+    nextEl.classList.toggle('visible',  show && aiHistIdx < count - 1);
+    countEl.classList.toggle('visible', show);
+    if (show) countEl.textContent = `${aiHistIdx + 1} · ${count}`;
+}
+
+function applyHistoryImg(idx) {
+    aiHistIdx = idx;
+    const src = aiHistory[idx];
+    const img = document.getElementById('ai-img');
+    img.classList.remove('visible');
+    img.onload = () => img.classList.add('visible');
+    img.src = src;
+    document.getElementById('lightbox-img').src = src;
+    document.getElementById('overlay-img').src = src;
+    if (aiOverlayOn) {
+        document.getElementById('gp-ai-overlay').classList.add('visible');
+    }
+    updateNavUI();
+}
+
+function showAiImg(src) {
+    aiHistory.push(src);
+    applyHistoryImg(aiHistory.length - 1);
+}
+
+document.getElementById('gp-ai-nav-prev').addEventListener('click', () => {
+    if (aiHistIdx > 0) applyHistoryImg(aiHistIdx - 1);
+});
+document.getElementById('gp-ai-nav-next').addEventListener('click', () => {
+    if (aiHistIdx < aiHistory.length - 1) applyHistoryImg(aiHistIdx + 1);
+});
+
+// Overlay toggle
+document.getElementById('ai-overlay-layer').addEventListener('click', () => {
+    aiOverlayOn = !aiOverlayOn;
+    document.getElementById('ai-overlay-layer').classList.toggle('active', aiOverlayOn);
+    if (!aiOverlayOn) document.getElementById('gp-ai-overlay').classList.remove('visible');
+    else if (document.getElementById('overlay-img').src)
+        document.getElementById('gp-ai-overlay').classList.add('visible');
+    updateNavUI();
+});
+
+// Al mover la cámara: ocultar overlay
+controls.addEventListener('change', () => {
+    if (!aiPending) document.getElementById('gp-ai-overlay').classList.remove('visible');
+});
+
+// Lightbox
+document.getElementById('ai-img').addEventListener('click', () => {
+    if (document.getElementById('ai-img').src)
+        document.getElementById('gp-lightbox').classList.add('on');
+});
+document.getElementById('gp-lightbox').addEventListener('click', () =>
+    document.getElementById('gp-lightbox').classList.remove('on')
+);
+window.addEventListener('keydown', e => {
+    if (e.key === 'Escape') document.getElementById('gp-lightbox').classList.remove('on');
+});
+
+async function generateAI() {
+    if (aiPending) return;
+    const key      = document.getElementById('ai-key').value.trim();
+    const prompt   = document.getElementById('ai-prompt').value.trim()
+                     || 'aerial masterplan render, photorealistic, lush green vegetation, natural landscape, soft golden hour light, high resolution, architectural visualization';
+    const strength = parseFloat(document.getElementById('ai-strength').value) / 100;
+    if (!key) { setAiStatus('ingresá la API key'); return; }
+
+    const quality = document.getElementById('ai-quality').value;
+    aiPending = true;
+    setAiStatus('generando…');
+    document.getElementById('gp-ai-loading').classList.add('on');
+    const t0    = Date.now();
+    const thumb = captureThumb();
+
+    try {
+        let res;
+
+        if (quality === 'nano' || quality === 'nano2k' || quality === 'nano4k') {
+            const resolution = quality === 'nano4k' ? '4K' : quality === 'nano2k' ? '2K' : '1K';
+            res = await fetch('https://fal.run/fal-ai/nano-banana-pro/edit', {
+                method: 'POST',
+                headers: { 'Authorization': `Key ${key}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    prompt,
+                    image_urls:    [thumb],
+                    num_images:    1,
+                    resolution,
+                    output_format: 'jpeg'
+                })
+            });
+        } else {
+            const modelUrl = quality === 'pro'
+                ? 'https://fal.run/fal-ai/flux-general/image-to-image'
+                : 'https://fal.run/fal-ai/flux/dev/image-to-image';
+            const steps    = quality === 'quality' ? 50 : 28;
+            const guidance = quality === 'quality' ? 7.5 : 3.5;
+            res = await fetch(modelUrl, {
+                method: 'POST',
+                headers: { 'Authorization': `Key ${key}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    image_url:           thumb,
+                    prompt,
+                    strength,
+                    num_inference_steps: steps,
+                    guidance_scale:      guidance,
+                    seed:                Math.floor(Math.random() * 999999)
+                })
+            });
+        }
+
+        if (!res.ok) { const t = await res.text(); throw new Error(`${res.status}: ${t.slice(0, 100)}`); }
+        const data = await res.json();
+        const url  = data.images?.[0]?.url;
+        if (!url) throw new Error('sin imagen en respuesta');
+        showAiImg(url);
+        setAiStatus(`listo · ${((Date.now() - t0) / 1000).toFixed(1)}s`);
+    } catch (e) {
+        setAiStatus('error · ' + e.message.slice(0, 55));
+        console.error('[fal.ai]', e);
+    } finally {
+        aiPending = false;
+        document.getElementById('gp-ai-loading').classList.remove('on');
+    }
+}
+
+document.getElementById('ai-generate-btn').addEventListener('click', generateAI);
+
+const toolAi = document.getElementById('tool-ai');
+toolAi.addEventListener('click', () => {
+    const panel = document.getElementById('gp-ai-panel');
+    const on    = panel.classList.toggle('on');
+    toolAi.classList.toggle('active', on);
+});
+
+/* ── SKETCH IA ──────────────────────────────────────────────────────── */
+const sketchCanvas = document.getElementById('gp-sketch-canvas');
+const sketchCtx    = sketchCanvas.getContext('2d');
+let sketchDrawing  = false;
+let sketchColor    = '#ffffff';
+let sketchSize     = 4;
+let sketchLast     = null;
+
+sketchCanvas.width  = window.innerWidth;
+sketchCanvas.height = window.innerHeight;
+window.addEventListener('resize', () => {
+    const tmp = document.createElement('canvas');
+    tmp.width = sketchCanvas.width; tmp.height = sketchCanvas.height;
+    tmp.getContext('2d').drawImage(sketchCanvas, 0, 0);
+    sketchCanvas.width = window.innerWidth; sketchCanvas.height = window.innerHeight;
+    sketchCtx.drawImage(tmp, 0, 0);
+});
+
+sketchCanvas.addEventListener('pointerdown', e => {
+    sketchDrawing = true;
+    sketchLast = { x: e.clientX, y: e.clientY };
+    sketchCtx.beginPath();
+    sketchCtx.arc(e.clientX, e.clientY, sketchSize / 2, 0, Math.PI * 2);
+    sketchCtx.fillStyle = sketchColor;
+    sketchCtx.fill();
+    e.preventDefault();
+});
+sketchCanvas.addEventListener('pointermove', e => {
+    if (!sketchDrawing || !sketchLast) return;
+    sketchCtx.beginPath();
+    sketchCtx.moveTo(sketchLast.x, sketchLast.y);
+    sketchCtx.lineTo(e.clientX, e.clientY);
+    sketchCtx.lineWidth   = sketchSize;
+    sketchCtx.lineCap     = 'round';
+    sketchCtx.lineJoin    = 'round';
+    sketchCtx.strokeStyle = sketchColor;
+    sketchCtx.stroke();
+    sketchLast = { x: e.clientX, y: e.clientY };
+});
+sketchCanvas.addEventListener('pointerup',    () => { sketchDrawing = false; sketchLast = null; });
+sketchCanvas.addEventListener('pointerleave', () => { sketchDrawing = false; sketchLast = null; });
+
+document.querySelectorAll('.gp-swatch').forEach(sw => {
+    sw.addEventListener('click', () => {
+        document.querySelectorAll('.gp-swatch').forEach(s => s.classList.remove('active'));
+        sw.classList.add('active');
+        sketchColor = sw.dataset.color;
+    });
+});
+document.querySelectorAll('.gp-size-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.gp-size-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        sketchSize = parseInt(btn.dataset.size);
+    });
+});
+document.getElementById('sketch-clear-btn').addEventListener('click', () => {
+    sketchCtx.clearRect(0, 0, sketchCanvas.width, sketchCanvas.height);
 });
 
 </script>
