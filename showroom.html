@@ -233,6 +233,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <button class="sr-up-tab" data-tab="galeria">Imágenes</button>
             <button class="sr-up-tab" id="sr-tab-videos-btn" data-tab="videos">Videos</button>
             <button class="sr-up-tab" id="sr-tab-calc-btn" data-tab="calc">Financiamiento</button>
+            <button class="sr-up-tab" id="sr-tab-consultar-btn" data-tab="consultar" style="display:none">Consultar</button>
         </div>
 
         <div class="sr-up-body">
@@ -303,14 +304,54 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
                 </div>
             </div>
+            <!-- ── Formulario de consulta ── -->
+            <div class="sr-up-content" id="sr-tab-consultar">
+                <div class="lead-wrap">
+
+                    <div class="lead-unit-info" id="lead-unit-info"></div>
+
+                    <form id="lead-form" onsubmit="submitLead(event)">
+                        <div class="lead-field">
+                            <label class="lead-label">Nombre</label>
+                            <input class="lead-input" id="lead-nombre" type="text"
+                                placeholder="Tu nombre" required autocomplete="name">
+                        </div>
+                        <div class="lead-field">
+                            <label class="lead-label">Email</label>
+                            <input class="lead-input" id="lead-email" type="email"
+                                placeholder="tu@email.com" required autocomplete="email">
+                        </div>
+                        <div class="lead-field">
+                            <label class="lead-label">Teléfono</label>
+                            <input class="lead-input" id="lead-tel" type="tel"
+                                placeholder="+598 99 000 000" autocomplete="tel">
+                        </div>
+                        <div class="lead-field">
+                            <label class="lead-label">Mensaje</label>
+                            <textarea class="lead-input lead-textarea" id="lead-mensaje"
+                                placeholder="¿Alguna consulta en particular?" rows="3"></textarea>
+                        </div>
+                        <button class="lead-submit" type="submit" id="lead-submit">
+                            Enviar consulta
+                        </button>
+                    </form>
+
+                    <div class="lead-success" id="lead-success">
+                        <div class="lead-success-icon">✓</div>
+                        <div class="lead-success-title">¡Consulta enviada!</div>
+                        <div class="lead-success-sub">Nos ponemos en contacto a la brevedad.</div>
+                        <button class="lead-new-btn" onclick="resetLeadForm()">Nueva consulta</button>
+                    </div>
+
+                </div>
+            </div>
         </div>
 
         <div class="sr-up-actions" id="sr-up-actions">
-            <a href="contact.html" class="sr-up-btn sr-up-btn--primary" id="sr-up-btn-contact"
-               onclick="const u=DATA.units[state.openUnit]||{}; gaEvent('consultar_precio', {unidad: state.openUnit, tipologia: u.label||state.openUnit})">
+            <button class="sr-up-btn sr-up-btn--primary" id="sr-up-btn-contact" onclick="abrirConsulta()">
                 <i class="fa fa-envelope-o"></i>
                 <span>Consultar precio</span>
-            </a>
+            </button>
             <button id="sr-btn-tour" class="sr-up-btn sr-up-btn--secondary">
                 <i class="fa fa-street-view"></i>
                 <span>Tour virtual</span>
@@ -784,6 +825,10 @@ function openUnitPanel(unit) {
     /* calculadora — actualizar precio */
     if (typeof window.initCalc === "function") window.initCalc(unitData.precio || 0);
 
+    /* formulario de leads — actualizar info de unidad */
+    resetLeadForm();
+    updateLeadUnitInfo();
+
     /* planta */
     const plantaEl = $("sr-planta-img");
     plantaEl.src = plantaSrc; plantaEl.dataset.src = plantaSrc;
@@ -913,6 +958,66 @@ tourMaxBtn.addEventListener("click", () => {
     tourMaxBtn.querySelector("i").className = tourDialog.classList.contains("maximized")
         ? "fa fa-compress" : "fa fa-expand";
 });
+
+/* ══════════════════════════════════════════════════════════════
+   LEADS — formulario de consulta
+══════════════════════════════════════════════════════════════ */
+const LEADS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxVmWOQkz3a8ekUzVGEmgPJt5UVxEKvgJwx5kPjAzqK2tY6orRV165Z2UtqUMm67rFs/exec';
+
+function abrirConsulta() {
+    const u = DATA.units[state.openUnit] || {};
+    gaEvent('consultar_precio', { unidad: state.openUnit, tipologia: u.label || state.openUnit });
+    $('sr-tab-consultar-btn').click();
+}
+
+function updateLeadUnitInfo() {
+    const unit = DATA.units[state.openUnit] || {};
+    const precio = unit.precio
+        ? '$ ' + unit.precio.toLocaleString('es-UY') + ' USD'
+        : 'Consultar precio';
+    $('lead-unit-info').textContent =
+        (unit.label || 'Tipología') + '  ·  ' +
+        (unit.area ? unit.area + ' m²' : '') +
+        (unit.dorms ? '  ·  ' + unit.dorms + ' dorms' : '') +
+        '  ·  ' + precio;
+}
+
+function submitLead(e) {
+    e.preventDefault();
+    const btn = $('lead-submit');
+    btn.disabled = true;
+    btn.textContent = 'Enviando...';
+
+    const unit = DATA.units[state.openUnit] || {};
+    const payload = {
+        nombre:    $('lead-nombre').value.trim(),
+        email:     $('lead-email').value.trim(),
+        telefono:  $('lead-tel').value.trim(),
+        mensaje:   $('lead-mensaje').value.trim(),
+        unidad:    state.openUnit || '—',
+        tipologia: unit.label || '—',
+        precio:    unit.precio ? '$ ' + unit.precio.toLocaleString('es-UY') + ' USD' : '—'
+    };
+
+    fetch(LEADS_ENDPOINT, {
+        method: 'POST',
+        mode:   'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    }).finally(() => {
+        $('lead-form').style.display    = 'none';
+        $('lead-success').classList.add('visible');
+        gaEvent('lead_enviado', { unidad: state.openUnit, tipologia: unit.label || state.openUnit });
+    });
+}
+
+function resetLeadForm() {
+    $('lead-form').reset();
+    $('lead-form').style.display    = '';
+    $('lead-success').classList.remove('visible');
+    $('lead-submit').disabled       = false;
+    $('lead-submit').textContent    = 'Enviar consulta';
+}
 
 /* ══════════════════════════════════════════════════════════════
    CALCULADORA DE FINANCIAMIENTO
