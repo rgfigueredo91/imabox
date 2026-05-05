@@ -563,6 +563,44 @@ html, body {
     line-height: 1.5;
 }
 
+/* ── Terminaciones en lightbox ── */
+.sr-lb-term {
+    position: absolute;
+    bottom: 28px; left: 50%;
+    transform: translateX(-50%);
+    display: flex; align-items: center; gap: 12px;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 30px;
+    padding: 8px 16px;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.3s ease;
+    white-space: nowrap;
+    z-index: 5;
+}
+.sr-lb-term.active { opacity: 1; pointer-events: auto; }
+.sr-lb-term-label {
+    font-size: 0.5rem; letter-spacing: 3px;
+    text-transform: uppercase; color: rgba(255,255,255,0.3);
+}
+.sr-lb-term-btns { display: flex; gap: 6px; }
+.sr-lb-term-btn {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 20px; color: rgba(255,255,255,0.5);
+    font-family: inherit; font-size: 0.58rem;
+    letter-spacing: 2px; text-transform: uppercase;
+    padding: 6px 14px; cursor: pointer;
+    transition: all 0.2s;
+}
+.sr-lb-term-btn:hover { border-color: rgba(255,255,255,0.4); color: rgba(255,255,255,0.8); }
+.sr-lb-term-btn.active {
+    background: rgba(255,255,255,0.15);
+    border-color: rgba(255,255,255,0.6);
+    color: #fff;
+}
+
 /* ── Formulario de leads ── */
 .lead-wrap {
     padding: 18px 4px 8px;
@@ -814,6 +852,17 @@ html, body {
     max-height: 88vh;
     object-fit: contain;
     display: block;
+}
+#sr-lb-img-cross {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 92vw;
+    max-height: 88vh;
+    object-fit: contain;
+    opacity: 0;
+    transition: opacity 0.55s ease;
+    pointer-events: none;
 }
 .sr-lightbox-close {
     position: absolute;

@@ -232,7 +232,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <button class="sr-up-tab active" data-tab="planta">Planta</button>
             <button class="sr-up-tab" data-tab="galeria">Imágenes</button>
             <button class="sr-up-tab" id="sr-tab-videos-btn" data-tab="videos">Videos</button>
-            <button class="sr-up-tab" id="sr-tab-calc-btn" data-tab="calc">Financiamiento</button>
+            <button class="sr-up-tab" id="sr-tab-calc-btn" data-tab="calc">Préstamo</button>
             <button class="sr-up-tab" id="sr-tab-consultar-btn" data-tab="consultar" style="display:none">Consultar</button>
         </div>
 
@@ -392,8 +392,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <button class="sr-lightbox-close" id="sr-lb-close"><i class="fa fa-times"></i></button>
     <button class="sr-lightbox-prev"  id="sr-lb-prev"><i class="fa fa-angle-left"></i></button>
     <img id="sr-lb-img" src="" alt="" />
+    <img id="sr-lb-img-cross" src="" alt="" />
     <video id="sr-lb-video" controls playsinline></video>
     <button class="sr-lightbox-next"  id="sr-lb-next"><i class="fa fa-angle-right"></i></button>
+    <div class="sr-lb-term" id="sr-lb-term">
+        <span class="sr-lb-term-label">Piso</span>
+        <div class="sr-lb-term-btns" id="sr-lb-term-btns"></div>
+    </div>
 </div>
 
 <!-- ═══════════════════════════════════════════════════════════
@@ -449,6 +454,14 @@ const DATA = {
             status: "disponible", videos: [], pdfUrl: null,
             tourUrl: "360/KIU.html",
             vrUrl:   "360/KIU-vr.html",
+            terminaciones: {
+                trigger: "Dormitorio n05",
+                piso: [
+                    { label: "Madera clara",      src: "img/kiu/2025-12-19_Dormitorio n05.jpg"                 },
+                    { label: "Porcelanato beige", src: "img/kiu/terminaciones/dormitorio-porcelanato-beige.jpg" },
+                    { label: "Madera oscura",     src: "img/kiu/terminaciones/dormitorio-madera-oscura.jpg"    },
+                ]
+            },
         },
         "02": {
             label: "Tipología B", plantaImage: "img/kiu/planta-02.jpg",
@@ -825,6 +838,7 @@ function openUnitPanel(unit) {
     /* mostrar tab financiamiento solo en tipologías */
     $("sr-tab-calc-btn").style.display = "";
 
+
     /* calculadora — actualizar precio */
     if (typeof window.initCalc === "function") window.initCalc(unitData.precio || 0);
 
@@ -889,8 +903,8 @@ function openFloorPanel(floor) {
 
     /* tabs: hide planta, show/hide videos, ocultar financiamiento */
     $("sr-tab-videos-btn").style.display = (floor.videos && floor.videos.length) ? "" : "none";
-    $("sr-tab-calc-btn").style.display   = "none";
-    $("sr-up-precio").style.display      = "none";
+    $("sr-tab-calc-btn").style.display  = "none";
+    $("sr-up-precio").style.display     = "none";
     resetTabs("galeria");
 
     /* galleries */
@@ -963,6 +977,10 @@ tourMaxBtn.addEventListener("click", () => {
     tourMaxBtn.querySelector("i").className = tourDialog.classList.contains("maximized")
         ? "fa fa-compress" : "fa fa-expand";
 });
+
+/* ══════════════════════════════════════════════════════════════
+   TERMINACIONES — selector de renders
+══════════════════════════════════════════════════════════════ */
 
 /* ══════════════════════════════════════════════════════════════
    LEADS — formulario de consulta
@@ -1089,18 +1107,61 @@ const lb    = $("sr-lightbox");
 const lbImg = $("sr-lb-img");
 const lbVid = $("sr-lb-video");
 
+function checkLbTerminaciones(src) {
+    const termBar  = $("sr-lb-term");
+    const termBtns = $("sr-lb-term-btns");
+    const unit     = DATA.units[state.openUnit];
+    const term     = unit && unit.terminaciones;
+
+    if (!term || !src.includes(term.trigger)) {
+        termBar.classList.remove("active");
+        return;
+    }
+
+    termBtns.innerHTML = '';
+    term.piso.forEach((op, i) => {
+        const btn = document.createElement('button');
+        const isActive = i === 0 || src === op.src;
+        btn.className = 'sr-lb-term-btn' + (isActive ? ' active' : '');
+        btn.textContent = op.label;
+        btn.addEventListener('click', () => {
+            if (lbImg.src.endsWith(op.src)) return;
+            const cross = $('sr-lb-img-cross');
+            cross.style.transition = 'none';
+            cross.style.opacity = '0';
+            cross.src = op.src;
+            cross.onload = () => {
+                cross.style.transition = 'opacity 0.55s ease';
+                cross.style.opacity = '1';
+                setTimeout(() => {
+                    lbImg.src = op.src;
+                    cross.style.transition = 'none';
+                    cross.style.opacity = '0';
+                }, 580);
+            };
+            termBtns.querySelectorAll('.sr-lb-term-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        });
+        termBtns.appendChild(btn);
+    });
+
+    termBar.classList.add("active");
+}
+
 function openLightbox(images, i) {
     lbMode  = "image";
     lbItems = Array.isArray(images) ? images : [images];
     lbIndex = i || 0;
     lbImg.src = lbItems[lbIndex];
     lbImg.style.display = "";
+    lbImg.style.opacity = "1";
     lbVid.style.display = "none";
     lbVid.pause && lbVid.pause();
     lb.classList.add("active");
     const single = lbItems.length <= 1;
     $("sr-lb-prev").style.display = single ? "none" : "";
     $("sr-lb-next").style.display = single ? "none" : "";
+    checkLbTerminaciones(lbItems[lbIndex]);
 }
 
 function openLightboxVideo(videos, i) {
@@ -1128,6 +1189,7 @@ function lbStep(dir) {
         lbVid.pause(); lbVid.src = lbItems[lbIndex]; lbVid.play();
     } else {
         lbImg.src = lbItems[lbIndex];
+        checkLbTerminaciones(lbItems[lbIndex]);
     }
 }
 $("sr-lb-close").addEventListener("click", closeLightbox);
