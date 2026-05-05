@@ -822,6 +822,9 @@ function openUnitPanel(unit) {
         $("sr-up-precio").style.display = "none";
     }
 
+    /* mostrar tab financiamiento solo en tipologías */
+    $("sr-tab-calc-btn").style.display = "";
+
     /* calculadora — actualizar precio */
     if (typeof window.initCalc === "function") window.initCalc(unitData.precio || 0);
 
@@ -884,8 +887,10 @@ function openFloorPanel(floor) {
     /* hide specs */
     $("sr-up-specs").style.display = "none";
 
-    /* tabs: hide planta, show/hide videos */
+    /* tabs: hide planta, show/hide videos, ocultar financiamiento */
     $("sr-tab-videos-btn").style.display = (floor.videos && floor.videos.length) ? "" : "none";
+    $("sr-tab-calc-btn").style.display   = "none";
+    $("sr-up-precio").style.display      = "none";
     resetTabs("galeria");
 
     /* galleries */
