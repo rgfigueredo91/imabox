@@ -707,7 +707,7 @@ function openUnitPanel(unit) {
     /* status badge */
     const statusEl = $("sr-up-status");
     const s = unitData.status || "disponible";
-    statusEl.textContent = STATUS_LABELS[s]?.[state.lang] || s;
+    statusEl.textContent = STATUS_LABELS[s]?.esp || s;
     statusEl.className   = "sr-up-status sr-up-status--" + s;
     statusEl.style.display = "";
 
