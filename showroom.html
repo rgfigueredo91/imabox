@@ -232,6 +232,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <button class="sr-up-tab active" data-tab="planta">Planta</button>
             <button class="sr-up-tab" data-tab="galeria">Imágenes</button>
             <button class="sr-up-tab" id="sr-tab-videos-btn" data-tab="videos">Videos</button>
+            <button class="sr-up-tab" id="sr-tab-calc-btn" data-tab="calc">Financiamiento</button>
         </div>
 
         <div class="sr-up-body">
@@ -246,6 +247,60 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <div class="sr-up-content" id="sr-tab-videos">
                 <div class="sr-up-gallery sr-up-gallery--videos" id="sr-up-gallery-videos">
                     <!-- populated by JS -->
+                </div>
+            </div>
+
+            <!-- ── Calculadora de financiamiento ── -->
+            <div class="sr-up-content" id="sr-tab-calc">
+                <div class="calc-wrap">
+
+                    <div class="calc-row">
+                        <div class="calc-label">Precio de la unidad</div>
+                        <div class="calc-value" id="calc-precio-display">— USD</div>
+                    </div>
+
+                    <div class="calc-row">
+                        <div class="calc-label">
+                            Entrega inicial
+                            <span class="calc-pct" id="calc-entrada-pct">30%</span>
+                        </div>
+                        <input type="range" class="calc-slider" id="calc-entrada"
+                            min="10" max="70" value="30" step="5">
+                        <div class="calc-sub">
+                            $ <span id="calc-entrada-val">—</span> USD
+                        </div>
+                    </div>
+
+                    <div class="calc-row">
+                        <div class="calc-label">
+                            Plazo
+                            <span class="calc-pct" id="calc-plazo-pct">20 años</span>
+                        </div>
+                        <input type="range" class="calc-slider" id="calc-plazo"
+                            min="5" max="30" value="20" step="1">
+                    </div>
+
+                    <div class="calc-row">
+                        <div class="calc-label">
+                            Tasa de interés anual
+                            <span class="calc-pct" id="calc-tasa-pct">5%</span>
+                        </div>
+                        <input type="range" class="calc-slider" id="calc-tasa"
+                            min="1" max="15" value="5" step="0.5">
+                    </div>
+
+                    <div class="calc-result">
+                        <div class="calc-result-label">Cuota mensual estimada</div>
+                        <div class="calc-result-val" id="calc-cuota">$ — USD</div>
+                        <div class="calc-result-detail">
+                            <span>Total a pagar <strong id="calc-total">—</strong></span>
+                            <span>Intereses <strong id="calc-intereses">—</strong></span>
+                        </div>
+                        <div class="calc-disclaimer">
+                            Cálculo estimativo. Consultá con tu asesor financiero.
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -726,6 +781,9 @@ function openUnitPanel(unit) {
         $("sr-up-precio").style.display = "none";
     }
 
+    /* calculadora — actualizar precio */
+    if (typeof window.initCalc === "function") window.initCalc(unitData.precio || 0);
+
     /* planta */
     const plantaEl = $("sr-planta-img");
     plantaEl.src = plantaSrc; plantaEl.dataset.src = plantaSrc;
@@ -855,6 +913,61 @@ tourMaxBtn.addEventListener("click", () => {
     tourMaxBtn.querySelector("i").className = tourDialog.classList.contains("maximized")
         ? "fa fa-compress" : "fa fa-expand";
 });
+
+/* ══════════════════════════════════════════════════════════════
+   CALCULADORA DE FINANCIAMIENTO
+══════════════════════════════════════════════════════════════ */
+(function() {
+    const sliderEntrada = $("calc-entrada");
+    const sliderPlazo   = $("calc-plazo");
+    const sliderTasa    = $("calc-tasa");
+
+    function fmt(n) {
+        return n.toLocaleString('es-UY', { maximumFractionDigits: 0 });
+    }
+
+    function calcular() {
+        const precio = state.calcPrecio || 0;
+        if (!precio) return;
+
+        const pctEntrada = parseInt(sliderEntrada.value);
+        const plazoAnios = parseInt(sliderPlazo.value);
+        const tasaAnual  = parseFloat(sliderTasa.value);
+
+        const entrada   = precio * pctEntrada / 100;
+        const principal = precio - entrada;
+        const r         = (tasaAnual / 100) / 12;
+        const n         = plazoAnios * 12;
+
+        const cuota = principal > 0 && r > 0
+            ? principal * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1)
+            : principal / n;
+
+        const totalPago    = cuota * n;
+        const totalInteres = totalPago - principal;
+
+        $("calc-entrada-pct").textContent   = pctEntrada + "%";
+        $("calc-plazo-pct").textContent     = plazoAnios + " año" + (plazoAnios === 1 ? "" : "s");
+        $("calc-tasa-pct").textContent      = tasaAnual + "%";
+        $("calc-entrada-val").textContent   = fmt(entrada);
+        $("calc-cuota").textContent         = "$ " + fmt(cuota) + " USD";
+        $("calc-total").textContent         = "$ " + fmt(totalPago) + " USD";
+        $("calc-intereses").textContent     = "$ " + fmt(totalInteres) + " USD";
+    }
+
+    sliderEntrada.addEventListener("input", calcular);
+    sliderPlazo.addEventListener("input",   calcular);
+    sliderTasa.addEventListener("input",    calcular);
+
+    /* exponer para que openUnitPanel actualice el precio */
+    window.initCalc = function(precio) {
+        state.calcPrecio = precio || 0;
+        $("calc-precio-display").textContent = precio
+            ? "$ " + fmt(precio) + " USD"
+            : "Consultar precio";
+        calcular();
+    };
+})();
 
 /* ══════════════════════════════════════════════════════════════
    LIGHTBOX  —  images + video
