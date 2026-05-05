@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>KIU — Tour 360 VR</title>
+  <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #000; font-family: 'Courier New', monospace; }
+
+    /* ── Loader ── */
+    #vr-loader {
+      position: fixed; inset: 0;
+      background: #000;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 200;
+      transition: opacity 0.7s ease;
+    }
+    #vr-loader.hidden { opacity: 0; pointer-events: none; }
+    .lds-ring { display: inline-block; position: relative; width: 40px; height: 40px; }
+    .lds-ring div {
+      box-sizing: border-box; display: block; position: absolute;
+      width: 32px; height: 32px; margin: 4px;
+      border: 3px solid rgba(255,255,255,0.15);
+      border-top-color: rgba(255,255,255,0.7);
+      border-radius: 50%;
+      animation: spin 1.2s cubic-bezier(.5,0,.5,1) infinite;
+    }
+    .lds-ring div:nth-child(1){ animation-delay: -0.45s; }
+    .lds-ring div:nth-child(2){ animation-delay: -0.30s; }
+    .lds-ring div:nth-child(3){ animation-delay: -0.15s; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── HUD ── */
+    #room-label {
+      position: fixed; bottom: 64px; left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.62rem; letter-spacing: 5px;
+      color: rgba(255,255,255,0.35);
+      text-transform: uppercase;
+      pointer-events: none; z-index: 10;
+      transition: opacity 0.4s;
+    }
+    #room-nav {
+      position: fixed; bottom: 22px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; gap: 8px; z-index: 10;
+    }
+    .room-btn {
+      background: rgba(0,0,0,0.35);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.3);
+      font-family: 'Courier New', monospace;
+      font-size: 0.58rem; letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 5px 14px; border-radius: 20px;
+      cursor: pointer; transition: all 0.3s ease;
+      backdrop-filter: blur(8px);
+    }
+    .room-btn:hover { border-color: rgba(255,255,255,0.35); color: rgba(255,255,255,0.65); }
+    .room-btn.active {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.4);
+      color: rgba(255,255,255,0.85);
+    }
+
+    /* VR mode: ocultar HUD HTML */
+    body.vr-active #room-label,
+    body.vr-active #room-nav { display: none; }
+
+    /* A-Frame VR button styling */
+    .a-enter-vr-button {
+      border-radius: 20px !important;
+      font-family: 'Courier New', monospace !important;
+      font-size: 0.58rem !important;
+      letter-spacing: 2px !important;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ Loader ══════════════════════════════════════════════════════════ -->
+<div id="vr-loader">
+  <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+</div>
+
+<!-- ══ HUD ═════════════════════════════════════════════════════════════ -->
+<div id="room-label">KIU AV ITALIA</div>
+<div id="room-nav">
+  <button class="room-btn active" onclick="goRoom(0)">Living</button>
+  <button class="room-btn"        onclick="goRoom(1)">Dormitorio</button>
+</div>
+
+<!-- ══ A-Frame Scene ═══════════════════════════════════════════════════ -->
+<a-scene
+  loading-screen="enabled: false"
+  renderer="antialias: true; colorManagement: true; physicallyCorrectLights: true"
+  vr-mode-ui="enabled: true">
+
+  <!-- Assets: preload panoramas -->
+  <a-assets timeout="60000">
+    <img id="sky-0" src="img/living-703-360.jpg"      crossorigin="anonymous">
+    <img id="sky-1" src="img/dormitorio-703-360.jpg"  crossorigin="anonymous">
+  </a-assets>
+
+  <!-- ── Panorama sky ─────────────────────────────────────────── -->
+  <!-- rotation="0 -90 0" alinea el frente del equirectangular con la vista inicial -->
+  <a-sky id="sky" src="#sky-0" rotation="0 -90 0"></a-sky>
+
+  <!-- ── Hotspot: Living → Dormitorio ────────────────────────── -->
+  <a-entity id="hs-0" visible="true" position="2.5 -1.8 -3.2">
+    <!-- área invisible de detección para el raycaster -->
+    <a-circle class="clickable" radius="0.38"
+      material="opacity: 0; transparent: true; side: double; depthWrite: false"
+      rotation="-90 0 0">
+    </a-circle>
+    <!-- punto central blanco -->
+    <a-circle radius="0.06" color="#fff" opacity="0.95"
+      rotation="-90 0 0" side="double">
+    </a-circle>
+    <!-- anillo estático -->
+    <a-ring radius-inner="0.07" radius-outer="0.11" color="#fff" opacity="0.85"
+      rotation="-90 0 0" side="double">
+    </a-ring>
+    <!-- anillo pulsante -->
+    <a-ring radius-inner="0.11" radius-outer="0.16" color="#fff" opacity="0.45"
+      rotation="-90 0 0" side="double"
+      animation__scale="property: scale; from: 1 1 1; to: 2 2 2; dur: 1800; loop: true; easing: easeOutQuad"
+      animation__opacity="property: material.opacity; from: 0.45; to: 0; dur: 1800; loop: true; easing: easeOutQuad">
+    </a-ring>
+    <!-- label -->
+    <a-text value="DORMITORIO" align="center" color="#ffffff" opacity="0.5"
+      width="1.2" position="0 0.42 0" rotation="0 0 0"
+      font="https://cdn.aframe.io/fonts/DejaVu-sdf.fnt">
+    </a-text>
+  </a-entity>
+
+  <!-- ── Hotspot: Dormitorio → Living ────────────────────────── -->
+  <a-entity id="hs-1" visible="false" position="-3.2 -1.8 -2.2">
+    <a-circle class="clickable" radius="0.38"
+      material="opacity: 0; transparent: true; side: double; depthWrite: false"
+      rotation="-90 0 0">
+    </a-circle>
+    <a-circle radius="0.06" color="#fff" opacity="0.95"
+      rotation="-90 0 0" side="double">
+    </a-circle>
+    <a-ring radius-inner="0.07" radius-outer="0.11" color="#fff" opacity="0.85"
+      rotation="-90 0 0" side="double">
+    </a-ring>
+    <a-ring radius-inner="0.11" radius-outer="0.16" color="#fff" opacity="0.45"
+      rotation="-90 0 0" side="double"
+      animation__scale="property: scale; from: 1 1 1; to: 2 2 2; dur: 1800; loop: true; easing: easeOutQuad"
+      animation__opacity="property: material.opacity; from: 0.45; to: 0; dur: 1800; loop: true; easing: easeOutQuad">
+    </a-ring>
+    <a-text value="LIVING" align="center" color="#ffffff" opacity="0.5"
+      width="1.2" position="0 0.42 0" rotation="0 0 0"
+      font="https://cdn.aframe.io/fonts/DejaVu-sdf.fnt">
+    </a-text>
+  </a-entity>
+
+  <!-- ── Camera rig ──────────────────────────────────────────── -->
+  <a-entity id="rig" position="0 0 0">
+
+    <!-- Esfera de fade (black overlay para transiciones, side:back = visible desde adentro) -->
+    <a-sphere id="fade" radius="0.45" color="#000000"
+      material="opacity: 0; transparent: true; side: back; depthTest: false; depthWrite: false"
+      position="0 0 0">
+    </a-sphere>
+
+    <!-- Cámara principal — wasd deshabilitado (no walking en 360) -->
+    <a-camera id="cam" wasd-controls-enabled="false" look-controls="reverseMouseDrag: false">
+      <!-- Cursor de gaze/mouse — se activa al mirar hacia el hotspot en desktop/mobile -->
+      <a-cursor
+        id="cursor"
+        raycaster="objects: .clickable; far: 80"
+        color="#ffffff"
+        opacity="0.75"
+        geometry="primitive: ring; radiusInner: 0.004; radiusOuter: 0.008"
+        material="color: #ffffff; shader: flat; opacity: 0.75"
+        position="0 0 -0.5"
+        animation__click="property: scale; startEvents: click; from: 0.5 0.5 0.5; to: 1 1 1; dur: 180">
+      </a-cursor>
+    </a-camera>
+
+    <!-- Controlador derecho — laser pointer para VR (Quest, Index, etc.) -->
+    <a-entity
+      id="right-hand"
+      laser-controls="hand: right"
+      raycaster="objects: .clickable; far: 80; lineColor: #ffffff; lineOpacity: 0.65">
+    </a-entity>
+
+    <!-- Controlador izquierdo — laser pointer secundario -->
+    <a-entity
+      id="left-hand"
+      laser-controls="hand: left"
+      raycaster="objects: .clickable; far: 80; lineColor: #ffffff; lineOpacity: 0.35">
+    </a-entity>
+
+  </a-entity>
+
+</a-scene>
+
+<!-- ══ Lógica ═════════════════════════════════════════════════════════ -->
+<script>
+  const ROOMS = [
+    { sky: '#sky-0', hs: 'hs-0', name: 'Living' },
+    { sky: '#sky-1', hs: 'hs-1', name: 'Dormitorio' }
+  ];
+
+  let current     = 0;
+  let busy        = false;
+
+  const skyEl   = document.getElementById('sky');
+  const fadeEl  = document.getElementById('fade');
+  const btns    = document.querySelectorAll('.room-btn');
+
+  /* ── Transición entre salas ── */
+  function goRoom(idx) {
+    if (idx === current || busy) return;
+    busy = true;
+
+    // fade out
+    fadeEl.setAttribute('animation__f',
+      'property: material.opacity; from: 0; to: 1; dur: 380; easing: easeInQuad');
+
+    setTimeout(() => {
+      // cambiar panorama
+      skyEl.setAttribute('src', ROOMS[idx].sky);
+
+      // alternar hotspots
+      document.getElementById(ROOMS[current].hs).setAttribute('visible', 'false');
+      document.getElementById(ROOMS[idx].hs).setAttribute('visible', 'true');
+
+      // actualizar nav
+      btns.forEach((b, i) => b.classList.toggle('active', i === idx));
+      current = idx;
+
+      // fade in
+      fadeEl.setAttribute('animation__f',
+        'property: material.opacity; from: 1; to: 0; dur: 520; easing: easeOutQuad');
+
+      setTimeout(() => { busy = false; }, 540);
+    }, 400);
+  }
+
+  /* ── Click handlers para hotspots ── */
+  document.querySelector('#hs-0 .clickable').addEventListener('click', () => goRoom(1));
+  document.querySelector('#hs-1 .clickable').addEventListener('click', () => goRoom(0));
+
+  /* ── Hover: escala suave al apuntar ── */
+  ['hs-0', 'hs-1'].forEach(id => {
+    const el = document.getElementById(id);
+    const hit = el.querySelector('.clickable');
+
+    hit.addEventListener('mouseenter', () => {
+      el.setAttribute('animation__hover',
+        'property: scale; to: 1.18 1.18 1.18; dur: 180; easing: easeOutQuad');
+    });
+    hit.addEventListener('mouseleave', () => {
+      el.setAttribute('animation__hover',
+        'property: scale; to: 1 1 1; dur: 200; easing: easeOutQuad');
+    });
+  });
+
+  /* ── VR mode: ocultar HUD HTML ── */
+  const scene = document.querySelector('a-scene');
+  scene.addEventListener('enter-vr', () => document.body.classList.add('vr-active'));
+  scene.addEventListener('exit-vr',  () => document.body.classList.remove('vr-active'));
+
+  /* ── Loader: ocultar cuando ambas imágenes cargaron ── */
+  const loader = document.getElementById('vr-loader');
+  let loadCount = 0;
+
+  function onImgLoad() {
+    if (++loadCount >= 2) {
+      setTimeout(() => loader.classList.add('hidden'), 200);
+    }
+  }
+
+  ['sky-0', 'sky-1'].forEach(id => {
+    const img = document.getElementById(id);
+    if (img.complete && img.naturalWidth > 0) onImgLoad();
+    else img.addEventListener('load', onImgLoad);
+  });
+</script>
+
+</body>
+</html>

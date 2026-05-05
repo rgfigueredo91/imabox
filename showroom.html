@@ -23,6 +23,19 @@
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-NMJRX79');</script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0W0QJ3ZXQ5"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-0W0QJ3ZXQ5');
+
+        function gaEvent(action, params) {
+            if (typeof gtag === 'function') gtag('event', action, params);
+        }
+    </script>
 </head>
 <body>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMJRX79"
@@ -210,13 +223,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
 
         <div class="sr-up-actions" id="sr-up-actions">
-            <a href="contact.html" class="sr-up-btn sr-up-btn--primary" id="sr-up-btn-contact">
+            <a href="contact.html" class="sr-up-btn sr-up-btn--primary" id="sr-up-btn-contact"
+               onclick="const u=DATA.units[state.openUnit]||{}; gaEvent('consultar_precio', {unidad: state.openUnit, tipologia: u.label||state.openUnit})">
                 <i class="fa fa-envelope-o"></i>
                 <span>Consultar precio</span>
             </a>
             <button id="sr-btn-tour" class="sr-up-btn sr-up-btn--secondary">
                 <i class="fa fa-street-view"></i>
                 <span>Tour virtual</span>
+            </button>
+            <button id="sr-btn-vr" class="sr-up-btn sr-up-btn--secondary" style="display:none">
+                <i class="fa fa-eye"></i>
+                <span>Ver en VR</span>
             </button>
             <a id="sr-up-btn-pdf" href="#" class="sr-up-btn sr-up-btn--ghost">
                 <i class="fa fa-file-pdf-o"></i>
@@ -241,7 +259,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <button id="sr-tour-close"    title="Cerrar"><i class="fa fa-times"></i></button>
             </div>
         </div>
-        <iframe id="sr-tour-iframe" src="" allow="fullscreen" allowfullscreen></iframe>
+        <iframe id="sr-tour-iframe" src="" allow="fullscreen; xr-spatial-tracking" allowfullscreen></iframe>
     </div>
 </div>
 
@@ -284,6 +302,7 @@ const DATA = {
 
     defaults: {
         tourUrl: "app-files2/index.html",
+        vrUrl:   "360/KIU-vr.html",
         interiorImages: [
             "img/kiu/2025-12-19_Living comedor cocina piso  5.jpg",
             "img/kiu/2025-12-19_Living comedor cocina piso  6.jpg",
@@ -305,6 +324,7 @@ const DATA = {
             area: 72, terraza: 18, dorms: 2, banos: 1,
             status: "disponible", videos: [], pdfUrl: null,
             tourUrl: "360/KIU.html",
+            vrUrl:   "360/KIU-vr.html",
         },
         "02": {
             label: "Tipología B", plantaImage: "img/kiu/planta-02.jpg",
@@ -640,10 +660,12 @@ function openUnitPanel(unit) {
     state.openFloor = null;
 
     const unitData = DATA.units[unit] || {};
+    gaEvent('unidad_vista', { unidad: unit, tipologia: unitData.label || unit });
     const plantaSrc  = unitData.plantaImage   || "img/kiu/planta.jpg";
     const images     = unitData.interiorImages || DATA.defaults.interiorImages;
     const videos     = unitData.videos?.length  ? unitData.videos : (DATA.defaults.videos || []);
     state.currentTourUrl = unitData.tourUrl || DATA.defaults.tourUrl;
+    state.currentVrUrl   = unitData.vrUrl   || DATA.defaults.vrUrl || null;
 
     /* panel mode */
     const panel = $("sr-unit-panel");
@@ -682,6 +704,7 @@ function openUnitPanel(unit) {
     /* actions */
     $("sr-up-actions").style.display = "";
     $("sr-btn-tour").style.display   = state.currentTourUrl ? "" : "none";
+    $("sr-btn-vr").style.display     = state.currentVrUrl ? "" : "none";
 
     const pdfBtn = $("sr-up-btn-pdf");
     pdfBtn.style.display = "";
@@ -771,6 +794,8 @@ const tourMaxBtn = $("sr-tour-maximize");
 function openTour() {
     tourIframe.src = state.currentTourUrl || DATA.defaults.tourUrl;
     tourModal.classList.add("active");
+    const u = DATA.units[state.openUnit] || {};
+    gaEvent('tour_360_abierto', { unidad: state.openUnit, tipologia: u.label || state.openUnit });
 }
 function closeTour() {
     tourModal.classList.remove("active");
@@ -779,6 +804,13 @@ function closeTour() {
     setTimeout(() => { tourIframe.src = ""; }, 400);
 }
 $("sr-btn-tour").addEventListener("click", openTour);
+$("sr-btn-vr").addEventListener("click", () => {
+    if (state.currentVrUrl) {
+        const u = DATA.units[state.openUnit] || {};
+        gaEvent('tour_vr_abierto', { unidad: state.openUnit, tipologia: u.label || state.openUnit });
+        window.open(state.currentVrUrl, "_blank");
+    }
+});
 $("sr-tour-close").addEventListener("click", closeTour);
 tourModal.addEventListener("click", e => { if (e.target === tourModal) closeTour(); });
 tourMaxBtn.addEventListener("click", () => {
