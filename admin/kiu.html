@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin — KIU Showroom</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0d0d0d;
+      color: #e0e0e0;
+      font-family: 'Courier New', monospace;
+      min-height: 100vh;
+    }
+
+    /* ── Login ── */
+    #login-screen {
+      position: fixed; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: #0d0d0d; z-index: 100;
+    }
+    #login-screen.hidden { display: none; }
+    .login-box {
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 48px 56px;
+      border-radius: 4px;
+    }
+    .login-box h1 {
+      font-size: 0.65rem; letter-spacing: 6px;
+      color: rgba(255,255,255,0.3); margin-bottom: 32px;
+      text-transform: uppercase;
+    }
+    .login-box input {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #fff; font-family: inherit;
+      font-size: 1rem; padding: 10px 16px;
+      border-radius: 3px; width: 220px;
+      outline: none; letter-spacing: 3px;
+      text-align: center;
+    }
+    .login-box input:focus { border-color: rgba(255,255,255,0.35); }
+    .login-box button {
+      display: block; width: 100%; margin-top: 12px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.7);
+      font-family: inherit; font-size: 0.6rem;
+      letter-spacing: 3px; text-transform: uppercase;
+      padding: 10px; border-radius: 3px; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .login-box button:hover { background: rgba(255,255,255,0.14); }
+    .login-error {
+      font-size: 0.58rem; color: #e05555;
+      letter-spacing: 2px; margin-top: 10px;
+      min-height: 18px;
+    }
+
+    /* ── Dashboard ── */
+    #dashboard { padding: 40px 32px; max-width: 900px; margin: 0 auto; }
+
+    .dash-header {
+      display: flex; align-items: baseline;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      padding-bottom: 20px; margin-bottom: 32px;
+    }
+    .dash-header h1 {
+      font-size: 0.6rem; letter-spacing: 6px;
+      color: rgba(255,255,255,0.25); text-transform: uppercase;
+    }
+    .dash-header span {
+      font-size: 0.55rem; letter-spacing: 2px;
+      color: rgba(255,255,255,0.2);
+    }
+
+    .btn-sheet {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(66,133,244,0.15);
+      border: 1px solid rgba(66,133,244,0.35);
+      color: rgba(100,160,255,0.85);
+      font-family: inherit; font-size: 0.58rem;
+      letter-spacing: 2px; text-transform: uppercase;
+      padding: 9px 18px; border-radius: 3px;
+      text-decoration: none; cursor: pointer;
+      transition: all 0.2s; margin-bottom: 28px;
+    }
+    .btn-sheet:hover { background: rgba(66,133,244,0.25); }
+
+    /* ── Tabla de unidades ── */
+    .units-grid { display: flex; flex-direction: column; gap: 10px; }
+
+    .unit-row {
+      display: grid;
+      grid-template-columns: 60px 1fr 140px 130px 1fr;
+      gap: 16px; align-items: center;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 4px; padding: 16px 20px;
+      transition: border-color 0.2s;
+    }
+    .unit-row:hover { border-color: rgba(255,255,255,0.12); }
+
+    .unit-num {
+      font-size: 1.4rem; font-weight: 300;
+      color: rgba(255,255,255,0.2); text-align: center;
+    }
+    .unit-label {
+      font-size: 0.65rem; letter-spacing: 2px;
+      color: rgba(255,255,255,0.55); text-transform: uppercase;
+    }
+    .unit-sub {
+      font-size: 0.55rem; letter-spacing: 1px;
+      color: rgba(255,255,255,0.25); margin-top: 3px;
+    }
+
+    .status-badge {
+      display: inline-block; font-size: 0.55rem;
+      letter-spacing: 3px; text-transform: uppercase;
+      padding: 4px 10px; border-radius: 20px;
+      font-weight: 500;
+    }
+    .status-disponible { background: rgba(80,200,120,0.12); color: #5cc87a; border: 1px solid rgba(80,200,120,0.25); }
+    .status-reservada  { background: rgba(255,180,50,0.12);  color: #f5b94e; border: 1px solid rgba(255,180,50,0.25); }
+    .status-vendida    { background: rgba(220,60,60,0.12);   color: #e05555; border: 1px solid rgba(220,60,60,0.25); }
+
+    .unit-precio {
+      font-size: 0.85rem; letter-spacing: 1px;
+      color: rgba(255,255,255,0.5);
+    }
+    .unit-precio small {
+      font-size: 0.5rem; letter-spacing: 2px;
+      color: rgba(255,255,255,0.2); margin-left: 4px;
+    }
+
+    .unit-actions { text-align: right; }
+
+    /* ── Instrucciones ── */
+    .instructions {
+      margin-top: 40px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: 28px;
+    }
+    .instructions h2 {
+      font-size: 0.55rem; letter-spacing: 4px;
+      color: rgba(255,255,255,0.2); text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .instructions ol {
+      padding-left: 18px;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .instructions li {
+      font-size: 0.65rem; letter-spacing: 1px;
+      color: rgba(255,255,255,0.35); line-height: 1.6;
+    }
+    .instructions code {
+      background: rgba(255,255,255,0.07);
+      padding: 1px 6px; border-radius: 2px;
+      font-family: inherit;
+    }
+
+    /* loading */
+    .loading-msg {
+      font-size: 0.58rem; letter-spacing: 3px;
+      color: rgba(255,255,255,0.2); text-align: center;
+      padding: 40px 0;
+    }
+    .refresh-btn {
+      background: none; border: 1px solid rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.3); font-family: inherit;
+      font-size: 0.55rem; letter-spacing: 2px;
+      text-transform: uppercase; padding: 6px 14px;
+      border-radius: 3px; cursor: pointer; transition: all 0.2s;
+    }
+    .refresh-btn:hover { border-color: rgba(255,255,255,0.25); color: rgba(255,255,255,0.5); }
+
+    .last-update {
+      font-size: 0.52rem; letter-spacing: 1px;
+      color: rgba(255,255,255,0.18); margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ Login ════════════════════════════════════════════════════════ -->
+<div id="login-screen">
+  <div class="login-box">
+    <h1>Admin · KIU Showroom</h1>
+    <input type="password" id="pwd-input" placeholder="••••••••"
+      onkeydown="if(event.key==='Enter') doLogin()">
+    <button onclick="doLogin()">Ingresar</button>
+    <div class="login-error" id="login-error"></div>
+  </div>
+</div>
+
+<!-- ══ Dashboard ════════════════════════════════════════════════════ -->
+<div id="dashboard">
+  <div class="dash-header">
+    <h1>KIU · Panel de estados</h1>
+    <div style="display:flex; gap:12px; align-items:center">
+      <div>
+        <div class="last-update" id="last-update"></div>
+      </div>
+      <button class="refresh-btn" onclick="loadData()">↺ Actualizar</button>
+    </div>
+  </div>
+
+  <a class="btn-sheet" id="btn-sheet" href="#" target="_blank">
+    ✎ &nbsp;Editar en Google Sheets
+  </a>
+
+  <div class="units-grid" id="units-grid">
+    <div class="loading-msg">Cargando datos...</div>
+  </div>
+
+  <div class="instructions">
+    <h2>Cómo actualizar estados</h2>
+    <ol>
+      <li>Hacé click en <strong>Editar en Google Sheets</strong></li>
+      <li>Cambiá el estado de la unidad: <code>disponible</code>, <code>reservada</code> o <code>vendida</code></li>
+      <li>Guardá la hoja (se guarda automáticamente)</li>
+      <li>Volvé acá y presioná <strong>↺ Actualizar</strong> para verificar</li>
+      <li>El showroom refleja los cambios en menos de <strong>1 minuto</strong></li>
+    </ol>
+  </div>
+</div>
+
+<script>
+  const SHEET_CSV  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRyuCxwV7CrHyxNuSzyW-6152dpypg5hxZcEkvIlsBs6meVX8PZTqjI-071b2n8WQ20LP0yZIE28zIr/pub?gid=0&single=true&output=csv';
+  const SHEET_EDIT = 'https://docs.google.com/spreadsheets/d/1rKpXEMJ_eCxyWRxU5sX6p9VZUfwzHlQMg3h1sDLQmrU/edit';
+  const PASSWORD   = 'kiu2025';
+
+  document.getElementById('btn-sheet').href = SHEET_EDIT;
+
+  /* ── Login ── */
+  function doLogin() {
+    const val = document.getElementById('pwd-input').value;
+    if (val === PASSWORD) {
+      document.getElementById('login-screen').classList.add('hidden');
+      loadData();
+    } else {
+      document.getElementById('login-error').textContent = 'Contraseña incorrecta';
+      document.getElementById('pwd-input').value = '';
+    }
+  }
+
+  /* ── Fetch y render ── */
+  async function loadData() {
+    const grid = document.getElementById('units-grid');
+    grid.innerHTML = '<div class="loading-msg">Cargando...</div>';
+
+    try {
+      const res  = await fetch(SHEET_CSV + '&t=' + Date.now()); /* evita cache */
+      const text = await res.text();
+      const rows = parseCSV(text);
+      renderUnits(rows);
+      document.getElementById('last-update').textContent =
+        'Actualizado: ' + new Date().toLocaleTimeString('es-UY');
+    } catch(e) {
+      grid.innerHTML = '<div class="loading-msg">Error al cargar datos. Revisá la conexión.</div>';
+    }
+  }
+
+  function parseCSV(text) {
+    const lines   = text.trim().split('\n');
+    const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+    return lines.slice(1).map(line => {
+      const vals = line.split(',').map(v => v.trim().replace(/^"|"$/g, ''));
+      const obj  = {};
+      headers.forEach((h, i) => obj[h] = vals[i] || '');
+      return obj;
+    });
+  }
+
+  function renderUnits(rows) {
+    const grid = document.getElementById('units-grid');
+    if (!rows.length) {
+      grid.innerHTML = '<div class="loading-msg">No hay datos en la hoja.</div>';
+      return;
+    }
+
+    const STATUS_LABEL = {
+      disponible: 'Disponible',
+      reservada:  'Reservada',
+      vendida:    'Vendida'
+    };
+
+    grid.innerHTML = rows.map(row => {
+      const uid    = (row.unidad  || '').trim();
+      const estado = (row.estado  || 'disponible').trim().toLowerCase();
+      const precio = parseInt(row.precio) || null;
+      const label  = (row.label   || 'Tipología').trim();
+
+      const precioStr = precio
+        ? '$ ' + precio.toLocaleString('es-UY') + '<small>USD</small>'
+        : '<span style="opacity:0.3">—</span>';
+
+      return `
+        <div class="unit-row">
+          <div class="unit-num">${uid}</div>
+          <div>
+            <div class="unit-label">${label}</div>
+            <div class="unit-sub">Unidad ${uid}</div>
+          </div>
+          <span class="status-badge status-${estado}">
+            ${STATUS_LABEL[estado] || estado}
+          </span>
+          <div class="unit-precio">${precioStr}</div>
+          <div class="unit-actions">
+            <a class="btn-sheet" href="${SHEET_EDIT}" target="_blank"
+               style="padding: 6px 12px; font-size:0.52rem; margin-bottom:0">
+              ✎ Editar
+            </a>
+          </div>
+        </div>`;
+    }).join('');
+  }
+</script>
+
+</body>
+</html>

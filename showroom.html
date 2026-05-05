@@ -35,6 +35,30 @@
         function gaEvent(action, params) {
             if (typeof gtag === 'function') gtag('event', action, params);
         }
+
+        /* ── Google Sheet: estados y precios en vivo ── */
+        const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRyuCxwV7CrHyxNuSzyW-6152dpypg5hxZcEkvIlsBs6meVX8PZTqjI-071b2n8WQ20LP0yZIE28zIr/pub?gid=0&single=true&output=csv';
+
+        async function fetchSheetData() {
+            try {
+                const res  = await fetch(SHEET_CSV);
+                const text = await res.text();
+                const lines   = text.trim().split('\n');
+                const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+                lines.slice(1).forEach(line => {
+                    const vals = line.split(',').map(v => v.trim().replace(/^"|"$/g, ''));
+                    const row  = {};
+                    headers.forEach((h, i) => row[h] = vals[i] || '');
+                    const uid = (row.unidad || '').trim().padStart(2, '0');
+                    if (uid && DATA.units[uid]) {
+                        if (row.estado)  DATA.units[uid].status = row.estado.trim();
+                        if (row.precio)  DATA.units[uid].precio = parseInt(row.precio) || null;
+                    }
+                });
+            } catch(e) {
+                console.warn('No se pudo leer la Sheet, usando datos locales.');
+            }
+        }
     </script>
 </head>
 <body>
@@ -198,6 +222,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <span class="sr-up-spec-val" id="spec-banos">—</span>
                 <span class="sr-up-spec-label">baños</span>
             </div>
+        </div>
+        <div id="sr-up-precio" style="display:none; padding: 10px 0 4px; font-family: inherit;">
+            <span id="spec-precio" style="font-size:1.3rem; font-weight:500; letter-spacing:1px;"></span>
+            <span style="font-size:0.7rem; opacity:0.45; margin-left:6px;">USD</span>
         </div>
 
         <div class="sr-up-tabs">
@@ -501,6 +529,7 @@ function hideLoader() {
    INIT
 ══════════════════════════════════════════════════════════════ */
 function init() {
+    fetchSheetData(); /* carga estados/precios desde Google Sheet en background */
     runLoader();
     applyTexts();
     buildSidebar();
@@ -688,6 +717,14 @@ function openUnitPanel(unit) {
     $("spec-dorms").textContent   = unitData.dorms   ?? "—";
     $("spec-banos").textContent   = unitData.banos   ?? "—";
     $("sr-up-specs").style.display = "";
+
+    /* precio desde Sheet */
+    if (unitData.precio) {
+        $("spec-precio").textContent = "$ " + unitData.precio.toLocaleString('es-UY');
+        $("sr-up-precio").style.display = "";
+    } else {
+        $("sr-up-precio").style.display = "none";
+    }
 
     /* planta */
     const plantaEl = $("sr-planta-img");
