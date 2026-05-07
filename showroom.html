@@ -523,14 +523,21 @@ const DATA = {
                 "videos/kiu/amenities-terrace.mp4",
             ],
         },
-        {
-            id: "pisos-medios",
-            label: "Middle Floors", labelEsp: "Pisos Medios",
-            viewImage: "img/kiu/middle-floor.jpg",
-            hasUnits: true,
-            images: [],
-            videos: [],
-        },
+        { id: "nivel-14", label: "Level 14", labelEsp: "Nivel 14", viewImage: "img/kiu/middle-floor.jpg", hasUnits: true, placeholder: false, images: [], videos: [] },
+        { id: "nivel-13", label: "Level 13", labelEsp: "Nivel 13", viewImage: null, hasUnits: false, placeholder: true, images: [], videos: [] },
+        { id: "nivel-12", label: "Level 12", labelEsp: "Nivel 12", viewImage: null, hasUnits: false, placeholder: true, images: [], videos: [] },
+        { id: "nivel-11", label: "Level 11", labelEsp: "Nivel 11", viewImage: null, hasUnits: false, placeholder: true, images: [], videos: [] },
+        { id: "nivel-10", label: "Level 10", labelEsp: "Nivel 10", viewImage: null, hasUnits: false, placeholder: true, images: [], videos: [] },
+        { id: "nivel-09", label: "Level 9",  labelEsp: "Nivel 9",  viewImage: null, hasUnits: false, placeholder: true, images: [], videos: [] },
+        { id: "nivel-08", label: "Level 8",  labelEsp: "Nivel 8",  viewImage: null, hasUnits: false, placeholder: true, images: [], videos: [] },
+        { id: "nivel-07", label: "Level 7",  labelEsp: "Nivel 7",  viewImage: null, hasUnits: false, placeholder: true, images: [], videos: [] },
+        { id: "nivel-06", label: "Level 6",  labelEsp: "Nivel 6",  viewImage: null, hasUnits: false, placeholder: true, images: [], videos: [] },
+        { id: "nivel-05", label: "Level 5",  labelEsp: "Nivel 5",  viewImage: null, hasUnits: false, placeholder: true, images: [], videos: [] },
+        { id: "nivel-04", label: "Level 4",  labelEsp: "Nivel 4",  viewImage: null, hasUnits: false, placeholder: true, images: [], videos: [] },
+        { id: "nivel-03", label: "Level 3",  labelEsp: "Nivel 3",  viewImage: null, hasUnits: false, placeholder: true, images: [], videos: [] },
+        { id: "nivel-02", label: "Level 2",  labelEsp: "Nivel 2",  viewImage: null, hasUnits: false, placeholder: true, images: [], videos: [] },
+        { id: "nivel-01", label: "Level 1",  labelEsp: "Nivel 1",  viewImage: null, hasUnits: false, placeholder: true, images: [], videos: [] },
+        { id: "planta-baja", label: "Ground Floor", labelEsp: "Planta Baja", viewImage: null, hasUnits: false, placeholder: true, images: [], videos: [] },
     ],
 };
 
@@ -911,6 +918,15 @@ function openFloorPanel(floor) {
     buildGallery(floor.images || []);
     buildVideoGallery(floor.videos || []);
 
+    if (floor.placeholder && !(floor.images && floor.images.length)) {
+        const label = state.lang === "esp" ? floor.labelEsp : floor.label;
+        $("sr-up-gallery").innerHTML = `
+            <div class="sr-floor-placeholder">
+                <i class="fa fa-image"></i>
+                <p>Acá va la planta del ${label}</p>
+            </div>`;
+    }
+
     /* hide unit-only actions */
     $("sr-up-actions").style.display = "none";
 
@@ -1216,8 +1232,8 @@ function selectFloor(fid, openPanel) {
     if (floor.viewImage) { crossfadeTo(floor.viewImage); }
     else { clearFloorImage(); }
 
-    /* open floor gallery panel if requested and floor has content */
-    const hasContent = (floor.images && floor.images.length) || (floor.videos && floor.videos.length);
+    /* open floor gallery panel if requested and floor has content or placeholder */
+    const hasContent = (floor.images && floor.images.length) || (floor.videos && floor.videos.length) || floor.placeholder;
     if (openPanel && !floor.hasUnits && hasContent) {
         openFloorPanel(floor);
     }

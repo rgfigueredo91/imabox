@@ -212,13 +212,21 @@ html, body {
     z-index: 20;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    padding: 0;
+    justify-content: flex-start;
+    padding: 60px 0 40px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
     /* slide in from right when explore state */
     transform: translateX(100%);
     transition: transform 0.6s cubic-bezier(0.4,0,0.2,1);
     background: linear-gradient(to left, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.2) transparent;
 }
+.sr-sidebar::-webkit-scrollbar { width: 3px; }
+.sr-sidebar::-webkit-scrollbar-track { background: transparent; }
+.sr-sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 2px; }
 
 .sr-scene.is-explore .sr-sidebar {
     transform: translateX(0);
@@ -729,6 +737,20 @@ html, body {
 }
 .sr-up-gallery-item:hover img { transform: scale(1.03); opacity: 0.9; }
 
+/* Placeholder piso sin contenido aún */
+.sr-floor-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 60px 20px;
+    color: rgba(255,255,255,0.35);
+    text-align: center;
+}
+.sr-floor-placeholder i { font-size: 2.8rem; }
+.sr-floor-placeholder p { font-size: 0.85rem; letter-spacing: 0.04em; margin: 0; }
+
 /* Action buttons */
 .sr-up-actions {
     display: flex;
@@ -902,10 +924,10 @@ html, body {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   RESPONSIVE — TABLET  (769 – 1024 px)
+   RESPONSIVE — TABLET LANDSCAPE  (768 – 1024 px, horizontal)
+   Canvas 16:9 centrado, sidebar vertical derecha con scroll
    ═══════════════════════════════════════════════════════════════ */
-@media (min-width: 769px) and (max-width: 1024px) {
-    /* Canvas: 16:9, full width, centered vertically */
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
     .sr-canvas {
         inset: auto;
         left: 0; right: 0;
@@ -915,64 +937,137 @@ html, body {
         transform: translateY(-50%);
         height: auto;
     }
-
     .sr-unit-panel { width: 320px; }
     .sr-up-header  { padding: 80px 22px 18px; }
-
-    .sr-tour-dialog {
-        width: 90vw;
-        height: 78vh;
-    }
+    .sr-tour-dialog { width: 90vw; height: 78vh; }
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   RESPONSIVE — MOBILE  (≤ 768 px)
+   RESPONSIVE — TABLET PORTRAIT  (768 – 1024 px, vertical)
+   Canvas arriba, sidebar como barra inferior con scroll horizontal,
+   panel de unidad como bottom-sheet
    ═══════════════════════════════════════════════════════════════ */
-@media (max-width: 768px) {
-    /* Canvas: 16:9, full width, sits at top leaving room for bottom bar */
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
     .sr-canvas {
         inset: auto;
         left: 0; right: 0;
         width: 100%;
         aspect-ratio: 16 / 9;
-        top: 60px; /* below navbar */
+        top: 0;
         transform: none;
         height: auto;
     }
 
-    /* Sidebar moves to bottom tab bar */
+    /* Sidebar: barra horizontal inferior con scroll */
     .sr-sidebar {
         top: auto; right: 0; bottom: 0; left: 0;
         width: 100%; height: auto;
         flex-direction: row;
-        justify-content: stretch;
+        justify-content: flex-start;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
         transform: translateY(100%);
         background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 100%);
         padding: 0;
+        scrollbar-width: none;
     }
+    .sr-sidebar::-webkit-scrollbar { display: none; }
     .sr-scene.is-explore .sr-sidebar { transform: translateY(0); }
 
     .sr-floor-btn {
-        flex: 1;
+        flex: 0 0 auto;
         flex-direction: column;
         align-items: center;
         gap: 6px;
-        padding: 16px 8px 20px;
+        padding: 18px 20px 22px;
+        border-left: none;
+        border-top: 2px solid rgba(255,255,255,0.1);
+        text-align: center;
+        min-height: 80px;
+        min-width: 100px;
+    }
+    .sr-floor-btn.active { border-top-color: #fff; border-left-color: transparent; }
+    .sr-floor-btn + .sr-floor-btn { border-top-color: rgba(255,255,255,0.1); }
+    .sr-floor-arrow { display: none; }
+    .sr-floor-name  { font-size: 0.7rem; }
+
+    .sr-btn-back { top: 16px; left: 16px; }
+    .sr-project-meta { left: 20px; bottom: 110px; }
+
+    /* Panel: bottom-sheet a 70vh */
+    .sr-unit-panel {
+        width: 100%;
+        top: auto;
+        height: 70vh;
+        border-right: none;
+        border-top: 1px solid rgba(255,255,255,0.08);
+        transform: translateY(100%);
+    }
+    .sr-scene.is-open .sr-unit-panel { transform: translateY(0); }
+    .sr-up-header { padding: 24px 24px 18px; }
+
+    .sr-tour-dialog { width: 94vw; height: 80vh; }
+
+    .sr-unit-zone { stroke: transparent; stroke-width: 2; }
+    .sr-lightbox-prev { left: 10px; width: 52px; height: 52px; }
+    .sr-lightbox-next { right: 10px; width: 52px; height: 52px; }
+    .sr-lightbox-close { top: 16px; right: 16px; width: 48px; height: 48px; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE — MOBILE  (≤ 767 px)
+   ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+    /* Canvas: 16:9, full width, debajo del navbar */
+    .sr-canvas {
+        inset: auto;
+        left: 0; right: 0;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        top: 60px;
+        transform: none;
+        height: auto;
+    }
+
+    /* Sidebar: barra inferior horizontal */
+    .sr-sidebar {
+        top: auto; right: 0; bottom: 0; left: 0;
+        width: 100%; height: auto;
+        flex-direction: row;
+        justify-content: flex-start;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        transform: translateY(100%);
+        background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 100%);
+        padding: 0;
+        scrollbar-width: none;
+    }
+    .sr-sidebar::-webkit-scrollbar { display: none; }
+    .sr-scene.is-explore .sr-sidebar { transform: translateY(0); }
+
+    .sr-floor-btn {
+        flex: 0 0 auto;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        padding: 16px 16px 20px;
         border-left: none;
         border-top: 2px solid rgba(255,255,255,0.1);
         text-align: center;
         min-height: 72px;
+        min-width: 80px;
     }
     .sr-floor-btn.active { border-top-color: #fff; }
     .sr-floor-btn + .sr-floor-btn { border-top-color: rgba(255,255,255,0.1); }
     .sr-floor-arrow { display: none; }
     .sr-floor-name  { font-size: 0.65rem; }
 
-    /* Push meta above the bottom tab bar */
     .sr-btn-back { top: 72px; left: 16px; }
     .sr-project-meta { left: 20px; bottom: 110px; }
 
-    /* Unit panel slides up as bottom sheet */
+    /* Panel: bottom-sheet */
     .sr-unit-panel {
         width: 100%;
         top: auto;
@@ -984,7 +1079,6 @@ html, body {
     .sr-scene.is-open .sr-unit-panel { transform: translateY(0); }
     .sr-up-header { padding: 24px 20px 18px; }
 
-    /* Tour modal full-screen on mobile */
     .sr-tour-dialog {
         width: 100vw;
         height: 100vh;
@@ -992,13 +1086,7 @@ html, body {
         border-radius: 0;
     }
 
-    /* Larger tap targets on SVG hotspots */
-    .sr-unit-zone {
-        stroke: transparent;
-        stroke-width: 3;
-    }
-
-    /* Lightbox nav buttons easier to tap */
+    .sr-unit-zone { stroke: transparent; stroke-width: 3; }
     .sr-lightbox-prev { left: 8px; width: 52px; height: 52px; }
     .sr-lightbox-next { right: 8px; width: 52px; height: 52px; }
     .sr-lightbox-close { top: 16px; right: 16px; width: 48px; height: 48px; }
