@@ -955,7 +955,7 @@ controls.minDistance    = 10;
 controls.maxDistance    = 6000;
 
 /* ── LIGHTS ──────────────────────────────────────────────────────── */
-const ambient = new THREE.AmbientLight(0xffffff, 0.4);
+const ambient = new THREE.AmbientLight(0xffffff, 1.2);
 scene.add(ambient);
 
 const sun = new THREE.DirectionalLight(0xfff8e8, 1.5);
@@ -1143,6 +1143,7 @@ const texCache = {};
 function loadTex(url, cb, onErr) {
     if (texCache[url]) { cb(texCache[url]); return; }
     new THREE.TextureLoader().load(url, tex => {
+        tex.colorSpace = THREE.SRGBColorSpace;
         tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
         tex.needsUpdate = true;
         texCache[url] = tex;
