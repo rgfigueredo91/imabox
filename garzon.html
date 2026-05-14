@@ -1421,6 +1421,9 @@ function toggleCurvas() {
         new THREE.TextureLoader().load(CFG.curvasTex, tex => {
             label.textContent = 'Curvas de nivel';
             tex.colorSpace = THREE.SRGBColorSpace;
+            tex.repeat.x = -1;
+            tex.offset.x = 1;
+            tex.wrapS = THREE.RepeatWrapping;
 
             // Clone every terrain mesh and apply curvas texture using the same UVs
             // so the overlay sits perfectly on the terrain surface
