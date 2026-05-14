@@ -1422,29 +1422,31 @@ function toggleCurvas() {
             label.textContent = 'Curvas de nivel';
             tex.colorSpace = THREE.SRGBColorSpace;
 
-            // Compute terrain footprint after centering
-            terrainGroup.updateMatrixWorld(true);
-            const box = new THREE.Box3().setFromObject(terrainGroup);
-            const sizeX = box.max.x - box.min.x;
-            const sizeZ = box.max.z - box.min.z;
-
-            const geo = new THREE.PlaneGeometry(sizeX, sizeZ);
-            const mat = new THREE.MeshBasicMaterial({
-                map: tex,
-                transparent: true,
-                alphaTest: 0.01,
-                opacity: 0.8,
-                depthTest: false,
-                polygonOffset: true,
-                polygonOffsetFactor: -1,
-                polygonOffsetUnits: -1,
+            // Clone every terrain mesh and apply curvas texture using the same UVs
+            // so the overlay sits perfectly on the terrain surface
+            const overlay = new THREE.Group();
+            terrainGroup.traverse(child => {
+                if (!child.isMesh) return;
+                const clone = new THREE.Mesh(
+                    child.geometry,
+                    new THREE.MeshBasicMaterial({
+                        map: tex,
+                        transparent: true,
+                        alphaTest: 0.01,
+                        opacity: 0.8,
+                        polygonOffset: true,
+                        polygonOffsetFactor: -2,
+                        polygonOffsetUnits: -2,
+                    })
+                );
+                clone.position.copy(child.getWorldPosition(new THREE.Vector3()));
+                clone.quaternion.copy(child.getWorldQuaternion(new THREE.Quaternion()));
+                clone.scale.copy(child.getWorldScale(new THREE.Vector3()));
+                clone.renderOrder = 2;
+                overlay.add(clone);
             });
-            curvasMesh = new THREE.Mesh(geo, mat);
-            // +PI/2 rotation keeps UV V=0→zMin, V=1→zMax matching generatePlanarUVs
-            curvasMesh.rotation.x = Math.PI / 2;
-            curvasMesh.position.set(0, box.max.y + 0.5, 0);
-            curvasMesh.renderOrder = 2;
-            curvasMesh.visible = curvasOn;
+
+            curvasMesh = overlay;
             scene.add(curvasMesh);
         }, undefined, () => {
             label.textContent = 'Curvas de nivel';
@@ -1461,7 +1463,9 @@ function toggleCurvas() {
 document.getElementById('curvas-opacity').addEventListener('input', e => {
     const v = parseInt(e.target.value, 10);
     document.getElementById('curvas-opacity-val').textContent = v + '%';
-    if (curvasMesh) curvasMesh.material.opacity = v / 100;
+    if (curvasMesh) curvasMesh.traverse(c => {
+        if (c.isMesh) c.material.opacity = v / 100;
+    });
 });
 
 /* ── LOAD TERRAIN ────────────────────────────────────────────────── */
