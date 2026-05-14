@@ -702,10 +702,28 @@
             <span class="gp-layer-label" id="curvas-label">Curvas de nivel</span>
             <div class="gp-toggle"></div>
         </div>
+        <div id="curvas-opacity-row" style="display:none;margin-top:8px">
+            <div class="gp-row">
+                <span class="gp-row-label">Opacidad</span>
+                <span class="gp-popup-value" id="curvas-opacity-val">80%</span>
+            </div>
+            <input type="range" class="gp-slider" id="curvas-opacity" min="0" max="100" value="80" style="margin-top:5px">
+        </div>
         <div class="gp-layer" id="layer-contexto" style="margin-top:10px;display:none">
             <span class="gp-layer-label">Mapa general</span>
             <div class="gp-toggle"></div>
         </div>
+    </div>
+
+    <div class="gp-section" id="section-hotspots">
+        <div class="gp-section-title">Panoramas 360</div>
+        <button class="gp-cam-btn" id="hs-select-1" style="margin-bottom:4px">Mover Hotspot 1</button>
+        <button class="gp-cam-btn" id="hs-select-2" style="margin-bottom:4px">Mover Hotspot 2</button>
+        <button class="gp-cam-btn" id="hs-select-3" style="margin-bottom:4px">Mover Hotspot 3</button>
+        <button class="gp-cam-btn" id="hs-select-4" style="margin-bottom:4px">Mover Hotspot 4</button>
+        <button class="gp-cam-btn" id="hs-select-5" style="margin-bottom:4px">Mover Hotspot 5</button>
+        <button class="gp-cam-btn" id="hs-select-6" style="margin-bottom:4px">Mover Hotspot 6</button>
+        <div id="hs-coords" style="font-size:10px;color:rgba(255,255,255,0.4);margin-top:6px;line-height:1.6;display:none"></div>
     </div>
 
     <div class="gp-section">
@@ -873,9 +891,13 @@ const CFG = {
     glb:     BASE + 'terrain.glb',
     blanco:  { obj: BASE + 'blanco.obj',  mtl: BASE + 'blanco.mtl'  },
     curvas:  BASE + 'curvas.glb',
+    curvasTex: BASE + 'curvas_tex.png',
     panorama:     BASE + 'panorama.jpg',
     panorama2:    BASE + 'panorama2.jpg',
     panorama3:    BASE + 'panorama3.jpg',
+    panorama4:    BASE + 'panorama4.jpg',
+    panorama5:    BASE + 'panorama5.jpg',
+    panorama6:    BASE + 'panorama6.jpg',
     texReal:      BASE + 'terrain.jpg',
     texProyecto:  BASE + 'proyecto1.jpg',
     texProyecto2: BASE + 'proyecto2.jpg',
@@ -1138,6 +1160,7 @@ let curvasGroup  = null;
 let blancoLoaded = false;
 let curvasLoaded = false;
 let curvasOn     = false;
+let curvasMesh   = null;
 let currentMode  = 'real';
 let origTerrainTex = null;
 
@@ -1386,35 +1409,55 @@ controls.addEventListener('change', () => {
 /* ── TOGGLE CURVAS ───────────────────────────────────────────────── */
 function toggleCurvas() {
     curvasOn = !curvasOn;
-    const el    = document.getElementById('layer-curvas');
-    const label = document.getElementById('curvas-label');
+    const el      = document.getElementById('layer-curvas');
+    const label   = document.getElementById('curvas-label');
+    const opRow   = document.getElementById('curvas-opacity-row');
     el.classList.toggle('active', curvasOn);
+    opRow.style.display = curvasOn ? 'block' : 'none';
 
     if (curvasOn && !curvasLoaded) {
         curvasLoaded = true;
         label.textContent = 'cargando…';
-        loadGLB(CFG.curvas, null, group => {
+        new THREE.TextureLoader().load(CFG.curvasTex, tex => {
             label.textContent = 'Curvas de nivel';
-            if (!group) { curvasOn = false; el.classList.remove('active'); return; }
+            tex.colorSpace = THREE.SRGBColorSpace;
 
-            group.traverse(child => {
-                if (!child.isMesh) return;
-                child.material = new THREE.MeshBasicMaterial({ color: 0xffffff, opacity: 0.8, transparent: true });
+            // Size the plane to match the terrain footprint
+            const box = new THREE.Box3().setFromObject(terrainGroup);
+            const sizeX = box.max.x - box.min.x;
+            const sizeZ = box.max.z - box.min.z;
+
+            const geo = new THREE.PlaneGeometry(sizeX, sizeZ);
+            const mat = new THREE.MeshBasicMaterial({
+                map: tex,
+                transparent: true,
+                alphaTest: 0.01,
+                opacity: 0.8,
+                depthTest: false,
             });
-
-            const result = new THREE.Group();
-            result.add(group);
-
-            curvasGroup = result;
-            result.position.set(-terrainCenter.x, -terrainCenter.y, -terrainCenter.z);
-            result.visible = curvasOn;
-            scene.add(result);
+            curvasMesh = new THREE.Mesh(geo, mat);
+            curvasMesh.rotation.x = -Math.PI / 2;
+            curvasMesh.position.set(0, box.max.y + 0.5, 0);
+            curvasMesh.renderOrder = 1;
+            curvasMesh.visible = curvasOn;
+            scene.add(curvasMesh);
+        }, undefined, () => {
+            label.textContent = 'Curvas de nivel';
+            curvasOn = false;
+            el.classList.remove('active');
+            opRow.style.display = 'none';
         });
         return;
     }
 
-    if (curvasGroup) curvasGroup.visible = curvasOn;
+    if (curvasMesh) curvasMesh.visible = curvasOn;
 }
+
+document.getElementById('curvas-opacity').addEventListener('input', e => {
+    const v = parseInt(e.target.value, 10);
+    document.getElementById('curvas-opacity-val').textContent = v + '%';
+    if (curvasMesh) curvasMesh.material.opacity = v / 100;
+});
 
 /* ── LOAD TERRAIN ────────────────────────────────────────────────── */
 showLoader('cargando terreno');
@@ -2270,6 +2313,9 @@ let panoLon = 0, panoLat = 0;
 let panoHotspot  = null;
 let panoHotspot2 = null;
 let panoHotspot3 = null;
+let panoHotspot4 = null;
+let panoHotspot5 = null;
+let panoHotspot6 = null;
 
 function makeHotspot(x, z, url, color) {
     const ray = new THREE.Raycaster();
@@ -2292,9 +2338,12 @@ function makeHotspot(x, z, url, color) {
 
 function placePanoHotspot() {
     // Dos hotspots separados: uno en el cuadrante norte y otro en el sur
-    panoHotspot  = makeHotspot(-300,  300, CFG.panorama,  0xff6600);
-    panoHotspot2 = makeHotspot( 300, -300, CFG.panorama2, 0xff6600);
-    panoHotspot3 = makeHotspot(-300, -300, CFG.panorama3, 0xff6600);
+    panoHotspot  = makeHotspot(-300,  300, CFG.panorama,  0xffffff);
+    panoHotspot2 = makeHotspot( 300, -300, CFG.panorama2, 0xffffff);
+    panoHotspot3 = makeHotspot(-300, -300, CFG.panorama3, 0xffffff);
+    panoHotspot4 = makeHotspot( 300,  300, CFG.panorama4, 0xffffff);
+    panoHotspot5 = makeHotspot(   0,    0, CFG.panorama5, 0xffffff);
+    panoHotspot6 = makeHotspot(-150,  150, CFG.panorama6, 0xffffff);
 }
 
 function open360(url) {
@@ -2381,7 +2430,7 @@ window.addEventListener('resize', () => {
 // Detectar click en hotspots (modo orbit)
 canvas.addEventListener('click', e => {
     if (activeTool !== 'orbit') return;
-    const hotspots = [panoHotspot, panoHotspot2, panoHotspot3].filter(Boolean);
+    const hotspots = [panoHotspot, panoHotspot2, panoHotspot3, panoHotspot4, panoHotspot5, panoHotspot6].filter(Boolean);
     if (!hotspots.length) return;
     const rect = canvas.getBoundingClientRect();
     const mx =  ((e.clientX - rect.left) / rect.width)  * 2 - 1;
@@ -2391,11 +2440,52 @@ canvas.addEventListener('click', e => {
     if (hits.length) open360(hits[0].object.userData.panoUrl);
 });
 
+/* ── HOTSPOT POSITIONING ─────────────────────────────────────────── */
+let hsPlacing = null; // hotspot que se está posicionando
+
+function startHsPlace(hotspot, btnId) {
+    // Desactivar cualquier otro activo
+    ['hs-select-1','hs-select-2','hs-select-3','hs-select-4','hs-select-5','hs-select-6'].forEach(id => {
+        document.getElementById(id).classList.remove('active');
+    });
+    if (hsPlacing === hotspot) { hsPlacing = null; return; } // toggle off
+    hsPlacing = hotspot;
+    document.getElementById(btnId).classList.add('active');
+    document.getElementById('hs-coords').style.display = 'block';
+    document.getElementById('hs-coords').textContent = 'Hacé click en el terreno para ubicar el hotspot';
+}
+
+document.getElementById('hs-select-1').addEventListener('click', () => startHsPlace(panoHotspot,  'hs-select-1'));
+document.getElementById('hs-select-2').addEventListener('click', () => startHsPlace(panoHotspot2, 'hs-select-2'));
+document.getElementById('hs-select-3').addEventListener('click', () => startHsPlace(panoHotspot3, 'hs-select-3'));
+document.getElementById('hs-select-4').addEventListener('click', () => startHsPlace(panoHotspot4, 'hs-select-4'));
+document.getElementById('hs-select-5').addEventListener('click', () => startHsPlace(panoHotspot5, 'hs-select-5'));
+document.getElementById('hs-select-6').addEventListener('click', () => startHsPlace(panoHotspot6, 'hs-select-6'));
+
+canvas.addEventListener('click', e => {
+    if (!hsPlacing || activeTool !== 'orbit') return;
+    const rect = canvas.getBoundingClientRect();
+    const mx =  ((e.clientX - rect.left) / rect.width)  * 2 - 1;
+    const my = -((e.clientY - rect.top)  / rect.height) * 2 + 1;
+    raycaster.setFromCamera(new THREE.Vector2(mx, my), camera);
+    const meshes = [];
+    if (terrainGroup) terrainGroup.traverse(c => { if (c.isMesh && c.visible) meshes.push(c); });
+    const hits = raycaster.intersectObjects(meshes, false);
+    if (!hits.length) return;
+    const pt = hits[0].point;
+    hsPlacing.position.copy(pt);
+    const coords = document.getElementById('hs-coords');
+    coords.textContent = 'X: ' + pt.x.toFixed(1) + '  Y: ' + pt.y.toFixed(1) + '  Z: ' + pt.z.toFixed(1);
+    // Deseleccionar
+    ['hs-select-1','hs-select-2','hs-select-3','hs-select-4','hs-select-5','hs-select-6'].forEach(id => document.getElementById(id).classList.remove('active'));
+    hsPlacing = null;
+});
+
 // Pulso animado en ambos hotspots
 (function pulseHotspot() {
     requestAnimationFrame(pulseHotspot);
     const t = Date.now();
-    [panoHotspot, panoHotspot2, panoHotspot3].forEach((h, i) => {
+    [panoHotspot, panoHotspot2, panoHotspot3, panoHotspot4, panoHotspot5, panoHotspot6].forEach((h, i) => {
         if (!h) return;
         const s = 1 + 0.25 * Math.sin(t * 0.003 + i * Math.PI);
         h.scale.setScalar(screenRadius(h.position, 10) * s);
