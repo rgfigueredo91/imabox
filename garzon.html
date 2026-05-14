@@ -727,6 +727,15 @@
         </div>
     </div>
 
+    <div class="gp-section">
+        <div class="gp-section-title">Terreno</div>
+        <div class="gp-row">
+            <span class="gp-row-label">Relieve</span>
+            <span class="gp-popup-value" id="relief-val">1.0×</span>
+        </div>
+        <input type="range" class="gp-slider" id="relief-slider" min="10" max="500" value="100" style="margin-top:5px">
+    </div>
+
     <div class="gp-section" id="section-hotspots">
         <div class="gp-section-title">Panoramas 360</div>
         <button class="gp-cam-btn" id="hs-select-1" style="margin-bottom:4px">Mover Hotspot 1</button>
@@ -1437,32 +1446,28 @@ function toggleCurvas() {
             tex.offset.y = 1;
             tex.wrapT = THREE.RepeatWrapping;
 
-            // Clone every terrain mesh and apply curvas texture using the same UVs
-            // so the overlay sits perfectly on the terrain surface
-            const overlay = new THREE.Group();
-            terrainGroup.traverse(child => {
-                if (!child.isMesh) return;
-                const clone = new THREE.Mesh(
-                    child.geometry,
-                    new THREE.MeshBasicMaterial({
-                        map: tex,
-                        transparent: true,
-                        alphaTest: 0.01,
-                        opacity: 0.8,
-                        polygonOffset: true,
-                        polygonOffsetFactor: -2,
-                        polygonOffsetUnits: -2,
-                    })
-                );
-                clone.position.copy(child.getWorldPosition(new THREE.Vector3()));
-                clone.quaternion.copy(child.getWorldQuaternion(new THREE.Quaternion()));
-                clone.scale.copy(child.getWorldScale(new THREE.Vector3()));
-                clone.renderOrder = 2;
-                overlay.add(clone);
+            // Deep-clone terrainGroup hierarchy, swap materials, add as child
+            // so it inherits scale/position automatically (including relief slider)
+            const overlay = terrainGroup.clone(true);
+            overlay.position.set(0, 0, 0);
+            overlay.rotation.set(0, 0, 0);
+            overlay.scale.set(1, 1, 1);
+            overlay.traverse(c => {
+                if (!c.isMesh) return;
+                c.material = new THREE.MeshBasicMaterial({
+                    map: tex,
+                    transparent: true,
+                    alphaTest: 0.01,
+                    opacity: 0.8,
+                    polygonOffset: true,
+                    polygonOffsetFactor: -2,
+                    polygonOffsetUnits: -2,
+                });
+                c.renderOrder = 2;
             });
 
             curvasMesh = overlay;
-            scene.add(curvasMesh);
+            terrainGroup.add(curvasMesh);
         }, undefined, () => {
             label.textContent = 'Curvas de nivel';
             curvasOn = false;
@@ -1474,6 +1479,13 @@ function toggleCurvas() {
 
     if (curvasMesh) curvasMesh.visible = curvasOn;
 }
+
+document.getElementById('relief-slider').addEventListener('input', e => {
+    const scale = parseInt(e.target.value, 10) / 100;
+    document.getElementById('relief-val').textContent = scale.toFixed(1) + '×';
+    if (terrainGroup) terrainGroup.scale.y = scale;
+    if (blancoGroup)  blancoGroup.scale.y  = scale;
+});
 
 document.getElementById('curvas-opacity').addEventListener('input', e => {
     const v = parseInt(e.target.value, 10);
