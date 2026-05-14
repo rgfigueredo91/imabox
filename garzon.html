@@ -721,6 +721,10 @@
             </div>
             <input type="range" class="gp-slider" id="curvas-opacity" min="0" max="100" value="80" style="margin-top:5px">
         </div>
+        <div class="gp-layer" id="layer-hotspots" style="margin-top:10px">
+            <span class="gp-layer-label">Panoramas 360</span>
+            <div class="gp-toggle"></div>
+        </div>
         <div class="gp-layer" id="layer-contexto" style="margin-top:10px;display:none">
             <span class="gp-layer-label">Mapa general</span>
             <div class="gp-toggle"></div>
@@ -736,7 +740,7 @@
         <input type="range" class="gp-slider" id="relief-slider" min="10" max="500" value="100" style="margin-top:5px">
     </div>
 
-    <div class="gp-section" id="section-hotspots">
+    <div class="gp-section" id="section-hotspots" style="display:none">
         <div class="gp-section-title">Panoramas 360</div>
         <button class="gp-cam-btn" id="hs-select-1" style="margin-bottom:4px">Mover Hotspot 1</button>
         <button class="gp-cam-btn" id="hs-select-2" style="margin-bottom:4px">Mover Hotspot 2</button>
@@ -1548,6 +1552,8 @@ loadGLB(CFG.glb,
         applyMode('real');
         updateContextTiles();
         placePanoHotspot();
+        [panoHotspot, panoHotspot2, panoHotspot4, panoHotspot5, panoHotspot6]
+            .forEach(h => { if (h) h.visible = false; });
     }
 );
 
@@ -1699,6 +1705,15 @@ document.querySelectorAll('.gp-mode-btn').forEach(btn => {
 
 /* ── CURVAS TOGGLE ───────────────────────────────────────────────── */
 document.getElementById('layer-curvas').addEventListener('click', toggleCurvas);
+
+/* ── HOTSPOTS TOGGLE ─────────────────────────────────────────────── */
+let hotspotsOn = false;
+document.getElementById('layer-hotspots').addEventListener('click', () => {
+    hotspotsOn = !hotspotsOn;
+    document.getElementById('layer-hotspots').classList.toggle('active', hotspotsOn);
+    [panoHotspot, panoHotspot2, panoHotspot3, panoHotspot4, panoHotspot5, panoHotspot6]
+        .forEach(h => { if (h) h.visible = hotspotsOn; });
+});
 
 /* ── CONTEXTO TOGGLE ─────────────────────────────────────────────── */
 document.getElementById('layer-contexto').addEventListener('click', () => {
