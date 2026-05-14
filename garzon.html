@@ -727,7 +727,7 @@
         <button class="gp-cam-btn" id="draw-clear" style="margin-top:14px">Limpiar trazos</button>
     </div>
 
-    <div class="gp-section">
+    <div class="gp-section" style="display:none">
         <div class="gp-section-title">Cajas</div>
         <div class="gp-dim-row">
             <span class="gp-dim-label">Ancho</span>
@@ -752,7 +752,7 @@
         <div class="gp-dim-hint">T mover · R rotar · Delete borrar</div>
     </div>
 
-    <div class="gp-section">
+    <div class="gp-section" style="display:none">
         <div class="gp-section-title">Cámara</div>
         <button class="gp-cam-btn" id="cam-persp">Perspectiva</button>
         <button class="gp-cam-btn" id="cam-top">Vista superior</button>
@@ -785,25 +785,22 @@
     <div class="gp-tool" id="tool-draw" title="Dibujar">
         <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z"/><path d="M20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
     </div>
-    <div class="gp-tool" id="tool-box" title="Cajas 3D">
+    <div class="gp-tool" id="tool-box" title="Cajas 3D" style="display:none">
         <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
     </div>
-    <div class="gp-tool" id="tool-cut" title="Perfil de corte">
+    <div class="gp-tool" id="tool-cut" title="Perfil de corte" style="display:none">
         <svg viewBox="0 0 24 24"><line x1="3" y1="5" x2="21" y2="5"/><polyline points="3,19 6,14 10,17 14,11 18,15 21,10"/></svg>
     </div>
-    <div class="gp-sep"></div>
-    <div class="gp-tool" id="tool-sun" title="Sol / Iluminación">
+    <div class="gp-tool" id="tool-sun" title="Sol / Iluminación" style="display:none">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/><line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/></svg>
     </div>
-    <div class="gp-sep"></div>
     <div class="gp-tool" id="tool-screenshot" title="Captura">
         <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="12" cy="12" r="3"/><path d="M9 5l1.5-2h3L15 5"/></svg>
     </div>
-    <div class="gp-tool" id="tool-sketch" title="Boceto IA">
+    <div class="gp-tool" id="tool-sketch" title="Boceto IA" style="display:none">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
     </div>
-    <div class="gp-sep"></div>
-    <div class="gp-tool" id="tool-ai" title="IA Render">
+    <div class="gp-tool" id="tool-ai" title="IA Render" style="display:none">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><circle cx="5" cy="5" r="1.5"/><circle cx="19" cy="5" r="1.5"/><circle cx="5" cy="19" r="1.5"/><circle cx="19" cy="19" r="1.5"/><line x1="12" y1="12" x2="6.1" y2="6.1"/><line x1="12" y1="12" x2="17.9" y2="6.1"/><line x1="12" y1="12" x2="6.1" y2="17.9"/><line x1="12" y1="12" x2="17.9" y2="17.9"/></svg>
     </div>
 </div>
@@ -877,6 +874,8 @@ const CFG = {
     blanco:  { obj: BASE + 'blanco.obj',  mtl: BASE + 'blanco.mtl'  },
     curvas:  BASE + 'curvas.glb',
     panorama:     BASE + 'panorama.jpg',
+    panorama2:    BASE + 'panorama2.jpg',
+    panorama3:    BASE + 'panorama3.jpg',
     texReal:      BASE + 'terrain.jpg',
     texProyecto:  BASE + 'proyecto1.jpg',
     texProyecto2: BASE + 'proyecto2.jpg',
@@ -2268,24 +2267,34 @@ document.getElementById('sketch-clear-btn').addEventListener('click', () => {
 let panoRenderer = null, panoCamera = null, panoScene = null, panoAnimId = null;
 let panoDragging = false, panoLastX = 0, panoLastY = 0;
 let panoLon = 0, panoLat = 0;
-let panoHotspot = null;
+let panoHotspot  = null;
+let panoHotspot2 = null;
+let panoHotspot3 = null;
 
-function placePanoHotspot() {
+function makeHotspot(x, z, url, color) {
     const ray = new THREE.Raycaster();
-    ray.set(new THREE.Vector3(0, 99999, 0), new THREE.Vector3(0, -1, 0));
+    ray.set(new THREE.Vector3(x, 99999, z), new THREE.Vector3(0, -1, 0));
     const meshes = [];
     if (terrainGroup) terrainGroup.traverse(c => { if (c.isMesh) meshes.push(c); });
     const hits = ray.intersectObjects(meshes, false);
     const y = hits.length ? hits[0].point.y : 0;
 
-    panoHotspot = new THREE.Mesh(
+    const h = new THREE.Mesh(
         new THREE.SphereGeometry(1, 16, 16),
-        new THREE.MeshBasicMaterial({ color: 0xff6600, depthTest: false })
+        new THREE.MeshBasicMaterial({ color, depthTest: false })
     );
-    panoHotspot.position.set(0, y, 0);
-    panoHotspot.renderOrder = 999;
-    panoHotspot.userData.isPanoHotspot = true;
-    scene.add(panoHotspot);
+    h.position.set(x, y, z);
+    h.renderOrder = 999;
+    h.userData.panoUrl = url;
+    scene.add(h);
+    return h;
+}
+
+function placePanoHotspot() {
+    // Dos hotspots separados: uno en el cuadrante norte y otro en el sur
+    panoHotspot  = makeHotspot(-300,  300, CFG.panorama,  0xff6600);
+    panoHotspot2 = makeHotspot( 300, -300, CFG.panorama2, 0xff6600);
+    panoHotspot3 = makeHotspot(-300, -300, CFG.panorama3, 0xff6600);
 }
 
 function open360(url) {
@@ -2369,23 +2378,28 @@ window.addEventListener('resize', () => {
     if (panoCamera) { panoCamera.aspect = window.innerWidth / window.innerHeight; panoCamera.updateProjectionMatrix(); }
 });
 
-// Detectar click en hotspot (modo orbit)
+// Detectar click en hotspots (modo orbit)
 canvas.addEventListener('click', e => {
-    if (activeTool !== 'orbit' || !panoHotspot) return;
+    if (activeTool !== 'orbit') return;
+    const hotspots = [panoHotspot, panoHotspot2, panoHotspot3].filter(Boolean);
+    if (!hotspots.length) return;
     const rect = canvas.getBoundingClientRect();
     const mx =  ((e.clientX - rect.left) / rect.width)  * 2 - 1;
     const my = -((e.clientY - rect.top)  / rect.height) * 2 + 1;
     raycaster.setFromCamera(new THREE.Vector2(mx, my), camera);
-    const hits = raycaster.intersectObject(panoHotspot, false);
-    if (hits.length) open360(CFG.panorama);
+    const hits = raycaster.intersectObjects(hotspots, false);
+    if (hits.length) open360(hits[0].object.userData.panoUrl);
 });
 
-// Pulso animado en el hotspot
+// Pulso animado en ambos hotspots
 (function pulseHotspot() {
     requestAnimationFrame(pulseHotspot);
-    if (!panoHotspot) return;
-    const s = 1 + 0.25 * Math.sin(Date.now() * 0.003);
-    panoHotspot.scale.setScalar(screenRadius(panoHotspot.position, 10) * s);
+    const t = Date.now();
+    [panoHotspot, panoHotspot2, panoHotspot3].forEach((h, i) => {
+        if (!h) return;
+        const s = 1 + 0.25 * Math.sin(t * 0.003 + i * Math.PI);
+        h.scale.setScalar(screenRadius(h.position, 10) * s);
+    });
 })();
 
 </script>
