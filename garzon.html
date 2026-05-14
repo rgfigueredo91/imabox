@@ -1422,7 +1422,8 @@ function toggleCurvas() {
             label.textContent = 'Curvas de nivel';
             tex.colorSpace = THREE.SRGBColorSpace;
 
-            // Size the plane to match the terrain footprint
+            // Compute terrain footprint after centering
+            terrainGroup.updateMatrixWorld(true);
             const box = new THREE.Box3().setFromObject(terrainGroup);
             const sizeX = box.max.x - box.min.x;
             const sizeZ = box.max.z - box.min.z;
@@ -1434,11 +1435,15 @@ function toggleCurvas() {
                 alphaTest: 0.01,
                 opacity: 0.8,
                 depthTest: false,
+                polygonOffset: true,
+                polygonOffsetFactor: -1,
+                polygonOffsetUnits: -1,
             });
             curvasMesh = new THREE.Mesh(geo, mat);
-            curvasMesh.rotation.x = -Math.PI / 2;
+            // +PI/2 rotation keeps UV V=0→zMin, V=1→zMax matching generatePlanarUVs
+            curvasMesh.rotation.x = Math.PI / 2;
             curvasMesh.position.set(0, box.max.y + 0.5, 0);
-            curvasMesh.renderOrder = 1;
+            curvasMesh.renderOrder = 2;
             curvasMesh.visible = curvasOn;
             scene.add(curvasMesh);
         }, undefined, () => {
