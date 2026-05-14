@@ -740,7 +740,7 @@
         <div class="gp-section-title">Panoramas 360</div>
         <button class="gp-cam-btn" id="hs-select-1" style="margin-bottom:4px">Mover Hotspot 1</button>
         <button class="gp-cam-btn" id="hs-select-2" style="margin-bottom:4px">Mover Hotspot 2</button>
-        <button class="gp-cam-btn" id="hs-select-3" style="margin-bottom:4px">Mover Hotspot 3</button>
+        <button class="gp-cam-btn" id="hs-select-3" style="margin-bottom:4px;display:none">Mover Hotspot 3</button>
         <button class="gp-cam-btn" id="hs-select-4" style="margin-bottom:4px">Mover Hotspot 4</button>
         <button class="gp-cam-btn" id="hs-select-5" style="margin-bottom:4px">Mover Hotspot 5</button>
         <button class="gp-cam-btn" id="hs-select-6" style="margin-bottom:4px">Mover Hotspot 6</button>
@@ -2373,13 +2373,12 @@ function makeHotspot(x, z, url, color) {
 }
 
 function placePanoHotspot() {
-    // Dos hotspots separados: uno en el cuadrante norte y otro en el sur
-    panoHotspot  = makeHotspot(-300,  300, CFG.panorama,  0xffffff);
-    panoHotspot2 = makeHotspot( 300, -300, CFG.panorama2, 0xffffff);
-    panoHotspot3 = makeHotspot(-300, -300, CFG.panorama3, 0xffffff);
-    panoHotspot4 = makeHotspot( 300,  300, CFG.panorama4, 0xffffff);
-    panoHotspot5 = makeHotspot(   0,    0, CFG.panorama5, 0xffffff);
-    panoHotspot6 = makeHotspot(-150,  150, CFG.panorama6, 0xffffff);
+    panoHotspot  = makeHotspot(  887.7,  1323.3, CFG.panorama,  0xffffff);
+    panoHotspot2 = makeHotspot( -468.3,   158.9, CFG.panorama2, 0xffffff);
+    panoHotspot3 = null;
+    panoHotspot4 = makeHotspot(-1212.6,   412.5, CFG.panorama4, 0xffffff);
+    panoHotspot5 = makeHotspot(-1106.5,  -858.4, CFG.panorama5, 0xffffff);
+    panoHotspot6 = makeHotspot(-1373.0, -2499.9, CFG.panorama6, 0xffffff);
 }
 
 function open360(url) {
