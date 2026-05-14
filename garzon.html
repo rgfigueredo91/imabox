@@ -704,8 +704,6 @@
         <button class="gp-mode-btn active" data-mode="real">Existente</button>
         <button class="gp-mode-btn" data-mode="proyecto">Proyecto</button>
         <button class="gp-mode-btn" data-mode="proyecto2">Proyecto 2</button>
-        <button class="gp-mode-btn" data-mode="proyecto3">Proyecto 3</button>
-        <button class="gp-mode-btn" data-mode="blanco">Blanco</button>
     </div>
 
     <div class="gp-section">
@@ -1214,13 +1212,11 @@ function applyMode(mode) {
     if (!terrainGroup) return;
     currentMode = mode;
 
-    if (terrainGroup) terrainGroup.visible = (mode !== 'blanco');
-    if (blancoGroup)  blancoGroup.visible  = (mode === 'blanco');
+    if (terrainGroup) terrainGroup.visible = true;
 
-    if (mode === 'real' || mode === 'proyecto' || mode === 'proyecto2' || mode === 'proyecto3') {
-        const url = mode === 'real'      ? CFG.texReal :
-                    mode === 'proyecto'  ? CFG.texProyecto :
-                    mode === 'proyecto2' ? CFG.texProyecto2 : CFG.texProyecto3;
+    if (mode === 'real' || mode === 'proyecto' || mode === 'proyecto2') {
+        const url = mode === 'real'     ? CFG.texReal :
+                    mode === 'proyecto' ? CFG.texProyecto : CFG.texProyecto2;
         loadTex(url, tex => {
             // GLTF usa UV con origen top-left — flipY false para que coincida
             tex.flipY = false;
@@ -1245,18 +1241,6 @@ function applyMode(mode) {
         }, () => console.error('[garzon] tex FAILED:', url));
     }
 
-    if (mode === 'blanco' && !blancoLoaded) {
-        blancoLoaded = true;
-        loadOBJ(CFG.blanco, null, group => {
-            if (!group) return;
-            blancoGroup = group;
-            blancoGroup.position.set(0, 0, 0);
-            blancoGroup.updateMatrixWorld(true);
-            centerGroup(blancoGroup);
-            blancoGroup.visible = (currentMode === 'blanco');
-            scene.add(blancoGroup);
-        });
-    }
 
     document.querySelectorAll('.gp-mode-btn').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.mode === mode);
@@ -1490,7 +1474,6 @@ document.getElementById('relief-slider').addEventListener('input', e => {
     const scale = parseInt(e.target.value, 10) / 100;
     document.getElementById('relief-val').textContent = scale.toFixed(1) + '×';
     if (terrainGroup) terrainGroup.scale.y = scale;
-    if (blancoGroup)  blancoGroup.scale.y  = scale;
 });
 
 document.getElementById('curvas-opacity').addEventListener('input', e => {
@@ -1569,7 +1552,7 @@ function sampleProfile(pts, n = 240) {
     if (!total) return [];
 
     const meshes = [];
-    const grp = currentMode === 'blanco' ? blancoGroup : terrainGroup;
+    const grp = terrainGroup;
     if (grp) grp.traverse(c => { if (c.isMesh) meshes.push(c); });
 
     const result = [];
@@ -1839,7 +1822,7 @@ canvas.addEventListener('click', e => {
         mouse2D.y = -((e.clientY - rect.top)  / rect.height) * 2 + 1;
         raycaster.setFromCamera(mouse2D, camera);
         const meshes = [];
-        [terrainGroup, blancoGroup].forEach(g => {
+        [terrainGroup].forEach(g => {
             if (g) g.traverse(c => { if (c.isMesh && c.visible) meshes.push(c); });
         });
         const hits = raycaster.intersectObjects(meshes, false);
@@ -1864,7 +1847,7 @@ canvas.addEventListener('click', e => {
     mouse2D.y = -((e.clientY - rect.top)  / rect.height) * 2 + 1;
     raycaster.setFromCamera(mouse2D, camera);
     const meshes = [];
-    [terrainGroup, blancoGroup, curvasGroup].forEach(g => {
+    [terrainGroup, curvasGroup].forEach(g => {
         if (g) g.traverse(c => { if (c.isMesh && c.visible) meshes.push(c); });
     });
     const hits = raycaster.intersectObjects(meshes, false);
@@ -1907,7 +1890,7 @@ function getTerrainHit(e) {
     mouse2D.y = -((e.clientY - rect.top)  / rect.height) * 2 + 1;
     raycaster.setFromCamera(mouse2D, camera);
     const meshes = [];
-    [terrainGroup, blancoGroup, curvasGroup].forEach(g => {
+    [terrainGroup, curvasGroup].forEach(g => {
         if (g) g.traverse(c => { if (c.isMesh && c.visible) meshes.push(c); });
     });
     const hits = raycaster.intersectObjects(meshes, false);
@@ -2091,7 +2074,7 @@ canvas.addEventListener('click', e => {
     const boxHits = raycaster.intersectObjects(allBoxes, false);
     if (boxHits.length) { selectBox(boxHits[0].object); return; }
     const meshes = [];
-    [terrainGroup, blancoGroup, curvasGroup].forEach(g => {
+    [terrainGroup, curvasGroup].forEach(g => {
         if (g) g.traverse(c => { if (c.isMesh && c.visible) meshes.push(c); });
     });
     const hits = raycaster.intersectObjects(meshes, false);
