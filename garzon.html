@@ -1227,6 +1227,7 @@ function applyMode(mode) {
             tex.needsUpdate = true;
             terrainGroup.traverse(child => {
                 if (!child.isMesh) return;
+                if (child.userData.isCurvasOverlay) return; // no tocar el overlay de curvas
                 const arr = Array.isArray(child.material) ? child.material : [child.material];
                 arr.forEach(m => {
                     if (!m) return;
@@ -1468,6 +1469,7 @@ function toggleCurvas() {
                     polygonOffsetUnits: -2,
                 });
                 c.renderOrder = 2;
+                c.userData.isCurvasOverlay = true;
             });
 
             curvasMesh = overlay;
