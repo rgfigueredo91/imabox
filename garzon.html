@@ -577,6 +577,17 @@
             border: 1px solid rgba(255,255,255,0.1);
             box-shadow: 0 0 80px rgba(0,0,0,0.8);
         }
+    /* ── FADE TO BLACK ───────────────────────────────────────────────── */
+    #fade-black {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: #000;
+        opacity: 0;
+        z-index: 1999;
+        pointer-events: none;
+        transition: opacity 0.35s ease;
+    }
     /* ── PANORAMA OVERLAY ────────────────────────────────────────────── */
     #pano-overlay {
         display: none;
@@ -619,6 +630,7 @@
 </head>
 <body>
 
+<div id="fade-black"></div>
 <div id="pano-overlay">
     <canvas id="pano-canvas"></canvas>
     <div id="pano-close">&#x2715;</div>
@@ -2439,6 +2451,44 @@ window.addEventListener('resize', () => {
     if (panoCamera) { panoCamera.aspect = window.innerWidth / window.innerHeight; panoCamera.updateProjectionMatrix(); }
 });
 
+/* ── ZOOM + FADE → OPEN 360 ──────────────────────────────────────── */
+function zoomAndOpen360(url, targetPos) {
+    controls.enabled = false;
+
+    const startPos    = camera.position.clone();
+    const startTarget = controls.target.clone();
+
+    // Zoom destination: directly above the hotspot, close in
+    const endTarget = targetPos.clone();
+    const endPos    = targetPos.clone().add(new THREE.Vector3(0, 80, 100));
+
+    const duration = 750;
+    const t0 = performance.now();
+
+    function ease(t) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t; }
+
+    function animZoom() {
+        const t = Math.min((performance.now() - t0) / duration, 1);
+        const k = ease(t);
+        camera.position.lerpVectors(startPos, endPos, k);
+        controls.target.lerpVectors(startTarget, endTarget, k);
+        controls.update();
+        if (t < 1) { requestAnimationFrame(animZoom); return; }
+
+        // Zoom done → fade to black
+        const fade = document.getElementById('fade-black');
+        fade.style.display = 'block';
+        requestAnimationFrame(() => { fade.style.opacity = '1'; });
+        setTimeout(() => {
+            open360(url);
+            fade.style.opacity = '0';
+            setTimeout(() => { fade.style.display = 'none'; controls.enabled = true; }, 380);
+        }, 380);
+    }
+
+    requestAnimationFrame(animZoom);
+}
+
 // Detectar click en hotspots (modo orbit)
 canvas.addEventListener('click', e => {
     if (activeTool !== 'orbit') return;
@@ -2449,7 +2499,7 @@ canvas.addEventListener('click', e => {
     const my = -((e.clientY - rect.top)  / rect.height) * 2 + 1;
     raycaster.setFromCamera(new THREE.Vector2(mx, my), camera);
     const hits = raycaster.intersectObjects(hotspots, false);
-    if (hits.length) open360(hits[0].object.userData.panoUrl);
+    if (hits.length) zoomAndOpen360(hits[0].object.userData.panoUrl, hits[0].object.position);
 });
 
 /* ── HOTSPOT POSITIONING ─────────────────────────────────────────── */
