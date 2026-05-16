@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Carrusel Preventa — Imabox</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.typekit.net/oov2wcw.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #080808;
+      --bg2:         #0f0f0f;
+      --bg3:         #141414;
+      --border:      rgba(255,255,255,0.07);
+      --text:        rgba(255,255,255,0.88);
+      --muted:       rgba(255,255,255,0.38);
+      --gold:        #c9a96e;
+      --gold-dim:    rgba(201,169,110,0.12);
+      --gold-border: rgba(201,169,110,0.3);
+      --slide-size:  480px;
+    }
+
+    html, body {
+      height: 100%;
+      background: #050505;
+      color: var(--text);
+      font-family: 'Poppins', sans-serif;
+      font-weight: 300;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── PAGE WRAPPER ── */
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px;
+      gap: 32px;
+    }
+
+    .page-label {
+      font-family: 'Poppins', sans-serif;
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    /* ── VIEWER ── */
+    .viewer {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    /* ── ARROWS ── */
+    .arrow {
+      background: none;
+      border: 1px solid var(--gold-border);
+      color: var(--gold);
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+      flex-shrink: 0;
+    }
+    .arrow:hover { background: var(--gold-dim); border-color: var(--gold); }
+    .arrow:disabled { opacity: 0.2; cursor: default; }
+    .arrow svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+
+    /* ── SLIDE CONTAINER ── */
+    .slide-wrap {
+      position: relative;
+      width: var(--slide-size);
+      height: var(--slide-size);
+      flex-shrink: 0;
+    }
+
+    /* ── SLIDE ── */
+    .slide {
+      position: absolute;
+      inset: 0;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      padding: 44px 44px 36px;
+      border-top: 2px solid var(--gold);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease;
+      overflow: hidden;
+    }
+    .slide.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* Grid overlay for slide 1 */
+    .slide-grid-bg {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(201,169,110,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,169,110,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+
+    .slide-counter { display: none; }
+
+    /* Wordmark */
+    .wordmark {
+      position: absolute;
+      bottom: 28px;
+      left: 44px;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 200;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      color: var(--gold);
+      opacity: 0.7;
+    }
+
+    /* Download button */
+    .dl-btn {
+      position: absolute;
+      bottom: 22px;
+      right: 20px;
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: 'Poppins', sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 5px 10px;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .dl-btn:hover { border-color: var(--gold-border); color: var(--gold); }
+
+    /* ── TYPOGRAPHY ── */
+    .eyebrow {
+      font-family: 'Poppins', sans-serif;
+      font-size: 9.5px;
+      font-weight: 400;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+
+    .headline {
+      font-family: aktiv-grotesk, sans-serif;
+      font-weight: 300;
+      line-height: 1.15;
+      color: var(--text);
+    }
+
+    .headline-xl { font-size: 46px; }
+    .headline-lg { font-size: 36px; }
+    .headline-md { font-size: 30px; }
+
+    .subline {
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-top: 20px;
+    }
+
+    .body-text {
+      font-family: 'Poppins', sans-serif;
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .gold-divider {
+      width: 40px;
+      height: 1px;
+      background: var(--gold);
+      margin: 24px 0;
+      opacity: 0.6;
+    }
+
+    /* ── SLIDE 1 specific ── */
+    .s1-content {
+      margin-top: auto;
+      margin-bottom: auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── SLIDE 4 — tools list ── */
+    .tool-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-top: 28px;
+    }
+    .tool-item {
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+    }
+    .tool-num {
+      font-family: aktiv-grotesk, sans-serif;
+      font-size: 11px;
+      font-weight: 300;
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      padding-top: 2px;
+      flex-shrink: 0;
+      width: 24px;
+    }
+    .tool-text {
+      font-family: 'Poppins', sans-serif;
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--text);
+      line-height: 1.6;
+    }
+    .tool-text em {
+      font-style: normal;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    /* ── SLIDE 5 — timing rows ── */
+    .timing-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-top: 28px;
+    }
+    .timing-row {
+      display: flex;
+      align-items: stretch;
+      border-top: 1px solid var(--border);
+      padding: 16px 0 16px 20px;
+      border-left: 2px solid var(--gold-border);
+      gap: 16px;
+    }
+    .timing-row:last-child { border-bottom: 1px solid var(--border); }
+    .timing-label {
+      font-family: aktiv-grotesk, sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--gold);
+      letter-spacing: 0.06em;
+      min-width: 90px;
+      flex-shrink: 0;
+      padding-top: 1px;
+    }
+    .timing-value {
+      font-family: 'Poppins', sans-serif;
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* ── SLIDE 6 — resultado glow ── */
+    .glow-bg {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 320px;
+      height: 200px;
+      background: radial-gradient(ellipse, rgba(201,169,110,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* ── SLIDE 7 — contact ── */
+    .contact-block {
+      margin-top: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .contact-item {
+      font-family: aktiv-grotesk, sans-serif;
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--text);
+      letter-spacing: 0.04em;
+    }
+    .contact-note {
+      font-family: 'Poppins', sans-serif;
+      font-size: 11px;
+      font-weight: 300;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      margin-top: 20px;
+    }
+
+    /* ── DOTS ── */
+    .dots {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+    }
+    .dot {
+      width: 20px;
+      height: 2px;
+      background: var(--border);
+      cursor: pointer;
+      transition: background 0.2s, width 0.2s;
+    }
+    .dot.active {
+      background: var(--gold);
+      width: 32px;
+    }
+
+    /* ── SLIDE CONTENT LAYOUTS ── */
+    .content-center {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .content-top {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      padding-top: 16px;
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <div class="page-label">Carrusel Instagram &mdash; Cómo vender un proyecto que todavía no existe</div>
+
+  <div class="viewer">
+
+    <!-- PREV -->
+    <button class="arrow" id="prev" onclick="navigate(-1)">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+
+    <!-- SLIDES -->
+    <div class="slide-wrap" id="slide-wrap">
+
+      <!-- SLIDE 1 -->
+      <div class="slide active" id="slide-1">
+        <div class="slide-counter">01 / 06</div>
+        <div class="content-center">
+          <div class="eyebrow">Preventa</div>
+          <div class="headline headline-xl">Tu proyecto<br>no existe<br>todavía.</div>
+          <div class="subline">Tus compradores no tienen<br>por qué esperar.</div>
+        </div>
+        <div class="wordmark">imabox.</div>
+        <button class="dl-btn" onclick="downloadSlide(1)">Descargar</button>
+      </div>
+
+      <!-- SLIDE 2 -->
+      <div class="slide" id="slide-2">
+        <div class="slide-counter">02 / 06</div>
+        <div class="content-center">
+          <div class="eyebrow">El error más común</div>
+          <div class="headline headline-lg">Mostrar planos a alguien que no sabe leer planos.</div>
+          <div class="gold-divider"></div>
+          <div class="body-text">El 90% de los compradores no puede imaginarse el espacio con un plano. Ven líneas. Necesitan ver el espacio.</div>
+        </div>
+        <div class="wordmark">imabox.</div>
+        <button class="dl-btn" onclick="downloadSlide(2)">Descargar</button>
+      </div>
+
+      <!-- SLIDE 3 -->
+      <div class="slide" id="slide-3">
+        <div class="slide-counter">03 / 06</div>
+        <div class="content-center">
+          <div class="eyebrow">Lo que realmente vendés</div>
+          <div class="headline headline-lg">No metros cuadrados.<br>Una forma de vivir.</div>
+          <div class="gold-divider"></div>
+          <div class="body-text">No es "apartamento de 80m² orientación norte". Es despertar con el sol entrando por el ventanal mientras tomás el café.</div>
+        </div>
+        <div class="wordmark">imabox.</div>
+        <button class="dl-btn" onclick="downloadSlide(3)">Descargar</button>
+      </div>
+
+      <!-- SLIDE 4 -->
+      <div class="slide" id="slide-4">
+        <div class="slide-counter">04 / 06</div>
+        <div class="content-top" style="padding-bottom: 56px;">
+          <div class="eyebrow">Las herramientas</div>
+          <div class="headline headline-md" style="font-size:26px;">Tres cosas que hacen posible vender antes de construir.</div>
+          <div class="tool-list" style="gap:14px;margin-top:20px;">
+            <div class="tool-item">
+              <div class="tool-num">01</div>
+              <div class="tool-text">Imágenes que narran historias.<br><em>Renders que comunican el estilo de vida, no solo el espacio.</em></div>
+            </div>
+            <div class="tool-item">
+              <div class="tool-num">02</div>
+              <div class="tool-text">Showrooms interactivos.<br><em>El comprador recorre el proyecto desde cualquier dispositivo.</em></div>
+            </div>
+            <div class="tool-item">
+              <div class="tool-num">03</div>
+              <div class="tool-text">Presencia de marca.<br><em>Construir una identidad reconocida en redes antes de que el proyecto salga al mercado.</em></div>
+            </div>
+          </div>
+        </div>
+        <div class="wordmark">imabox.</div>
+        <button class="dl-btn" onclick="downloadSlide(4)">Descargar</button>
+      </div>
+
+      <!-- SLIDE 5 -->
+      <div class="slide" id="slide-5">
+        <div class="glow-bg"></div>
+        <div class="slide-counter">05 / 06</div>
+        <div class="content-center" style="position:relative;z-index:1;">
+          <div class="eyebrow">El resultado</div>
+          <div class="headline headline-xl" style="font-size:42px;line-height:1.1;">No es<br>marketing.<br>Es confianza.</div>
+          <div class="gold-divider"></div>
+          <div class="body-text">Un comprador que puede ver, recorrer y sentir el proyecto antes de que exista firma más rápido, con menos dudas y recomienda el proyecto.</div>
+        </div>
+        <div class="wordmark">imabox.</div>
+        <button class="dl-btn" onclick="downloadSlide(5)">Descargar</button>
+      </div>
+
+      <!-- SLIDE 6 -->
+      <div class="slide" id="slide-6">
+        <div class="slide-counter">06 / 06</div>
+        <div class="content-center">
+          <div class="eyebrow">¿Tenés un proyecto en preventa?</div>
+          <div class="headline headline-md" style="line-height:1.25;">Te mostramos cómo se vería con esta metodología.</div>
+          <div class="contact-block">
+            <div class="contact-item">hello@imabox.uy</div>
+            <div class="contact-item">imabox.uy</div>
+          </div>
+          <div class="contact-note">Respondemos en menos de 24 hs.</div>
+        </div>
+        <div class="wordmark">imabox.</div>
+        <button class="dl-btn" onclick="downloadSlide(6)">Descargar</button>
+      </div>
+
+    </div><!-- /slide-wrap -->
+
+    <!-- NEXT -->
+    <button class="arrow" id="next" onclick="navigate(1)">
+      <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+
+  </div><!-- /viewer -->
+
+  <!-- DOTS -->
+  <div class="dots" id="dots">
+    <div class="dot active" onclick="goTo(0)"></div>
+    <div class="dot" onclick="goTo(1)"></div>
+    <div class="dot" onclick="goTo(2)"></div>
+    <div class="dot" onclick="goTo(3)"></div>
+    <div class="dot" onclick="goTo(4)"></div>
+    <div class="dot" onclick="goTo(5)"></div>
+  </div>
+
+</div><!-- /page -->
+
+<script>
+  const total = 6;
+  let current = 0;
+
+  function goTo(idx) {
+    document.getElementById('slide-' + (current + 1)).classList.remove('active');
+    document.querySelectorAll('.dot')[current].classList.remove('active');
+    current = idx;
+    document.getElementById('slide-' + (current + 1)).classList.add('active');
+    document.querySelectorAll('.dot')[current].classList.add('active');
+    document.getElementById('prev').disabled = current === 0;
+    document.getElementById('next').disabled = current === total - 1;
+  }
+
+  function navigate(dir) {
+    const next = current + dir;
+    if (next >= 0 && next < total) goTo(next);
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') navigate(1);
+    if (e.key === 'ArrowLeft') navigate(-1);
+  });
+
+  // Init arrow state
+  document.getElementById('prev').disabled = true;
+
+  async function downloadSlide(num) {
+    const slide = document.getElementById('slide-' + num);
+    const btn = slide.querySelector('.dl-btn');
+    const wordmark = slide.querySelector('.wordmark');
+    btn.style.display = 'none';
+
+    try {
+      const canvas = await html2canvas(slide, {
+        width: 480,
+        height: 480,
+        scale: 2.25,
+        backgroundColor: '#080808',
+        useCORS: true,
+        logging: false,
+      });
+      const link = document.createElement('a');
+      link.download = 'slide-0' + num + '.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    } finally {
+      btn.style.display = '';
+    }
+  }
+
+  // ── HIGHLIGHTS VIEWER ──
+  const totalH = 7;
+  let currentH = 0;
+
+  function goToH(idx) {
+    document.getElementById('hl-' + (currentH + 1)).classList.remove('active');
+    document.querySelectorAll('.hdot')[currentH].classList.remove('active');
+    currentH = idx;
+    document.getElementById('hl-' + (currentH + 1)).classList.add('active');
+    document.querySelectorAll('.hdot')[currentH].classList.add('active');
+    document.getElementById('hprev').disabled = currentH === 0;
+    document.getElementById('hnext').disabled = currentH === totalH - 1;
+  }
+
+  function navigateH(dir) {
+    const n = currentH + dir;
+    if (n >= 0 && n < totalH) goToH(n);
+  }
+
+  document.getElementById('hprev').disabled = true;
+
+  async function downloadHL(num) {
+    const slide = document.getElementById('hl-' + num);
+    const btn = slide.querySelector('.dl-btn');
+    btn.style.display = 'none';
+    try {
+      const canvas = await html2canvas(slide, {
+        width: 480, height: 480, scale: 2.25,
+        backgroundColor: '#080808', useCORS: true, logging: false,
+      });
+      const link = document.createElement('a');
+      link.download = 'highlight-0' + num + '.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    } finally {
+      btn.style.display = '';
+    }
+  }
+</script>
+
+<!-- ══════════════════════════════════════════
+     SECCIÓN 2 — PORTADAS DE DESTACADOS
+     ══════════════════════════════════════════ -->
+<div class="page" style="padding-top: 0; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 0;">
+
+  <div class="page-label">Portadas de Destacados — Instagram</div>
+
+  <div class="viewer">
+
+    <button class="arrow" id="hprev" onclick="navigateH(-1)">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+
+    <div class="slide-wrap">
+
+      <!-- HL 1 — Portfolio -->
+      <div class="slide active" id="hl-1" style="align-items:center;justify-content:center;">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;">
+          <div style="width:64px;height:64px;border:1px solid rgba(201,169,110,0.4);display:flex;align-items:center;justify-content:center;">
+            <div style="width:38px;height:28px;border:1px solid var(--gold);opacity:0.7;position:relative;">
+              <div style="position:absolute;top:4px;left:4px;right:4px;bottom:4px;border:1px solid rgba(201,169,110,0.3);"></div>
+            </div>
+          </div>
+          <div style="font-family:aktiv-grotesk,sans-serif;font-size:32px;font-weight:300;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);">Portfolio</div>
+        </div>
+        <div class="wordmark">imabox.</div>
+        <button class="dl-btn" onclick="downloadHL(1)">Descargar</button>
+      </div>
+
+      <!-- HL 2 — Proceso -->
+      <div class="slide" id="hl-2" style="align-items:center;justify-content:center;">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:16px;height:16px;border:1px solid rgba(201,169,110,0.5);"></div>
+            <div style="width:24px;height:1px;background:rgba(201,169,110,0.4);"></div>
+            <div style="width:16px;height:16px;background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.5);"></div>
+            <div style="width:24px;height:1px;background:rgba(201,169,110,0.4);"></div>
+            <div style="width:16px;height:16px;background:rgba(201,169,110,0.35);border:1px solid var(--gold);"></div>
+          </div>
+          <div style="font-family:aktiv-grotesk,sans-serif;font-size:32px;font-weight:300;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);">Proceso</div>
+        </div>
+        <div class="wordmark">imabox.</div>
+        <button class="dl-btn" onclick="downloadHL(2)">Descargar</button>
+      </div>
+
+      <!-- HL 3 — Proyectos -->
+      <div class="slide" id="hl-3" style="align-items:center;justify-content:center;">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;">
+          <div style="position:relative;width:52px;height:60px;">
+            <div style="position:absolute;bottom:0;left:0;right:0;height:100%;border:1px solid rgba(201,169,110,0.4);"></div>
+            <div style="position:absolute;bottom:0;left:8px;right:8px;height:70%;border:1px solid rgba(201,169,110,0.25);border-bottom:none;"></div>
+            <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:0;border-left:14px solid transparent;border-right:14px solid transparent;border-bottom:10px solid rgba(201,169,110,0.4);"></div>
+          </div>
+          <div style="font-family:aktiv-grotesk,sans-serif;font-size:32px;font-weight:300;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);">Proyectos</div>
+        </div>
+        <div class="wordmark">imabox.</div>
+        <button class="dl-btn" onclick="downloadHL(3)">Descargar</button>
+      </div>
+
+      <!-- HL 4 — Servicios -->
+      <div class="slide" id="hl-4" style="align-items:center;justify-content:center;">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;width:48px;height:48px;">
+            <div style="border:1px solid rgba(201,169,110,0.5);"></div>
+            <div style="background:rgba(201,169,110,0.2);border:1px solid rgba(201,169,110,0.5);"></div>
+            <div style="background:rgba(201,169,110,0.1);border:1px solid rgba(201,169,110,0.3);"></div>
+            <div style="border:1px solid rgba(201,169,110,0.4);"></div>
+          </div>
+          <div style="font-family:aktiv-grotesk,sans-serif;font-size:32px;font-weight:300;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);">Servicios</div>
+        </div>
+        <div class="wordmark">imabox.</div>
+        <button class="dl-btn" onclick="downloadHL(4)">Descargar</button>
+      </div>
+
+      <!-- HL 5 — Clientes -->
+      <div class="slide" id="hl-5" style="align-items:center;justify-content:center;">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;">
+          <div style="font-family:aktiv-grotesk,sans-serif;font-size:52px;font-weight:200;color:rgba(201,169,110,0.5);line-height:1;margin-bottom:-8px;">&ldquo;</div>
+          <div style="width:40px;height:1px;background:rgba(201,169,110,0.3);"></div>
+          <div style="font-family:aktiv-grotesk,sans-serif;font-size:32px;font-weight:300;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);">Clientes</div>
+        </div>
+        <div class="wordmark">imabox.</div>
+        <button class="dl-btn" onclick="downloadHL(5)">Descargar</button>
+      </div>
+
+      <!-- HL 6 — Logos clientes -->
+      <div class="slide" id="hl-6" style="align-items:center;justify-content:center;">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;padding:44px;">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;width:100%;">
+            <div style="display:flex;align-items:center;justify-content:center;height:72px;padding:8px;"><img src="logos-clientes/1987.png" style="max-width:100%;max-height:100%;object-fit:contain;mix-blend-mode:screen;opacity:0.85;"></div>
+            <div style="display:flex;align-items:center;justify-content:center;height:72px;padding:8px;"><img src="logos-clientes/BEKRES.PNG" style="max-width:100%;max-height:100%;object-fit:contain;mix-blend-mode:screen;opacity:0.85;"></div>
+            <div style="display:flex;align-items:center;justify-content:center;height:72px;padding:8px;"><img src="logos-clientes/cabrera inciartne.png" style="max-width:100%;max-height:100%;object-fit:contain;mix-blend-mode:screen;opacity:0.85;"></div>
+            <div style="display:flex;align-items:center;justify-content:center;height:72px;padding:8px;"><img src="logos-clientes/gomez platero nuevo.png" style="max-width:100%;max-height:100%;object-fit:contain;mix-blend-mode:screen;opacity:0.85;"></div>
+            <div style="display:flex;align-items:center;justify-content:center;height:72px;padding:8px;"><img src="logos-clientes/hifglobal.png" style="max-width:100%;max-height:100%;object-fit:contain;mix-blend-mode:screen;opacity:0.85;"></div>
+            <div style="display:flex;align-items:center;justify-content:center;height:72px;padding:8px;"><img src="logos-clientes/latu.png" style="max-width:100%;max-height:100%;object-fit:contain;mix-blend-mode:screen;opacity:0.85;"></div>
+            <div style="display:flex;align-items:center;justify-content:center;height:72px;padding:8px;"><img src="logos-clientes/martin gonzalez.png" style="max-width:100%;max-height:100%;object-fit:contain;mix-blend-mode:screen;opacity:0.85;"></div>
+            <div style="display:flex;align-items:center;justify-content:center;height:72px;padding:8px;"><img src="logos-clientes/sigmaplus copy.png" style="max-width:100%;max-height:100%;object-fit:contain;mix-blend-mode:screen;opacity:0.85;"></div>
+            <div style="display:flex;align-items:center;justify-content:center;height:72px;padding:8px;"><img src="logos-clientes/teyma.png" style="max-width:100%;max-height:100%;object-fit:contain;mix-blend-mode:screen;opacity:0.85;"></div>
+          </div>
+        </div>
+        <div class="wordmark">imabox.</div>
+        <button class="dl-btn" onclick="downloadHL(6)">Descargar</button>
+      </div>
+
+      <!-- HL 7 — Equipo -->
+      <div class="slide" id="hl-7" style="align-items:center;justify-content:center;">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;">
+          <div style="display:flex;align-items:flex-end;gap:8px;">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:5px;">
+              <div style="width:14px;height:14px;border-radius:50%;border:1px solid rgba(201,169,110,0.4);"></div>
+              <div style="width:22px;height:18px;border:1px solid rgba(201,169,110,0.35);border-bottom:none;"></div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:5px;margin-bottom:4px;">
+              <div style="width:16px;height:16px;border-radius:50%;background:rgba(201,169,110,0.2);border:1px solid rgba(201,169,110,0.6);"></div>
+              <div style="width:26px;height:20px;background:rgba(201,169,110,0.08);border:1px solid rgba(201,169,110,0.5);border-bottom:none;"></div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:5px;">
+              <div style="width:14px;height:14px;border-radius:50%;border:1px solid rgba(201,169,110,0.4);"></div>
+              <div style="width:22px;height:18px;border:1px solid rgba(201,169,110,0.35);border-bottom:none;"></div>
+            </div>
+          </div>
+          <div style="font-family:aktiv-grotesk,sans-serif;font-size:32px;font-weight:300;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);">Equipo</div>
+        </div>
+        <div class="wordmark">imabox.</div>
+        <button class="dl-btn" onclick="downloadHL(7)">Descargar</button>
+      </div>
+
+    </div><!-- /slide-wrap -->
+
+    <button class="arrow" id="hnext" onclick="navigateH(1)">
+      <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+
+  </div><!-- /viewer -->
+
+  <div class="dots">
+    <div class="hdot dot active" onclick="goToH(0)"></div>
+    <div class="hdot dot" onclick="goToH(1)"></div>
+    <div class="hdot dot" onclick="goToH(2)"></div>
+    <div class="hdot dot" onclick="goToH(3)"></div>
+    <div class="hdot dot" onclick="goToH(4)"></div>
+    <div class="hdot dot" onclick="goToH(5)"></div>
+    <div class="hdot dot" onclick="goToH(6)"></div>
+  </div>
+
+</div>
+
+</body>
+</html>

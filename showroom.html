@@ -390,6 +390,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- LIGHTBOX -->
 <div class="sr-lightbox" id="sr-lightbox" aria-modal="true" role="dialog">
     <button class="sr-lightbox-close" id="sr-lb-close"><i class="fa fa-times"></i></button>
+    <button class="sr-lb-edit" id="sr-lb-edit" title="Editar con IA"><i class="fa fa-magic"></i></button>
     <button class="sr-lightbox-prev"  id="sr-lb-prev"><i class="fa fa-angle-left"></i></button>
     <img id="sr-lb-img" src="" alt="" />
     <img id="sr-lb-img-cross" src="" alt="" />
@@ -398,6 +399,56 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="sr-lb-term" id="sr-lb-term">
         <span class="sr-lb-term-label">Piso</span>
         <div class="sr-lb-term-btns" id="sr-lb-term-btns"></div>
+    </div>
+</div>
+
+<!-- AI EDITOR -->
+<div class="sr-ai-panel" id="sr-ai-panel">
+    <button class="sr-ai-close" id="sr-ai-close"><i class="fa fa-times"></i></button>
+    <div class="sr-ai-inner">
+        <div class="sr-ai-images">
+            <div class="sr-ai-img-stack">
+                <img id="sr-ai-original" src="" alt="Original" />
+                <img id="sr-ai-result" src="" alt="Resultado" />
+                <span class="sr-ai-stack-label" id="sr-ai-stack-label">Original</span>
+            </div>
+            <div class="sr-ai-compare-bar" id="sr-ai-compare-bar">
+                <span class="sr-ai-cmp-txt">Original</span>
+                <label class="sr-ai-toggle">
+                    <input type="checkbox" id="sr-ai-toggle-input" onchange="toggleAIResult(this.checked)">
+                    <span class="sr-ai-toggle-track"></span>
+                </label>
+                <span class="sr-ai-cmp-txt">Resultado</span>
+                <a class="sr-ai-dl" id="sr-ai-dl" download="imagen-editada.jpg" title="Descargar"><i class="fa fa-download"></i></a>
+            </div>
+        </div>
+        <div class="sr-ai-controls">
+            <div class="sr-ai-title">Editar con IA</div>
+            <div class="sr-ai-chips">
+                <button class="sr-ai-chip" onclick="appendAIChip('más luminoso, luz natural abundante, ventanas amplias')">Más luminoso</button>
+                <button class="sr-ai-chip" onclick="appendAIChip('piso de madera clara, parquet, acabado natural')">Piso madera</button>
+                <button class="sr-ai-chip" onclick="appendAIChip('piso de porcelanato blanco, minimalista, limpio')">Porcelanato</button>
+                <button class="sr-ai-chip" onclick="appendAIChip('muebles de diseño contemporáneo, estilo nórdico')">Amueblado</button>
+                <button class="sr-ai-chip" onclick="appendAIChip('plantas de interior, vegetación natural, verde')">Con plantas</button>
+                <button class="sr-ai-chip" onclick="appendAIChip('luz de atardecer, tonos cálidos dorados, hora mágica')">Atardecer</button>
+            </div>
+            <textarea id="sr-ai-prompt" placeholder="Describí cómo querés el espacio…" rows="4"></textarea>
+            <div class="sr-ai-row">
+                <label>Calidad</label>
+                <select id="sr-ai-quality">
+                    <option value="nano">Rápida (1K)</option>
+                    <option value="nano2k" selected>Normal (2K)</option>
+                    <option value="nano4k">Alta (4K)</option>
+                </select>
+            </div>
+            <button class="sr-ai-generate" id="sr-ai-generate"><i class="fa fa-magic"></i> Generar</button>
+            <div class="sr-ai-loading" id="sr-ai-loading"><div class="sr-ai-spinner"></div></div>
+            <div class="sr-ai-status" id="sr-ai-status"></div>
+            <details class="sr-ai-key-wrap">
+                <summary>API Key (fal.ai)</summary>
+                <input type="password" id="sr-ai-key" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" autocomplete="off" />
+            </details>
+        </div>
     </div>
 </div>
 
@@ -1281,12 +1332,112 @@ function resetToLanding() {
 ══════════════════════════════════════════════════════════════ */
 document.addEventListener("keydown", e => {
     if (e.key === "Escape") {
+        if (aiPanel.classList.contains("active"))   { closeAIEditor(); return; }
         if (tourModal.classList.contains("active")) { closeTour(); return; }
         if (lb.classList.contains("active"))        { closeLightbox(); return; }
         if (state.openUnit || state.openFloor)      { closeUnitPanel(); return; }
         if (state.phase === "explore")               resetToLanding();
     }
 });
+
+/* ═══════════════════════════════════════════════════════════════
+   AI EDITOR
+═══════════════════════════════════════════════════════════════ */
+let aiEditorPending = false;
+const aiPanel       = $("sr-ai-panel");
+const aiOrigImg     = $("sr-ai-original");
+const aiResult      = $("sr-ai-result");
+const aiCompareBar  = $("sr-ai-compare-bar");
+const aiStackLabel  = $("sr-ai-stack-label");
+const aiToggleInput = $("sr-ai-toggle-input");
+const aiStatusEl    = $("sr-ai-status");
+const aiLoadingEl   = $("sr-ai-loading");
+const aiKeyInput    = $("sr-ai-key");
+
+const SR_AI_KEY = 'sr_ai_key';
+aiKeyInput.value = localStorage.getItem(SR_AI_KEY) || '';
+aiKeyInput.addEventListener('change', () => localStorage.setItem(SR_AI_KEY, aiKeyInput.value.trim()));
+
+function toggleAIResult(on) {
+    aiResult.classList.toggle('visible', on);
+    aiStackLabel.textContent = on ? 'Resultado' : 'Original';
+}
+
+function openAIEditor() {
+    const src = lbImg.src;
+    if (!src) return;
+    aiOrigImg.src = src;
+    aiResult.src = '';
+    aiResult.classList.remove('visible');
+    aiToggleInput.checked = false;
+    aiCompareBar.classList.remove('visible');
+    aiStackLabel.textContent = 'Original';
+    aiStatusEl.textContent = '';
+    aiPanel.classList.add('active');
+}
+function closeAIEditor() { aiPanel.classList.remove('active'); }
+
+function appendAIChip(text) {
+    const ta = $("sr-ai-prompt");
+    ta.value = ta.value.trim() ? ta.value.trim() + ', ' + text : text;
+    ta.focus();
+}
+
+async function imgToBase64(url) {
+    const res  = await fetch(url);
+    const blob = await res.blob();
+    return new Promise(resolve => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.readAsDataURL(blob);
+    });
+}
+
+async function generateShowroomAI() {
+    if (aiEditorPending) return;
+    const key     = aiKeyInput.value.trim();
+    const prompt  = $("sr-ai-prompt").value.trim()
+                  || 'interior arquitectónico fotorrealista, alta calidad, luz natural';
+    const quality = $("sr-ai-quality").value;
+    if (!key) { aiStatusEl.textContent = 'ingresá la API key'; return; }
+
+    aiEditorPending = true;
+    $("sr-ai-generate").disabled = true;
+    aiStatusEl.textContent = 'generando…';
+    aiLoadingEl.classList.add('on');
+    const t0 = Date.now();
+
+    try {
+        const thumb      = await imgToBase64(aiOrigImg.src);
+        const resolution = quality === 'nano4k' ? '4K' : quality === 'nano2k' ? '2K' : '1K';
+        const res = await fetch('https://fal.run/fal-ai/nano-banana-pro/edit', {
+            method: 'POST',
+            headers: { 'Authorization': `Key ${key}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt, image_urls: [thumb], num_images: 1, resolution, output_format: 'jpeg' })
+        });
+        if (!res.ok) { const t = await res.text(); throw new Error(`${res.status}: ${t.slice(0, 100)}`); }
+        const data = await res.json();
+        const url  = data.images?.[0]?.url;
+        if (!url) throw new Error('sin imagen en respuesta');
+        aiResult.src = url;
+        $("sr-ai-dl").href = url;
+        aiCompareBar.classList.add('visible');
+        aiToggleInput.checked = true;
+        toggleAIResult(true);
+        aiStatusEl.textContent = `listo · ${((Date.now() - t0) / 1000).toFixed(1)}s`;
+    } catch (e) {
+        aiStatusEl.textContent = 'error · ' + e.message.slice(0, 60);
+        console.error('[fal.ai]', e);
+    } finally {
+        aiEditorPending = false;
+        $("sr-ai-generate").disabled = false;
+        aiLoadingEl.classList.remove('on');
+    }
+}
+
+$("sr-lb-edit").addEventListener('click', openAIEditor);
+$("sr-ai-close").addEventListener('click', closeAIEditor);
+$("sr-ai-generate").addEventListener('click', generateShowroomAI);
 
 init();
 </script>
