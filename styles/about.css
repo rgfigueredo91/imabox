@@ -130,7 +130,7 @@ body{
 .buttons-students button {
 	color: white;
 	cursor: pointer;
-	background-color: #f01f50;
+	background-color: #c9a96e;
 	border: none;
 	width: 20%;
 	height: 40px;
@@ -252,12 +252,12 @@ svg {
 
 .textoyo h2{
 	text-align: center;
-	color: #f01f50;
+	color: #c9a96e;
 }
 
 .textoyo2 h2{
 	text-align: center;
-	color: #f01f50;
+	color: #c9a96e;
 }
 .top-about {
 	text-align: center;
@@ -346,7 +346,7 @@ footer p {
 		margin-left: 35%;
 	color: white;
 	cursor: pointer;
-	background-color: #f01f50;
+	background-color: #c9a96e;
 	border: none;
 	width: 30%;
 	height: 40px;
@@ -586,7 +586,7 @@ footer p {
 		
 			color: white;
 			cursor: pointer;
-			background-color: #f01f50;
+			background-color: #c9a96e;
 			border: none;
 			width: 50%;
 			height: 40px;

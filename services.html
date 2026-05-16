@@ -1,183 +1,855 @@
 <!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta charset="UTF-8" />
+    <title>Servicios — Imabox</title>
+    <meta name="description" content="Agencia creativa para proyectos inmobiliarios. Somos arquitectos. Trabajamos desde antes del primer ladrillo: marca, imágenes, videos, showrooms virtuales y más." />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500&display=swap" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.typekit.net/oov2wcw.css">
+    <link rel="shortcut icon" type="image/png" href="favicon.png" />
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-<html lang="en">
-	<head>
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-		<meta charset="UTF-8" />
-		<title>Services - 3D Rendering, CGI &amp; Virtual Showrooms | Imabox</title>
-		<meta name="description" content="Explore our services: architectural rendering, CGI, branding identity, virtual showrooms, and films for architecture and real estate projects." />
-		<meta name="keywords" content="Imabox - Rendering Visualization Studio" />
-		<meta name="author" content="Rodrigo Figueredo" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
-		<meta property="og:type" content="website" />
-		<meta property="og:title" content="Services - 3D Rendering, CGI content="Imabox Rendering Studio"amp; Virtual Showrooms" />
-	
-		<meta property="og:description" content="Explore our services: architectural rendering, CGI, branding identity, virtual showrooms, and films for architecture and real estate projects." />
-		<meta property="og:url" content="https://imabox.uy/services.html" />
-		<meta property="og:image" content="https://imabox.uy/img/cover1index.webp" />
+        :root {
+            --bg:          #080808;
+            --bg2:         #0f0f0f;
+            --bg3:         #141414;
+            --border:      rgba(255,255,255,0.07);
+            --text:        rgba(255,255,255,0.88);
+            --muted:       rgba(255,255,255,0.38);
+            --gold:        #c9a96e;
+            --gold-dim:    rgba(201,169,110,0.12);
+            --gold-border: rgba(201,169,110,0.3);
+            --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+        }
 
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+        html, body { height: 100%; }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 300;
+            line-height: 1.7;
+            overflow-x: hidden;
+            overflow-y: scroll;
+            scroll-behavior: smooth;
+        }
+        section {
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        footer { position: relative; }
 
-		<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-		<link rel="shortcut icon" type="image/png" href="favicon.png"/>
-		<link rel="canonical" href="https://imabox.uy/services.html" />
-		<link rel="stylesheet" type="text/css" href="styles/styles.css">
-		<link rel="stylesheet" type="text/css" href="styles/services.css">
-		<link rel="stylesheet" href="https://use.typekit.net/oov2wcw.css">
-	
-				<!-- Google Tag Manager -->
-				<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-					new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-					j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-					'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-					})(window,document,'script','dataLayer','GTM-NMJRX79');</script>
-					<!-- End Google Tag Manager -->
-	
+        /* ── NAV ── */
+        .navbar {
+            z-index: 100;
+            position: fixed;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: height 0.3s ease-in-out, background-color 0.3s ease-in-out;
+            height: 0;
+            overflow: visible;
+        }
+        .navbar.active {
+            height: 170px;
+            background-color: rgba(255,255,255,0.95);
+            backdrop-filter: blur(8px);
+        }
+        .top-navbar { width: 100%; display: flex; flex-direction: row; justify-content: space-between; }
+        .top-navbarDivUno { margin-top: 10px; }
+        .top-navbarDivUno a { text-decoration: none; cursor: pointer; }
+        .nav-branding {
+            font-family: 'Poppins', sans-serif;
+            margin-left: 25px;
+            color: white;
+            font-size: 2.5rem;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .nav-branding.active { color: black; }
+        .hamburger {
+            cursor: pointer; margin-top: 15px; margin-right: 30px;
+            width: 50px; height: 50px; border-radius: 50%;
+            background-color: white; flex-shrink: 0;
+        }
+        .div-bar { margin-left: 0.8px; margin-top: 15px; }
+        .bar { display: block; width: 25px; height: 3px; margin: 5px auto; transition: all 0.5s ease-in-out; background-color: black; }
+        .div-bar.active .bar:nth-child(2) { opacity: 0; }
+        .div-bar.active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        .div-bar.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+        .nav-text {
+            width: 100%; display: flex; flex-direction: row; justify-content: space-between;
+            position: relative; top: -170px; opacity: 0;
+            transition: top 0.3s ease-in-out, opacity 0.2s ease-in-out;
+        }
+        .nav-text.active { opacity: 1; top: 0; }
+        .nav-textUno { list-style: none; }
+        .nav-menuDos { list-style-type: none; margin-top: 5px; }
+        .nav-itemDos { margin-top: 2px; margin-left: 25px; font-family: 'Times New Roman', Times, serif; font-size: 0.78rem; line-height: 1.3; color: #333; }
+        .nav-menuDos a { margin-left: 25px; text-decoration: none; color: black; font-size: 0.78rem; line-height: 1.3; }
+        .nav-menuDos a:hover { color: #c9a96e; }
+        .flex-icon { display: flex; flex-direction: row; gap: 12px; margin-top: 8px; margin-left: 25px; list-style: none; }
+        .social-icon a { font-size: 0.9rem; text-decoration: none; color: black; }
+        .social-icon a:hover { color: #c9a96e; }
+        .nav-menu { list-style-type: none; margin-top: 15px; display: flex; flex-direction: row; }
+        .nav-item { margin-right: 30px; font-size: 1.5rem; }
+        .nav-item a { font-family: 'Times New Roman', Times, serif; font-weight: 900; text-decoration: none; color: black; }
+        .nav-link { transition: color 0.3s ease; }
+        .nav-link:hover { color: #c9a96e; }
 
-		<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  "name": "Imabox",
-  "url": "https://imabox.uy",
-  "logo": "https://imabox.uy/img/logo.webp",
-  "image": "https://imabox.uy/img/cover1index.webp",
-  "description": "Architectural visualization, 3D rendering, and CGI studio based in Montevideo, Uruguay.",
-  "address": {
-    "@type": "PostalAddress",
-    "addressLocality": "Montevideo",
-    "addressCountry": "UY"
-  },
-  "telephone": "+598-98-325-902",
-  "email": "hello@imabox.uy",
-  "sameAs": [
-    "https://www.instagram.com/imabox_uy",
-    "https://www.linkedin.com/company/imabox",
-  ]
+        /* ── SHARED ── */
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; width: 100%; }
+        .section-tag { font-size: 0.6rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }
+        .section-title {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+            font-weight: 300; letter-spacing: 0.04em; line-height: 1.15; margin-bottom: 10px;
+        }
+        .section-sub { color: var(--muted); font-size: 0.88rem; max-width: 520px; margin-bottom: 36px; line-height: 1.7; }
+        .btn-primary {
+            background: var(--gold); color: #080808; border: none; padding: 14px 34px;
+            font-family: 'Poppins', sans-serif; font-size: 0.72rem; font-weight: 500;
+            letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer;
+            text-decoration: none; transition: opacity 0.2s; display: inline-block;
+        }
+        .btn-primary:hover { opacity: 0.85; }
+        .btn-secondary {
+            background: none; color: var(--muted); border: 1px solid var(--border); padding: 14px 34px;
+            font-family: 'Poppins', sans-serif; font-size: 0.72rem; font-weight: 400;
+            letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer;
+            text-decoration: none; transition: color 0.2s, border-color 0.2s; display: inline-block;
+        }
+        .btn-secondary:hover { color: #fff; border-color: rgba(255,255,255,0.3); }
+
+        /* ── ANIMATIONS ── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(28px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+        @keyframes lineGrow {
+            from { transform: scaleX(0); }
+            to   { transform: scaleX(1); }
+        }
+        @keyframes pulse-gold {
+            0%, 100% { opacity: 0.06; transform: translate(-50%, -50%) scale(1); }
+            50%       { opacity: 0.10; transform: translate(-50%, -50%) scale(1.08); }
+        }
+
+        .anim {
+            opacity: 0;
+            transform: translateY(32px);
+            transition: opacity 0.75s var(--ease-out), transform 0.75s var(--ease-out);
+        }
+        .anim-left {
+            opacity: 0;
+            transform: translateX(-32px);
+            transition: opacity 0.75s var(--ease-out), transform 0.75s var(--ease-out);
+        }
+        .anim-right {
+            opacity: 0;
+            transform: translateX(32px);
+            transition: opacity 0.75s var(--ease-out), transform 0.75s var(--ease-out);
+        }
+        .anim-scale {
+            opacity: 0;
+            transform: scale(0.94);
+            transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+        }
+        .anim.visible, .anim-left.visible, .anim-right.visible, .anim-scale.visible {
+            opacity: 1;
+            transform: none;
+        }
+
+        /* ── HERO ── */
+        .hero { align-items: center; text-align: center; background: var(--bg); }
+        .hero-glow {
+            position: absolute;
+            width: 700px; height: 700px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(201,169,110,0.09) 0%, transparent 65%);
+            pointer-events: none;
+            left: 50%; top: 42%;
+            transform: translate(-50%, -50%);
+            transition: left 0.8s cubic-bezier(0.25, 1, 0.5, 1), top 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+            animation: pulse-gold 6s ease-in-out infinite;
+        }
+        .hero-line {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--gold-border) 30%, var(--gold-border) 70%, transparent);
+            transform-origin: left;
+            transform: scaleX(0);
+        }
+        .hero-line.visible { animation: lineGrow 1.2s var(--ease-out) 0.8s forwards; }
+
+        .hero-tag {
+            font-size: 0.62rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold);
+            margin-bottom: 24px; display: flex; align-items: center; gap: 12px;
+            animation: fadeUp 0.7s var(--ease-out) 0.15s both;
+        }
+        .hero-tag::before, .hero-tag::after { content: ''; width: 32px; height: 1px; background: var(--gold); opacity: 0.5; }
+        .hero h1 {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: clamp(2rem, 5vw, 4.2rem); font-weight: 300;
+            letter-spacing: 0.03em; line-height: 1.1; max-width: 860px; margin-bottom: 22px;
+            animation: fadeUp 0.8s var(--ease-out) 0.35s both;
+        }
+        .hero h1 em { font-style: normal; color: var(--gold); }
+        .hero-sub {
+            font-size: clamp(0.85rem, 1.8vw, 1rem); color: var(--muted);
+            max-width: 500px; margin-bottom: 40px; line-height: 1.8;
+            animation: fadeUp 0.8s var(--ease-out) 0.55s both;
+        }
+        .hero-actions {
+            display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
+            animation: fadeUp 0.8s var(--ease-out) 0.72s both;
+        }
+        .hero-scroll {
+            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+            color: var(--muted); font-size: 1.2rem;
+            animation: bounce 2s infinite, fadeIn 1s var(--ease-out) 1.2s both;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50%       { transform: translateX(-50%) translateY(8px); }
+        }
+
+        /* ── DIFERENCIAL ── */
+        .diferencial-section { background: var(--bg2); }
+        .diferencial-inner { display: grid; grid-template-columns: 1fr 1.6fr; gap: 64px; align-items: start; }
+        .diferencial-left { padding-top: 4px; }
+        .diferencial-left .eyebrow { font-size: 0.6rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }
+        .diferencial-left h2 {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: clamp(1.5rem, 3vw, 2.1rem); font-weight: 300;
+            letter-spacing: 0.04em; line-height: 1.2; margin-bottom: 16px;
+        }
+        .diferencial-left p { color: var(--muted); font-size: 0.86rem; line-height: 1.75; }
+        .pillar-grid { display: flex; flex-direction: column; gap: 2px; }
+        .pillar-card {
+            background: var(--bg); border: 1px solid var(--border);
+            padding: 24px 28px; position: relative; overflow: hidden;
+            display: flex; gap: 20px; align-items: flex-start;
+        }
+        .pillar-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0;
+            height: 2px; background: var(--gold); opacity: 0; transition: opacity 0.3s;
+        }
+        .pillar-card:hover::before { opacity: 1; }
+        .pillar-icon {
+            width: 40px; height: 40px; border: 1px solid var(--gold-border);
+            background: var(--gold-dim); display: flex; align-items: center; justify-content: center;
+            color: var(--gold); font-size: 0.95rem; flex-shrink: 0; margin-top: 2px;
+            transition: background 0.3s;
+        }
+        .pillar-card:hover .pillar-icon { background: rgba(201,169,110,0.2); }
+        .pillar-body h3 { font-family: 'aktiv-grotesk', sans-serif; font-size: 0.9rem; font-weight: 400; letter-spacing: 0.07em; text-transform: uppercase; color: #fff; margin-bottom: 6px; }
+        .pillar-body p { color: var(--muted); font-size: 0.82rem; line-height: 1.65; }
+
+        /* ── SERVICIOS ── */
+        .servicios-section { background: var(--bg); }
+        .servicios-header { margin-bottom: 28px; }
+        .servicios-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+        .srv-card {
+            background: var(--bg2); border: 1px solid var(--border);
+            padding: 22px 24px 20px; position: relative; overflow: hidden;
+            transition: border-color 0.3s;
+        }
+        .srv-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0;
+            height: 2px; background: var(--gold); opacity: 0; transition: opacity 0.3s;
+        }
+        .srv-card:hover::before { opacity: 1; }
+        .srv-card:hover { border-color: rgba(255,255,255,0.14); }
+        .srv-badge {
+            display: inline-block; background: var(--gold-dim); border: 1px solid var(--gold-border);
+            color: var(--gold); font-size: 0.52rem; letter-spacing: 0.2em;
+            text-transform: uppercase; padding: 3px 8px; margin-bottom: 12px;
+        }
+        .srv-icon { color: var(--gold); font-size: 1.1rem; margin-bottom: 10px; opacity: 0.85; }
+        .srv-card h3 { font-family: 'aktiv-grotesk', sans-serif; font-size: 0.88rem; font-weight: 400; letter-spacing: 0.06em; text-transform: uppercase; color: #fff; margin-bottom: 8px; }
+        .srv-card p { color: var(--muted); font-size: 0.78rem; line-height: 1.65; }
+
+        /* ── PROCESO ── */
+        .proceso-section { background: var(--bg2); }
+        .proceso-steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; position: relative; margin-top: 32px; }
+        .proceso-line {
+            position: absolute; top: 28px; left: 0; right: 0; height: 1px;
+            background: linear-gradient(to right, transparent, var(--gold-border) 15%, var(--gold-border) 85%, transparent);
+            transform-origin: left; transform: scaleX(0);
+            transition: transform 1.2s var(--ease-out);
+        }
+        .proceso-steps.visible .proceso-line { transform: scaleX(1); }
+        .step { padding: 0 16px; position: relative; }
+        .step-num {
+            font-family: 'aktiv-grotesk', sans-serif; font-size: 0.62rem; font-weight: 400;
+            letter-spacing: 0.2em; color: var(--gold); margin-bottom: 18px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .step-dot {
+            width: 8px; height: 8px; border: 1px solid var(--gold); background: var(--bg2);
+            border-radius: 50%; flex-shrink: 0; position: relative; z-index: 1;
+            transition: background 0.3s, transform 0.3s;
+        }
+        .step:hover .step-dot { background: var(--gold); transform: scale(1.4); }
+        .step h4 { font-family: 'aktiv-grotesk', sans-serif; font-size: 0.82rem; font-weight: 400; letter-spacing: 0.06em; text-transform: uppercase; color: #fff; margin-bottom: 8px; }
+        .step p { color: var(--muted); font-size: 0.75rem; line-height: 1.65; }
+
+        /* ── CTA ── */
+        .cta-section { align-items: center; text-align: center; background: var(--bg); }
+        .cta-section::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(201,169,110,0.07) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .cta-section h2 {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: clamp(1.8rem, 4.5vw, 3.4rem); font-weight: 300;
+            letter-spacing: 0.04em; line-height: 1.15;
+            max-width: 660px; margin: 0 auto 16px;
+        }
+        .cta-section h2 em { font-style: normal; color: var(--gold); }
+        .cta-section p { color: var(--muted); font-size: 0.92rem; max-width: 440px; margin: 0 auto 36px; }
+        .cta-buttons { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+        .cta-contact { display: flex; align-items: center; justify-content: center; gap: 28px; flex-wrap: wrap; margin-top: 28px; }
+        .cta-contact a {
+            color: var(--muted); text-decoration: none; font-size: 0.78rem;
+            letter-spacing: 0.1em; display: flex; align-items: center; gap: 7px; transition: color 0.2s;
+        }
+        .cta-contact a:hover { color: #fff; }
+
+        /* ── CARD CLICKEABLE ── */
+        a.srv-card {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        a.srv-card .srv-arrow {
+            position: absolute;
+            bottom: 16px; right: 18px;
+            color: var(--gold);
+            font-size: 0.7rem;
+            opacity: 0;
+            transform: translateX(-6px);
+            transition: opacity 0.25s, transform 0.25s;
+        }
+        a.srv-card:hover .srv-arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        a.srv-card:hover { cursor: pointer; }
+
+        /* ── MODELO DE COBRO ── */
+        .modelo-section { background: var(--bg2); }
+        .modelo-inner {
+            display: grid;
+            grid-template-columns: 1fr 1.4fr;
+            gap: 64px;
+            align-items: start;
+        }
+        .modelo-left .section-title { margin-bottom: 14px; }
+        .modelo-intro {
+            color: var(--muted);
+            font-size: 0.86rem;
+            line-height: 1.75;
+            margin-bottom: 28px;
+        }
+        .modelo-insight {
+            border-left: 2px solid var(--gold);
+            padding-left: 18px;
+        }
+        .modelo-insight p {
+            color: rgba(255,255,255,0.55);
+            font-size: 0.82rem;
+            line-height: 1.7;
+            font-style: italic;
+        }
+        .modelo-cards { display: flex; flex-direction: column; gap: 2px; }
+        .modelo-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            padding: 26px 28px;
+            display: flex;
+            gap: 22px;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.3s;
+        }
+        .modelo-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: var(--gold);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .modelo-card:hover::before { opacity: 1; }
+        .modelo-card:hover { border-color: rgba(255,255,255,0.14); }
+        .modelo-card-num {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 300;
+            color: var(--gold);
+            opacity: 0.25;
+            line-height: 1;
+            flex-shrink: 0;
+            padding-top: 2px;
+            min-width: 36px;
+        }
+        .modelo-card-body h3 {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 400;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+        .modelo-card-body p {
+            color: var(--muted);
+            font-size: 0.81rem;
+            line-height: 1.7;
+            margin-bottom: 14px;
+        }
+        .modelo-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .modelo-list li {
+            color: rgba(255,255,255,0.45);
+            font-size: 0.76rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+        .modelo-list li::before { content: '—'; color: var(--gold); flex-shrink: 0; }
+
+        /* ── FOOTER ── */
+        footer {
+            border-top: 1px solid var(--border); padding: 28px 48px;
+            display: flex; align-items: center; justify-content: space-between;
+            flex-wrap: wrap; gap: 12px; background: var(--bg);
+        }
+        footer .logo { font-family: 'aktiv-grotesk', sans-serif; font-size: 0.9rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.3); }
+        footer p { font-size: 0.7rem; color: rgba(255,255,255,0.18); letter-spacing: 0.08em; }
+
+        /* ── SCROLL PROGRESS ── */
+        .scroll-progress {
+            position: fixed; right: 28px; top: 50%; transform: translateY(-50%);
+            display: flex; flex-direction: column; gap: 10px; z-index: 50;
+        }
+        .sp-dot {
+            width: 5px; height: 5px; border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            transition: background 0.3s, transform 0.3s;
+            cursor: pointer;
+        }
+        .sp-dot.active { background: var(--gold); transform: scale(1.6); }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 900px) {
+            body { overflow-y: auto; height: auto; }
+            section { height: auto; min-height: 100vh; overflow: visible; }
+            .diferencial-inner { grid-template-columns: 1fr; gap: 32px; }
+            .servicios-grid { grid-template-columns: 1fr 1fr; }
+            .modelo-inner { grid-template-columns: 1fr; gap: 32px; }
+            .proceso-steps { grid-template-columns: 1fr; }
+            .proceso-line { display: none; }
+            .step { padding: 16px 0; border-left: 1px solid var(--gold-border); padding-left: 20px; }
+            .scroll-progress { display: none; }
+            footer { flex-direction: column; text-align: center; padding: 28px 24px; }
+            .container { padding: 48px 24px; }
+        }
+        @media (max-width: 600px) {
+            .servicios-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<header>
+    <nav class="navbar">
+        <div class="top-navbar">
+            <div class="top-navbarDivUno">
+                <a href="https://imabox.uy" class="nav-branding" id="link-font-index">imabox.</a>
+            </div>
+            <div class="hamburger" role="button" aria-label="Abrir menú" aria-expanded="false" tabindex="0">
+                <div class="div-bar">
+                    <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+                </div>
+            </div>
+        </div>
+        <div class="nav-text">
+            <div class="nav-textUno">
+                <ul class="nav-menuDos">
+                    <li class="nav-itemDos"><p>hello@imabox.uy</p></li>
+                    <li class="nav-itemDos"><p>Montevideo, Uruguay.</p></li>
+                    <li class="nav-itemDos"><p>+598 98 325 902</p></li>
+                    <ul class="flex-icon">
+                        <li class="social-icon"><a href="https://www.instagram.com/imabox_uy" target="_blank"><i class="fa fa-instagram"></i></a></li>
+                        <li class="social-icon"><a href="https://www.linkedin.com/company/imabox" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+                    </ul>
+                </ul>
+            </div>
+            <div>
+                <ul class="nav-menu">
+                    <li class="nav-item"><a href="services.html" class="nav-link" style="color:#c9a96e;">Services</a></li>
+                    <li class="nav-item"><a href="https://imabox.uy/about.html" class="nav-link">About</a></li>
+                    <li class="nav-item"><a href="https://imabox.uy/contact.html" class="nav-link">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<!-- Scroll progress dots -->
+<nav class="scroll-progress" aria-label="Secciones">
+    <div class="sp-dot active" data-section="0"></div>
+    <div class="sp-dot" data-section="1"></div>
+    <div class="sp-dot" data-section="2"></div>
+    <div class="sp-dot" data-section="3"></div>
+    <div class="sp-dot" data-section="4"></div>
+    <div class="sp-dot" data-section="5"></div>
+</nav>
+
+<!-- 1. HERO -->
+<section class="hero" id="sec-0">
+    <div class="hero-glow" id="heroGlow"></div>
+    <div class="hero-tag">Agencia creativa · Arquitectura &amp; Real Estate</div>
+    <h1>Revelamos el futuro<br><em>antes de que ocurra.</em></h1>
+    <p class="hero-sub">Somos arquitectos. Nos encargamos de la marca total de tu proyecto — desde la identidad hasta el día que se vende la última unidad. Todo lo visual, todo integrado, todo nuestro.</p>
+    <div class="hero-actions">
+        <a href="#sec-2" class="btn-primary">Ver servicios</a>
+        <a href="#sec-5" class="btn-secondary">Hablemos</a>
+    </div>
+    <div class="hero-scroll"><i class="fa fa-angle-down"></i></div>
+    <div class="hero-line"></div>
+</section>
+
+<!-- 2. DIFERENCIAL -->
+<section class="diferencial-section" id="sec-1">
+    <div class="container">
+        <div class="diferencial-inner">
+            <div class="diferencial-left anim-left">
+                <div class="eyebrow">Por qué somos distintos</div>
+                <h2>No somos solo un estudio de visualización.</h2>
+                <p>Entendemos el espacio antes de que exista. Eso cambia todo lo que producimos — desde la primera imagen hasta la campaña de lanzamiento.</p>
+            </div>
+            <div class="pillar-grid">
+                <div class="pillar-card anim" style="transition-delay:0.1s">
+                    <div class="pillar-icon"><i class="fa fa-pencil-square-o"></i></div>
+                    <div class="pillar-body">
+                        <h3>Somos arquitectos</h3>
+                        <p>Cada imagen es una decisión de diseño. Entendemos la escala, la luz, la materialidad — y cuando el proyecto todavía no está del todo definido, lo completamos.</p>
+                    </div>
+                </div>
+                <div class="pillar-card anim" style="transition-delay:0.22s">
+                    <div class="pillar-icon"><i class="fa fa-lightbulb-o"></i></div>
+                    <div class="pillar-body">
+                        <h3>Desde el día cero</h3>
+                        <p>Trabajamos cuando el proyecto todavía es una idea en papel. Ayudamos a definir el nombre, la identidad visual, el posicionamiento — todo antes de que la obra empiece.</p>
+                    </div>
+                </div>
+                <div class="pillar-card anim" style="transition-delay:0.34s">
+                    <div class="pillar-icon"><i class="fa fa-th-large"></i></div>
+                    <div class="pillar-body">
+                        <h3>Todo lo visual, todo integrado</h3>
+                        <p>Marca, imágenes, video, cinemagraphs, showroom virtual, tour 360, redes sociales, material para inversores. Un solo equipo que mantiene coherencia en cada pieza.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 3. SERVICIOS -->
+<section class="servicios-section" id="sec-2">
+    <div class="container">
+        <div class="servicios-header anim">
+            <h2 class="section-title">Todo lo que necesita un proyecto para venderse</h2>
+            <p class="section-sub" style="margin-bottom:0">La marca total de un proyecto. Todo esto convive bajo una misma dirección creativa — para que cada pieza cuente la misma historia.</p>
+        </div>
+        <div class="servicios-grid">
+            <a class="srv-card anim" href="branding.html" style="transition-delay:0.05s">
+                <div class="srv-badge">Marca</div>
+                <div class="srv-icon"><i class="fa fa-font"></i></div>
+                <h3>Identidad visual del proyecto</h3>
+                <p>Nombre, logo, paleta, tipografía, brand guidelines. La marca del proyecto antes de que se construya — para que cada pieza comunique lo mismo.</p>
+                <div class="srv-arrow"><i class="fa fa-arrow-right"></i></div>
+            </a>
+            <a class="srv-card anim" href="works.html" style="transition-delay:0.12s">
+                <div class="srv-badge">Visualización</div>
+                <div class="srv-icon"><i class="fa fa-picture-o"></i></div>
+                <h3>Imágenes fotorrealistas</h3>
+                <p>Exteriores, interiores, amenidades y accesos. Imágenes que hacen que alguien que no sabe leer planos entienda exactamente dónde va a vivir.</p>
+                <div class="srv-arrow"><i class="fa fa-arrow-right"></i></div>
+            </a>
+            <a class="srv-card anim" href="films.html" style="transition-delay:0.19s">
+                <div class="srv-badge">Visualización</div>
+                <div class="srv-icon"><i class="fa fa-film"></i></div>
+                <h3>Video y cinemagraphs</h3>
+                <p>Videos de concepto, fly-throughs, timelapses de obra. Cinemagraphs: imágenes fijas con movimiento sutil — el formato con mayor engagement en redes.</p>
+                <div class="srv-arrow"><i class="fa fa-arrow-right"></i></div>
+            </a>
+            <a class="srv-card anim" href="showroom.html" style="transition-delay:0.26s">
+                <div class="srv-badge">Herramientas de venta</div>
+                <div class="srv-icon"><i class="fa fa-desktop"></i></div>
+                <h3>Showroom virtual interactivo</h3>
+                <p>Recorrido digital del proyecto, planta por planta. Disponibilidad en vivo, calculadora de préstamo, formulario de leads y analítica incluida.</p>
+                <div class="srv-arrow"><i class="fa fa-arrow-right"></i></div>
+            </a>
+            <div class="srv-card anim" style="transition-delay:0.33s">
+                <div class="srv-badge">Diseño</div>
+                <div class="srv-icon"><i class="fa fa-th"></i></div>
+                <h3>Diseño de interiores</h3>
+                <p>Propuesta de materialidad, layout y ambientación. Imágenes conceptuales para mostrar cómo se puede vivir el espacio antes de que exista.</p>
+            </div>
+            <div class="srv-card anim" style="transition-delay:0.40s">
+                <div class="srv-badge">Contenido</div>
+                <div class="srv-icon"><i class="fa fa-instagram"></i></div>
+                <h3>Contenido para redes</h3>
+                <p>Posts, carruseles, reels y historias alineados con la identidad del proyecto. Estrategia pensada para atraer compradores, no solo seguidores.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 4. PROCESO -->
+<section class="proceso-section" id="sec-3">
+    <div class="container">
+        <div class="section-tag anim">Proceso</div>
+        <h2 class="section-title anim" style="transition-delay:0.1s">Así trabajamos</h2>
+        <p class="section-sub anim" style="transition-delay:0.2s">Cada proyecto es distinto, pero el camino siempre empieza en el mismo lugar: antes de que haya algo que mostrar.</p>
+        <div class="proceso-steps">
+            <div class="proceso-line"></div>
+            <div class="step anim" style="transition-delay:0.1s">
+                <div class="step-num"><div class="step-dot"></div>01</div>
+                <h4>Concepto</h4>
+                <p>Entendemos el proyecto: ubicación, programa, mercado. Definimos qué quiere comunicar y a quién.</p>
+            </div>
+            <div class="step anim" style="transition-delay:0.22s">
+                <div class="step-num"><div class="step-dot"></div>02</div>
+                <h4>Identidad</h4>
+                <p>Desarrollamos la marca del edificio: nombre, logo, paleta, tipografía. El ADN visual de todo.</p>
+            </div>
+            <div class="step anim" style="transition-delay:0.34s">
+                <div class="step-num"><div class="step-dot"></div>03</div>
+                <h4>Visualización</h4>
+                <p>Imágenes, videos y cinemagraphs. Las imágenes que hacen real al proyecto antes de que exista.</p>
+            </div>
+            <div class="step anim" style="transition-delay:0.46s">
+                <div class="step-num"><div class="step-dot"></div>04</div>
+                <h4>Herramientas</h4>
+                <p>Showroom virtual, tour 360 y material de venta. El ecosistema digital completo del proyecto.</p>
+            </div>
+            <div class="step anim" style="transition-delay:0.58s">
+                <div class="step-num"><div class="step-dot"></div>05</div>
+                <h4>Lanzamiento</h4>
+                <p>Activamos el contenido, publicamos en portales y redes. El proyecto sale al mercado listo para vender.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 5. MODELO DE COBRO -->
+<section class="modelo-section" id="sec-4">
+    <div class="container">
+        <div class="modelo-inner">
+            <div class="modelo-left anim-left">
+                <div class="section-tag">Inversión</div>
+                <h2 class="section-title">El trabajo se estructura<br>en dos momentos.</h2>
+                <p class="modelo-intro">No cobramos por imagen suelta ni por hora. Estructuramos el trabajo como lo que es: un proyecto con inicio, producción y vida en el mercado.</p>
+                <div class="modelo-insight anim" style="transition-delay:0.3s">
+                    <div class="modelo-insight-line"></div>
+                    <p>El costo del proyecto se amortiza en la primera unidad vendida. A partir de ahí, todo lo que generamos es rentabilidad para tu proyecto.</p>
+                </div>
+            </div>
+            <div class="modelo-cards anim-right" style="transition-delay:0.15s">
+                <div class="modelo-card">
+                    <div class="modelo-card-num">01</div>
+                    <div class="modelo-card-body">
+                        <h3>Producción del proyecto</h3>
+                        <p>Todo el material visual definido al inicio: identidad de marca, imágenes, video, showroom virtual, tour 360, material para inversores. Se acuerda una vez, se paga por etapas. Sin sorpresas.</p>
+                        <ul class="modelo-list">
+                            <li>Alcance cerrado desde el arranque</li>
+                            <li>Revisiones incluidas en el proceso</li>
+                            <li>El material queda en propiedad del cliente</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modelo-card">
+                    <div class="modelo-card-num">02</div>
+                    <div class="modelo-card-body">
+                        <h3>Acompañamiento mensual</h3>
+                        <p>Una vez lanzado el proyecto, el material necesita vida: contenido nuevo, actualizaciones de disponibilidad, redes activas, reportes de leads. Un equipo dedicado sin tener que volver a explicar el proyecto.</p>
+                        <ul class="modelo-list">
+                            <li>Continuidad sobre lo que ya existe</li>
+                            <li>Escala según la etapa del proyecto</li>
+                            <li>Se puede sumar desde el día uno o después del lanzamiento</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 6. CTA -->
+<section class="cta-section" id="sec-5">
+    <div class="container">
+        <div class="section-tag anim">Hablemos</div>
+        <h2 class="anim" style="transition-delay:0.12s">Tu proyecto empieza<br>con <em>una conversación.</em></h2>
+        <p class="anim" style="transition-delay:0.24s">Contanos en qué etapa está y en 24 horas te contamos cómo lo encaramos.</p>
+        <div class="cta-buttons anim" style="transition-delay:0.36s">
+            <a href="mailto:hello@imabox.uy" class="btn-primary">Escribirnos</a>
+            <a href="https://calendly.com/imabox/30min" target="_blank" class="btn-secondary"><i class="fa fa-calendar-o" style="margin-right:8px"></i>Agendar reunión</a>
+        </div>
+        <div class="cta-contact anim" style="transition-delay:0.48s">
+            <a href="mailto:hello@imabox.uy"><i class="fa fa-envelope-o"></i> hello@imabox.uy</a>
+            <a href="https://wa.me/59898325902" target="_blank"><i class="fa fa-whatsapp"></i> WhatsApp</a>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="logo">Imabox</div>
+    <p>Agencia creativa · Arquitectura &amp; Real Estate — Montevideo, Uruguay</p>
+    <p>© 2025 Imabox. Todos los derechos reservados.</p>
+</footer>
+
+<script>
+/* ── NAVBAR ── */
+const hamburger   = document.querySelector('.div-bar');
+const navMenu     = document.querySelector('.nav-text');
+const topNavBar   = document.querySelector('.top-navbar');
+const navBranding = document.querySelector('.nav-branding');
+const navBar      = document.querySelector('.navbar');
+hamburger.addEventListener('click', () => {
+    [hamburger, navMenu, topNavBar, navBranding, navBar].forEach(el => el.classList.toggle('active'));
+});
+document.querySelectorAll('.nav-link').forEach(n => n.addEventListener('click', () => {
+    [hamburger, navMenu, topNavBar, navBranding, navBar].forEach(el => el.classList.remove('active'));
+}));
+
+/* ── SECCIONES para scroll ── */
+const sections   = [...document.querySelectorAll('section')];
+const spDots     = [...document.querySelectorAll('.sp-dot')];
+let currentIndex = 0;
+let scrollLocked = false;
+
+function goToSection(idx) {
+    if (idx < 0 || idx >= sections.length || scrollLocked) return;
+    scrollLocked = true;
+    currentIndex = idx;
+    sections[idx].scrollIntoView({ behavior: 'smooth' });
+    spDots.forEach((d, i) => d.classList.toggle('active', i === idx));
+    setTimeout(() => { scrollLocked = false; }, 850);
+}
+
+/* ── SCROLL CON RUEDA: 1 tick = 1 sección ── */
+window.addEventListener('wheel', (e) => {
+    if (window.innerWidth <= 900) return;
+    e.preventDefault();
+    if (scrollLocked) return;
+    /* Normalizar deltaY según deltaMode (pixels / lines / pages) */
+    let delta = e.deltaY;
+    if (e.deltaMode === 1) delta *= 24;
+    if (e.deltaMode === 2) delta *= 600;
+    if (Math.abs(delta) < 3) return; /* ignorar micro-movimientos de trackpad */
+    goToSection(currentIndex + (delta > 0 ? 1 : -1));
+}, { passive: false });
+
+/* ── TECLADO ── */
+window.addEventListener('keydown', (e) => {
+    if (window.innerWidth <= 900) return;
+    if (e.key === 'ArrowDown' || e.key === 'PageDown') { e.preventDefault(); goToSection(currentIndex + 1); }
+    if (e.key === 'ArrowUp'   || e.key === 'PageUp')   { e.preventDefault(); goToSection(currentIndex - 1); }
+});
+
+/* ── DOTS click ── */
+spDots.forEach(d => d.addEventListener('click', () => goToSection(+d.dataset.section)));
+
+/* ── ANCHOR links ── */
+document.querySelectorAll('a[href^="#sec-"]').forEach(a => {
+    a.addEventListener('click', e => {
+        e.preventDefault();
+        const idx = +a.getAttribute('href').replace('#sec-', '');
+        goToSection(idx);
+    });
+});
+
+/* ── INTERSECTION OBSERVER para animaciones ── */
+const animEls = document.querySelectorAll('.anim, .anim-left, .anim-right, .anim-scale');
+const ioAnim = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            ioAnim.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.12 });
+animEls.forEach(el => ioAnim.observe(el));
+
+/* Línea del proceso */
+const procesoLine = document.querySelector('.proceso-line');
+const ioLine = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+        if (e.isIntersecting) { procesoLine.style.transform = 'scaleX(1)'; ioLine.unobserve(e.target); }
+    });
+}, { threshold: 0.3 });
+if (procesoLine) ioLine.observe(procesoLine.parentElement);
+
+/* Hero line */
+const heroLine = document.querySelector('.hero-line');
+if (heroLine) heroLine.classList.add('visible');
+
+/* ── PARALLAX: glow sigue el mouse en el hero ── */
+const heroGlow = document.getElementById('heroGlow');
+document.addEventListener('mousemove', (e) => {
+    if (!heroGlow) return;
+    const pct = { x: (e.clientX / window.innerWidth) * 100, y: (e.clientY / window.innerHeight) * 100 };
+    heroGlow.style.left = `${45 + (pct.x - 50) * 0.18}%`;
+    heroGlow.style.top  = `${42 + (pct.y - 50) * 0.14}%`;
+});
+
+
+/* ── Actualizar dot activo al hacer scroll manual (mobile) ── */
+if (window.innerWidth <= 900) {
+    const ioSection = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const idx = sections.indexOf(entry.target);
+                if (idx !== -1) {
+                    currentIndex = idx;
+                    spDots.forEach((d, i) => d.classList.toggle('active', i === idx));
+                }
+            }
+        });
+    }, { threshold: 0.5 });
+    sections.forEach(s => ioSection.observe(s));
 }
 </script>
-</head>
 
-	<body>
-
-				<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMJRX79"
-	height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-	<!-- End Google Tag Manager (noscript) -->
-
-	<header>
-
-		<nav class="navbar">
-			<div class="top-navbar">
-				<div class="top-navbarDivUno">
-					<a href="https://imabox.uy" class="nav-branding nav-brandingblack" id="link-font-index">imabox.</a>
-				</div>
-				<div class="hamburger" role="button" aria-label="Toggle navigation menu" aria-expanded="false" tabindex="0">
-					<div class="div-bar">
-							<span class="bar"></span>
-							<span class="bar"></span>	
-							<span class="bar"></span>
-					</div>
-				</div>
-				
-			</div>
-
-			<div class="nav-text">
-				<div class="nav-textUno">
-					<ul class="nav-menuDos">
-						<li  class="nav-itemDos">
-							<p>hello@imabox.uy</p>	
-						</li>
-						<li  class="nav-itemDos">
-							<p>Montevideo, Uruguay.</p>	
-						</li>
-						<li  class="nav-itemDos">
-							<p>+598 98 325 902</p>	
-						</li>
-						
-						<li class="nav-itemDos">
-							<a href="#eng" onclick="timedRefresh()">eng <a>|</a>
-							</a> <a href="#esp" onclick="timedRefresh()">esp</a>
-						</li>	
-						
-					
-						<ul class="flex-icon">
-							<li class="social-icon" id="instagram"><a href="https://www.instagram.com/imabox_uy" target="_blank"><i class="fa fa-instagram"></i></a></li>
-							<li class="social-icon" id="linkedin"><a href="https://www.linkedin.com/company/imabox" target="_blank"><i class="fa fa-linkedin"></i></a></li>
-							
-						</ul>
-					</ul>
-				</div>
-				<div>
-					<ul class="nav-menu">
-						<li class="nav-item">
-							<a href="https://imabox.uy/works.html" class="nav-link" id="link-font">Our Work</a>
-						</li>
-						<li class="nav-item">
-							<a href="https://imabox.uy/services.html" class="nav-link" id="link-font-Virtual">Services</a>
-						</li>
-				
-						<li class="nav-item">
-							<a href="https://imabox.uy/about.html" class="nav-link" id="link-font-about">About</a>
-						</li>
-						<li class="nav-item">
-							<a href="https://imabox.uy/contact.html" class="nav-link" id="link-font-contact">Contact</a>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</nav>
-
-	</header>
-	<!--fin barra fija arriba telefono navbar-->
-		<!--seccion imagenes-->
-		<div class="servicesContainer">
-			<h1 class="sr-only">Architectural Visualization Services</h1>
-				<div class="firstParagraphVR">
-				<p>We empower real estate developers, architects, 
-					and creative teams by providing visual tools that 
-					turn ideas into unforgettable experiences. With extensive expertise in architecture, 
-					photography, and CGI, we specialize in bringing unbuilt projects to life through hyper-realistic imagery 
-					and animations, interactive solutions, and branding design for both digital and traditional platforms.</p>
-			</div>
-			<div class="main">
-				<div class="box-img">
-					<div class="ourWork">
-						<a href="https://imabox.uy/works" target="_blank"><img src="images/logos/images.webp"></a>
-						<h3>Images & Motions</h3>
-					</div>
-					<div class="ourWork">
-						<a href="https://imabox.uy/films.html"><img src="images/logos/video.webp"></a>
-						<h3>Films</h3>
-					</div>
-					<div class="ourWork">
-						<a href="https://imabox.uy/branding.html" target="_blank"><img src="images/logos/branding.webp"></a>
-						<h3>Branding identity</h3>
-					</div>
-					<div class="ourWork">
-						
-						<a href="https://imabox.uy/showroom.html"><img src="images/logos/saleplatform.webp"></a>
-						<h3>Virtual Showroom</h3>
-					</div>
-				</div>
-				
-			</div>
-			<div>
-				<footer>
-					<hr>
-					<p  id="rights-reserved">&copy; 2025 Imabox - "Unboxing The Future". All rights reserved</p>
-				</footer>
-			</div>
-		</div>
-		<script>
-		
-		</script>
-		<script src="js/navbarmoveindex.js"></script><!--navbar move-->
-		<script src="js/circle.js"></script>
-		<script src="js/translate.js"></script><!--navbar move-->
-		<script src="js/translate-vr.js"></script><!--navbar move-->
-
-	</body>
+</body>
 </html>

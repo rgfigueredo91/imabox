@@ -95,7 +95,7 @@ input, textarea {
 	margin-top: 20px;
 	height: 40px;
 	border: none;
-	background-color: #f01f50;
+	background-color: #c9a96e;
 	color: white;
 	transition: .6 ease-in-out;
 }
@@ -134,7 +134,7 @@ footer p {
 /* Form validation visual feedback */
 input:invalid:not(:placeholder-shown),
 textarea:invalid:not(:placeholder-shown) {
-	border-bottom: 2px solid #f01f50;
+	border-bottom: 2px solid #c9a96e;
 	outline: none;
 }
 

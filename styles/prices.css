@@ -144,7 +144,7 @@ textarea {
 	color: red;
 }
 #checkpricing:hover {
-	background-color: #f01f50;	
+	background-color: #c9a96e;	
 }
 
 .ifYouAre{
@@ -179,16 +179,16 @@ textarea {
 }
 
 .amount-interior label{
-	color: #f01f50;
+	color: #c9a96e;
 	font-weight: bold;
 }
 .amount-exterior label {
-	color: #f01f50;
+	color: #c9a96e;
 	font-weight: bold;
 }
 
 .experience-select label {
-	color: #f01f50;
+	color: #c9a96e;
 	font-weight: bold;
 }
 .correct-text{
@@ -268,7 +268,7 @@ textarea {
 }
 
 .experience-select-timeline label{
-	color: #f01f50;
+	color: #c9a96e;
 	font-weight: bold;
 }
 	
@@ -517,9 +517,9 @@ select {
 }
 button {
 	border: 1px;
-	border-color: #f01f50;;
+	border-color: #c9a96e;;
 	margin-top: 30px;
-	background-color:#f01f50;
+	background-color:#c9a96e;
 	color: white;
 	height: 40px;
 	width: 180px;
@@ -732,9 +732,9 @@ select {
 }
 button {
 	border: 1px;
-	border-color: #f01f50;;
+	border-color: #c9a96e;;
 	margin-top: 30px;
-	background-color:#f01f50;
+	background-color:#c9a96e;
 	color: white;
 	height: 40px;
 	width: 180px;

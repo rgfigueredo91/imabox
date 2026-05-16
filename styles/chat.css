@@ -2,7 +2,7 @@
 .imabox-chat-btn{
   position: fixed; right: 18px; bottom: 18px;
   width: 56px; height: 56px; border: 0; border-radius: 50%;
-  background:#f01f50; box-shadow:0 12px 30px rgba(0,0,0,.28);
+  background:#c9a96e; box-shadow:0 12px 30px rgba(0,0,0,.28);
   display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:9999;
 }
 .imabox-chat-btn svg{ width:28px; height:28px; fill:#fff; }
@@ -63,7 +63,7 @@
 /* Foco accesible */
 #imabox-chat-panel input:focus,
 #imabox-chat-panel textarea:focus{
-  border-color:#f01f50;
+  border-color:#c9a96e;
   box-shadow:0 0 0 3px rgba(37,211,102,.18);
 }
 
@@ -72,7 +72,7 @@
 .actions button{
   padding:.75rem .9rem; border:0; border-radius:10px; cursor:pointer; font-weight:700;
 }
-.actions button[type="submit"]{ background:#f01f50; color:#fff; }
+.actions button[type="submit"]{ background:#c9a96e; color:#fff; }
 #imabox-whats{ background:#f1f2f4; color:#1f2937; }
 
 /* Textos auxiliares */

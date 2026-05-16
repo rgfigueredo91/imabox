@@ -60,7 +60,7 @@ body {
 .social-icon a:hover{
     text-decoration: none;
     list-style: none;
-    color: #f01f50;
+    color: #c9a96e;
 }
 .top-navbar {
     transition: .1s;
@@ -134,7 +134,7 @@ body {
 
 .nav-menuDos a:hover{
     cursor: pointer;
-    color: #f01f50;
+    color: #c9a96e;
 
 }
 .nav-itemDos {
@@ -173,7 +173,7 @@ body {
     transition: 0.7s ease;
 }
 .nav-link:hover {
-    color: #f01f50;
+    color: #c9a96e;
 }
 .bar {
     display: block ;
