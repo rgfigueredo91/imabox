@@ -9,12 +9,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // Reproducir el GIF cuando el mouse pasa sobre la imagen
         imgContainer.addEventListener("mouseenter", function() {
-            gif.style.display = "block";
+            if (gif) gif.style.display = "block";
         });
 
-        // Pausar el GIF cuando el mouse sale de la imagen
         imgContainer.addEventListener("mouseleave", function() {
-            gif.style.display = "none";
+            if (gif) gif.style.display = "none";
         });
     });
 });

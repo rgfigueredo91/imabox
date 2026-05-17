@@ -12,6 +12,7 @@
 
   document.body.appendChild(ring);
   document.body.classList.add('custom-cursor-active');
+  document.documentElement.classList.add('custom-cursor-active');
 
   // Keep cursor-ring as last child so it always renders above
   // any dynamically injected overlays (swipebox, modals, etc.)

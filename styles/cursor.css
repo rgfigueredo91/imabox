@@ -1,5 +1,7 @@
 body.custom-cursor-active,
-body.custom-cursor-active * { cursor: none !important; }
+body.custom-cursor-active *,
+html.custom-cursor-active,
+html.custom-cursor-active * { cursor: none !important; }
 
 #cursor-ring {
   position: fixed;
@@ -37,6 +39,8 @@ body.custom-cursor-active * { cursor: none !important; }
 
 @media (hover: none), (pointer: coarse) {
   body.custom-cursor-active,
-  body.custom-cursor-active * { cursor: auto !important; }
+  body.custom-cursor-active *,
+  html.custom-cursor-active,
+  html.custom-cursor-active * { cursor: auto !important; }
   #cursor-ring { display: none; }
 }
