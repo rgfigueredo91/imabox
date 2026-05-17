@@ -80,9 +80,13 @@
     if (tag === 'A' || tag === 'BUTTON' || tag === 'INPUT') return;
 
     if (currentEdge === 'bottom') {
-      window.scrollBy({ top: window.innerHeight, behavior: 'smooth' });
+      var amount = window.innerHeight;
+      document.body.scrollBy({ top: amount, behavior: 'smooth' });
+      window.scrollBy({ top: amount, behavior: 'smooth' });
     } else if (currentEdge === 'top') {
-      window.scrollBy({ top: -window.innerHeight, behavior: 'smooth' });
+      var amount = -window.innerHeight;
+      document.body.scrollBy({ top: amount, behavior: 'smooth' });
+      window.scrollBy({ top: amount, behavior: 'smooth' });
     } else if (currentEdge === 'left' || currentEdge === 'right') {
       const visible = Array.from(document.querySelectorAll('.carousel')).find(function (c) {
         const r = c.getBoundingClientRect();
