@@ -132,7 +132,7 @@
 
         /* ── responsive ── */
         @media (max-width: 1024px) {
-            .films-grid { grid-template-columns: repeat(3, 1fr); grid-auto-rows: 28vw; }
+            .films-grid { grid-template-columns: repeat(3, 1fr); grid-auto-rows: auto; gap: 4px; }
             .films-grid > .vid { grid-row: auto !important; grid-column: auto !important; }
         }
         @media (max-width: 600px) {
@@ -242,8 +242,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
         </div>
 
-        <!-- film5: portrait -->
-        <div class="vid portrait" id="film5">
+        <!-- film5: landscape -->
+        <div class="vid landscape" id="film5">
             <video src="videos/trenes.mp4" preload="none" playsinline loop></video>
             <img class="vid-poster" src="img/posters/trenes.webp" alt="Trenes film by Imabox"/>
             <div class="vid-overlay">
@@ -270,18 +270,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="vid landscape" id="film7">
             <video src="videos/kiu/lifestyle-coffee.mp4" preload="none" playsinline loop></video>
             <img class="vid-poster" src="img/posters/kiu-lifestyle-coffee.webp" alt="Lifestyle Coffee film by Imabox"/>
-            <div class="vid-overlay">
-                <svg class="vid-play-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="32" cy="32" r="31" stroke="white" stroke-width="1.2"/>
-                    <polygon points="26,20 48,32 26,44" fill="white"/>
-                </svg>
-            </div>
-        </div>
-
-        <!-- film8: landscape -->
-        <div class="vid landscape" id="film8">
-            <video src="videos/kiu/lifestyle-people.mp4" preload="none" playsinline loop></video>
-            <img class="vid-poster" src="img/posters/kiu-lifestyle-people.webp" alt="Lifestyle People film by Imabox"/>
             <div class="vid-overlay">
                 <svg class="vid-play-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="32" cy="32" r="31" stroke="white" stroke-width="1.2"/>
