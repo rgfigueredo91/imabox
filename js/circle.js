@@ -45,11 +45,16 @@
     const vw = window.innerWidth;
     const vh = window.innerHeight;
 
+    const inCorner = (e.clientX < EDGE_PX || e.clientX > vw - EDGE_PX) &&
+                     (e.clientY < EDGE_PX || e.clientY > vh - EDGE_PX);
+
     let dir = null;
-    if      (e.clientY < EDGE_PX)        dir = 'top';
-    else if (e.clientY > vh - EDGE_PX)   dir = 'bottom';
-    else if (e.clientX < EDGE_PX)        dir = 'left';
-    else if (e.clientX > vw - EDGE_PX)   dir = 'right';
+    if (!inCorner) {
+      if      (e.clientY < EDGE_PX)        dir = 'top';
+      else if (e.clientY > vh - EDGE_PX)   dir = 'bottom';
+      else if (e.clientX < EDGE_PX)        dir = 'left';
+      else if (e.clientX > vw - EDGE_PX)   dir = 'right';
+    }
 
     currentEdge = dir;
 
@@ -91,7 +96,7 @@
 
   /* ── Hamburger / interactive-element hover ─────────── */
   function attachHoverElements() {
-    const selectors = ['.hamburger', '.imabox-chat-btn'];
+    const selectors = ['.hamburger', '.nav-toggle', '.imabox-chat-btn'];
 
     selectors.forEach(function (sel) {
       const el = document.querySelector(sel);

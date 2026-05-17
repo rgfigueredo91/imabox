@@ -2,11 +2,11 @@ document.addEventListener("DOMContentLoaded", function(e){
     let language = {
         esp: {
             
-            firstParagraph: "Imabox es un estudio experto en visualización arquitectónica que se especializa en fotografía, diseño gráfico y trabajos audiovisuales. Nos destacamos en capturar la belleza de las imágenes arquitectónicas a través de nuestra experiencia en geometría, textura e iluminación. Nuestro objetivo es crear experiencias visuales distintivas que muestren las fortalezas de cada proyecto.",
+            firstParagraph: "Somos una agencia creativa. Nos especializamos en identidad de marca, fotografía y producción audiovisual para proyectos de arquitectura y real estate. Lo que nos mueve es construir la experiencia de un proyecto antes de que exista — porque una buena imagen no solo muestra lo que va a ser, sino que hace que la gente lo quiera.",
             iporaUnoTitle: `Parque Termal Iporá`,
             iporaUnoSubtitle: "Figarola Davila Arquitectos",
-            secondParagraph: "Nos especializamos en desarrollos inmobiliarios, comercios, espacios públicos y planes urbanos, creando fotografías cautivadoras que representan el futuro. Utilizando hábilmente la luz y la textura, diseñamos experiencias visuales únicas. Con más de una década de experiencia, comprendemos las necesidades específicas de nuestros clientes, y nuestra pasión por este arte nos impulsa a trabajar incansablemente cada día para lograr los mejores resultados posibles.",
-            secondParagraphDos: "¿PODEMOS SER PARTE DE DESCUBRIR EL FUTURO JUNTOS?",
+            secondParagraph: "Trabajamos con desarrolladores y estudios de arquitectura en proyectos de real estate, espacios comerciales y urbanos. Cada trabajo empieza con una pregunta simple: ¿qué tiene que sentir la gente cuando ve esto? La respuesta la construimos con imagen, marca y movimiento — los tres lenguajes con los que hacemos que un proyecto exista antes de existir.",
+            secondParagraphDos: "¿Empezamos a construir juntos?",
             arecoTitle: "Jardines de Areco",   
             arecoSubtitle: 'Gomez Platero Arquitectura y Urbanismo', 
 

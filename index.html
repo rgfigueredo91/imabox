@@ -1,416 +1,514 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    <title>imabox - Architectural Visualization &amp; 3D Rendering Studio | Montevideo</title>
+    <meta name="description" content="Imabox specializes in architectural visualization, 3D rendering, and CGI for real estate developers and architects in Uruguay and globally." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="imabox - Architectural Visualization Studio" />
+    <meta property="og:description" content="Imabox specializes in architectural visualization, 3D rendering, and CGI for real estate developers and architects in Uruguay and globally." />
+    <meta property="og:url" content="https://imabox.uy/" />
+    <meta property="og:image" content="https://imabox.uy/img/cover1index.webp" />
+    <link rel="shortcut icon" type="image/png" href="favicon.png" />
+    <link rel="canonical" href="https://imabox.uy/" />
 
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-		<meta charset="UTF-8" />
-		<title>imabox - Architectural Visualization &amp; 3D Rendering Studio | Montevideo</title>
-		<meta name="description" content="Imabox specializes in architectural visualization, 3D rendering, and CGI for real estate developers and architects in Uruguay and globally." />
-		<meta name="keywords" content="Imabox - Rendering Visualization Studio" />
-		<meta name="author" content="Rodrigo Figueredo" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
-		<meta property="og:type" content="website" />
-		<meta property="og:title" content="imabox - Architectural Visualization Studio" />
-		<meta property="og:description" content="Imabox specializes in architectural visualization, 3D rendering, and CGI for real estate developers and architects in Uruguay and globally." />
-		<meta property="og:url" content="https://imabox.uy/" />
-		<meta property="og:image" content="https://imabox.uy/img/cover1index.webp" />
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
-		<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-		<link rel="stylesheet" type="text/css" href="styles/index.css">
-		<link rel="stylesheet" type="text/css" href="styles/chat.css">
-		<link rel="stylesheet" href="https://use.typekit.net/oov2wcw.css">
-		<link rel="shortcut icon" type="image/png" href="favicon.png" />
-		<link rel="canonical" href="https://imabox.uy/" />
-		<script src="js/scrollreveal.js"></script>
-		<script src="js/jquery-2.1.0.min.js"></script>
-		<script src="js/jquery.swipebox.min.js"></script>
-		<script src="js/polyfill.js"></script>
-		<script src="js/chat.js"></script><!--chat-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.typekit.net/oov2wcw.css">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
-		<!-- Google Tag Manager -->
-			<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-			new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-			j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-			'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-			})(window,document,'script','dataLayer','GTM-NMJRX79');</script>
-		<!-- End Google Tag Manager -->
+    <!-- navbar siempre primero -->
+    <link rel="stylesheet" href="styles/navbar.css" />
+    <link rel="stylesheet" href="styles/cursor.css" />
 
-		<script>
-		window.addEventListener('load', function () {
-			const video  = document.getElementById('videoElementId');
-			const loader = document.getElementById('ix-loader');
-			const bar    = document.getElementById('ix-loader-bar');
+    <style>
+        /* ── reset mínimo ── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { height: 100%; background: #000; color: #fff; font-family: 'Poppins', sans-serif; }
+        *::-webkit-scrollbar { display: none; }
+        * { scrollbar-width: none; }
 
-			let prog = 0;
-			const ticker = setInterval(() => {
-				prog = Math.min(prog + Math.random() * 12, 88);
-				bar.style.width = prog + '%';
-			}, 180);
+        /* ── scroll snap container ── */
+        .snap-container {
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
 
-			function hideLoader() {
-				clearInterval(ticker);
-				bar.style.width = '100%';
-				setTimeout(() => {
-					loader.classList.add('ix-loader--out');
-					loader.addEventListener('transitionend', () => loader.remove(), { once: true });
-				}, 300);
-			}
+        /* ── secciones ── */
+        .section {
+            scroll-snap-align: start;
+            height: 100vh;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
 
-			video.addEventListener('canplay',  hideLoader, { once: true });
-			video.addEventListener('error',    hideLoader, { once: true });
-			setTimeout(hideLoader, 6000);
+        /* ── SECTION 1 — video ── */
+        #s1 video {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
 
-			video.addEventListener('ended', function () {
-				this.currentTime = 0;
-				this.play();
-			}, false);
-			video.play();
-		});
-		</script>
+        /* ── SECTION 2 — texto ── */
+        #s2 {
+            background: #080808;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .text-block {
+            max-width: 1000px;
+            padding: 0 80px;
+            text-align: center;
+        }
+        .text-block p {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 300;
+            font-size: clamp(1rem, 2vw, 1.35rem);
+            line-height: 2.2;
+            color: rgba(255,255,255,0.78);
+        }
 
-		<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  "name": "Imabox",
-  "url": "https://imabox.uy",
-  "logo": "https://imabox.uy/img/logo.webp",
-  "image": "https://imabox.uy/img/cover1index.webp",
-  "description": "Architectural visualization, 3D rendering, and CGI studio based in Montevideo, Uruguay.",
-  "address": {
-    "@type": "PostalAddress",
-    "addressLocality": "Montevideo",
-    "addressCountry": "UY"
-  },
-  "telephone": "+598-98-325-902",
-  "email": "hello@imabox.uy",
-  "sameAs": [
-    "https://www.instagram.com/imabox_uy",
-    "https://www.linkedin.com/company/imabox",
-  ]
-}
-</script>
+        /* ── SECTION 3 / 5 — carousel ── */
+        #s3, #s5 { background: #000; }
+
+        .carousel-wrap {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        .slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+        .slide.active { opacity: 1; }
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .slide-caption {
+            position: absolute;
+            bottom: 60px;
+            left: 48px;
+        }
+        .slide-caption h2 {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-weight: 200;
+            font-size: clamp(1.4rem, 3vw, 2rem);
+            color: #fff;
+            letter-spacing: -0.02em;
+        }
+        .slide-caption p {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.5);
+            margin-top: 4px;
+        }
+        .carousel-nav {
+            position: absolute;
+            bottom: 60px;
+            right: 48px;
+            display: flex;
+            gap: 10px;
+        }
+        .carousel-btn {
+            width: 38px;
+            height: 38px;
+            border: 1px solid rgba(255,255,255,0.25);
+            background: none;
+            color: #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .carousel-btn:hover { border-color: #c9a96e; background: rgba(201,169,110,0.1); }
+        .carousel-btn svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+        /* ── SECTION 4 — texto 2 ── */
+        #s4 {
+            background: #0a0a0a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .text-block-cta p { color: rgba(255,255,255,0.72); }
+        .text-block-cta .cta {
+            margin-top: 32px;
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: #c9a96e;
+        }
+        .btn-call {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 14px 36px;
+            border: 1px solid #c9a96e;
+            color: #c9a96e;
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: background 0.25s ease, color 0.25s ease;
+        }
+        .btn-call:hover {
+            background: #c9a96e;
+            color: #000;
+        }
+
+        /* ── preloader ── */
+        #ix-loader {
+            position: fixed;
+            inset: 0;
+            z-index: 9000;
+            background: #0e0e0e;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            transition: opacity 0.7s ease;
+        }
+        #ix-loader.out { opacity: 0; pointer-events: none; }
+        .loader-brand {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(2.4rem, 7vw, 4rem);
+            font-weight: 300;
+            color: #fff;
+        }
+        .loader-track {
+            width: 140px;
+            height: 1px;
+            background: rgba(201,169,110,0.2);
+            overflow: hidden;
+        }
+        .loader-bar {
+            height: 100%;
+            width: 0%;
+            background: #c9a96e;
+            transition: width 0.35s ease;
+        }
+
+        /* ── responsive ── */
+        @media (max-width: 768px) {
+            .slide-caption { left: 24px; bottom: 48px; }
+            .carousel-nav  { right: 24px; bottom: 48px; }
+            .text-block, .text-block-cta { padding: 0 24px; }
+        }
+    </style>
+
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-NMJRX79');</script>
+    <!-- End Google Tag Manager -->
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Imabox",
+      "url": "https://imabox.uy",
+      "logo": "https://imabox.uy/img/logo.webp",
+      "description": "Architectural visualization, 3D rendering, and CGI studio based in Montevideo, Uruguay.",
+      "address": { "@type": "PostalAddress", "addressLocality": "Montevideo", "addressCountry": "UY" },
+      "telephone": "+598-98-325-902",
+      "email": "hello@imabox.uy",
+      "sameAs": ["https://www.instagram.com/imabox_uy","https://www.linkedin.com/company/imabox"]
+    }
+    </script>
 </head>
-	<body>
+<body>
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMJRX79"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
 <!-- PRELOADER -->
 <div id="ix-loader">
-    <span class="ix-loader-brand">imabox.</span>
-    <div class="ix-loader-bar-track"><div class="ix-loader-bar" id="ix-loader-bar"></div></div>
+    <span class="loader-brand">imabox.</span>
+    <div class="loader-track"><div class="loader-bar" id="loader-bar"></div></div>
 </div>
 
-<!-- WhatsApp Floating Button + Chat Panel -->
-<div id="imabox-chat" aria-live="polite">
-  <!-- Floating Button -->
-  <button class="imabox-chat-btn" aria-controls="imabox-chat-panel" aria-expanded="false">
-    <svg viewBox="0 0 32 32" aria-hidden="true">
-      <path d="M19.11 17.59c-.27-.13-1.57-.77-1.81-.86-.24-.09-.42-.13-.6.13-.18.27-.69.86-.85 1.04-.16.18-.31.2-.58.07-.27-.13-1.13-.42-2.16-1.34-.8-.71-1.34-1.59-1.5-1.86-.16-.27-.02-.42.11-.55.11-.11.27-.29.4-.44.13-.16.18-.27.27-.45.09-.18.04-.34-.02-.47-.07-.13-.6-1.45-.82-1.98-.22-.53-.44-.45-.6-.45h-.51c-.18 0-.47.07-.72.34-.24.27-.94.92-.94 2.25 0 1.33.97 2.62 1.11 2.8.13.18 1.9 2.9 4.62 4.05.65.28 1.15.45 1.54.58.65.21 1.24.18 1.71.11.52-.08 1.57-.64 1.79-1.25.22-.62.22-1.15.15-1.25-.06-.1-.24-.16-.51-.29zM16 3C8.82 3 3 8.82 3 16c0 2.29.59 4.44 1.63 6.32L3 29l6.86-1.79C11.65 28.41 13.74 29 16 29c7.18 0 13-5.82 13-13S23.18 3 16 3z"/>
-    </svg>
-  </button>
+<!-- NAV -->
+<header>
+    <nav class="navbar" id="navbar">
+        <a href="https://imabox.uy" class="nav-logo" id="link-font-index">imabox.</a>
+        <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+            <span class="nav-bar"></span>
+            <span class="nav-bar"></span>
+            <span class="nav-bar"></span>
+        </button>
+        <div class="nav-overlay">
+            <ul class="nav-links">
+                <li><a href="services.html">Services</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="nav-info">
+                <p>hello@imabox.uy</p>
+                <p>+598 98 325 902</p>
+                <p>Montevideo, Uruguay.</p>
+                <div class="nav-lang">
+                    <a href="#eng" onclick="timedRefresh()">eng</a>
+                    <span>|</span>
+                    <a href="#esp" onclick="timedRefresh()">esp</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
 
-  <!-- Chat Panel -->
-  <div id="imabox-chat-panel" hidden>
-    <header>
-      <strong>Imabox</strong>
-      <span>We usually reply within minutes</span>
-    </header>
+<!-- SNAP SCROLL CONTAINER -->
+<div class="snap-container" id="snapContainer">
 
-    <form id="imabox-chat-form">
-      <!-- hidden inputs for FormSubmit -->
-      <input type="text" name="_honey" style="display:none">
-      <input type="hidden" name="_subject" value="New message from imabox.uy">
-      <input type="hidden" name="_template" value="table">
-      <input type="hidden" name="_captcha" value="false">
+    <!-- S1 — VIDEO -->
+    <section class="section" id="s1">
+        <video id="mainVideo" autoplay loop muted playsinline
+               poster="img/cover1index.webp"
+               src="https://imabox.uy/animations/presentation.mp4">
+        </video>
+    </section>
 
-      <label>
-        Your name
-        <input name="name" required placeholder="Jane Doe">
-      </label>
-      <label>
-        Your email or phone
-        <input name="contact" type="text" placeholder="jane@email.com">
-      </label>
-      <label>
-        Message
-        <textarea name="message" required placeholder="Hi, I would like to request a quote for..."></textarea>
-      </label>
+    <!-- S2 — TEXTO -->
+    <section class="section" id="s2">
+        <div class="text-block">
+            <p id="translateFirstParagraph">We are a creative agency. We specialize in brand identity, photography and audiovisual production for architecture and real estate projects. What drives us is building the experience of a project before it exists — because a great image doesn't just show what something will be, it makes people want it.</p>
+        </div>
+    </section>
 
-      <div class="actions">
-        <button type="submit">Send to email</button>
-        <button type="button" id="imabox-whats">Open WhatsApp</button>
-      </div>
+    <!-- S3 — CAROUSEL Iporá -->
+    <section class="section" id="s3">
+        <div class="carousel-wrap" data-carousel="ipora">
+            <div class="slide active">
+                <img src="img/cover2index.webp" alt="Iporá Thermal Park">
+                <div class="slide-caption">
+                    <h2 id="iporaUnoTitle">Iporá Thermal Park</h2>
+                    <p id="iporaUnoSubtitle">Figarola Davila Architects</p>
+                </div>
+            </div>
+            <div class="slide">
+                <img loading="lazy" src="img/cover3index.webp" alt="Iporá Thermal Park">
+                <div class="slide-caption">
+                    <h2 id="iporaDosTitle">Iporá Thermal Park</h2>
+                    <p id="iporaDosSubtitle">Figarola Davila Architects</p>
+                </div>
+            </div>
+            <div class="slide">
+                <img loading="lazy" src="img/cover4index.webp" alt="Iporá Thermal Park">
+                <div class="slide-caption">
+                    <h2 id="iporaTresTitle">Iporá Thermal Park</h2>
+                    <p id="iporaTresSubtitle">Figarola Davila Architects</p>
+                </div>
+            </div>
+            <div class="slide">
+                <img loading="lazy" src="img/cover5index.webp" alt="Iporá Thermal Park">
+                <div class="slide-caption">
+                    <h2 id="iporaCuatroTitle">Iporá Thermal Park</h2>
+                    <p id="iporaCuatroSubtitle">Figarola Davila Architects</p>
+                </div>
+            </div>
+            <nav class="carousel-nav" aria-label="carousel controls">
+                <button class="carousel-btn prev" aria-label="Previous">
+                    <svg viewBox="0 0 16 16"><polyline points="10,3 5,8 10,13"/></svg>
+                </button>
+                <button class="carousel-btn next" aria-label="Next">
+                    <svg viewBox="0 0 16 16"><polyline points="6,3 11,8 6,13"/></svg>
+                </button>
+            </nav>
+        </div>
+    </section>
 
-      <p class="hint">By sending, you accept our privacy policy.</p>
-      <p class="ok" hidden>Thank you! We’ll get back to you shortly.</p>
-      <p class="err" hidden>Oops, something went wrong. Please try again.</p>
-    </form>
-  </div>
-</div>
+    <!-- S4 — TEXTO 2 -->
+    <section class="section" id="s4">
+        <div class="text-block text-block-cta">
+            <p id="translateSecondParagraph">We work with developers and architecture firms on real estate, commercial and urban projects. Every job starts with a simple question: what should people feel when they see this? The answer is built with image, brand and motion — the three languages we use to make a project exist before it exists.</p>
+            <p class="cta" id="translateSecondParagraphDos">Shall we start building together?</p>
+            <a href="https://calendly.com/imabox" target="_blank" rel="noopener" class="btn-call" id="btnBookCall">Book a call</a>
+        </div>
+    </section>
 
+    <!-- S5 — CAROUSEL Areco -->
+    <section class="section" id="s5">
+        <div class="carousel-wrap" data-carousel="areco">
+            <div class="slide active">
+                <img src="img/cover1index.webp" alt="Areco Gardens">
+                <div class="slide-caption">
+                    <h2 id="arecoUnoTitle">Areco Gardens</h2>
+                    <p id="arecoUnoSubtitle">Gomez Platero Architecture and Urban Planning</p>
+                </div>
+            </div>
+            <div class="slide">
+                <img loading="lazy" src="img/cover6index.webp" alt="Areco Gardens">
+                <div class="slide-caption">
+                    <h2 id="arecoDosTitle">Areco Gardens</h2>
+                    <p id="arecoDosSubtitle">Gomez Platero Architecture and Urban Planning</p>
+                </div>
+            </div>
+            <div class="slide">
+                <img loading="lazy" src="img/cover7index.webp" alt="Areco Gardens">
+                <div class="slide-caption">
+                    <h2 id="arecoTresTitle">Areco Gardens</h2>
+                    <p id="arecoTresSubtitle">Gomez Platero Architecture and Urban Planning</p>
+                </div>
+            </div>
+            <nav class="carousel-nav" aria-label="carousel controls">
+                <button class="carousel-btn prev" aria-label="Previous">
+                    <svg viewBox="0 0 16 16"><polyline points="10,3 5,8 10,13"/></svg>
+                </button>
+                <button class="carousel-btn next" aria-label="Next">
+                    <svg viewBox="0 0 16 16"><polyline points="6,3 11,8 6,13"/></svg>
+                </button>
+            </nav>
+        </div>
+    </section>
 
+</div><!-- /snap-container -->
 
+<!-- SCRIPTS -->
+<script src="js/navbar-hamburger.js"></script>
+<script src="js/circle.js"></script>
+<script src="js/translate.js"></script>
+<script src="js/translate-index.js"></script>
 
 <script>
-(() => {
-  const btn   = document.querySelector('.imabox-chat-btn');
-  const panel = document.getElementById('imabox-chat-panel');
-  const form  = document.getElementById('imabox-chat-form');
-  const ok    = form.querySelector('.ok');
-  const err   = form.querySelector('.err');
-  const whats = document.getElementById('imabox-whats');
+/* ── Preloader ── */
+(function () {
+    const loader = document.getElementById('ix-loader');
+    const bar    = document.getElementById('loader-bar');
+    const video  = document.getElementById('mainVideo');
 
-  const FORM_EMAIL = "imabox.rendering@gmail.com";
-  const ENDPOINT   = `https://formsubmit.co/ajax/${encodeURIComponent(FORM_EMAIL)}`;
+    let prog = 0;
+    const ticker = setInterval(() => {
+        prog = Math.min(prog + Math.random() * 12, 88);
+        bar.style.width = prog + '%';
+    }, 180);
 
-  btn.addEventListener('click', () => {
-    if (panel.hasAttribute('hidden')) {
-      panel.removeAttribute('hidden');
-      btn.setAttribute('aria-expanded','true');
-    } else {
-      panel.setAttribute('hidden','');
-      btn.setAttribute('aria-expanded','false');
+    function hide() {
+        clearInterval(ticker);
+        bar.style.width = '100%';
+        setTimeout(() => {
+            loader.classList.add('out');
+            loader.addEventListener('transitionend', () => loader.remove(), { once: true });
+        }, 300);
     }
-  });
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    ok.hidden = true; err.hidden = true;
-    const fd = new FormData(form);
-    if ((fd.get('_honey') || '').trim() !== '') return;
-    const payload = {};
-    fd.forEach((v,k)=>payload[k]=v);
-    try {
-      const res = await fetch(ENDPOINT, {
-        method:'POST',
-        headers:{'Content-Type':'application/json','Accept':'application/json'},
-        body: JSON.stringify(payload)
-      });
-      if(res.ok){ ok.hidden=false; form.reset(); }
-      else{ err.hidden=false; }
-    } catch(_){ err.hidden=false; }
-  });
+    if (video) {
+        video.addEventListener('canplay', hide, { once: true });
+        video.addEventListener('error',   hide, { once: true });
+    }
+    setTimeout(hide, 6000);
+})();
 
-  whats.addEventListener('click', () => {
-    const msg = encodeURIComponent(
-      form.querySelector('textarea[name="message"]').value || 'Hi Imabox, I would like to ask about…'
-    );
-    window.open(`https://wa.me/59898325902?text=${msg}`, '_blank', 'noopener');
-  });
+/* ── Snap scroll navigation ── */
+var snapCurrent = 0;
+var snapLocked  = false;
+var snapSections;
+
+(function () {
+    const container = document.getElementById('snapContainer');
+    snapSections = Array.from(container.querySelectorAll('.section'));
+
+    window.snapGoTo = function (index) {
+        index = Math.max(0, Math.min(snapSections.length - 1, index));
+        if (index === snapCurrent) return;
+        snapCurrent = index;
+        snapSections[snapCurrent].scrollIntoView({ behavior: 'smooth', block: 'start' });
+        snapLocked = true;
+        setTimeout(function () { snapLocked = false; }, 900);
+    };
+
+    /* mouse wheel */
+    container.addEventListener('wheel', function (e) {
+        e.preventDefault();
+        if (snapLocked) return;
+        window.snapGoTo(snapCurrent + (e.deltaY > 0 ? 1 : -1));
+    }, { passive: false });
+
+    /* keyboard arrows */
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowDown' || e.key === 'PageDown') { e.preventDefault(); window.snapGoTo(snapCurrent + 1); }
+        if (e.key === 'ArrowUp'   || e.key === 'PageUp')   { e.preventDefault(); window.snapGoTo(snapCurrent - 1); }
+    });
+
+    /* touch swipe */
+    var touchY = 0;
+    container.addEventListener('touchstart', function (e) { touchY = e.touches[0].clientY; }, { passive: true });
+    container.addEventListener('touchend',   function (e) {
+        var diff = touchY - e.changedTouches[0].clientY;
+        if (Math.abs(diff) > 40) window.snapGoTo(snapCurrent + (diff > 0 ? 1 : -1));
+    }, { passive: true });
+})();
+
+/* ── Carousels ── */
+var carouselNavs = {};
+
+document.querySelectorAll('.carousel-wrap').forEach(function (wrap) {
+    var slides  = Array.from(wrap.querySelectorAll('.slide'));
+    var cur     = 0;
+    var id      = wrap.dataset.carousel;
+
+    function go(n) {
+        slides[cur].classList.remove('active');
+        cur = (n + slides.length) % slides.length;
+        slides[cur].classList.add('active');
+    }
+
+    wrap.querySelector('.next').addEventListener('click', function () { go(cur + 1); });
+    wrap.querySelector('.prev').addEventListener('click', function () { go(cur - 1); });
+
+    carouselNavs[id] = { prev: function(){ go(cur - 1); }, next: function(){ go(cur + 1); } };
+});
+
+/* ── Edge click handler (conecta circle.js con navegación) ── */
+(function () {
+    var EDGE = 72;
+    document.addEventListener('click', function (e) {
+        var tag = e.target.tagName;
+        if (tag === 'A' || tag === 'BUTTON' || tag === 'INPUT') return;
+
+        var vw = window.innerWidth;
+        var vh = window.innerHeight;
+        var inCorner = (e.clientX < EDGE || e.clientX > vw - EDGE) &&
+                       (e.clientY < EDGE || e.clientY > vh - EDGE);
+        if (inCorner) return;
+
+        if (e.clientY < EDGE) {
+            window.snapGoTo(snapCurrent - 1);
+        } else if (e.clientY > vh - EDGE) {
+            window.snapGoTo(snapCurrent + 1);
+        } else if (e.clientX < EDGE || e.clientX > vw - EDGE) {
+            /* navega carousel de la sección actual */
+            var sec = snapSections[snapCurrent];
+            var wrap = sec && sec.querySelector('.carousel-wrap');
+            if (wrap) {
+                var id = wrap.dataset.carousel;
+                if (carouselNavs[id]) {
+                    e.clientX < EDGE ? carouselNavs[id].prev() : carouselNavs[id].next();
+                }
+            }
+        }
+    });
 })();
 </script>
 
-			<!-- Google Tag Manager (noscript) -->
-			<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMJRX79"
-			height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-			<!-- End Google Tag Manager (noscript) -->
-
-		
-<!--barra fija arriba desktop-->
-<header>
-
-	<nav class="navbar">
-		<div class="top-navbar">
-			<div class="top-navbarDivUno">
-				<a href="https://imabox.uy" class="nav-branding" id="link-font-index">imabox.</a>
-			</div>
-			<div class="hamburger" role="button" aria-label="Toggle navigation menu" aria-expanded="false" tabindex="0">
-				<div class="div-bar">
-						<span class="bar"></span>
-						<span class="bar"></span>	
-						<span class="bar"></span>
-				</div>
-			</div>
-			
-		</div>
-
-		<div class="nav-text">
-			<div class="nav-textUno">
-				<ul class="nav-menuDos">
-					<li  class="nav-itemDos">
-						<p>hello@imabox.uy</p>	
-					
-					</li>
-					<li  class="nav-itemDos">
-						<p>Montevideo, Uruguay.</p>	
-					</li>
-					<li  class="nav-itemDos">
-						<p>+598 98 325 902</p>	
-					</li>
-					
-					<li class="nav-itemDos">
-						<a href="#eng" onclick="timedRefresh()">eng <a>|</a>
-						</a> <a href="#esp" onclick="timedRefresh()">esp</a>
-					</li>	
-					
-				
-					<ul class="flex-icon">
-						<li class="social-icon" id="instagram"><a href="https://www.instagram.com/imabox_uy" target="_blank"><i class="fa fa-instagram"></i></a></li>
-						<li class="social-icon" id="linkedin"><a href="https://www.linkedin.com/company/imabox" target="_blank"><i class="fa fa-linkedin"></i></a></li>
-						
-					</ul>
-				</ul>
-			</div>
-			<div>
-				<ul class="nav-menu">
-					<li class="nav-item">
-					</li>
-					<li class="nav-item">
-						<a href="https://imabox.uy/services.html" class="nav-link" id="link-font-Virtual">Services</a>
-					</li>
-					
-					<li class="nav-item">
-						<a href="https://imabox.uy/about.html" class="nav-link" id="link-font-about">About</a>
-					</li>
-					<li class="nav-item">
-						<a href="https://imabox.uy/contact.html" class="nav-link" id="link-font-contact">Contact</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</nav>
-
-</header>
-
-
-     
-   
-    
-
-				<section id="section1">
-					
-					<div class="supervideo">
-						<video class="videoloch" id="videoElementId" autoplay loop muted playsinline src="https://imabox.uy/animations/presentation.mp4" poster="img/cover1index.webp"></video>
-					</div>
-				</section>
-
-				<section id="section2" class="sectiondos">
-					<div class="textandimage">
-						<div class="textandimagediv">
-							<p id="translateFirstParagraph">Imabox is a skilled architecture visualization studio that specializes in photography, graphic design, and audiovisual work.
-								We excel at capturing the beauty of architectural imagery through our expertise in geometry, texture, and lighting. 
-								Our goal is to create distinctive visual experiences that showcase the strengths of each project.
-							</p>
-						</div>
-					</div>
-				</section>
-
-				<section id="section3" class="sectiontres">
-			
-					<div class="container">
-					  <div class="carousel">
-						<div class="slide slide-1 active">
-						  <img src="img/cover2index.webp" alt="slide-1">
-						  <div class="caption">
-							<h1 id="iporaUnoTitle">Iporá Thermal Park</h1>
-							<p id="iporaUnoSubtitle">Figarola Davila Architects</p>
-						  </div>
-						</div>
-						<div class="slide slide-2">
-						  <img loading="lazy" src="img/cover3index.webp" alt="slide-2">
-						  <div class="caption">
-							<h1 id="iporaDosTitle">Iporá Thermal Park</h1>
-							<p id="iporaDosSubtitle">Figarola Davila Architects</p>
-						  </div>
-						</div>
-						<div class="slide slide-3">
-						  <img loading="lazy" src="img/cover4index.webp" alt="slide-3">
-						  <div class="caption">
-							<h1 id="iporaTresTitle">Iporá Thermal Park</h1>
-							<p id="iporaTresSubtitle">Figarola Davila Architects</p>
-						  </div>
-						</div>
-						<div class="slide slide-4">
-						  <img loading="lazy" src="img/cover5index.webp" alt="slide-4">
-						  <div class="caption">
-							<h1 id="iporaCuatroTitle">Iporá Thermal Park</h1>
-							<p id="iporaCuatroSubtitle">Figarola Davila Architects</p>
-						  </div>
-						</div>
-						<div class="dots"></div>
-					  </div>
-					 
-					</div>
-				</section>
-				  
-				  
-
-				<section id="section4" class="sectioncuatro">
-					<div class="textandimage">
-						<div class="textandimagediv">
-							<p id="translateSecondParagraph">We specialize in real estate, retail, public spaces and urban planning, creating captivating photographs that represent the future.
-								By skillfully using light and texture, we design unique visual experiences. 
-								With over a decade of experience, we understand our clients' specific needs, and our passion for this art drives us to work tirelessly every day to achieve the best possible results.
-								</p>
-							<p id="translateSecondParagraphDos">CAN WE BE PART OF UNBOXING THE FUTURE TOGETHER?</p>	
-													
-							
-						</div>
-					</div>
-				</section>
-
-				<section id="section5" class="sectioncinco">
-					<div class="container">
-						<div class="carousel">
-						  <div class="slide slide-1 active">
-							<img src="img/cover1index.webp" alt="slide-1">
-							<div class="caption">
-							  <h1 id="arecoUnoTitle">Areco Gardens</h1>
-							  <p id="arecoUnoSubtitle">Gomez Platero Architecture and Urban Planning</p>
-							</div>
-						  </div>
-						  <div class="slide slide-2">
-							<img loading="lazy" src="img/cover6index.webp" alt="slide-2">
-							<div class="caption">
-							  <h1 id="arecoDosTitle">Areco Gardens</h1>
-							  <p id="arecoDosSubtitle">Gomez Platero Architecture and Urban Planning</p>
-							</div>
-						  </div>
-						  <div class="slide slide-3">
-							<img loading="lazy" src="img/cover7index.webp" alt="slide-3">
-							<div class="caption">
-							  <h1 id="arecoTresTitle">Areco Gardens</h1>
-							  <p id="arecoTresSubtitle">Gomez Platero Architecture and Urban Planning</p>
-							</div>
-						  </div>
-						  <div class="dots"></div>
-						</div>
-						
-					  </div>
-				</section>
-
-
-		
-
-
-				
-				<script>
-				
-				</script>
-
-				<script src="js/yall.min.js"></script>
-				<script src="js/snap-scroll.js"></script>
-				<script>
-				
-					
-					ScrollReveal().reveal('.lazy');
-					document.addEventListener("DOMContentLoaded", yall);
-					var snapScroll = $("section").SnapScroll({
-						hashes: false
-					});
-					$(document).on(snapScroll.eventChangeVisible, function (evt, visibleList) {
-						console.log(evt, visibleList.data);
-					});
-				</script>
-				<script src="js/carouselDots.js"></script><!--Carousel-->
-				<script src="js/navbar-hamburger.js"></script><!--navbar move-->
-				<script src="js/circle.js"></script>
-				
-				<script src="js/translate.js"></script>
-				<script src="js/translate-index.js"></script>
-				<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-				
-			
-		</body>
-	
+</body>
 </html>

@@ -619,6 +619,9 @@ footer p {
 	margin-top: 15px;
 	text-align: center;
 }
+.footer-social { display: flex; gap: 18px; justify-content: center; margin-top: 14px; }
+.footer-social a { color: #c9a96e; font-size: 1.15rem; text-decoration: none; transition: opacity 0.2s; }
+.footer-social a:hover { opacity: 0.65; }
 
 /*--tablet responsive--*/
 @media only screen and (max-width: 1200px) and (min-width: 700px)  {

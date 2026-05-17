@@ -25,7 +25,7 @@
 		<link rel="stylesheet" type="text/css" href="styles/styles.css">
 		<link rel="stylesheet" type="text/css" href="styles/contact.css">
 		<link rel="stylesheet" type="text/css" href="styles/chat.css">
-		<script src="js/scrollreveal.js"></script>
+		<link rel="stylesheet" href="styles/navbar.css" />
 		<link rel="stylesheet" href="https://use.typekit.net/oov2wcw.css">
 		<link rel="shortcut icon" type="image/png" href="favicon.png"/>
 		<link rel="canonical" href="https://imabox.uy/contact.html" />
@@ -131,69 +131,31 @@
 
 <!--barra fija arriba desktop-->
 <header>
-
-	<header>
-
-		<nav class="navbar">
-			<div class="top-navbar">
-				<div class="top-navbarDivUno">
-					<a href="https://imabox.uy" class="nav-branding nav-brandingblack" id="link-font-index">imabox.</a>
-				</div>
-				<div class="hamburger" role="button" aria-label="Toggle navigation menu" aria-expanded="false" tabindex="0">
-					<div class="div-bar">
-							<span class="bar"></span>
-							<span class="bar"></span>	
-							<span class="bar"></span>
+	<nav class="navbar" id="navbar">
+			<a href="https://imabox.uy" class="nav-logo" id="link-font-index">imabox.</a>
+			<button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+				<span class="nav-bar"></span>
+				<span class="nav-bar"></span>
+				<span class="nav-bar"></span>
+			</button>
+			<div class="nav-overlay">
+				<ul class="nav-links">
+					<li><a href="services.html" id="link-font-Virtual">Services</a></li>
+					<li><a href="about.html" id="link-font-about">About</a></li>
+					<li><a href="contact.html" id="link-font-contact" style="color:#c9a96e;">Contact</a></li>
+				</ul>
+				<div class="nav-info">
+					<p>hello@imabox.uy</p>
+					<p>+598 98 325 902</p>
+					<p>Montevideo, Uruguay.</p>
+					<div class="nav-lang">
+						<a href="#eng" onclick="timedRefresh()">eng</a>
+						<span>|</span>
+						<a href="#esp" onclick="timedRefresh()">esp</a>
 					</div>
-				</div>
-				
-			</div>
-
-			<div class="nav-text">
-				<div class="nav-textUno">
-					<ul class="nav-menuDos">
-						<li  class="nav-itemDos">
-							<p>hello@imabox.uy</p>	
-						</li>
-						<li  class="nav-itemDos">
-							<p>Montevideo, Uruguay.</p>	
-						</li>
-						<li  class="nav-itemDos">
-							<p>+598 98 325 902</p>	
-						</li>
-						
-						<li class="nav-itemDos">
-							<a href="#eng" onclick="timedRefresh()">eng <a>|</a>
-							</a> <a href="#esp" onclick="timedRefresh()">esp</a>
-						</li>	
-						
-					
-						<ul class="flex-icon">
-							<li class="social-icon" id="instagram"><a href="https://www.instagram.com/imabox_uy" target="_blank"><i class="fa fa-instagram"></i></a></li>
-							<li class="social-icon" id="linkedin"><a href="https://www.linkedin.com/company/imabox" target="_blank"><i class="fa fa-linkedin"></i></a></li>
-							
-						</ul>
-					</ul>
-				</div>
-				<div>
-					<ul class="nav-menu">
-						<li class="nav-item">
-						</li>
-						<li class="nav-item">
-							<a href="https://imabox.uy/services.html" class="nav-link" id="link-font-Virtual">Services</a>
-						</li>
-					
-						<li class="nav-item">
-							<a href="https://imabox.uy/about.html" class="nav-link" id="link-font-about">About</a>
-						</li>
-						<li class="nav-item">
-							<a href="https://imabox.uy/contact.html" class="nav-link" id="link-font-contact">Contact</a>
-						</li>
-					</ul>
 				</div>
 			</div>
 		</nav>
-
 	</header>
 
 
@@ -259,7 +221,12 @@
 					<footer>
 						<hr>
 						<p  id="rights-reserved">&copy; 2025 Imabox - "Unboxing The Future". All rights reserved</p>
+						<div class="footer-social">
+							<a href="https://www.instagram.com/imabox_uy" target="_blank"><i class="fa fa-instagram"></i></a>
+							<a href="https://www.linkedin.com/company/imabox" target="_blank"><i class="fa fa-linkedin"></i></a>
+						</div>
 					</footer>
+	<script src="js/scrollreveal.js"></script>
 	<script src="js/navbar-hamburger.js"></script><!--navbar move-->
 	<script src="js/circle.js"></script>
 		<script src="js/translate.js"></script><!--navbar move-->
