@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
-<html lang="es">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta charset="UTF-8" />
-    <title>Servicios — Imabox</title>
-    <meta name="description" content="Agencia creativa para proyectos inmobiliarios. Somos arquitectos. Trabajamos desde antes del primer ladrillo: marca, imágenes, videos, showrooms virtuales y más." />
+    <title>Services — Imabox</title>
+    <meta name="description" content="Creative agency for real estate projects. We are architects. We work before the first brick: branding, images, videos, virtual showrooms and more." />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,7 +24,7 @@
             <div class="top-navbarDivUno">
                 <a href="https://imabox.uy" class="nav-branding" id="link-font-index">imabox.</a>
             </div>
-            <div class="hamburger" role="button" aria-label="Abrir menú" aria-expanded="false" tabindex="0">
+            <div class="hamburger" role="button" aria-label="Open menu" aria-expanded="false" tabindex="0">
                 <div class="div-bar">
                     <span class="bar"></span><span class="bar"></span><span class="bar"></span>
                 </div>
@@ -36,6 +36,9 @@
                     <li class="nav-itemDos"><p>hello@imabox.uy</p></li>
                     <li class="nav-itemDos"><p>Montevideo, Uruguay.</p></li>
                     <li class="nav-itemDos"><p>+598 98 325 902</p></li>
+                    <li class="nav-itemDos">
+                        <a href="#eng" onclick="timedRefresh()">eng <span style="color:#999">|</span></a> <a href="#esp" onclick="timedRefresh()">esp</a>
+                    </li>
                     <ul class="flex-icon">
                         <li class="social-icon"><a href="https://www.instagram.com/imabox_uy" target="_blank"><i class="fa fa-instagram"></i></a></li>
                         <li class="social-icon"><a href="https://www.linkedin.com/company/imabox" target="_blank"><i class="fa fa-linkedin"></i></a></li>
@@ -54,7 +57,7 @@
 </header>
 
 <!-- Scroll progress dots -->
-<nav class="scroll-progress" aria-label="Secciones">
+<nav class="scroll-progress" aria-label="Sections">
     <div class="sp-dot active" data-section="0"></div>
     <div class="sp-dot" data-section="1"></div>
     <div class="sp-dot" data-section="2"></div>
@@ -66,12 +69,12 @@
 <!-- 1. HERO -->
 <section class="hero" id="sec-0">
     <div class="hero-glow" id="heroGlow"></div>
-    <div class="hero-tag">Agencia creativa · Arquitectura &amp; Real Estate</div>
-    <h1>Revelamos el futuro<br><em>antes de que ocurra.</em></h1>
-    <p class="hero-sub">Somos arquitectos. Nos encargamos de la marca total de tu proyecto — desde la identidad hasta el día que se vende la última unidad. Todo lo visual, todo integrado, todo nuestro.</p>
+    <div id="srv-hero-tag" class="hero-tag">Creative agency · Architecture &amp; Real Estate</div>
+    <h1><span id="srv-hero-h1a">We reveal the future</span><br><em id="srv-hero-h1b">before it happens.</em></h1>
+    <p id="srv-hero-sub" class="hero-sub">We are architects. We handle your project's complete visual identity — from branding to the day the last unit sells. Everything visual, fully integrated, all ours.</p>
     <div class="hero-actions">
-        <a href="#sec-2" class="btn-primary">Ver servicios</a>
-        <a href="#sec-5" class="btn-secondary">Hablemos</a>
+        <a href="#sec-2" id="srv-btn-ver" class="btn-primary">See services</a>
+        <a href="#sec-5" id="srv-btn-hablemos" class="btn-secondary">Let's talk</a>
     </div>
     <div class="hero-scroll"><i class="fa fa-angle-down"></i></div>
     <div class="hero-line"></div>
@@ -82,30 +85,30 @@
     <div class="container">
         <div class="diferencial-inner">
             <div class="diferencial-left anim-left">
-                <div class="eyebrow">Por qué somos distintos</div>
-                <h2>No somos solo un estudio de visualización.</h2>
-                <p>Entendemos el espacio antes de que exista. Eso cambia todo lo que producimos — desde la primera imagen hasta la campaña de lanzamiento.</p>
+                <div id="dif-eyebrow" class="eyebrow">Why we're different</div>
+                <h2 id="dif-h2">We're not just a visualization studio.</h2>
+                <p id="dif-p">We understand space before it exists. That changes everything we produce — from the first image to the launch campaign.</p>
             </div>
             <div class="pillar-grid">
                 <div class="pillar-card anim" style="transition-delay:0.1s">
                     <div class="pillar-icon"><i class="fa fa-pencil-square-o"></i></div>
                     <div class="pillar-body">
-                        <h3>Somos arquitectos</h3>
-                        <p>Cada imagen es una decisión de diseño. Entendemos la escala, la luz, la materialidad — y cuando el proyecto todavía no está del todo definido, lo completamos.</p>
+                        <h3 id="pillar1-h3">We are architects</h3>
+                        <p id="pillar1-p">Every image is a design decision. We understand scale, light, materiality — and when the project isn't fully defined yet, we complete it.</p>
                     </div>
                 </div>
                 <div class="pillar-card anim" style="transition-delay:0.22s">
                     <div class="pillar-icon"><i class="fa fa-lightbulb-o"></i></div>
                     <div class="pillar-body">
-                        <h3>Desde el día cero</h3>
-                        <p>Trabajamos cuando el proyecto todavía es una idea en papel. Ayudamos a definir el nombre, la identidad visual, el posicionamiento — todo antes de que la obra empiece.</p>
+                        <h3 id="pillar2-h3">From day zero</h3>
+                        <p id="pillar2-p">We work when the project is still an idea on paper. We help define the name, visual identity, positioning — all before construction begins.</p>
                     </div>
                 </div>
                 <div class="pillar-card anim" style="transition-delay:0.34s">
                     <div class="pillar-icon"><i class="fa fa-th-large"></i></div>
                     <div class="pillar-body">
-                        <h3>Todo lo visual, todo integrado</h3>
-                        <p>Marca, imágenes, video, cinemagraphs, showroom virtual, tour 360, redes sociales, material para inversores. Un solo equipo que mantiene coherencia en cada pieza.</p>
+                        <h3 id="pillar3-h3">Everything visual, fully integrated</h3>
+                        <p id="pillar3-p">Brand, images, video, cinemagraphs, virtual showroom, 360 tour, social media, investor materials. One team maintaining coherence across every piece.</p>
                     </div>
                 </div>
             </div>
@@ -117,49 +120,49 @@
 <section class="servicios-section" id="sec-2">
     <div class="container">
         <div class="servicios-header anim">
-            <h2 class="section-title">Todo lo que necesita un proyecto para venderse</h2>
-            <p class="section-sub" style="margin-bottom:0">La marca total de un proyecto. Todo esto convive bajo una misma dirección creativa — para que cada pieza cuente la misma historia.</p>
+            <h2 id="srvsec-h2" class="section-title">Everything a project needs to sell</h2>
+            <p id="srvsec-sub" class="section-sub" style="margin-bottom:0">The complete visual identity of a project. All of this lives under a single creative direction — so every piece tells the same story.</p>
         </div>
         <div class="servicios-grid">
             <a class="srv-card anim" href="branding.html" style="transition-delay:0.05s">
-                <div class="srv-badge">Marca</div>
+                <div id="srv1-badge" class="srv-badge">Brand</div>
                 <div class="srv-icon"><i class="fa fa-font"></i></div>
-                <h3>Identidad visual del proyecto</h3>
-                <p>Nombre, logo, paleta, tipografía, brand guidelines. La marca del proyecto antes de que se construya — para que cada pieza comunique lo mismo.</p>
+                <h3 id="srv1-h3">Visual identity for your project</h3>
+                <p id="srv1-p">Name, logo, palette, typography, brand guidelines. The project's brand before it's built — so every piece communicates the same thing.</p>
                 <div class="srv-arrow"><i class="fa fa-arrow-right"></i></div>
             </a>
             <a class="srv-card anim" href="works.html" style="transition-delay:0.12s">
-                <div class="srv-badge">Visualización</div>
+                <div id="srv2-badge" class="srv-badge">Visualization</div>
                 <div class="srv-icon"><i class="fa fa-picture-o"></i></div>
-                <h3>Imágenes fotorrealistas</h3>
-                <p>Exteriores, interiores, amenidades y accesos. Imágenes que hacen que alguien que no sabe leer planos entienda exactamente dónde va a vivir.</p>
+                <h3 id="srv2-h3">Photorealistic images</h3>
+                <p id="srv2-p">Exteriors, interiors, amenities and access. Images that help someone who can't read floor plans understand exactly where they'll live.</p>
                 <div class="srv-arrow"><i class="fa fa-arrow-right"></i></div>
             </a>
             <a class="srv-card anim" href="films.html" style="transition-delay:0.19s">
-                <div class="srv-badge">Visualización</div>
+                <div id="srv3-badge" class="srv-badge">Visualization</div>
                 <div class="srv-icon"><i class="fa fa-film"></i></div>
-                <h3>Video y cinemagraphs</h3>
-                <p>Videos de concepto, fly-throughs, timelapses de obra. Cinemagraphs: imágenes fijas con movimiento sutil — el formato con mayor engagement en redes.</p>
+                <h3 id="srv3-h3">Video &amp; cinemagraphs</h3>
+                <p id="srv3-p">Concept videos, fly-throughs, construction timelapses. Cinemagraphs: still images with subtle movement — the format with the highest engagement on social media.</p>
                 <div class="srv-arrow"><i class="fa fa-arrow-right"></i></div>
             </a>
             <a class="srv-card anim" href="showroom.html" style="transition-delay:0.26s">
-                <div class="srv-badge">Herramientas de venta</div>
+                <div id="srv4-badge" class="srv-badge">Sales tools</div>
                 <div class="srv-icon"><i class="fa fa-desktop"></i></div>
-                <h3>Showroom virtual interactivo</h3>
-                <p>Recorrido digital del proyecto, planta por planta. Disponibilidad en vivo, calculadora de préstamo, formulario de leads y analítica incluida.</p>
+                <h3 id="srv4-h3">Interactive virtual showroom</h3>
+                <p id="srv4-p">Digital walkthrough of the project, floor by floor. Live availability, loan calculator, lead form and analytics included.</p>
                 <div class="srv-arrow"><i class="fa fa-arrow-right"></i></div>
             </a>
             <div class="srv-card anim" style="transition-delay:0.33s">
-                <div class="srv-badge">Diseño</div>
+                <div id="srv5-badge" class="srv-badge">Design</div>
                 <div class="srv-icon"><i class="fa fa-th"></i></div>
-                <h3>Diseño de interiores</h3>
-                <p>Propuesta de materialidad, layout y ambientación. Imágenes conceptuales para mostrar cómo se puede vivir el espacio antes de que exista.</p>
+                <h3 id="srv5-h3">Interior design</h3>
+                <p id="srv5-p">Materiality, layout and ambiance proposal. Conceptual images to show how the space can be lived before it exists.</p>
             </div>
             <div class="srv-card anim" style="transition-delay:0.40s">
-                <div class="srv-badge">Contenido</div>
+                <div id="srv6-badge" class="srv-badge">Content</div>
                 <div class="srv-icon"><i class="fa fa-instagram"></i></div>
-                <h3>Contenido para redes</h3>
-                <p>Posts, carruseles, reels y historias alineados con la identidad del proyecto. Estrategia pensada para atraer compradores, no solo seguidores.</p>
+                <h3 id="srv6-h3">Social media content</h3>
+                <p id="srv6-p">Posts, carousels, reels and stories aligned with the project's identity. Strategy designed to attract buyers, not just followers.</p>
             </div>
         </div>
     </div>
@@ -168,35 +171,35 @@
 <!-- 4. PROCESO -->
 <section class="proceso-section" id="sec-3">
     <div class="container">
-        <div class="section-tag anim">Proceso</div>
-        <h2 class="section-title anim" style="transition-delay:0.1s">Así trabajamos</h2>
-        <p class="section-sub anim" style="transition-delay:0.2s">Cada proyecto es distinto, pero el camino siempre empieza en el mismo lugar: antes de que haya algo que mostrar.</p>
+        <div id="proc-tag" class="section-tag anim">Process</div>
+        <h2 id="proc-h2" class="section-title anim" style="transition-delay:0.1s">How we work</h2>
+        <p id="proc-sub" class="section-sub anim" style="transition-delay:0.2s">Every project is different, but the path always starts in the same place: before there's anything to show.</p>
         <div class="proceso-steps">
             <div class="proceso-line"></div>
             <div class="step anim" style="transition-delay:0.1s">
                 <div class="step-num"><div class="step-dot"></div>01</div>
-                <h4>Concepto</h4>
-                <p>Entendemos el proyecto: ubicación, programa, mercado. Definimos qué quiere comunicar y a quién.</p>
+                <h4 id="step1-h4">Concept</h4>
+                <p id="step1-p">We understand the project: location, program, market. We define what it wants to communicate and to whom.</p>
             </div>
             <div class="step anim" style="transition-delay:0.22s">
                 <div class="step-num"><div class="step-dot"></div>02</div>
-                <h4>Identidad</h4>
-                <p>Desarrollamos la marca del edificio: nombre, logo, paleta, tipografía. El ADN visual de todo.</p>
+                <h4 id="step2-h4">Identity</h4>
+                <p id="step2-p">We develop the building's brand: name, logo, palette, typography. The visual DNA of everything.</p>
             </div>
             <div class="step anim" style="transition-delay:0.34s">
                 <div class="step-num"><div class="step-dot"></div>03</div>
-                <h4>Visualización</h4>
-                <p>Imágenes, videos y cinemagraphs. Las imágenes que hacen real al proyecto antes de que exista.</p>
+                <h4 id="step3-h4">Visualization</h4>
+                <p id="step3-p">Images, videos and cinemagraphs. The visuals that make the project real before it exists.</p>
             </div>
             <div class="step anim" style="transition-delay:0.46s">
                 <div class="step-num"><div class="step-dot"></div>04</div>
-                <h4>Herramientas</h4>
-                <p>Showroom virtual, tour 360 y material de venta. El ecosistema digital completo del proyecto.</p>
+                <h4 id="step4-h4">Tools</h4>
+                <p id="step4-p">Virtual showroom, 360 tour and sales materials. The project's complete digital ecosystem.</p>
             </div>
             <div class="step anim" style="transition-delay:0.58s">
                 <div class="step-num"><div class="step-dot"></div>05</div>
-                <h4>Lanzamiento</h4>
-                <p>Activamos el contenido, publicamos en portales y redes. El proyecto sale al mercado listo para vender.</p>
+                <h4 id="step5-h4">Launch</h4>
+                <p id="step5-p">We activate the content, publish on portals and social media. The project hits the market ready to sell.</p>
             </div>
         </div>
     </div>
@@ -207,36 +210,36 @@
     <div class="container">
         <div class="modelo-inner">
             <div class="modelo-left anim-left">
-                <div class="section-tag">Inversión</div>
-                <h2 class="section-title">El trabajo se estructura<br>en dos momentos.</h2>
-                <p class="modelo-intro">No cobramos por imagen suelta ni por hora. Estructuramos el trabajo como lo que es: un proyecto con inicio, producción y vida en el mercado.</p>
+                <div id="mod-tag" class="section-tag">Investment</div>
+                <h2 class="section-title"><span id="mod-h2a">The work is structured</span><br><span id="mod-h2b">in two moments.</span></h2>
+                <p id="mod-intro" class="modelo-intro">We don't charge per image or per hour. We structure the work as what it is: a project with a start, production phase, and market life.</p>
                 <div class="modelo-insight anim" style="transition-delay:0.3s">
                     <div class="modelo-insight-line"></div>
-                    <p>El costo del proyecto se amortiza en la primera unidad vendida. A partir de ahí, todo lo que generamos es rentabilidad para tu proyecto.</p>
+                    <p id="mod-insight">The project cost is recovered with the first unit sold. From there, everything we generate is profitability for your project.</p>
                 </div>
             </div>
             <div class="modelo-cards anim-right" style="transition-delay:0.15s">
                 <div class="modelo-card">
                     <div class="modelo-card-num">01</div>
                     <div class="modelo-card-body">
-                        <h3>Producción del proyecto</h3>
-                        <p>Todo el material visual definido al inicio: identidad de marca, imágenes, video, showroom virtual, tour 360, material para inversores. Se acuerda una vez, se paga por etapas. Sin sorpresas.</p>
+                        <h3 id="mod1-h3">Project production</h3>
+                        <p id="mod1-p">All visual materials defined upfront: brand identity, images, video, virtual showroom, 360 tour, investor materials. Agreed once, paid in stages. No surprises.</p>
                         <ul class="modelo-list">
-                            <li>Alcance cerrado desde el arranque</li>
-                            <li>Revisiones incluidas en el proceso</li>
-                            <li>El material queda en propiedad del cliente</li>
+                            <li id="mod1-li1">Closed scope from the start</li>
+                            <li id="mod1-li2">Revisions included in the process</li>
+                            <li id="mod1-li3">Materials remain the client's property</li>
                         </ul>
                     </div>
                 </div>
                 <div class="modelo-card">
                     <div class="modelo-card-num">02</div>
                     <div class="modelo-card-body">
-                        <h3>Acompañamiento mensual</h3>
-                        <p>Una vez lanzado el proyecto, el material necesita vida: contenido nuevo, actualizaciones de disponibilidad, redes activas, reportes de leads. Un equipo dedicado sin tener que volver a explicar el proyecto.</p>
+                        <h3 id="mod2-h3">Monthly support</h3>
+                        <p id="mod2-p">Once the project launches, the materials need ongoing life: new content, availability updates, active social media, lead reports. A dedicated team without having to re-explain the project.</p>
                         <ul class="modelo-list">
-                            <li>Continuidad sobre lo que ya existe</li>
-                            <li>Escala según la etapa del proyecto</li>
-                            <li>Se puede sumar desde el día uno o después del lanzamiento</li>
+                            <li id="mod2-li1">Continuity on what already exists</li>
+                            <li id="mod2-li2">Scales with the project's stage</li>
+                            <li id="mod2-li3">Can be added from day one or after launch</li>
                         </ul>
                     </div>
                 </div>
@@ -248,12 +251,12 @@
 <!-- 6. CTA -->
 <section class="cta-section" id="sec-5">
     <div class="container">
-        <div class="section-tag anim">Hablemos</div>
-        <h2 class="anim" style="transition-delay:0.12s">Tu proyecto empieza<br>con <em>una conversación.</em></h2>
-        <p class="anim" style="transition-delay:0.24s">Contanos en qué etapa está y en 24 horas te contamos cómo lo encaramos.</p>
+        <div id="cta-tag" class="section-tag anim">Let's talk</div>
+        <h2 class="anim" style="transition-delay:0.12s"><span id="cta-h2a">Your project starts</span><br>with <em id="cta-h2b">a conversation.</em></h2>
+        <p id="cta-p" class="anim" style="transition-delay:0.24s">Tell us where it stands and within 24 hours we'll tell you how we'd approach it.</p>
         <div class="cta-buttons anim" style="transition-delay:0.36s">
-            <a href="mailto:hello@imabox.uy" class="btn-primary">Escribirnos</a>
-            <a href="https://calendly.com/imabox/30min" target="_blank" class="btn-secondary"><i class="fa fa-calendar-o" style="margin-right:8px"></i>Agendar reunión</a>
+            <a href="mailto:hello@imabox.uy" id="cta-btn-write" class="btn-primary">Write to us</a>
+            <a href="https://calendly.com/imabox/30min" target="_blank" id="cta-btn-meeting" class="btn-secondary"><i class="fa fa-calendar-o" style="margin-right:8px"></i>Schedule a meeting</a>
         </div>
         <div class="cta-contact anim" style="transition-delay:0.48s">
             <a href="mailto:hello@imabox.uy"><i class="fa fa-envelope-o"></i> hello@imabox.uy</a>
@@ -265,13 +268,13 @@
 <!-- FOOTER -->
 <footer>
     <div class="logo">Imabox</div>
-    <p>Agencia creativa · Arquitectura &amp; Real Estate — Montevideo, Uruguay</p>
-    <p>© 2025 Imabox. Todos los derechos reservados.</p>
+    <p id="footer-p1">Creative agency · Architecture &amp; Real Estate — Montevideo, Uruguay</p>
+    <p id="footer-p2">© 2025 Imabox. All rights reserved.</p>
 </footer>
-
 
     <script src="js/navbar-hamburger.js"></script>
     <script src="js/services.js"></script>
     <script src="js/circle.js"></script>
+    <script src="js/translate-services.js"></script>
 </body>
 </html>

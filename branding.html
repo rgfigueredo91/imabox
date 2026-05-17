@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta charset="UTF-8" />
-    <title>Identidad Visual — Imabox</title>
-    <meta name="description" content="Marca total para proyectos inmobiliarios." />
+    <title>Visual Identity — Imabox</title>
+    <meta name="description" content="Total brand for real estate projects." />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,7 +20,7 @@
     <nav class="navbar">
         <div class="top-navbar">
             <div class="top-navbarDivUno"><a href="https://imabox.uy" class="nav-branding">imabox.</a></div>
-            <div class="hamburger" role="button" aria-label="Abrir menu" tabindex="0">
+            <div class="hamburger" role="button" aria-label="Open menu" tabindex="0">
                 <div class="div-bar"><span class="bar"></span><span class="bar"></span><span class="bar"></span></div>
             </div>
         </div>
@@ -30,6 +30,9 @@
                     <li class="nav-itemDos"><p>hello@imabox.uy</p></li>
                     <li class="nav-itemDos"><p>Montevideo, Uruguay.</p></li>
                     <li class="nav-itemDos"><p>+598 98 325 902</p></li>
+                    <li class="nav-itemDos">
+                        <a href="#eng" onclick="timedRefresh()">eng <span style="color:#999">|</span></a> <a href="#esp" onclick="timedRefresh()">esp</a>
+                    </li>
                     <ul class="flex-icon">
                         <li class="social-icon"><a href="https://www.instagram.com/imabox_uy" target="_blank"><i class="fa fa-instagram"></i></a></li>
                         <li class="social-icon"><a href="https://www.linkedin.com/company/imabox" target="_blank"><i class="fa fa-linkedin"></i></a></li>
@@ -49,9 +52,9 @@
 
 <section class="hero">
     <div class="container">
-        <div class="hero-tag">Identidad Visual</div>
-        <h1>Marca total para proyectos<br>que <em>se venden.</em></h1>
-        <p class="hero-sub">Cada proyecto tiene una historia antes de tener una pared. Nosotros la construimos desde el nombre hasta la última pieza de comunicación.</p>
+        <div id="brd-hero-tag" class="hero-tag">Visual Identity</div>
+        <h1 id="brd-hero-h1">Total brand for projects that <em>sell.</em></h1>
+        <p id="brd-hero-sub" class="hero-sub">Every project has a story before it has a wall. We build it from the name to the last piece of communication.</p>
     </div>
 </section>
 
@@ -94,12 +97,13 @@
 
 <footer>
     <div class="logo">Imabox</div>
-    <p>Agencia creativa &middot; Arquitectura &amp; Real Estate &mdash; Montevideo, Uruguay</p>
-    <p>&copy; 2025 Imabox. Todos los derechos reservados.</p>
+    <p id="footer-p1">Creative agency &middot; Architecture &amp; Real Estate &mdash; Montevideo, Uruguay</p>
+    <p id="footer-p2">&copy; 2025 Imabox. All rights reserved.</p>
 </footer>
 
 <script src="js/navbar-hamburger.js"></script>
 <script src="js/branding.js"></script>
 <script src="js/circle.js"></script>
+<script src="js/translate-branding.js"></script>
 </body>
 </html>

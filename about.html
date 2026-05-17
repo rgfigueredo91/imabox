@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta charset="UTF-8" />
-    <title>Nosotros — Imabox · Agencia creativa · Montevideo, Uruguay</title>
-    <meta name="description" content="Imabox es una agencia creativa para proyectos inmobiliarios. Somos arquitectos y nos encargamos de la marca total de tu proyecto — desde el día cero." />
+    <title>About — Imabox · Creative agency · Montevideo, Uruguay</title>
+    <meta name="description" content="Imabox is a creative agency for real estate projects. We are architects and we handle the complete brand of your project — from day zero." />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Nosotros — Imabox" />
-    <meta property="og:description" content="Agencia creativa para proyectos inmobiliarios. Marca total, desde el día cero." />
+    <meta property="og:title" content="About — Imabox" />
+    <meta property="og:description" content="Creative agency for real estate projects. Total brand, from day zero." />
     <meta property="og:url" content="https://imabox.uy/about.html" />
     <meta property="og:image" content="https://imabox.uy/img/cover1index.webp" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -35,7 +35,7 @@
       "name": "Imabox",
       "url": "https://imabox.uy",
       "logo": "https://imabox.uy/img/logo.webp",
-      "description": "Agencia creativa para proyectos inmobiliarios. Arquitectura y real estate — Montevideo, Uruguay.",
+      "description": "Creative agency for real estate projects. Architecture and real estate — Montevideo, Uruguay.",
       "address": { "@type": "PostalAddress", "addressLocality": "Montevideo", "addressCountry": "UY" },
       "telephone": "+598-98-325-902",
       "email": "hello@imabox.uy",
@@ -58,7 +58,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <nav class="navbar">
         <div class="top-navbar">
             <div class="top-navbarDivUno"><a href="https://imabox.uy" class="nav-branding">imabox.</a></div>
-            <div class="hamburger" role="button" aria-label="Abrir menu" tabindex="0">
+            <div class="hamburger" role="button" aria-label="Open menu" tabindex="0">
                 <div class="div-bar"><span class="bar"></span><span class="bar"></span><span class="bar"></span></div>
             </div>
         </div>
@@ -68,6 +68,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     <li class="nav-itemDos"><p>hello@imabox.uy</p></li>
                     <li class="nav-itemDos"><p>Montevideo, Uruguay.</p></li>
                     <li class="nav-itemDos"><p>+598 98 325 902</p></li>
+                    <li class="nav-itemDos">
+                        <a href="#eng" onclick="timedRefresh()">eng <span style="color:#999">|</span></a> <a href="#esp" onclick="timedRefresh()">esp</a>
+                    </li>
                     <ul class="flex-icon">
                         <li class="social-icon"><a href="https://www.instagram.com/imabox_uy" target="_blank"><i class="fa fa-instagram"></i></a></li>
                         <li class="social-icon"><a href="https://www.linkedin.com/company/imabox" target="_blank"><i class="fa fa-linkedin"></i></a></li>
@@ -86,7 +89,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </header>
 
 <!-- Scroll progress dots -->
-<nav class="scroll-progress" aria-label="Secciones">
+<nav class="scroll-progress" aria-label="Sections">
     <div class="sp-dot active" data-section="0"></div>
     <div class="sp-dot" data-section="1"></div>
     <div class="sp-dot" data-section="2"></div>
@@ -97,9 +100,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section class="hero" id="sec-0">
     <div class="hero-glow" id="heroGlow"></div>
     <div class="container">
-        <div class="hero-tag">Sobre nosotros</div>
-        <h1>Somos la agencia creativa detrás<br><em>de la marca de tu proyecto.</em></h1>
-        <p class="hero-sub">Fundamos Imabox convencidos de que la imagen de un proyecto puede ser tan decisiva como el proyecto mismo — y que para hacerlo bien, hay que entender el espacio antes de mostrarlo.</p>
+        <div id="abt-hero-tag" class="hero-tag">About us</div>
+        <h1><span id="abt-hero-h1a">We are the creative agency behind</span><br><em id="abt-hero-h1b">your project's brand.</em></h1>
+        <p id="abt-hero-sub" class="hero-sub">We founded Imabox convinced that a project's image can be as decisive as the project itself — and that to do it right, you need to understand the space before you show it.</p>
     </div>
     <div class="hero-line"></div>
 </section>
@@ -109,26 +112,26 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="container">
         <div class="historia-inner">
             <div class="historia-left anim-left">
-                <div class="historia-year">2018</div>
-                <div class="historia-eyebrow">Nuestra historia</div>
-                <h2>Empezamos como lo que somos: arquitectos.</h2>
+                <div id="hist-year" class="historia-year">2018</div>
+                <div id="hist-eyebrow" class="historia-eyebrow">Our story</div>
+                <h2 id="hist-h2">We started as what we are: architects.</h2>
             </div>
             <div class="historia-right">
                 <div class="historia-bloque anim" style="transition-delay:0.1s">
                     <div class="historia-divider"></div>
-                    <p>Nos graduamos como arquitectos y desde el primer día supimos que queríamos hacer algo distinto. No construir edificios — construir la imagen que los hace deseables.</p>
+                    <p id="hist-p1">We graduated as architects and from day one we knew we wanted to do something different. Not build buildings — build the image that makes them desirable.</p>
                 </div>
                 <div class="historia-bloque anim" style="transition-delay:0.25s">
                     <div class="historia-divider"></div>
-                    <p>Antes de fundar Imabox viajamos casi un año por el mundo. <strong>China, Corea, Japón, Italia, Suiza, Alemania, Francia, Colombia.</strong> No como turistas — como arquitectos con los ojos muy abiertos. Eso le dio a nuestra mirada algo que no se aprende en un estudio: perspectiva real.</p>
+                    <p id="hist-p2">Before founding Imabox we spent almost a year traveling the world. <strong>China, Korea, Japan, Italy, Switzerland, Germany, France, Colombia.</strong> Not as tourists — as architects with wide-open eyes. That gave our perspective something no studio teaches: real-world context.</p>
                 </div>
                 <div class="historia-bloque anim" style="transition-delay:0.40s">
                     <div class="historia-divider"></div>
-                    <p>En <strong>2018 fundamos Imabox en Montevideo</strong>. No como un estudio de visualización, sino como una agencia creativa que se hace cargo de toda la imagen de un proyecto — desde la identidad de marca hasta el día del lanzamiento.</p>
+                    <p id="hist-p3">In <strong>2018 we founded Imabox in Montevideo</strong>. Not as a visualization studio, but as a creative agency that takes full ownership of a project's entire image — from brand identity to launch day.</p>
                 </div>
                 <div class="historia-bloque anim" style="transition-delay:0.55s">
                     <div class="historia-divider"></div>
-                    <p>La orientación norte no vende un apartamento. <strong>El sol de la mañana entrando por la ventana mientras tomás un café, sí.</strong> Con cada imagen, cada video, cada cinemagraph, construimos la experiencia de vivir algo que todavía no existe — para que quien lo vea lo desee antes de que se ponga el primer ladrillo.</p>
+                    <p id="hist-p4">North-facing orientation doesn't sell an apartment. <strong>Morning sunlight streaming through the window as you have your coffee, does.</strong> With every image, every video, every cinemagraph, we build the experience of living something that doesn't yet exist — so whoever sees it desires it before the first brick is laid.</p>
                 </div>
             </div>
         </div>
@@ -139,24 +142,24 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section class="valores-section" id="sec-2">
     <div class="container">
         <div class="valores-header">
-            <div class="section-tag anim">Lo que nos define</div>
-            <h2 class="anim" style="transition-delay:0.12s">No solo mostramos el espacio.<br>Lo pensamos.</h2>
+            <div id="val-tag" class="section-tag anim">What defines us</div>
+            <h2 id="val-h2" class="anim" style="transition-delay:0.12s">We don't just show the space.<br>We think it.</h2>
         </div>
         <div class="valores-grid">
             <div class="valor-card anim" style="transition-delay:0.1s">
                 <div class="valor-num">01</div>
-                <h3>Somos arquitectos</h3>
-                <p>Cada imagen es una decisión de diseño. Entendemos la escala, la luz, la materialidad — y cuando el proyecto no está del todo definido, lo completamos con criterio profesional.</p>
+                <h3 id="val1-h3">We are architects</h3>
+                <p id="val1-p">Every image is a design decision. We understand scale, light, materiality — and when the project isn't fully defined, we complete it with professional judgement.</p>
             </div>
             <div class="valor-card anim" style="transition-delay:0.22s">
                 <div class="valor-num">02</div>
-                <h3>Desde el día cero del proyecto</h3>
-                <p>Trabajamos antes de que haya algo que mostrar. Nombre, identidad visual, posicionamiento — todo antes de que la obra empiece. Cuanto antes entramos, mejor sale el resultado.</p>
+                <h3 id="val2-h3">From day zero of the project</h3>
+                <p id="val2-p">We work before there's anything to show. Name, visual identity, positioning — all before construction begins. The earlier we come in, the better the result.</p>
             </div>
             <div class="valor-card anim" style="transition-delay:0.34s">
                 <div class="valor-num">03</div>
-                <h3>La marca total, integrada</h3>
-                <p>Imágenes, video, cinemagraphs, showroom virtual, contenido para redes. Un solo equipo, una sola dirección creativa — para que cada pieza cuente la misma historia.</p>
+                <h3 id="val3-h3">The total brand, integrated</h3>
+                <p id="val3-p">Images, video, cinemagraphs, virtual showroom, social content. One team, one creative direction — so every piece tells the same story.</p>
             </div>
         </div>
     </div>
@@ -165,12 +168,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- 4. CTA -->
 <section class="cta-section" id="sec-3">
     <div class="container">
-        <div class="section-tag anim">Hablemos</div>
-        <h2 class="anim" style="transition-delay:0.12s">Tu proyecto empieza<br>con <em>una conversación.</em></h2>
-        <p class="anim" style="transition-delay:0.24s">Contanos en qué etapa está y en 24 horas te contamos cómo lo encaramos.</p>
+        <div id="abt-cta-tag" class="section-tag anim">Let's talk</div>
+        <h2 class="anim" style="transition-delay:0.12s"><span id="abt-cta-h2a">Your project starts</span><br>with <em id="abt-cta-h2b">a conversation.</em></h2>
+        <p id="abt-cta-p" class="anim" style="transition-delay:0.24s">Tell us where it stands and within 24 hours we'll tell you how we'd approach it.</p>
         <div class="cta-buttons anim" style="transition-delay:0.36s">
-            <a href="mailto:hello@imabox.uy" class="btn-primary">Escribirnos</a>
-            <a href="https://calendly.com/imabox/30min" target="_blank" class="btn-secondary"><i class="fa fa-calendar-o" style="margin-right:8px"></i>Agendar reunión</a>
+            <a href="mailto:hello@imabox.uy" id="abt-btn-write" class="btn-primary">Write to us</a>
+            <a href="https://calendly.com/imabox/30min" target="_blank" id="abt-btn-meeting" class="btn-secondary"><i class="fa fa-calendar-o" style="margin-right:8px"></i>Schedule a meeting</a>
         </div>
         <div class="cta-contact anim" style="transition-delay:0.48s">
             <a href="mailto:hello@imabox.uy"><i class="fa fa-envelope-o"></i> hello@imabox.uy</a>
@@ -182,12 +185,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- FOOTER -->
 <footer>
     <div class="logo">Imabox</div>
-    <p>Agencia creativa · Arquitectura &amp; Real Estate — Montevideo, Uruguay</p>
-    <p>© 2025 Imabox. Todos los derechos reservados.</p>
+    <p id="footer-p1">Creative agency · Architecture &amp; Real Estate — Montevideo, Uruguay</p>
+    <p id="footer-p2">© 2025 Imabox. All rights reserved.</p>
 </footer>
 
 <script src="js/navbar-hamburger.js"></script>
 <script src="js/about.js"></script>
-    <script src="js/circle.js"></script>
+<script src="js/circle.js"></script>
+<script src="js/translate-about.js"></script>
 </body>
 </html>
