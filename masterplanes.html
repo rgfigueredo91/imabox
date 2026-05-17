@@ -251,6 +251,15 @@
         }
         .mp-loader.done { opacity: 0; pointer-events: none; }
 
+        .mp-loader-title {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.85);
+            margin-bottom: 4px;
+        }
         .mp-loader-label {
             font-size: 0.6rem;
             letter-spacing: 0.45em;
@@ -657,7 +666,8 @@
 
 <!-- Loader -->
 <div class="mp-loader" id="mp-loader">
-    <span class="mp-loader-label" id="mp-loader-label">imabox</span>
+    <span class="mp-loader-title">imabox</span>
+    <span class="mp-loader-label" id="mp-loader-label">0%</span>
     <div class="mp-loader-track">
         <div class="mp-loader-bar" id="mp-loader-bar"></div>
     </div>
