@@ -42,6 +42,12 @@ document.addEventListener("DOMContentLoaded", function () {
         srv7Badge:      "Herramientas de venta",
         srv7H3:         "Maquetas interactivas",
         srv7P:          "Masterplans 3D interactivos para que los compradores exploren el desarrollo — unidades, vistas, disponibilidad — desde cualquier dispositivo.",
+        srv8Badge:      "Visualización",
+        srv8H3:         "Tour virtual 360°",
+        srv8P:          "Recorrido inmersivo del espacio — ambiente por ambiente, en cualquier etapa de obra. Listo para embeber en portales, redes y landing pages.",
+        srv9Badge:      "Herramientas de venta",
+        srv9H3:         "Material para inversores",
+        srv9P:          "Pitch decks, brochures y PDFs de presentación diseñados para levantar capital antes de que arranque la obra. Datos, renders y marca — todo en un documento.",
 
         procTag:        "Proceso",
         procH2:         "Así trabajamos",
@@ -129,6 +135,12 @@ document.addEventListener("DOMContentLoaded", function () {
         t("srv7-badge",      esp.srv7Badge);
         t("srv7-h3",         esp.srv7H3);
         t("srv7-p",          esp.srv7P);
+        t("srv8-badge",      esp.srv8Badge);
+        t("srv8-h3",         esp.srv8H3);
+        t("srv8-p",          esp.srv8P);
+        t("srv9-badge",      esp.srv9Badge);
+        t("srv9-h3",         esp.srv9H3);
+        t("srv9-p",          esp.srv9P);
 
         t("proc-tag",        esp.procTag);
         t("proc-h2",         esp.procH2);
