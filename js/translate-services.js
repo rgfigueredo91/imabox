@@ -39,6 +39,9 @@ document.addEventListener("DOMContentLoaded", function () {
         srv6Badge:      "Contenido",
         srv6H3:         "Contenido para redes",
         srv6P:          "Posts, carruseles, reels y historias alineados con la identidad del proyecto. Estrategia pensada para atraer compradores, no solo seguidores.",
+        srv7Badge:      "Herramientas de venta",
+        srv7H3:         "Maquetas interactivas",
+        srv7P:          "Masterplans 3D interactivos para que los compradores exploren el desarrollo — unidades, vistas, disponibilidad — desde cualquier dispositivo.",
 
         procTag:        "Proceso",
         procH2:         "Así trabajamos",
@@ -123,6 +126,9 @@ document.addEventListener("DOMContentLoaded", function () {
         t("srv6-badge",      esp.srv6Badge);
         t("srv6-h3",         esp.srv6H3);
         t("srv6-p",          esp.srv6P);
+        t("srv7-badge",      esp.srv7Badge);
+        t("srv7-h3",         esp.srv7H3);
+        t("srv7-p",          esp.srv7P);
 
         t("proc-tag",        esp.procTag);
         t("proc-h2",         esp.procH2);
@@ -172,5 +178,6 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll("a[href='works.html']").forEach(function(el){ el.href = "works.html#esp"; });
         document.querySelectorAll("a[href='films.html']").forEach(function(el){ el.href = "films.html#esp"; });
         document.querySelectorAll("a[href='showroom.html']").forEach(function(el){ el.href = "showroom.html#esp"; });
+        document.querySelectorAll("a[href='masterplanes.html']").forEach(function(el){ el.href = "masterplanes.html#esp"; });
     }
 });
