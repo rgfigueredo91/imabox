@@ -16,6 +16,7 @@
 
         * { scrollbar-width: none; }
         *::-webkit-scrollbar { display: none; }
+        html { overflow-x: hidden; }
         html, body { height: 100%; }
         body {
             background: var(--bg);
@@ -131,19 +132,22 @@
             font-size: 0.62rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold);
             margin-bottom: 24px; display: flex; align-items: center; gap: 12px;
             animation: fadeUp 0.7s var(--ease-out) 0.15s both;
+            max-width: 100%; padding: 0 24px;
         }
-        .hero-tag::before, .hero-tag::after { content: ''; width: 32px; height: 1px; background: var(--gold); opacity: 0.5; }
+        .hero-tag::before, .hero-tag::after { content: ''; width: 24px; min-width: 24px; height: 1px; background: var(--gold); opacity: 0.5; flex-shrink: 0; }
         .hero h1 {
             font-family: 'aktiv-grotesk', sans-serif;
             font-size: clamp(2rem, 5vw, 4.2rem); font-weight: 300;
             letter-spacing: 0.03em; line-height: 1.1; max-width: 860px; margin-bottom: 22px;
             animation: fadeUp 0.8s var(--ease-out) 0.35s both;
+            padding: 0 24px;
         }
         .hero h1 em { font-style: normal; color: var(--gold); }
         .hero-sub {
             font-size: clamp(0.85rem, 1.8vw, 1rem); color: var(--muted);
             max-width: 500px; margin-bottom: 40px; line-height: 1.8;
             animation: fadeUp 0.8s var(--ease-out) 0.55s both;
+            padding: 0 24px;
         }
         .hero-actions {
             display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
