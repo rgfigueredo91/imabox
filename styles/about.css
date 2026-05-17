@@ -80,10 +80,10 @@
         .cta-contact a:hover { color: var(--gold); }
 
         /* ── FOOTER ── */
-        footer { border-top: 1px solid var(--border); padding: 40px; text-align: center; background: var(--bg); }
-        footer .logo { font-family: "Poppins", sans-serif; font-size: 1.4rem; color: var(--text); margin-bottom: 8px; }
-        footer p { font-size: 0.8rem; color: var(--muted); line-height: 1.8; }
-        .footer-social { display: flex; gap: 18px; justify-content: center; margin-top: 16px; }
+        footer { border-top: 1px solid var(--border); padding: 28px 48px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; background: var(--bg); }
+        footer .logo { font-family: 'aktiv-grotesk', sans-serif; font-size: 0.9rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.3); }
+        footer p { font-size: 0.7rem; color: rgba(255,255,255,0.18); letter-spacing: 0.08em; }
+        .footer-social { display: flex; gap: 18px; align-items: center; }
         .footer-social a { color: var(--gold); font-size: 1.15rem; text-decoration: none; transition: opacity 0.2s; }
         .footer-social a:hover { opacity: 0.65; }
 
@@ -95,4 +95,5 @@
             .valores-grid { grid-template-columns: 1fr; }
             .valor-card { padding: 32px 24px; }
             .container { padding: 0 24px; }
+            footer { flex-direction: column; text-align: center; padding: 28px 24px; }
         }

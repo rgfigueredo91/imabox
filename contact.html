@@ -1,258 +1,568 @@
 <!DOCTYPE html>
-
 <html lang="en">
-	<head>
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-		<meta charset="UTF-8"/> 
-		<title>Contact Imabox - Request a Quote | Montevideo, Uruguay</title>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    <title>Contact Imabox — Let's Talk | Montevideo, Uruguay</title>
+    <meta name="description" content="Get in touch with Imabox to discuss your project. Based in Montevideo, Uruguay — we respond within 24 hours." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Contact Imabox — Let's Talk" />
+    <meta property="og:description" content="Get in touch with Imabox to discuss your project. Based in Montevideo, Uruguay." />
+    <meta property="og:url" content="https://imabox.uy/contact.html" />
+    <meta property="og:image" content="https://imabox.uy/img/cover1index.webp" />
+    <link rel="shortcut icon" type="image/png" href="favicon.png" />
+    <link rel="canonical" href="https://imabox.uy/contact.html" />
+    <meta name="google-site-verification" content="E0SpeRDXnyyyYe_az7hMb6PirOHIawPyVZi6EA_HKSc" />
 
-		<meta name="description" content="Get in touch with Imabox to request a quote or discuss your architectural visualization project. Based in Montevideo, Uruguay."/>
-		<meta name="keywords" content="imago - Rendering Visualization Studio"/>
-		<meta name="author" content="Rodrigo Figueredo"/>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
-		<meta property="og:type" content="website"/>
-		<meta property="og:title" content="Contact Imabox - Request a Quote"/>
-		<meta name="google-site-verification" content="E0SpeRDXnyyyYe_az7hMb6PirOHIawPyVZi6EA_HKSc" />
-		<meta property="og:description" content="Get in touch with Imabox to request a quote or discuss your architectural visualization project. Based in Montevideo, Uruguay."/>
-		<meta property="og:url" content="https://imabox.uy/contact.html"/>
-		<meta property="og:image" content="https://imabox.uy/img/cover1index.webp" />
-		<meta name="description" content="contact form example">
-		<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
-			
-		<link rel="stylesheet" type="text/css" href="styles/styles.css">
-		<link rel="stylesheet" type="text/css" href="styles/contact.css">
-		<link rel="stylesheet" type="text/css" href="styles/chat.css">
-		<link rel="stylesheet" href="styles/navbar.css" />
-		<link rel="stylesheet" href="https://use.typekit.net/oov2wcw.css">
-		<link rel="shortcut icon" type="image/png" href="favicon.png"/>
-		<link rel="canonical" href="https://imabox.uy/contact.html" />
-	
-		<script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
-		
-		<!-- The core Firebase JS SDK is always required and must be listed first -->
-	
-		
-		
-		
-		
-	
-			<!-- Google Tag Manager -->
-		<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-		new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-		j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-		'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-		})(window,document,'script','dataLayer','GTM-NMJRX79');</script>
-		<!-- End Google Tag Manager -->
- 	
- 		
-		<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  "name": "Imabox",
-  "url": "https://imabox.uy",
-  "logo": "https://imabox.uy/img/logo.webp",
-  "image": "https://imabox.uy/img/cover1index.webp",
-  "description": "Architectural visualization, 3D rendering, and CGI studio based in Montevideo, Uruguay.",
-  "address": {
-    "@type": "PostalAddress",
-    "addressLocality": "Montevideo",
-    "addressCountry": "UY"
-  },
-  "telephone": "+598-98-325-902",
-  "email": "hello@imabox.uy",
-  "sameAs": [
-    "https://www.instagram.com/imabox_uy",
-    "https://www.linkedin.com/company/imabox",
-  ]
-}
-</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.typekit.net/oov2wcw.css">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="styles/navbar.css" />
+    <link rel="stylesheet" href="styles/cursor.css" />
+
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --bg: #080808;
+            --gold: #c9a96e;
+            --gold-dim: rgba(201,169,110,0.1);
+            --border: rgba(255,255,255,0.08);
+            --text: rgba(255,255,255,0.88);
+            --muted: rgba(255,255,255,0.38);
+            --ease: cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        html, body { background: var(--bg); color: var(--text); font-family: 'Poppins', sans-serif; min-height: 100vh; }
+        * { scrollbar-width: none; }
+        *::-webkit-scrollbar { display: none; }
+
+        /* ── page ── */
+        .contact-page {
+            min-height: 100vh;
+            display: grid;
+            grid-template-rows: 1fr auto;
+            padding-top: 72px;
+        }
+
+        .contact-wrap {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: calc(100vh - 72px);
+        }
+
+        /* ── LEFT ── */
+        .contact-left {
+            padding: 80px 64px 80px 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border-right: 1px solid var(--border);
+        }
+
+        .contact-eyebrow {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.68rem;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gold);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 32px;
+            opacity: 0;
+            animation: fadeUp 0.7s var(--ease) 0.1s forwards;
+        }
+        .contact-eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: var(--gold); }
+
+        .contact-left h1 {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: clamp(2.4rem, 4vw, 3.8rem);
+            font-weight: 300;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            color: var(--text);
+            margin-bottom: 24px;
+            opacity: 0;
+            animation: fadeUp 0.8s var(--ease) 0.2s forwards;
+        }
+        .contact-left h1 em { font-style: italic; color: var(--gold); }
+
+        .contact-desc {
+            font-size: 0.95rem;
+            color: var(--muted);
+            line-height: 1.8;
+            max-width: 400px;
+            margin-bottom: 56px;
+            opacity: 0;
+            animation: fadeUp 0.8s var(--ease) 0.35s forwards;
+        }
+
+        /* contact info */
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            opacity: 0;
+            animation: fadeUp 0.8s var(--ease) 0.5s forwards;
+        }
+
+        .contact-info-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+            color: var(--muted);
+            font-size: 0.88rem;
+            transition: color 0.2s;
+        }
+        .contact-info-item:hover { color: var(--gold); }
+        .contact-info-item i { width: 16px; text-align: center; color: var(--gold); font-size: 0.9rem; }
+
+        .contact-divider {
+            width: 100%;
+            height: 1px;
+            background: var(--border);
+            margin: 32px 0;
+        }
+
+        .btn-calendly {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 28px;
+            border: 1px solid rgba(201,169,110,0.35);
+            color: var(--gold);
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: background 0.2s, border-color 0.2s;
+            width: fit-content;
+            opacity: 0;
+            animation: fadeUp 0.8s var(--ease) 0.65s forwards;
+        }
+        .btn-calendly:hover { background: var(--gold-dim); border-color: var(--gold); }
+
+        /* ── RIGHT ── */
+        .contact-right {
+            padding: 80px 80px 80px 64px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .form-heading {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.68rem;
+            font-weight: 500;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 48px;
+            opacity: 0;
+            animation: fadeUp 0.7s var(--ease) 0.3s forwards;
+        }
+
+        /* form fields */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0 32px;
+        }
+
+        .field {
+            position: relative;
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeUp 0.7s var(--ease) forwards;
+        }
+
+        .field input,
+        .field textarea {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+            color: var(--text);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 300;
+            padding: 12px 0 10px;
+            outline: none;
+            transition: border-color 0.25s;
+            resize: none;
+        }
+        .field input::placeholder,
+        .field textarea::placeholder {
+            color: rgba(255,255,255,0.2);
+            font-size: 0.85rem;
+        }
+        .field input:focus,
+        .field textarea:focus { border-bottom-color: var(--gold); }
+        .field textarea { min-height: 100px; }
+
+        .field-label {
+            position: absolute;
+            top: 12px;
+            left: 0;
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.2);
+            pointer-events: none;
+            transition: top 0.2s, font-size 0.2s, color 0.2s;
+        }
+        .field input:focus ~ .field-label,
+        .field input:not(:placeholder-shown) ~ .field-label,
+        .field textarea:focus ~ .field-label,
+        .field textarea:not(:placeholder-shown) ~ .field-label {
+            top: -14px;
+            font-size: 0.65rem;
+            color: var(--gold);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        /* file upload */
+        .field-file {
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeUp 0.7s var(--ease) forwards;
+        }
+        .file-label-text {
+            display: block;
+            font-size: 0.65rem;
+            font-weight: 400;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.25);
+            margin-bottom: 10px;
+        }
+        .file-upload-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 18px;
+            border: 1px solid rgba(255,255,255,0.12);
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.72rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--muted);
+            cursor: pointer;
+            transition: border-color 0.2s, color 0.2s;
+        }
+        .file-upload-btn:hover { border-color: rgba(201,169,110,0.4); color: rgba(255,255,255,0.7); }
+        .file-upload-btn i { font-size: 0.8rem; }
+        #fileInput { display: none; }
+        #file-name { font-size: 0.72rem; color: var(--gold); margin-top: 8px; display: none; }
+
+        /* submit */
+        .btn-submit {
+            width: 100%;
+            padding: 16px;
+            background: var(--gold);
+            color: #080808;
+            border: none;
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.2s;
+            opacity: 0;
+            animation: fadeUp 0.7s var(--ease) 0.9s forwards;
+        }
+        .btn-submit:hover { opacity: 0.88; transform: translateY(-1px); }
+
+        .form-note {
+            font-size: 0.68rem;
+            color: rgba(255,255,255,0.15);
+            margin-top: 14px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeUp 0.7s var(--ease) 1s forwards;
+        }
+
+        /* success message */
+        .form-success {
+            display: none;
+            text-align: center;
+            padding: 48px 0;
+        }
+        .form-success i { font-size: 2rem; color: var(--gold); margin-bottom: 16px; display: block; }
+        .form-success p { color: var(--muted); font-size: 0.95rem; line-height: 1.8; }
+
+        /* ── FOOTER ── */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 28px 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        footer .logo { font-family: 'aktiv-grotesk', sans-serif; font-size: 0.9rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.3); }
+        footer p { font-size: 0.7rem; color: rgba(255,255,255,0.18); letter-spacing: 0.08em; }
+        .footer-social { display: flex; gap: 18px; align-items: center; }
+        .footer-social a { color: var(--gold); font-size: 1.15rem; text-decoration: none; transition: opacity 0.2s; }
+        .footer-social a:hover { opacity: 0.65; }
+
+        /* ── animations ── */
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ── responsive ── */
+        @media (max-width: 900px) {
+            .contact-wrap { grid-template-columns: 1fr; }
+            .contact-left { border-right: none; border-bottom: 1px solid var(--border); padding: 56px 32px; }
+            .contact-right { padding: 56px 32px; }
+            .form-row { grid-template-columns: 1fr; gap: 0; }
+            footer { flex-direction: column; text-align: center; padding: 28px 24px; }
+        }
+    </style>
+
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-NMJRX79');</script>
+    <!-- End Google Tag Manager -->
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Imabox",
+      "url": "https://imabox.uy",
+      "logo": "https://imabox.uy/img/logo.webp",
+      "description": "Creative agency for real estate and architecture projects.",
+      "address": { "@type": "PostalAddress", "addressLocality": "Montevideo", "addressCountry": "UY" },
+      "telephone": "+598-98-325-902",
+      "email": "hello@imabox.uy",
+      "sameAs": ["https://www.instagram.com/imabox_uy","https://www.linkedin.com/company/imabox"]
+    }
+    </script>
 </head>
-
 <body>
 
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMJRX79"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
-	
-<!-- Botón flotante + panel de chat tipo WhatsApp -->
-<div id="imabox-chat" aria-live="polite">
-  <!-- Botón flotante -->
-  <button class="imabox-chat-btn" aria-controls="imabox-chat-panel" aria-expanded="false">
-    <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M19.11 17.59c-.27-.13-1.57-.77-1.81-.86-.24-.09-.42-.13-.6.13-.18.27-.69.86-.85 1.04-.16.18-.31.2-.58.07-.27-.13-1.13-.42-2.16-1.34-.8-.71-1.34-1.59-1.5-1.86-.16-.27-.02-.42.11-.55.11-.11.27-.29.4-.44.13-.16.18-.27.27-.45.09-.18.04-.34-.02-.47-.07-.13-.6-1.45-.82-1.98-.22-.53-.44-.45-.6-.45h-.51c-.18 0-.47.07-.72.34-.24.27-.94.92-.94 2.25 0 1.33.97 2.62 1.11 2.8.13.18 1.9 2.9 4.62 4.05.65.28 1.15.45 1.54.58.65.21 1.24.18 1.71.11.52-.08 1.57-.64 1.79-1.25.22-.62.22-1.15.15-1.25-.06-.1-.24-.16-.51-.29zM16 3C8.82 3 3 8.82 3 16c0 2.29.59 4.44 1.63 6.32L3 29l6.86-1.79C11.65 28.41 13.74 29 16 29c7.18 0 13-5.82 13-13S23.18 3 16 3z"/></svg>
-  </button>
+<!-- NAV -->
+<header>
+    <nav class="navbar" id="navbar">
+        <a href="https://imabox.uy" class="nav-logo" id="link-font-index">imabox.</a>
+        <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+            <span class="nav-bar"></span>
+            <span class="nav-bar"></span>
+            <span class="nav-bar"></span>
+        </button>
+        <div class="nav-overlay">
+            <ul class="nav-links">
+                <li><a href="services.html">Services</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html" style="color:#c9a96e;">Contact</a></li>
+            </ul>
+            <div class="nav-info">
+                <p>hello@imabox.uy</p>
+                <p>+598 98 325 902</p>
+                <p>Montevideo, Uruguay.</p>
+                <div class="nav-lang">
+                    <a href="#eng" onclick="timedRefresh()">eng</a>
+                    <span>|</span>
+                    <a href="#esp" onclick="timedRefresh()">esp</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
 
-  <!-- Panel que se abre -->
-<div id="imabox-chat-panel" hidden>
-  <header>
-    <strong>Imabox</strong>
-    <span>We usually reply within minutes</span>
-  </header>
+<div class="contact-page">
+    <div class="contact-wrap">
 
-  <form id="imabox-chat-form">
-    <!-- hidden inputs for FormSubmit -->
-    <input type="text" name="_honey" style="display:none">
-    <input type="hidden" name="_subject" value="New message from imabox.uy">
-    <input type="hidden" name="_template" value="table">
-    <input type="hidden" name="_captcha" value="false">
+        <!-- LEFT -->
+        <div class="contact-left">
+            <div>
+                <div class="contact-eyebrow" id="ct-eyebrow">Get in touch</div>
+                <h1 id="ct-h1">Tell us about<br><em>your project.</em></h1>
+                <p class="contact-desc" id="ct-desc">We respond within 24 hours. If you prefer a quick conversation, schedule a call and we'll walk through your project together.</p>
 
-    <label>
-      Your name
-      <input name="name" required placeholder="Jane Doe">
-    </label>
-    <label>
-      Your email or phone
-      <input name="contact" type="text" placeholder="jane@email.com">
-    </label>
-    <label>
-      Message
-      <textarea name="message" required placeholder="Hi, I would like to request a quote for..."></textarea>
-    </label>
+                <div class="contact-info">
+                    <a href="mailto:hello@imabox.uy" class="contact-info-item">
+                        <i class="fa fa-envelope-o"></i> hello@imabox.uy
+                    </a>
+                    <a href="https://wa.me/59898325902" target="_blank" rel="noopener" class="contact-info-item">
+                        <i class="fa fa-whatsapp"></i> +598 98 325 902
+                    </a>
+                    <a href="https://www.instagram.com/imabox_uy" target="_blank" rel="noopener" class="contact-info-item">
+                        <i class="fa fa-instagram"></i> @imabox_uy
+                    </a>
+                    <a href="https://www.linkedin.com/company/imabox" target="_blank" rel="noopener" class="contact-info-item">
+                        <i class="fa fa-linkedin"></i> Imabox
+                    </a>
+                </div>
 
-    <div class="actions">
-      <button type="submit">Send to email</button>
-      <button type="button" id="imabox-whats">Open WhatsApp</button>
+                <div class="contact-divider"></div>
+            </div>
+
+            <a href="https://calendly.com/imabox/30min" target="_blank" rel="noopener" class="btn-calendly" id="ct-btn-cal">
+                <i class="fa fa-calendar-o"></i> <span id="ct-cal-text">Schedule a call</span>
+            </a>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="contact-right">
+            <div class="form-heading" id="ct-form-heading">Send us a message</div>
+
+            <form id="contactForm"
+                action="https://formsubmit.co/imabox.rendering@gmail.com"
+                method="POST"
+                enctype="multipart/form-data">
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_subject" value="New contact from imabox.uy">
+                <input type="hidden" name="_next" value="https://imabox.uy/contact.html?sent=1">
+                <input type="text" name="_honey" style="display:none">
+
+                <div class="form-row">
+                    <div class="field" style="animation-delay:0.4s">
+                        <input type="text" name="name" id="ct-name" placeholder=" " required />
+                        <span class="field-label" id="ct-label-name">Name</span>
+                    </div>
+                    <div class="field" style="animation-delay:0.5s">
+                        <input type="text" name="studio" id="ct-studio" placeholder=" " />
+                        <span class="field-label" id="ct-label-studio">Studio / Company</span>
+                    </div>
+                </div>
+
+                <div class="field" style="animation-delay:0.55s">
+                    <input type="email" name="email" id="ct-email" placeholder=" " required />
+                    <span class="field-label" id="ct-label-email">Email</span>
+                </div>
+
+                <div class="field-file" style="animation-delay:0.6s">
+                    <span class="file-label-text" id="ct-file-label">Attach a file (max 5 MB)</span>
+                    <label class="file-upload-btn" for="fileInput">
+                        <i class="fa fa-paperclip"></i> <span id="ct-file-btn">Choose file</span>
+                    </label>
+                    <input type="file" id="fileInput" name="attachment" multiple accept=".pdf,.jpg,.jpeg,.png,.dwg,.zip">
+                    <p id="file-name"></p>
+                </div>
+
+                <div class="field" style="animation-delay:0.7s">
+                    <input type="url" name="wetransfer_link" id="ct-wetransfer" placeholder=" " />
+                    <span class="field-label" id="ct-label-wetransfer">WeTransfer link (for files over 5 MB)</span>
+                </div>
+
+                <div class="field" style="animation-delay:0.8s">
+                    <textarea name="message" id="ct-message" placeholder=" " required></textarea>
+                    <span class="field-label" id="ct-label-message">Message</span>
+                </div>
+
+                <button type="submit" class="btn-submit" id="ct-submit">Send message</button>
+                <p class="form-note" id="ct-note">We'll get back to you within 24 hours.</p>
+            </form>
+
+            <div class="form-success" id="formSuccess">
+                <i class="fa fa-check-circle"></i>
+                <p id="ct-success-msg">Message sent. We'll be in touch within 24 hours.</p>
+            </div>
+        </div>
+
     </div>
 
-    <p class="hint">By sending, you accept our privacy policy.</p>
-    <p class="ok" hidden>Thank you! We’ll get back to you shortly.</p>
-    <p class="err" hidden>Oops, something went wrong. Please try again.</p>
-  </form>
+    <footer>
+        <div class="logo">Imabox</div>
+        <p id="footer-p1">Creative agency &middot; Architecture &amp; Real Estate &mdash; Montevideo, Uruguay</p>
+        <p id="footer-p2">&copy; 2025 Imabox. All rights reserved.</p>
+        <div class="footer-social">
+            <a href="https://www.instagram.com/imabox_uy" target="_blank" rel="noopener"><i class="fa fa-instagram"></i></a>
+            <a href="https://www.linkedin.com/company/imabox" target="_blank" rel="noopener"><i class="fa fa-linkedin"></i></a>
+        </div>
+    </footer>
 </div>
 
-</div>
+<script src="js/navbar-hamburger.js"></script>
+<script src="js/circle.js"></script>
+<script src="js/translate.js"></script>
 
+<script>
+function timedRefresh() { setTimeout(function(){ location.reload(true); }, 600); }
 
+/* file upload — show filename */
+document.addEventListener('DOMContentLoaded', function () {
+    var input = document.getElementById('fileInput');
+    var label = document.getElementById('file-name');
+    if (input) {
+        input.addEventListener('change', function () {
+            if (this.files.length > 0) {
+                var names = Array.from(this.files).map(function(f){ return f.name; }).join(', ');
+                label.textContent = names;
+                label.style.display = 'block';
+            }
+        });
+    }
+});
 
+/* show success if redirected back with ?sent=1 */
+if (window.location.search.includes('sent=1')) {
+    document.getElementById('contactForm').style.display = 'none';
+    document.getElementById('formSuccess').style.display = 'block';
+}
 
-	
+/* ESP translation */
+document.addEventListener('DOMContentLoaded', function () {
+    if (window.location.hash !== '#esp') return;
 
+    var t = {
+        eyebrow:      'Contacto',
+        h1:           'Contanos sobre<br><em>tu proyecto.</em>',
+        desc:         'Respondemos en menos de 24 horas. Si preferís, agendá una llamada y lo vemos juntos.',
+        calText:      'Agendar una llamada',
+        formHeading:  'Envianos un mensaje',
+        labelName:    'Nombre',
+        labelStudio:  'Estudio / Empresa',
+        labelEmail:   'Email',
+        fileLabel:    'Adjuntar archivo (máx 5 MB)',
+        fileBtn:      'Elegir archivo',
+        labelWt:      'Link de WeTransfer (para archivos mayores a 5 MB)',
+        labelMsg:     'Mensaje',
+        submit:       'Enviar mensaje',
+        note:         'Te respondemos en menos de 24 horas.',
+        successMsg:   'Mensaje enviado. Te contactamos en menos de 24 horas.',
+        footerP1:     'Agencia creativa &middot; Arquitectura &amp; Real Estate &mdash; Montevideo, Uruguay',
+        footerP2:     '&copy; 2025 Imabox. Todos los derechos reservados.',
+    };
 
-<!--barra fija arriba desktop-->
-<header>
-	<nav class="navbar" id="navbar">
-			<a href="https://imabox.uy" class="nav-logo" id="link-font-index">imabox.</a>
-			<button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
-				<span class="nav-bar"></span>
-				<span class="nav-bar"></span>
-				<span class="nav-bar"></span>
-			</button>
-			<div class="nav-overlay">
-				<ul class="nav-links">
-					<li><a href="services.html" id="link-font-Virtual">Services</a></li>
-					<li><a href="about.html" id="link-font-about">About</a></li>
-					<li><a href="contact.html" id="link-font-contact" style="color:#c9a96e;">Contact</a></li>
-				</ul>
-				<div class="nav-info">
-					<p>hello@imabox.uy</p>
-					<p>+598 98 325 902</p>
-					<p>Montevideo, Uruguay.</p>
-					<div class="nav-lang">
-						<a href="#eng" onclick="timedRefresh()">eng</a>
-						<span>|</span>
-						<a href="#esp" onclick="timedRefresh()">esp</a>
-					</div>
-				</div>
-			</div>
-		</nav>
-	</header>
+    function s(id, html) { var el = document.getElementById(id); if (el) el.innerHTML = html; }
+    function p(id, val) { var el = document.getElementById(id); if (el) el.placeholder = val; }
 
+    s('ct-eyebrow',       t.eyebrow);
+    s('ct-h1',            t.h1);
+    s('ct-desc',          t.desc);
+    s('ct-cal-text',      t.calText);
+    s('ct-form-heading',  t.formHeading);
+    s('ct-label-name',    t.labelName);
+    s('ct-label-studio',  t.labelStudio);
+    s('ct-label-email',      t.labelEmail);
+    s('ct-file-label',       t.fileLabel);
+    s('ct-file-btn',         t.fileBtn);
+    s('ct-label-wetransfer', t.labelWt);
+    s('ct-label-message',    t.labelMsg);
+    s('ct-submit',        t.submit);
+    s('ct-note',          t.note);
+    s('ct-success-msg',   t.successMsg);
+    s('footer-p1',        t.footerP1);
+    s('footer-p2',        t.footerP2);
+});
+</script>
 
-
-
-
-
-				<div class="main">
-
-					<p class="FirstParagraph">We’d love to hear from you! Whether you have questions, feedback, or 
-						exciting ideas to share, our team is here to connect. Reach out to us anytime at hello@imabox.uy, or take the next step by  <a href="https://calendly.com/imabox/30min" style="color: #c9a96e;; font-weight: bold;">scheduling</a> a call with one of our team members—we’re ready to collaborate and bring your vision to life!
-
-					</p>
-					
-
-					<form class="formulario"
-							action="https://formsubmit.co/imabox.rendering@gmail.com"
-							method="POST"
-							enctype="multipart/form-data">
-						<input type="hidden" name="_captcha" value="false">
-						<input type="hidden" name="_subject" value="New contact from imabox.uy">
-						<input type="hidden" name="_next" value="https://imabox.uy/contact.html">
-						<div>
-							<label class="label1">
-							<input type="name" class="name" name="name" placeholder="name" required id="nameid">
-							</label>
-						</div>
-						<div>	
-							<label class="label1">
-							<input type="text" class="text" name="studio" placeholder="architecture studio, business, etc." id="studioarchid">
-							</label>
-						</div>
-						<div>	
-							<label class="label1">
-							<input type="email" class="email" name="email" placeholder="e-mail" required>
-							</label>
-						</div>
-						<div>
-							<label class="label1">
-							<input type="text" class="subject" name="subject" placeholder="subject" required id="subjectid">
-							</label>
-						</div>
-						<div class="uploads">
-							<br />
-							<input type="file" id="files" name="attachment" multiple class="input-file">
-							<p id="file-warning" style="display:none; color:#c9a96e; text-align:center; margin-top:8px; font-size:13px;"></p>
-						</div>
-						<div>
-							<label class="label1">
-							<input type="url" class="wetransfer" name="wetransfer_link" placeholder="WeTransfer link (for files over 5 MB)" id="wetransferid">
-							</label>
-						</div>
-						<div>
-							<label class="label1">
-							<textarea class="message" name="textarea" placeholder="write your message" required id="textareaid"></textarea>
-							</label>
-						</div>
-						<button type="submit" class="submit" id="buttoncontact">
-						contact us
-						</button>
-					</form>
-				</div>
-					<footer>
-						<hr>
-						<p  id="rights-reserved">&copy; 2025 Imabox - "Unboxing The Future". All rights reserved</p>
-						<div class="footer-social">
-							<a href="https://www.instagram.com/imabox_uy" target="_blank"><i class="fa fa-instagram"></i></a>
-							<a href="https://www.linkedin.com/company/imabox" target="_blank"><i class="fa fa-linkedin"></i></a>
-						</div>
-					</footer>
-	<script src="js/scrollreveal.js"></script>
-	<script src="js/navbar-hamburger.js"></script><!--navbar move-->
-	<script src="js/circle.js"></script>
-		<script src="js/translate.js"></script><!--navbar move-->
-		<script src="js/chat.js"></script><!--chat-->
-		<script src="js/translate-contact.js"></script>
-		<script src="js/contact.js"></script>
-
-	<script>
-		ScrollReveal().reveal('.FirstParagraph', {
-			distance: '40px',
-			origin: 'left',
-			opacity: 0,
-			duration: 700,
-			easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-			reset: false
-		});
-		ScrollReveal().reveal('.formulario > div, .formulario .submit', {
-			distance: '30px',
-			origin: 'bottom',
-			opacity: 0,
-			duration: 600,
-			easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-			interval: 100,
-			reset: false
-		});
-	</script>
-
-	</body>
+</body>
 </html>

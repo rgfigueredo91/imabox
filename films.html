@@ -1,26 +1,223 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
     <title>Films - Architectural Animation Reels | Imabox</title>
     <meta name="description" content="Imabox architectural animation films — high-quality CGI animations and cinematic reels for real estate and architectural projects." />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Films - Architectural Animation Reels | Imabox" />
     <meta property="og:description" content="Imabox architectural animation films — high-quality CGI animations and cinematic reels for real estate and architectural projects." />
     <meta property="og:url" content="https://imabox.uy/films.html" />
     <meta property="og:image" content="https://imabox.uy/img/cover1index.webp" />
+    <link rel="shortcut icon" type="image/png" href="favicon.png" />
+    <link rel="canonical" href="https://imabox.uy/films.html" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500&display=swap" rel="stylesheet">
-    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://use.typekit.net/oov2wcw.css">
-    <link rel="shortcut icon" type="image/png" href="favicon.png" />
-    <link rel="canonical" href="https://imabox.uy/films.html" />
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
     <link rel="stylesheet" href="styles/navbar.css" />
-    <link rel="stylesheet" href="styles/films.css" />
     <link rel="stylesheet" href="styles/cursor.css" />
+
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { background: #0f0f0f; color: #fff; font-family: 'Poppins', sans-serif; }
+        *::-webkit-scrollbar { display: none; }
+        * { scrollbar-width: none; }
+
+        /* ── layout ── */
+        .films-main {
+            padding-top: 72px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .films-header {
+            padding: 5vh 2.5vw 3vh;
+            border-bottom: 1px solid #1e1e1e;
+        }
+
+        .films-label {
+            font-size: 0.6rem;
+            font-weight: 400;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.35);
+        }
+
+        /* ── grid ── */
+        .films-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            padding: 4vh 4vw;
+            flex: 1;
+            align-content: center;
+        }
+
+        /* ── card ── */
+        .film-card {
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            background: #0f0f0f;
+        }
+
+        .film-thumb {
+            position: relative;
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+        }
+
+        .film-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.4s ease;
+            filter: brightness(0.92);
+        }
+
+        .film-card:hover .film-thumb img {
+            transform: scale(1.04);
+            filter: brightness(0.78);
+        }
+
+        .film-play-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .film-play-icon {
+            width: 62px;
+            height: 62px;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity 0.35s ease, transform 0.35s ease;
+        }
+
+        .film-card:hover .film-play-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .film-meta {
+            padding: 12px 10px 22px;
+            border-bottom: 1px solid #1a1a1a;
+        }
+
+        .film-category {
+            display: block;
+            font-size: 0.52rem;
+            font-weight: 400;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.3);
+            margin-bottom: 5px;
+        }
+
+        .film-title {
+            font-size: 0.95rem;
+            font-weight: 300;
+            color: rgba(255,255,255,0.85);
+            margin: 0;
+            letter-spacing: 0.02em;
+        }
+
+        /* ── modal ── */
+        .film-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .film-modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .film-modal-bg {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.94);
+            cursor: pointer;
+        }
+
+        .film-modal-box {
+            position: relative;
+            z-index: 1;
+            width: min(92vw, 1280px);
+        }
+
+        .film-modal-box video {
+            width: 100%;
+            display: block;
+            outline: none;
+            background: #000;
+        }
+
+        .film-modal-close {
+            position: absolute;
+            top: -42px;
+            right: 0;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 6px;
+            color: rgba(255,255,255,0.7);
+            transition: color 0.2s;
+        }
+
+        .film-modal-close:hover { color: #fff; }
+
+        .film-modal-close svg {
+            width: 26px;
+            height: 26px;
+            display: block;
+        }
+
+        /* ── footer ── */
+        footer {
+            border-top: 1px solid rgba(255,255,255,0.08);
+            padding: 28px 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        footer .logo { font-family: 'aktiv-grotesk', sans-serif; font-size: 0.9rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.3); }
+        footer p { font-size: 0.7rem; color: rgba(255,255,255,0.18); letter-spacing: 0.08em; }
+        .footer-social { display: flex; gap: 18px; align-items: center; }
+        .footer-social a { color: #c9a96e; font-size: 1.15rem; text-decoration: none; transition: opacity 0.2s; }
+        .footer-social a:hover { opacity: 0.65; }
+        @media (max-width: 768px) { footer { flex-direction: column; text-align: center; padding: 28px 24px; } }
+
+        /* ── responsive ── */
+        @media (max-width: 1100px) and (min-width: 701px) {
+            .films-grid { grid-template-columns: repeat(2, 1fr); gap: 18px; padding: 3vh 3vw; }
+        }
+        @media (max-width: 700px) {
+            .films-grid { grid-template-columns: 1fr; gap: 14px; padding: 3vh 4vw; }
+            .film-play-icon { width: 48px; height: 48px; opacity: 0.6; }
+            .film-modal-box { width: 96vw; }
+            .film-modal-close { top: -38px; }
+        }
+    </style>
 
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -47,9 +244,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </button>
         <div class="nav-overlay">
             <ul class="nav-links">
-                <li><a href="services.html" id="link-font-Virtual">Services</a></li>
-                <li><a href="about.html" id="link-font-about">About</a></li>
-                <li><a href="contact.html" id="link-font-contact">Contact</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
             </ul>
             <div class="nav-info">
                 <p>hello@imabox.uy</p>
@@ -124,12 +321,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     </div>
 
-    <footer class="films-footer">
-        <hr>
-        <p id="rights-reserved">&copy; 2025 Imabox - "Unboxing The Future". All rights reserved</p>
+    <footer>
+        <div class="logo">Imabox</div>
+        <p id="footer-p1">Creative agency &middot; Architecture &amp; Real Estate &mdash; Montevideo, Uruguay</p>
+        <p id="footer-p2">&copy; 2025 Imabox. All rights reserved.</p>
         <div class="footer-social">
-            <a href="https://www.instagram.com/imabox_uy" target="_blank"><i class="fa fa-instagram"></i></a>
-            <a href="https://www.linkedin.com/company/imabox" target="_blank"><i class="fa fa-linkedin"></i></a>
+            <a href="https://www.instagram.com/imabox_uy" target="_blank" rel="noopener"><i class="fa fa-instagram"></i></a>
+            <a href="https://www.linkedin.com/company/imabox" target="_blank" rel="noopener"><i class="fa fa-linkedin"></i></a>
         </div>
     </footer>
 
@@ -152,28 +350,31 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script src="js/navbar-hamburger.js"></script>
 <script src="js/circle.js"></script>
 <script src="js/translate.js"></script>
+
 <script>
-    function openFilm(src) {
-        const modal = document.getElementById('filmModal');
-        const video = document.getElementById('filmVideo');
-        video.src = src;
-        modal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-        video.play().catch(() => {});
-    }
+function timedRefresh() { setTimeout(function(){ location.reload(true); }, 600); }
 
-    function closeFilm() {
-        const modal = document.getElementById('filmModal');
-        const video = document.getElementById('filmVideo');
-        video.pause();
-        video.src = '';
-        modal.classList.remove('active');
-        document.body.style.overflow = '';
-    }
+function openFilm(src) {
+    var modal = document.getElementById('filmModal');
+    var video = document.getElementById('filmVideo');
+    video.src = src;
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    video.play().catch(function(){});
+}
 
-    document.addEventListener('keydown', e => {
-        if (e.key === 'Escape') closeFilm();
-    });
+function closeFilm() {
+    var modal = document.getElementById('filmModal');
+    var video = document.getElementById('filmVideo');
+    video.pause();
+    video.src = '';
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeFilm();
+});
 </script>
 
 </body>
