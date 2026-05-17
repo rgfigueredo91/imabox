@@ -227,7 +227,7 @@
             text-transform: uppercase;
         }
 
-        /* file upload */
+        /* file upload — removed */
         .field-file {
             margin-bottom: 40px;
             opacity: 0;
@@ -424,8 +424,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
             <form id="contactForm"
                 action="https://formspree.io/f/mojbqjjw"
-                method="POST"
-                enctype="multipart/form-data">
+                method="POST">
                 <input type="hidden" name="_subject" value="New contact from imabox.uy">
                 <input type="text" name="_gotcha" style="display:none">
 
@@ -443,15 +442,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <div class="field" style="animation-delay:0.55s">
                     <input type="email" name="email" id="ct-email" placeholder=" " required />
                     <span class="field-label" id="ct-label-email">Email</span>
-                </div>
-
-                <div class="field-file" style="animation-delay:0.6s">
-                    <span class="file-label-text" id="ct-file-label">Attach a file (max 5 MB)</span>
-                    <label class="file-upload-btn" for="fileInput">
-                        <i class="fa fa-paperclip"></i> <span id="ct-file-btn">Choose file</span>
-                    </label>
-                    <input type="file" id="fileInput" name="attachment" multiple accept=".pdf,.jpg,.jpeg,.png,.dwg,.zip">
-                    <p id="file-name"></p>
                 </div>
 
                 <div class="field" style="animation-delay:0.7s">
@@ -494,20 +484,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script>
 function timedRefresh() { setTimeout(function(){ location.reload(true); }, 600); }
 
-/* file upload — show filename */
-document.addEventListener('DOMContentLoaded', function () {
-    var input = document.getElementById('fileInput');
-    var label = document.getElementById('file-name');
-    if (input) {
-        input.addEventListener('change', function () {
-            if (this.files.length > 0) {
-                var names = Array.from(this.files).map(function(f){ return f.name; }).join(', ');
-                label.textContent = names;
-                label.style.display = 'block';
-            }
-        });
-    }
-});
 
 /* show success if redirected back with ?sent=1 */
 if (window.location.search.includes('sent=1')) {
