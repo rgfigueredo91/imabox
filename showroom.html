@@ -217,18 +217,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
 
         <div class="sr-up-tabs">
-            <button class="sr-up-tab active" data-tab="planta">Planta</button>
-            <button class="sr-up-tab" data-tab="galeria">Imágenes</button>
+            <button class="sr-up-tab active" data-tab="galeria">Imágenes</button>
             <button class="sr-up-tab" id="sr-tab-videos-btn" data-tab="videos">Videos</button>
             <button class="sr-up-tab" id="sr-tab-calc-btn" data-tab="calc">Préstamo</button>
             <button class="sr-up-tab" id="sr-tab-consultar-btn" data-tab="consultar" style="display:none">Consultar</button>
         </div>
 
         <div class="sr-up-body">
-            <div class="sr-up-content active" id="sr-tab-planta">
-                <img id="sr-planta-img" src="img/kiu/planta.jpg" alt="Planta tipología" />
-            </div>
-            <div class="sr-up-content" id="sr-tab-galeria">
+            <img id="sr-planta-img" src="img/kiu/planta.jpg" alt="" style="display:none" />
+            <div class="sr-up-content active" id="sr-tab-galeria">
                 <div class="sr-up-gallery" id="sr-up-gallery">
                     <!-- populated by JS -->
                 </div>
@@ -372,6 +369,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
         </div>
         <iframe id="sr-tour-iframe" src="" allow="fullscreen; xr-spatial-tracking" allowfullscreen></iframe>
+    </div>
+</div>
+
+<!-- TIPOLOGÍA FULLSCREEN VIEW -->
+<div id="sr-tipo-fs" class="sr-tipo-fs" aria-hidden="true">
+    <button class="sr-tipo-fs-back" id="sr-tipo-fs-back">
+        <i class="fa fa-arrow-left"></i> <span>Volver</span>
+    </button>
+    <div class="sr-tipo-fs-img-wrap">
+        <img id="sr-tipo-fs-img" src="" alt="Tipología" />
     </div>
 </div>
 
@@ -691,11 +698,6 @@ function init() {
     bindUnitHotspots();
     buildGallery(DATA.defaults.interiorImages);
 
-    $("sr-planta-img").addEventListener("click", () => {
-        const src = $("sr-planta-img").src;
-        if (src) openLightbox([src], 0);
-    });
-
     const video = $("sr-video");
 
     $("sr-btn-enter").addEventListener("click", () => {
@@ -765,6 +767,7 @@ function bindUnitHotspots() {
             const floor = DATA.floors.find(f => f.id === state.activeFloor);
             if (!floor || !floor.hasUnits) return;
             openUnitPanel(unit);
+            openTipoFullscreen(unit);
         });
     });
 }
@@ -898,7 +901,7 @@ function openUnitPanel(unit) {
 
     /* tabs */
     $("sr-tab-videos-btn").style.display = videos.length ? "" : "none";
-    resetTabs("planta");
+    resetTabs("galeria");
 
     /* galleries */
     buildGallery(images);
@@ -1251,6 +1254,38 @@ $("sr-lb-close").addEventListener("click", closeLightbox);
 $("sr-lb-prev").addEventListener("click", () => lbStep(-1));
 $("sr-lb-next").addEventListener("click", () => lbStep(1));
 lb.addEventListener("click", e => { if (e.target === lb) closeLightbox(); });
+
+/* ══════════════════════════════════════════════════════════════
+   TIPOLOGÍA FULLSCREEN VIEW
+══════════════════════════════════════════════════════════════ */
+function openTipoFullscreen(unit) {
+    const unitData = DATA.units[unit] || {};
+    const imgSrc   = unitData.vista3dImage || "img/kiu/vista3d.webp";
+
+    const img = $("sr-tipo-fs-img");
+    img.src = imgSrc;
+    img.alt = unitData.label || "Tipología";
+
+    const fs = $("sr-tipo-fs");
+    fs.setAttribute("aria-hidden", "false");
+    fs.classList.add("active");
+    document.body.classList.add("tipo-fs-active");
+}
+
+function closeTipoFullscreen() {
+    const fs = $("sr-tipo-fs");
+    fs.classList.remove("active");
+    fs.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("tipo-fs-active");
+    closeUnitPanel();
+}
+
+$("sr-tipo-fs-back").addEventListener("click", closeTipoFullscreen);
+document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && $("sr-tipo-fs").classList.contains("active")) {
+        closeTipoFullscreen();
+    }
+});
 
 /* ══════════════════════════════════════════════════════════════
    SELECT FLOOR

@@ -339,10 +339,10 @@ html, body {
    UNIT PANEL  —  slides from left on unit click
    ═══════════════════════════════════════════════════════════════ */
 .sr-unit-panel {
-    position: absolute;
+    position: fixed;
     top: 0; left: 0; bottom: 0;
     width: 400px;
-    z-index: 30;
+    z-index: 170;         /* sobre sr-tipo-fs (160) y sobre sr-scene */
     display: flex;
     flex-direction: column;
     background: rgba(10,10,10,0.96);
@@ -449,6 +449,8 @@ html, body {
 .sr-up-body {
     flex: 1;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
     scrollbar-width: thin;
     scrollbar-color: rgba(255,255,255,0.12) transparent;
 }
@@ -791,7 +793,7 @@ html, body {
 .sr-tour-modal {
     position: fixed;
     inset: 0;
-    z-index: 55;
+    z-index: 185;
     background: rgba(0,0,0,0.82);
     display: flex;
     align-items: center;
@@ -859,7 +861,7 @@ html, body {
 .sr-lightbox {
     position: fixed;
     inset: 0;
-    z-index: 50;
+    z-index: 190;
     background: rgba(0,0,0,0.92);
     display: flex;
     align-items: center;
@@ -929,6 +931,75 @@ html, body {
     transition: background 0.2s, border-color 0.2s;
 }
 .sr-lb-edit:hover { background: rgba(201,169,110,0.25); border-color: #c9a96e; }
+
+/* ══ TIPOLOGÍA FULLSCREEN VIEW ════════════════════════════════════ */
+.sr-tipo-fs {
+    position: fixed;
+    top: 0; right: 0; bottom: 0;
+    left: 400px;          /* deja visible el sr-unit-panel a la izquierda */
+    z-index: 160;         /* por encima del sr-scene pero no del lightbox (200) */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0d0d0d;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+}
+.sr-tipo-fs.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* Botón volver — arriba a la izquierda del área de imagen */
+.sr-tipo-fs-back {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.14);
+    color: rgba(255,255,255,0.65);
+    padding: 9px 18px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-family: inherit;
+    z-index: 2;
+    transition: background 0.2s, color 0.2s;
+}
+.sr-tipo-fs-back:hover { background: rgba(255,255,255,0.14); color: #fff; }
+
+/* Imagen grande centrada */
+.sr-tipo-fs-img-wrap {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 72px 48px 48px;
+}
+.sr-tipo-fs-img-wrap img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    cursor: default;
+    pointer-events: none;
+}
+
+/* Mobile: el panel queda arriba (translateY, no X) → overlay cubre pantalla completa */
+@media (max-width: 768px) {
+    .sr-tipo-fs {
+        left: 0;
+        top: 60vh;  /* empieza debajo del panel que ocupa el 60% superior */
+    }
+    .sr-tipo-fs-back { top: 12px; left: 12px; padding: 7px 14px; }
+    .sr-tipo-fs-img-wrap { padding: 52px 20px 28px; }
+}
 
 /* ══ AI EDITOR PANEL ═════════════════════════════════════════════ */
 .sr-ai-panel {
@@ -1190,6 +1261,33 @@ html, body {
 
     .sr-tour-dialog { width: 94vw; height: 80vh; }
 
+    /* Acciones en grilla para tablet portrait */
+    .sr-up-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        padding: 12px 20px 18px;
+    }
+    #sr-up-btn-contact { grid-column: 1 / -1; }
+    .sr-up-btn { padding: 13px 8px; font-size: 0.62rem; gap: 6px; }
+
+    /* Tipología fullscreen: franja superior, panel cubre el resto */
+    .sr-tipo-fs {
+        left: 0; right: 0;
+        top: 0; bottom: auto;
+        height: 34vh;
+        z-index: 155;   /* panel (170) queda encima */
+    }
+    .sr-tipo-fs-back {
+        top: 10px; left: 12px;
+        padding: 7px 14px;
+        font-size: 0.68rem;
+    }
+    .sr-tipo-fs-img-wrap { padding: 44px 24px 12px; }
+
+    /* Panel más corto para dejar ver la imagen arriba */
+    body.tipo-fs-active .sr-unit-panel { height: 68vh; }
+
     .sr-unit-zone { stroke: transparent; stroke-width: 2; }
     .sr-lightbox-prev { left: 10px; width: 52px; height: 52px; }
     .sr-lightbox-next { right: 10px; width: 52px; height: 52px; }
@@ -1248,7 +1346,7 @@ html, body {
     .sr-btn-back { top: 72px; left: 16px; }
     .sr-project-meta { left: 20px; bottom: 110px; }
 
-    /* Panel: bottom-sheet */
+    /* Panel: bottom-sheet — altura normal */
     .sr-unit-panel {
         width: 100%;
         top: auto;
@@ -1258,7 +1356,9 @@ html, body {
         transform: translateY(100%);
     }
     .sr-scene.is-open .sr-unit-panel { transform: translateY(0); }
-    .sr-up-header { padding: 24px 20px 18px; }
+
+    /* Con tipo-fs activo: panel más corto para dejar la imagen arriba */
+    body.tipo-fs-active .sr-unit-panel { height: 62vh; }
 
     .sr-tour-dialog {
         width: 100vw;
@@ -1266,6 +1366,95 @@ html, body {
         border: none;
         border-radius: 0;
     }
+
+    /* ── Tipología fullscreen: franja superior visible ── */
+    .sr-tipo-fs {
+        display: flex !important; /* re-activo en mobile */
+        left: 0; right: 0;
+        top: 0; bottom: auto;
+        height: 38vh;
+        z-index: 155;  /* panel (170) queda encima */
+    }
+    .sr-tipo-fs-back {
+        top: 8px; left: 10px;
+        padding: 6px 12px;
+        font-size: 0.65rem;
+    }
+    .sr-tipo-fs-img-wrap { padding: 38px 16px 10px; }
+
+    /* ── Header + specs ultra-compactos cuando tipo-fs está activo ── */
+    body.tipo-fs-active .sr-up-header {
+        padding: 8px 12px 4px;
+        flex-wrap: nowrap;
+        align-items: center;
+        gap: 6px;
+        min-height: 0;
+    }
+    body.tipo-fs-active .sr-up-label  { display: none; }
+    body.tipo-fs-active .sr-up-name   { font-size: 0.78rem; font-weight: 400; margin: 0; letter-spacing: 0.06em; }
+    body.tipo-fs-active .sr-up-status { font-size: 0.48rem; padding: 2px 6px; }
+    body.tipo-fs-active .sr-up-close  { width: 26px; height: 26px; font-size: 0.7rem; }
+    body.tipo-fs-active #sr-up-precio { display: none !important; }
+
+    /* Specs: fila horizontal única en lugar de grilla 2x2 */
+    body.tipo-fs-active .sr-up-specs {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 0;
+        padding: 4px 12px 4px;
+        flex-shrink: 0;
+    }
+    body.tipo-fs-active .sr-up-spec {
+        flex: 1;
+        flex-direction: row;
+        align-items: center;
+        gap: 3px;
+        padding: 0 6px;
+        border-right: 1px solid rgba(255,255,255,0.08);
+    }
+    body.tipo-fs-active .sr-up-spec:last-child { border-right: none; }
+    body.tipo-fs-active .sr-up-spec-val   { font-size: 0.82rem; font-weight: 400; }
+    body.tipo-fs-active .sr-up-spec-label { font-size: 0.48rem; letter-spacing: 0.08em; white-space: nowrap; }
+
+    /* Header-right: fila en vez de columna */
+    body.tipo-fs-active .sr-up-header-right {
+        flex-direction: row;
+        align-items: center;
+        gap: 6px;
+        margin-top: 0;
+    }
+
+    /* Tabs compactos */
+    body.tipo-fs-active .sr-up-tabs { min-height: 0; }
+    body.tipo-fs-active .sr-up-tab  { padding: 7px 10px; font-size: 0.56rem; }
+
+    /* Acciones en grilla 2 columnas */
+    .sr-up-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        padding: 10px 16px 14px;
+    }
+    #sr-up-btn-contact { grid-column: 1 / -1; }
+    .sr-up-btn {
+        padding: 11px 6px;
+        font-size: 0.58rem;
+        letter-spacing: 0.12em;
+        gap: 5px;
+    }
+
+    /* Galería: imágenes con altura acotada */
+    .sr-up-gallery-item img {
+        max-height: 180px;
+        object-fit: cover;
+    }
+    .sr-up-gallery-item--video video { max-height: 160px; }
+
+    /* Specs más compactos (estado normal sin tipo-fs) */
+    .sr-up-specs { gap: 10px 16px; padding: 10px 20px 8px; }
+    .sr-up-spec-val { font-size: 1.25rem; }
+    .sr-up-header { padding: 18px 16px 12px; }
 
     .sr-unit-zone { stroke: transparent; stroke-width: 3; }
     .sr-lightbox-prev { left: 8px; width: 52px; height: 52px; }
