@@ -63,6 +63,73 @@
             height: 100%;
             object-fit: cover;
         }
+        #s1 .video-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.42);
+            pointer-events: none;
+        }
+        #s1 .video-hero {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 24px;
+            pointer-events: none;
+        }
+        #s1 .video-hero h1 {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: clamp(2.2rem, 5.5vw, 5rem);
+            font-weight: 300;
+            line-height: 1.15;
+            letter-spacing: -0.01em;
+            color: #fff;
+            margin-bottom: 20px;
+            max-width: 900px;
+        }
+        #s1 .video-hero h1 em {
+            font-style: normal;
+            color: #c9a96e;
+        }
+        #s1 .video-hero p {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(0.82rem, 1.4vw, 1rem);
+            font-weight: 300;
+            color: rgba(255,255,255,0.55);
+            letter-spacing: 0.04em;
+        }
+        @keyframes scrollPulse {
+            0%, 100% { transform: translateX(-50%) scaleY(1); opacity: 0.5; }
+            50%       { transform: translateX(-50%) scaleY(1.18); opacity: 1; }
+        }
+        #s1 .scroll-hint {
+            position: absolute;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+        #s1 .scroll-hint .scroll-line {
+            width: 1px;
+            height: 40px;
+            background: #c9a96e;
+            animation: scrollPulse 2s ease-in-out infinite;
+        }
+        #s1 .scroll-hint .scroll-label {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.6rem;
+            font-weight: 500;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.45);
+        }
 
         /* ── SECTION 2 — texto ── */
         #s2 {
@@ -225,7 +292,7 @@
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-NMJRX79');</script>
+    })(window,document,'script','dataLayer','GTM-K99Z94HL');</script>
     <!-- End Google Tag Manager -->
 
     <script type="application/ld+json">
@@ -246,7 +313,7 @@
 <body>
 
 <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMJRX79"
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K99Z94HL"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <!-- PRELOADER -->
@@ -294,6 +361,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                poster="img/cover1index.webp"
                src="animations/presentation.mp4">
         </video>
+        <div class="video-overlay"></div>
+        <div class="video-hero">
+            <h1>Creative agency for<br><em>architecture &amp; real estate.</em></h1>
+            <p>From brand identity to 3D visualization — Montevideo, Uruguay.</p>
+        </div>
+        <div class="scroll-hint" onclick="window.snapGoTo(1)">
+            <div class="scroll-line"></div>
+            <span class="scroll-label">Scroll down</span>
+        </div>
     </section>
 
     <!-- S2 — TEXTO -->
@@ -457,13 +533,13 @@ var snapSections;
         if (e.key === 'ArrowUp'   || e.key === 'PageUp')   { e.preventDefault(); window.snapGoTo(snapCurrent - 1); }
     });
 
-    /* touch swipe */
-    var touchY = 0;
-    container.addEventListener('touchstart', function (e) { touchY = e.touches[0].clientY; }, { passive: true });
-    container.addEventListener('touchend',   function (e) {
-        var diff = touchY - e.changedTouches[0].clientY;
-        if (Math.abs(diff) > 40) window.snapGoTo(snapCurrent + (diff > 0 ? 1 : -1));
-    }, { passive: true });
+    /* sync snapCurrent with actual scroll position (needed for wheel/keyboard after native touch scroll) */
+    var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            if (entry.isIntersecting) snapCurrent = snapSections.indexOf(entry.target);
+        });
+    }, { threshold: 0.5 });
+    snapSections.forEach(function (s) { observer.observe(s); });
 })();
 
 /* ── Carousels ── */

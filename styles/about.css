@@ -13,7 +13,7 @@
         * { scrollbar-width: none; }
         *::-webkit-scrollbar { display: none; }
         html, body { height: 100%; background: var(--bg); color: var(--text); font-family: "Poppins", sans-serif; font-weight: 300; line-height: 1.7; overflow-x: hidden; overflow-y: scroll; }
-        section { height: 100vh; overflow: hidden; position: relative; display: flex; flex-direction: column; justify-content: center; }
+        section { height: 100vh; height: 100dvh; overflow: hidden; position: relative; display: flex; flex-direction: column; justify-content: center; }
         footer { position: relative; }
         .container { max-width: 1100px; margin: 0 auto; padding: 0 48px; width: 100%; }
 
@@ -105,12 +105,15 @@
 
         /* ── RESPONSIVE ── */
         @media (max-width: 900px) {
-            section { height: auto; min-height: 100vh; overflow: auto; }
-            .historia-inner { grid-template-columns: 1fr; gap: 40px; padding: 80px 0; }
-            .historia-year { font-size: 4rem; }
+            section { height: 100vh; height: 100dvh; overflow: hidden; }
+            .historia-inner { grid-template-columns: 1fr; gap: 20px; padding: 32px 0; }
+            .historia-year { font-size: 3rem; }
+            .historia-right { gap: 16px; }
+            .historia-bloque p { font-size: 0.82rem; line-height: 1.65; }
             .diferencial-inner { grid-template-columns: 1fr; gap: 32px; }
             .valores-grid { grid-template-columns: 1fr; }
-            .valor-card { padding: 32px 24px; }
+            .valor-card { padding: 20px 20px; }
+            .valores-header { margin-bottom: 24px; }
             .container { padding: 0 24px; }
             footer { flex-direction: column; text-align: center; padding: 28px 24px; }
         }
