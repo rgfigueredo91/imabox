@@ -38,18 +38,17 @@
         *::-webkit-scrollbar { display: none; }
         * { scrollbar-width: none; }
 
-        /* ── scroll snap container ── */
+        /* ── scroll container ── */
         .snap-container {
             height: 100vh;
+            height: 100dvh;
             overflow-y: scroll;
-            scroll-snap-type: y mandatory;
-            scroll-behavior: smooth;
         }
 
         /* ── secciones ── */
         .section {
-            scroll-snap-align: start;
             height: 100vh;
+            height: 100dvh;
             width: 100%;
             position: relative;
             overflow: hidden;
@@ -515,7 +514,7 @@ var snapSections;
         index = Math.max(0, Math.min(snapSections.length - 1, index));
         if (index === snapCurrent) return;
         snapCurrent = index;
-        snapSections[snapCurrent].scrollIntoView({ behavior: 'smooth', block: 'start' });
+        container.scrollTo({ top: snapCurrent * container.clientHeight, behavior: 'smooth' });
         snapLocked = true;
         setTimeout(function () { snapLocked = false; }, 900);
     };
@@ -533,7 +532,26 @@ var snapSections;
         if (e.key === 'ArrowUp'   || e.key === 'PageUp')   { e.preventDefault(); window.snapGoTo(snapCurrent - 1); }
     });
 
-    /* sync snapCurrent with actual scroll position (needed for wheel/keyboard after native touch scroll) */
+    /* touch swipe — umbral 50px para evitar swipe accidental */
+    var touchStartY = 0;
+    container.addEventListener('touchstart', function (e) {
+        touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+    container.addEventListener('touchmove', function (e) {
+        e.preventDefault();
+    }, { passive: false });
+    container.addEventListener('touchend', function (e) {
+        if (snapLocked) return;
+        var dy = touchStartY - e.changedTouches[0].clientY;
+        if (Math.abs(dy) > 50) {
+            window.snapGoTo(snapCurrent + (dy > 0 ? 1 : -1));
+        } else {
+            /* swipe muy corto — volver a la sección actual */
+            container.scrollTo({ top: snapCurrent * container.clientHeight, behavior: 'smooth' });
+        }
+    }, { passive: true });
+
+    /* sync snapCurrent tras resize */
     var observer = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
             if (entry.isIntersecting) snapCurrent = snapSections.indexOf(entry.target);
