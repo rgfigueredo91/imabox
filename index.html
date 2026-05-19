@@ -285,6 +285,97 @@
             transition: width 0.35s ease;
         }
 
+        /* ── Services accordion ── */
+        #s-services { background: #000; padding: 0; }
+        .acc-wrap {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+        .acc-item {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            border-right: 1px solid rgba(255,255,255,0.06);
+            transition: flex 0.65s cubic-bezier(0.77,0,0.175,1);
+        }
+        .acc-item:last-child { border-right: none; }
+        .acc-item.open { flex: 5; }
+        .acc-bg {
+            position: absolute;
+            inset: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            opacity: 0.3;
+            transition: opacity 0.5s;
+            pointer-events: none;
+        }
+        .acc-item.open .acc-bg { opacity: 0.6; }
+        .acc-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, rgba(0,0,0,0.75) 30%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+        }
+        .acc-item.open .acc-overlay { opacity: 1; }
+        .acc-title-v {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) rotate(-90deg);
+            white-space: nowrap;
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-weight: 200;
+            font-size: 0.72rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.7);
+            transition: opacity 0.25s;
+            pointer-events: none;
+        }
+        .acc-item.open .acc-title-v { opacity: 0; }
+        .acc-content {
+            position: absolute;
+            bottom: 56px;
+            left: 48px;
+            right: 48px;
+            opacity: 0;
+            transform: translateY(12px);
+            transition: opacity 0.35s 0.2s, transform 0.35s 0.2s;
+            pointer-events: none;
+        }
+        .acc-item.open .acc-content {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .acc-content h3 {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-weight: 200;
+            font-size: clamp(1.6rem, 2.8vw, 2.6rem);
+            color: #fff;
+            letter-spacing: -0.02em;
+            margin-bottom: 14px;
+        }
+        .acc-content p {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 300;
+            color: rgba(255,255,255,0.55);
+            line-height: 1.85;
+            max-width: 300px;
+        }
+        @media (max-width: 768px) {
+            .acc-wrap { flex-direction: column; }
+            .acc-item { flex: 1; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
+            .acc-item.open { flex: 4; }
+            .acc-title-v { transform: translate(-50%, -50%); font-size: 0.65rem; }
+            .acc-item.open .acc-title-v { opacity: 0; }
+            .acc-content { left: 24px; right: 24px; bottom: 28px; }
+            .acc-overlay { background: linear-gradient(to top, rgba(0,0,0,0.75) 30%, transparent 100%); }
+        }
+
         /* ── Reveal slider ── */
         #s-reveal {
             background: #080808;
@@ -606,6 +697,57 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
     </section>
 
+    <!-- SERVICES ACCORDION -->
+    <section class="section" id="s-services">
+        <div class="acc-wrap" id="accWrap">
+            <div class="acc-item open" data-idx="0">
+                <img class="acc-bg" src="img/cover2index.webp" alt="3D Visualization">
+                <div class="acc-overlay"></div>
+                <span class="acc-title-v">3D Visualization</span>
+                <div class="acc-content">
+                    <h3>3D Visualization</h3>
+                    <p>Photorealistic renders and animations that make your project feel real before it's built.</p>
+                </div>
+            </div>
+            <div class="acc-item" data-idx="1">
+                <img class="acc-bg" src="img/cover3index.webp" alt="Brand & Identity">
+                <div class="acc-overlay"></div>
+                <span class="acc-title-v">Brand & Identity</span>
+                <div class="acc-content">
+                    <h3>Brand & Identity</h3>
+                    <p>Visual identity systems built for architecture and real estate — from logo to full brand rollout.</p>
+                </div>
+            </div>
+            <div class="acc-item" data-idx="2">
+                <img class="acc-bg" src="img/cover4index.webp" alt="Photography">
+                <div class="acc-overlay"></div>
+                <span class="acc-title-v">Photography</span>
+                <div class="acc-content">
+                    <h3>Photography</h3>
+                    <p>Architectural and lifestyle photography that communicates the feel of a space, not just its form.</p>
+                </div>
+            </div>
+            <div class="acc-item" data-idx="3">
+                <img class="acc-bg" src="img/cover6index.webp" alt="Film & Motion">
+                <div class="acc-overlay"></div>
+                <span class="acc-title-v">Film & Motion</span>
+                <div class="acc-content">
+                    <h3>Film & Motion</h3>
+                    <p>Cinematic videos and animations that tell the story of your project from concept to completion.</p>
+                </div>
+            </div>
+            <div class="acc-item" data-idx="4">
+                <img class="acc-bg" src="img/cover7index.webp" alt="Interactive">
+                <div class="acc-overlay"></div>
+                <span class="acc-title-v">Interactive</span>
+                <div class="acc-content">
+                    <h3>Interactive</h3>
+                    <p>Virtual showrooms, 3D viewers and masterplans that let clients explore your project on their own terms.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- STATS -->
     <section class="section" id="s-stats">
         <div class="stats-wrap">
@@ -783,6 +925,26 @@ document.querySelectorAll('.carousel-wrap').forEach(function (wrap) {
 
     carouselNavs[id] = { prev: function(){ go(cur - 1); }, next: function(){ go(cur + 1); } };
 });
+
+/* ── Services accordion ── */
+(function () {
+    var wrap  = document.getElementById('accWrap');
+    if (!wrap) return;
+    var items = Array.from(wrap.querySelectorAll('.acc-item'));
+
+    function open(idx) {
+        items.forEach(function (item, i) {
+            item.classList.toggle('open', i === idx);
+        });
+    }
+
+    items.forEach(function (item, i) {
+        item.addEventListener('mouseenter', function () { open(i); });
+        item.addEventListener('click',      function () { open(i); });
+    });
+
+    wrap.addEventListener('mouseleave', function () { open(0); });
+})();
 
 /* ── Reveal slider ── */
 (function () {
