@@ -79,6 +79,22 @@
         .cta-contact a { color: var(--muted); text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; transition: color 0.2s; }
         .cta-contact a:hover { color: var(--gold); }
 
+        /* ── DIFERENCIAL ── */
+        .diferencial-section { background: var(--bg2); border-bottom: 1px solid var(--border); }
+        .diferencial-inner { display: grid; grid-template-columns: 1fr 1.6fr; gap: 64px; align-items: start; }
+        .diferencial-left { padding-top: 4px; }
+        .diferencial-left .eyebrow { font-size: 0.6rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }
+        .diferencial-left h2 { font-family: "aktiv-grotesk", sans-serif; font-size: clamp(1.5rem, 3vw, 2.1rem); font-weight: 300; letter-spacing: 0.04em; line-height: 1.2; margin-bottom: 16px; }
+        .diferencial-left p { color: var(--muted); font-size: 0.86rem; line-height: 1.75; }
+        .pillar-grid { display: flex; flex-direction: column; gap: 2px; }
+        .pillar-card { background: var(--bg); border: 1px solid var(--border); padding: 24px 28px; position: relative; overflow: hidden; display: flex; gap: 20px; align-items: flex-start; }
+        .pillar-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--gold); opacity: 0; transition: opacity 0.3s; }
+        .pillar-card:hover::before { opacity: 1; }
+        .pillar-icon { width: 40px; height: 40px; border: 1px solid var(--gold-border); background: var(--gold-dim); display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--gold); transition: background 0.3s; }
+        .pillar-card:hover .pillar-icon { background: rgba(201,169,110,0.2); }
+        .pillar-body h3 { font-family: "aktiv-grotesk", sans-serif; font-size: 0.9rem; font-weight: 400; letter-spacing: 0.07em; text-transform: uppercase; color: #fff; margin-bottom: 6px; }
+        .pillar-body p { color: var(--muted); font-size: 0.82rem; line-height: 1.65; }
+
         /* ── FOOTER ── */
         footer { border-top: 1px solid var(--border); padding: 28px 48px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; background: var(--bg); }
         footer .logo { font-family: 'aktiv-grotesk', sans-serif; font-size: 0.9rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.3); }
@@ -92,6 +108,7 @@
             section { height: auto; min-height: 100vh; overflow: auto; }
             .historia-inner { grid-template-columns: 1fr; gap: 40px; padding: 80px 0; }
             .historia-year { font-size: 4rem; }
+            .diferencial-inner { grid-template-columns: 1fr; gap: 32px; }
             .valores-grid { grid-template-columns: 1fr; }
             .valor-card { padding: 32px 24px; }
             .container { padding: 0 24px; }

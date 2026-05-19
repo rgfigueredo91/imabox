@@ -83,7 +83,9 @@
 .nav-overlay {
     position: fixed;
     inset: 0;
-    background: #080808;
+    background: rgba(8, 8, 8, 0.68);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
@@ -136,6 +138,7 @@
 .navbar.open .nav-links li:nth-child(1) a { transform: translateY(0); transition-delay: 0.04s; }
 .navbar.open .nav-links li:nth-child(2) a { transform: translateY(0); transition-delay: 0.09s; }
 .navbar.open .nav-links li:nth-child(3) a { transform: translateY(0); transition-delay: 0.14s; }
+.navbar.open .nav-links li:nth-child(4) a { transform: translateY(0); transition-delay: 0.19s; }
 
 .nav-links a:hover,
 .nav-links a.current { color: #c9a96e; }
