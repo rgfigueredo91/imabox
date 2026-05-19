@@ -285,6 +285,101 @@
             transition: width 0.35s ease;
         }
 
+        /* ── Reveal slider ── */
+        #s-reveal {
+            background: #080808;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 36px;
+            padding: 0 40px;
+        }
+        .reveal-copy {
+            text-align: center;
+            max-width: 720px;
+        }
+        .reveal-copy h2 {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-weight: 200;
+            font-size: clamp(1.8rem, 4vw, 3.2rem);
+            color: #fff;
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+        }
+        .reveal-copy h2 em {
+            font-style: normal;
+            color: #c9a96e;
+        }
+        .reveal-copy p {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(0.78rem, 1.2vw, 0.92rem);
+            font-weight: 300;
+            color: rgba(255,255,255,0.45);
+            margin-top: 14px;
+            line-height: 1.8;
+        }
+        .reveal-wrap {
+            position: relative;
+            width: min(760px, 90vw);
+            aspect-ratio: 16/9;
+            overflow: hidden;
+            user-select: none;
+            flex-shrink: 0;
+            cursor: col-resize;
+        }
+        .reveal-after, .reveal-before {
+            position: absolute;
+            inset: 0;
+        }
+        .reveal-after img, .reveal-before img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            pointer-events: none;
+        }
+        .reveal-before { clip-path: inset(0 50% 0 0); }
+        .reveal-handle {
+            position: absolute;
+            top: 0; bottom: 0;
+            left: 50%;
+            width: 2px;
+            background: #fff;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .reveal-handle-btn {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            flex-shrink: 0;
+        }
+        .reveal-handle-btn svg { width: 18px; height: 18px; fill: #000; }
+        .reveal-label {
+            position: absolute;
+            bottom: 12px;
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.55rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.7);
+            background: rgba(0,0,0,0.4);
+            padding: 4px 10px;
+            pointer-events: none;
+        }
+        .reveal-label.left  { left: 12px; }
+        .reveal-label.right { right: 12px; }
+        @media (max-width: 768px) {
+            #s-reveal { gap: 24px; padding: 0 20px; }
+        }
+
         /* ── Typewriter cursor ── */
         #typer-cursor {
             display: inline-block;
@@ -488,6 +583,29 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
     </section>
 
+    <!-- REVEAL SLIDER -->
+    <section class="section" id="s-reveal">
+        <div class="reveal-copy">
+            <h2>You don't need a fully defined project.<br><em>A simple idea is enough.</em></h2>
+            <p>We work from early sketches — adding value at every stage of the architectural design process.</p>
+        </div>
+        <div class="reveal-wrap" id="revealWrap">
+            <div class="reveal-after">
+                <img src="img/reveal-render.webp" alt="Render">
+            </div>
+            <div class="reveal-before" id="revealBefore">
+                <img src="img/reveal-sketch.webp" alt="Sketch">
+            </div>
+            <div class="reveal-handle" id="revealHandle">
+                <div class="reveal-handle-btn">
+                    <svg viewBox="0 0 20 20"><path d="M7 4l-4 6 4 6M13 4l4 6-4 6"/></svg>
+                </div>
+            </div>
+            <span class="reveal-label left">Sketch</span>
+            <span class="reveal-label right">Vision</span>
+        </div>
+    </section>
+
     <!-- STATS -->
     <section class="section" id="s-stats">
         <div class="stats-wrap">
@@ -665,6 +783,32 @@ document.querySelectorAll('.carousel-wrap').forEach(function (wrap) {
 
     carouselNavs[id] = { prev: function(){ go(cur - 1); }, next: function(){ go(cur + 1); } };
 });
+
+/* ── Reveal slider ── */
+(function () {
+    var wrap   = document.getElementById('revealWrap');
+    var before = document.getElementById('revealBefore');
+    var handle = document.getElementById('revealHandle');
+    if (!wrap) return;
+    var dragging = false;
+
+    function setPos(x) {
+        var rect = wrap.getBoundingClientRect();
+        var pct  = Math.max(2, Math.min(98, ((x - rect.left) / rect.width) * 100));
+        before.style.clipPath = 'inset(0 ' + (100 - pct) + '% 0 0)';
+        handle.style.left     = pct + '%';
+    }
+
+    handle.addEventListener('mousedown',  function (e) { dragging = true; e.preventDefault(); });
+    document.addEventListener('mouseup',  function ()  { dragging = false; });
+    document.addEventListener('mousemove', function (e) { if (dragging) setPos(e.clientX); });
+
+    wrap.addEventListener('touchstart', function (e) { dragging = true; }, { passive: true });
+    wrap.addEventListener('touchend',   function ()  { dragging = false; });
+    wrap.addEventListener('touchmove',  function (e) {
+        if (dragging) { setPos(e.touches[0].clientX); e.stopPropagation(); }
+    }, { passive: true });
+})();
 
 /* ── Typewriter ── */
 (function () {
