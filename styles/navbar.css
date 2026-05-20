@@ -166,19 +166,18 @@
 }
 
 .nav-lang {
-    margin-top: 20px;
     display: flex;
-    gap: 8px;
+    gap: 12px;
     align-items: center;
     justify-content: flex-end;
 }
 .nav-lang a,
 .nav-lang span {
     font-family: 'aktiv-grotesk', sans-serif;
-    font-size: 0.68rem;
-    letter-spacing: 0.16em;
+    font-size: 1rem;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.32);
+    color: rgba(255,255,255,0.45);
     text-decoration: none;
     transition: color 0.2s;
     cursor: pointer;
