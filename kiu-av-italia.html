@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-K99Z94HL');</script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0W0QJ3ZXQ5"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-0W0QJ3ZXQ5');
+    </script>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    <title>KIU Av. Italia — Architectural Visualization | Imabox</title>
+    <meta name="description" content="KIU Av. Italia — residential tower in Montevideo. 3D visualization, branding and virtual tour by Imabox." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="KIU Av. Italia — Imabox" />
+    <meta property="og:description" content="3D visualization, branding and virtual tour for KIU Av. Italia, Montevideo." />
+    <meta property="og:url" content="https://imabox.uy/kiu-av-italia.html" />
+    <meta property="og:image" content="https://imabox.uy/img/kiu-av-italia/2025-12-19_Aerea.jpg" />
+    <link rel="shortcut icon" type="image/png" href="favicon.png" />
+    <link rel="canonical" href="https://imabox.uy/kiu-av-italia.html" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.typekit.net/oov2wcw.css">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles/navbar.css" />
+    <link rel="stylesheet" href="styles/swipebox.css" />
+    <link rel="stylesheet" href="styles/cursor.css" />
+
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { background: #0e0e0e; color: #fff; font-family: 'Poppins', sans-serif; }
+        *::-webkit-scrollbar { display: none; }
+        * { scrollbar-width: none; }
+
+        /* ── PROJECT HEADER ── */
+        .project-header {
+            padding: 120px 48px 48px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 32px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .project-header-left .back-link {
+            display: inline-flex; align-items: center; gap: 8px;
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
+            color: rgba(255,255,255,0.35); text-decoration: none;
+            transition: color 0.2s;
+            margin-bottom: 20px;
+        }
+        .project-header-left .back-link:hover { color: #c9a96e; }
+        .project-eyebrow {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase;
+            color: #c9a96e; margin-bottom: 10px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .project-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: #c9a96e; }
+        .project-header h1 {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 200; letter-spacing: -0.02em; line-height: 1;
+            color: #fff;
+        }
+        .project-header h1 span { color: #c9a96e; }
+        .project-meta {
+            display: flex; flex-direction: column; gap: 6px;
+            text-align: right;
+        }
+        .project-meta .meta-item {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.7rem; letter-spacing: 0.12em;
+            color: rgba(255,255,255,0.35);
+        }
+        .project-meta .meta-item strong {
+            color: rgba(255,255,255,0.7); font-weight: 400;
+            margin-left: 6px;
+        }
+
+        /* ── GALLERY ── */
+        .gallery-section { padding: 8px; margin-top: 8px; }
+
+        .hes-gallery {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-auto-rows: 18vw;
+            gap: 2px;
+        }
+
+        .img {
+            position: relative;
+            overflow: hidden;
+            background: #1a1a1a;
+            cursor: pointer;
+        }
+        .img img {
+            width: 100%; height: 100%;
+            object-fit: cover; display: block;
+            transition: transform 0.5s ease;
+        }
+        .img:hover img { transform: scale(1.03); }
+
+        /* scroll-in */
+        .img { opacity: 0; transform: scale(0.97); transition: opacity 0.6s ease, transform 0.6s ease; }
+        .img.visible { opacity: 1; transform: scale(1); }
+        .img:hover { opacity: 0.92; }
+
+        /* ── VIDEO items ── */
+        .img video {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
+        .img.video-item:hover video { opacity: 1; }
+        .img.video-item:hover img { opacity: 0; }
+        .img.video-item img { transition: opacity 0.4s ease; }
+
+        /* video play badge */
+        .video-badge {
+            position: absolute; bottom: 12px; left: 12px;
+            display: flex; align-items: center; gap: 6px;
+            background: rgba(0,0,0,0.55);
+            border: 1px solid rgba(201,169,110,0.4);
+            padding: 5px 10px; z-index: 5;
+            pointer-events: none;
+            opacity: 1; transition: opacity 0.3s;
+        }
+        .img.video-item:hover .video-badge { opacity: 0; }
+        .video-badge i { color: #c9a96e; font-size: 0.7rem; }
+        .video-badge span {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.6rem; letter-spacing: 0.15em;
+            text-transform: uppercase; color: rgba(255,255,255,0.8);
+        }
+
+        /* ── 360 BADGE ── */
+        .badge-360 {
+            position: absolute; inset: 0;
+            display: flex; align-items: center; justify-content: center;
+            text-decoration: none; z-index: 10;
+        }
+        .badge-360-inner {
+            display: flex; flex-direction: column; align-items: center; gap: 6px;
+            background: rgba(0,0,0,0.0);
+            transition: background 0.3s;
+            padding: 16px 20px;
+        }
+        .badge-360:hover .badge-360-inner { background: rgba(0,0,0,0.45); }
+        .badge-360-sphere {
+            width: 48px; height: 48px; border-radius: 50%;
+            border: 2px solid #c9a96e;
+            display: flex; align-items: center; justify-content: center;
+            color: #c9a96e; font-size: 1.1rem;
+            background: rgba(0,0,0,0.35);
+            transition: background 0.3s, transform 0.3s;
+        }
+        .badge-360:hover .badge-360-sphere { background: rgba(201,169,110,0.2); transform: scale(1.1); }
+        .badge-360-label {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.65rem; letter-spacing: 0.2em;
+            text-transform: uppercase; color: #c9a96e;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+        }
+
+        /* no user select */
+        #noselectgrid { -webkit-user-select: none; -moz-user-select: none; user-select: none; -webkit-touch-callout: none; }
+
+        /* ── MASONRY POSITIONS ── */
+        #img-aerea          { grid-row: 1/3;  grid-column: 1/4; }
+        #img-semi-aerea     { grid-row: 1/2;  grid-column: 4/6; }
+        #img-ext-frontal    { grid-row: 2/3;  grid-column: 4/6; }
+        #img-ext-esquina    { grid-row: 3/5;  grid-column: 1/3; }
+        #img-acceso         { grid-row: 3/4;  grid-column: 3/5; }
+        #img-barbacoa       { grid-row: 4/5;  grid-column: 3/4; }
+        #img-cowork         { grid-row: 3/4;  grid-column: 5/6; }
+        #img-living5        { grid-row: 4/5;  grid-column: 4/6; }
+        #img-living6-360    { grid-row: 5/7;  grid-column: 1/3; }
+        #img-living-piso6   { grid-row: 5/6;  grid-column: 3/5; }
+        #img-dorm-05        { grid-row: 6/7;  grid-column: 3/4; }
+        #img-dorm-11        { grid-row: 5/7;  grid-column: 5/6; }
+
+        /* footer */
+        footer {
+            border-top: 1px solid rgba(255,255,255,0.08);
+            padding: 28px 48px;
+            display: flex; align-items: center; justify-content: space-between;
+            flex-wrap: wrap; gap: 12px; margin-top: 8px;
+        }
+        footer .logo { font-family: 'aktiv-grotesk', sans-serif; font-size: 0.9rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.3); }
+        footer p { font-size: 0.7rem; color: rgba(255,255,255,0.18); letter-spacing: 0.08em; }
+        .footer-social { display: flex; gap: 18px; align-items: center; }
+        .footer-social a { color: #c9a96e; font-size: 1.15rem; text-decoration: none; transition: opacity 0.2s; }
+        .footer-social a:hover { opacity: 0.65; }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 1024px) {
+            .hes-gallery { grid-template-columns: repeat(3, 1fr); grid-auto-rows: 28vw; }
+            .hes-gallery > .img { grid-row: auto !important; grid-column: auto !important; }
+            .project-header { padding: 100px 24px 36px; }
+            .project-meta { text-align: left; }
+        }
+        @media (max-width: 600px) {
+            .hes-gallery { grid-template-columns: 1fr 1fr; grid-auto-rows: 44vw; gap: 3px; }
+            .gallery-section { padding: 4px; }
+            footer { flex-direction: column; text-align: center; padding: 28px 24px; }
+        }
+    </style>
+</head>
+<body>
+
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K99Z94HL"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+<!-- NAV -->
+<header>
+    <nav class="navbar" id="navbar">
+        <a href="https://imabox.uy" class="nav-logo" id="link-font-index">imabox.</a>
+        <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+            <span class="nav-bar"></span>
+            <span class="nav-bar"></span>
+            <span class="nav-bar"></span>
+        </button>
+        <div class="nav-overlay">
+            <ul class="nav-links">
+                <li><a href="projects.html">Projects</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="nav-info">
+                <div class="nav-lang">
+                    <a href="#eng">eng</a>
+                    <span>|</span>
+                    <a href="#esp">esp</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<!-- PROJECT HEADER -->
+<div class="project-header">
+    <div class="project-header-left">
+        <a href="projects.html" class="back-link"><i class="fa fa-arrow-left"></i> All projects</a>
+        <div class="project-eyebrow">Residential · Montevideo, Uruguay</div>
+        <h1>KIU <span>Av. Italia</span></h1>
+    </div>
+    <div class="project-meta">
+        <div class="meta-item">Year <strong>2025</strong></div>
+        <div class="meta-item">Services <strong>3D Visualization · Branding · 360 Tour</strong></div>
+        <div class="meta-item">Client <strong>KIU</strong></div>
+    </div>
+</div>
+
+<!-- GALLERY -->
+<section class="gallery-section">
+    <div class="hes-gallery" id="noselectgrid">
+
+        <div class="img" id="img-aerea">
+            <a href="img/kiu-av-italia/2025-12-19_Aerea.jpg" class="swipebox" title="KIU Av. Italia — Aerial view">
+                <img class="lazy" src="img/kiu-av-italia/2025-12-19_Aerea.jpg" data-src="img/kiu-av-italia/2025-12-19_Aerea.jpg" alt="KIU Av. Italia aerial render — Imabox"/>
+            </a>
+        </div>
+
+        <div class="img" id="img-semi-aerea">
+            <a href="img/kiu-av-italia/2025-12-19_Semi aerea.jpg" class="swipebox" title="KIU Av. Italia — Semi aerial view">
+                <img class="lazy" src="img/kiu-av-italia/2025-12-19_Semi aerea.jpg" data-src="img/kiu-av-italia/2025-12-19_Semi aerea.jpg" alt="KIU Av. Italia semi aerial render — Imabox"/>
+            </a>
+        </div>
+
+        <div class="img" id="img-ext-frontal">
+            <a href="img/kiu-av-italia/2025-12-19_Exterior Frontal.jpg" class="swipebox" title="KIU Av. Italia — Exterior frontal">
+                <img class="lazy" src="img/kiu-av-italia/2025-12-19_Exterior Frontal.jpg" data-src="img/kiu-av-italia/2025-12-19_Exterior Frontal.jpg" alt="KIU Av. Italia exterior frontal render — Imabox"/>
+            </a>
+        </div>
+
+        <div class="img" id="img-ext-esquina">
+            <a href="img/kiu-av-italia/2025-12-19_Exterior Esquina.jpg" class="swipebox" title="KIU Av. Italia — Exterior corner">
+                <img class="lazy" src="img/kiu-av-italia/2025-12-19_Exterior Esquina.jpg" data-src="img/kiu-av-italia/2025-12-19_Exterior Esquina.jpg" alt="KIU Av. Italia exterior corner render — Imabox"/>
+            </a>
+        </div>
+
+        <div class="img" id="img-acceso">
+            <a href="img/kiu-av-italia/2026-05-20_Acceso.jpg" class="swipebox" title="KIU Av. Italia — Acceso">
+                <img class="lazy" src="img/kiu-av-italia/2026-05-20_Acceso.jpg" data-src="img/kiu-av-italia/2026-05-20_Acceso.jpg" alt="KIU Av. Italia acceso render — Imabox"/>
+            </a>
+        </div>
+
+        <div class="img" id="img-barbacoa">
+            <a href="img/kiu-av-italia/2025-12-19_Barbacoa.jpg" class="swipebox" title="KIU Av. Italia — Barbacoa">
+                <img class="lazy" src="img/kiu-av-italia/2025-12-19_Barbacoa.jpg" data-src="img/kiu-av-italia/2025-12-19_Barbacoa.jpg" alt="KIU Av. Italia barbacoa render — Imabox"/>
+            </a>
+        </div>
+
+        <div class="img" id="img-cowork">
+            <a href="img/kiu-av-italia/2025-12-19_Cowork.jpg" class="swipebox" title="KIU Av. Italia — Cowork">
+                <img class="lazy" src="img/kiu-av-italia/2025-12-19_Cowork.jpg" data-src="img/kiu-av-italia/2025-12-19_Cowork.jpg" alt="KIU Av. Italia cowork render — Imabox"/>
+            </a>
+        </div>
+
+        <div class="img" id="img-living5">
+            <a href="img/kiu-av-italia/2025-12-19_Living comedor cocina piso  5.jpg" class="swipebox" title="KIU Av. Italia — Living piso 5">
+                <img class="lazy" src="img/kiu-av-italia/2025-12-19_Living comedor cocina piso  5.jpg" data-src="img/kiu-av-italia/2025-12-19_Living comedor cocina piso  5.jpg" alt="KIU Av. Italia living comedor cocina piso 5 — Imabox"/>
+            </a>
+        </div>
+
+        <!-- 360 TOUR IMAGE -->
+        <div class="img" id="img-living6-360">
+            <img class="lazy" src="img/kiu-av-italia/2025-12-19_Living comedor cocina piso  6.jpg" data-src="img/kiu-av-italia/2025-12-19_Living comedor cocina piso  6.jpg" alt="KIU Av. Italia living comedor cocina piso 6 — 360 tour — Imabox"/>
+            <a href="https://imabox.uy/app-files2/index.html" target="_blank" rel="noopener" class="badge-360" aria-label="Ver recorrido 360°">
+                <div class="badge-360-inner">
+                    <div class="badge-360-sphere"><i class="fa fa-globe"></i></div>
+                    <span class="badge-360-label">360°</span>
+                </div>
+            </a>
+        </div>
+
+        <div class="img" id="img-living-piso6">
+            <a href="img/kiu-av-italia/2025-12-19_Living piso  6.jpg" class="swipebox" title="KIU Av. Italia — Living piso 6">
+                <img class="lazy" src="img/kiu-av-italia/2025-12-19_Living piso  6.jpg" data-src="img/kiu-av-italia/2025-12-19_Living piso  6.jpg" alt="KIU Av. Italia living piso 6 — Imabox"/>
+            </a>
+        </div>
+
+        <div class="img" id="img-dorm-05">
+            <a href="img/kiu-av-italia/2025-12-19_Dormitorio n05.jpg" class="swipebox" title="KIU Av. Italia — Dormitorio n05">
+                <img class="lazy" src="img/kiu-av-italia/2025-12-19_Dormitorio n05.jpg" data-src="img/kiu-av-italia/2025-12-19_Dormitorio n05.jpg" alt="KIU Av. Italia dormitorio n05 — Imabox"/>
+            </a>
+        </div>
+
+        <div class="img" id="img-dorm-11">
+            <a href="img/kiu-av-italia/2025-12-19_Dormitorio n11.jpg" class="swipebox" title="KIU Av. Italia — Dormitorio n11">
+                <img class="lazy" src="img/kiu-av-italia/2025-12-19_Dormitorio n11.jpg" data-src="img/kiu-av-italia/2025-12-19_Dormitorio n11.jpg" alt="KIU Av. Italia dormitorio n11 — Imabox"/>
+            </a>
+        </div>
+
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="logo">Imabox</div>
+    <p>Creative agency · Architecture &amp; Real Estate — Montevideo, Uruguay</p>
+    <p>© 2025 Imabox. All rights reserved.</p>
+    <div class="footer-social">
+        <a href="https://www.instagram.com/imabox_uy" target="_blank"><i class="fa fa-instagram"></i></a>
+        <a href="https://www.linkedin.com/company/imabox" target="_blank"><i class="fa fa-linkedin"></i></a>
+    </div>
+</footer>
+
+<script src="js/navbar-hamburger.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/swipebox.min.js"></script>
+<script src="js/circle.js"></script>
+
+<script>
+$(document).ready(function(){ $('.swipebox').swipebox({ useSVG: false }); });
+
+/* lazy load */
+const lazyImgs = document.querySelectorAll('img.lazy');
+const ioLazy = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+        if (e.isIntersecting) {
+            const img = e.target;
+            img.src = img.dataset.src;
+            img.classList.add('loaded');
+            ioLazy.unobserve(img);
+        }
+    });
+}, { rootMargin: '200px' });
+lazyImgs.forEach(img => ioLazy.observe(img));
+
+/* scroll-in animation */
+const ioVisible = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); ioVisible.unobserve(e.target); } });
+}, { threshold: 0.05 });
+document.querySelectorAll('.img').forEach(el => ioVisible.observe(el));
+
+/* video hover */
+document.querySelectorAll('.img.video-item').forEach(item => {
+    const video = item.querySelector('video');
+    if (!video) return;
+    item.addEventListener('mouseenter', () => { video.play(); });
+    item.addEventListener('mouseleave', () => { video.pause(); video.currentTime = 0; });
+});
+</script>
+
+</body>
+</html>
