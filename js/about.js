@@ -60,21 +60,6 @@ tabBtns.forEach(btn => {
     });
 });
 
-/* ── PILLAR HOVER → imagen derecha ── */
-const pillarItems = document.querySelectorAll('.pillar-item');
-const pillarImgs  = document.querySelectorAll('.pillar-img');
-
-pillarItems.forEach(item => {
-    item.addEventListener('mouseenter', () => {
-        const idx = +item.dataset.img;
-        pillarImgs.forEach((img, i) => img.classList.toggle('active', i === idx));
-        pillarItems.forEach(it => it.classList.remove('hovered'));
-        item.classList.add('hovered');
-    });
-    item.addEventListener('mouseleave', () => {
-        item.classList.remove('hovered');
-    });
-});
 
 /* ── ANIMACIONES (intersection observer) ── */
 const animEls = document.querySelectorAll('.anim');
