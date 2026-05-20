@@ -287,10 +287,10 @@ footer p { font-size: 0.7rem; color: rgba(255,255,255,0.18); letter-spacing: 0.0
 @media (max-width: 900px) {
     section { height: auto; min-height: 100vh; min-height: 100dvh; overflow: visible; }
 
-    .hero-video-section { grid-template-columns: 1fr; grid-template-rows: 50vw auto; }
-    .hero-video-bg { display: block; height: 50vw; max-height: 320px; }
+    .hero-video-section { grid-template-columns: 1fr; grid-template-rows: 55vw auto; }
+    .hero-video-bg { display: block; height: 55vw; max-height: 340px; order: -1; margin-top: 64px; }
     .hero-video-bg::before { display: none; }
-    .hero-video-inner { padding: 72px 24px 48px; gap: 28px; }
+    .hero-video-inner { padding: 36px 24px 48px; gap: 28px; order: 1; }
     .hero-left h1 { font-size: clamp(1.8rem, 6vw, 2.6rem); }
     .tab-panels { min-height: 120px; }
 
