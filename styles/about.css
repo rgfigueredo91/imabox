@@ -33,7 +33,7 @@ footer { position: relative; }
    ════════════════════════════════ */
 .hero-video-section {
     display: grid;
-    grid-template-columns: 1fr 340px;
+    grid-template-columns: 1fr 480px;
     background: var(--bg);
     border-bottom: 1px solid var(--border);
 }
@@ -142,7 +142,7 @@ footer { position: relative; }
 
 .pillars-inner {
     display: grid;
-    grid-template-columns: 340px 1fr;
+    grid-template-columns: 480px 1fr;
     gap: 0;
     height: 100%;
     align-items: stretch;
