@@ -15,6 +15,16 @@ document.addEventListener("DOMContentLoaded", function () {
         histP3:     "En <strong>2018 fundamos Imabox en Montevideo</strong>. No como un estudio de visualización, sino como una agencia creativa que se hace cargo de toda la imagen de un proyecto — desde la identidad de marca hasta el día del lanzamiento.",
         histP4:     "La orientación norte no vende un apartamento. <strong>El sol de la mañana entrando por la ventana mientras tomás un café, sí.</strong> Con cada imagen, cada video, cada cinemagraph, construimos la experiencia de vivir algo que todavía no existe — para que quien lo vea lo desee antes de que se ponga el primer ladrillo.",
 
+        difEyebrow: "Por qué somos distintos",
+        difH2:      "No somos solo un estudio<br>de visualización.",
+        difP:       "Entendemos el espacio antes de que exista. Eso cambia todo lo que producimos — desde la primera imagen hasta la campaña de lanzamiento.",
+        pillar1H3:  "Somos arquitectos",
+        pillar1P:   "Cada imagen es una decisión de diseño. Entendemos la escala, la luz, la materialidad — y cuando el proyecto todavía no está del todo definido, lo completamos.",
+        pillar2H3:  "Desde el día cero",
+        pillar2P:   "Trabajamos cuando el proyecto todavía es una idea en papel. Ayudamos a definir el nombre, la identidad visual, el posicionamiento — todo antes de que la obra empiece.",
+        pillar3H3:  "Todo lo visual, todo integrado",
+        pillar3P:   "Marca, imágenes, video, cinemagraphs, showroom virtual, tour 360, redes sociales, material para inversores. Un solo equipo que mantiene coherencia en cada pieza.",
+
         valTag:     "Lo que nos define",
         valH2:      "No solo mostramos el espacio.<br>Lo pensamos.",
         val1H3:     "Somos arquitectos",
@@ -53,6 +63,16 @@ document.addEventListener("DOMContentLoaded", function () {
         t("hist-p3",         esp.histP3);
         t("hist-p4",         esp.histP4);
 
+        t("dif-eyebrow",     esp.difEyebrow);
+        t("dif-h2",          esp.difH2);
+        t("dif-p",           esp.difP);
+        t("pillar1-h3",      esp.pillar1H3);
+        t("pillar1-p",       esp.pillar1P);
+        t("pillar2-h3",      esp.pillar2H3);
+        t("pillar2-p",       esp.pillar2P);
+        t("pillar3-h3",      esp.pillar3H3);
+        t("pillar3-p",       esp.pillar3P);
+
         t("val-tag",         esp.valTag);
         t("val-h2",          esp.valH2);
         t("val1-h3",         esp.val1H3);
@@ -72,8 +92,9 @@ document.addEventListener("DOMContentLoaded", function () {
         t("footer-p1",       esp.footerP1);
         t("footer-p2",       esp.footerP2);
 
+        document.querySelectorAll("a[href='projects.html']").forEach(function(el){ el.href = "projects.html#esp"; });
         document.querySelectorAll("a[href='services.html']").forEach(function(el){ el.href = "services.html#esp"; });
-        document.querySelectorAll("a[href='https://imabox.uy/about.html']").forEach(function(el){ el.href = "about.html#esp"; });
-        document.querySelectorAll("a[href='https://imabox.uy/contact.html']").forEach(function(el){ el.href = "contact.html#esp"; });
+        document.querySelectorAll("a[href='about.html']").forEach(function(el){ el.href = "about.html#esp"; });
+        document.querySelectorAll("a[href='contact.html']").forEach(function(el){ el.href = "contact.html#esp"; });
     }
 });
