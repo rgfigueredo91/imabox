@@ -113,10 +113,7 @@
         }
         .img:hover img { transform: scale(1.03); }
 
-        /* scroll-in */
-        .img { opacity: 0; transform: translateY(16px); transition: opacity 0.55s ease, transform 0.55s ease; }
-        .img.visible { opacity: 1; transform: none; }
-        .img.visible:hover { opacity: 0.88; }
+        .img:hover { opacity: 0.88; }
 
         /* ── VIDEO items ── */
         .img video {
@@ -385,11 +382,6 @@ const ioLazy = new IntersectionObserver((entries) => {
 }, { rootMargin: '200px' });
 lazyImgs.forEach(img => ioLazy.observe(img));
 
-/* scroll-in animation */
-const ioVisible = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); ioVisible.unobserve(e.target); } });
-}, { threshold: 0, rootMargin: '0px 0px -40px 0px' });
-document.querySelectorAll('.img').forEach(el => ioVisible.observe(el));
 
 /* video hover */
 document.querySelectorAll('.img.video-item').forEach(item => {
