@@ -73,7 +73,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="sp-dot" data-section="1"></div>
     <div class="sp-dot" data-section="2"></div>
     <div class="sp-dot" data-section="3"></div>
-    <div class="sp-dot" data-section="4"></div>
 </nav>
 
 <!-- 1. HERO -->
@@ -86,78 +85,89 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="hero-line"></div>
 </section>
 
-<!-- 2. SERVICIOS -->
-<section class="servicios-section" id="sec-2">
-    <div class="container">
-        <div class="servicios-header anim">
-            <h2 id="srvsec-h2" class="section-title">Everything a project needs to sell</h2>
-            <p id="srvsec-sub" class="section-sub" style="margin-bottom:0">The complete visual identity of a project. All of this lives under a single creative direction — so every piece tells the same story.</p>
+<!-- 2. SERVICES ACCORDION -->
+<section class="acc-section" id="sec-1">
+    <div class="acc-wrap" id="accWrap">
+        <div class="acc-item open" data-idx="0">
+            <img class="acc-bg" src="img/img window/2025/09-torre 1 02.webp" alt="3D Visualization">
+            <div class="acc-overlay"></div>
+            <span class="acc-title-v">3D Visualization</span>
+            <div class="acc-content">
+                <h3>3D Visualization</h3>
+                <p>Photorealistic renders and animations that make your project feel real before it's built.</p>
+            </div>
         </div>
-        <div class="servicios-grid">
-            <div class="srv-card anim" style="transition-delay:0.05s">
-                <div id="srv1-badge" class="srv-badge">Brand</div>
-                <div class="srv-icon"><i class="fa fa-font"></i></div>
-                <h3 id="srv1-h3">Visual identity for your project</h3>
-                <p id="srv1-p">Name, logo, palette, typography, brand guidelines. The project's brand before it's built — so every piece communicates the same thing.</p>
+        <div class="acc-item" data-idx="1">
+            <video class="acc-bg acc-video" src="animations/acc-brand.mp4" muted loop playsinline preload="metadata"></video>
+            <div class="acc-overlay"></div>
+            <span class="acc-title-v">Brand &amp; Identity</span>
+            <div class="acc-content">
+                <h3>Brand &amp; Identity</h3>
+                <p>Visual identity systems built for architecture and real estate — from logo to full brand rollout.</p>
             </div>
-            <div class="srv-card anim" style="transition-delay:0.12s">
-                <div id="srv2-badge" class="srv-badge">Visualization</div>
-                <div class="srv-icon"><i class="fa fa-picture-o"></i></div>
-                <h3 id="srv2-h3">Photorealistic images</h3>
-                <p id="srv2-p">Exteriors, interiors, amenities and access. Images that help someone who can't read floor plans understand exactly where they'll live.</p>
+        </div>
+        <div class="acc-item" data-idx="2" id="acc-photo-srv">
+            <div class="acc-slideshow">
+                <img class="acc-slide active" src="img/acc-photo-2.webp" alt="Photography">
+                <img class="acc-slide" src="img/acc-photo-5.webp" alt="Photography">
+                <img class="acc-slide" src="img/acc-photo-3.webp" alt="Photography">
+                <img class="acc-slide" src="img/acc-photo-4.webp" alt="Photography">
             </div>
-            <div class="srv-card anim" style="transition-delay:0.19s">
-                <div id="srv3-badge" class="srv-badge">Visualization</div>
-                <div class="srv-icon"><i class="fa fa-film"></i></div>
-                <h3 id="srv3-h3">Video &amp; cinemagraphs</h3>
-                <p id="srv3-p">Concept videos, fly-throughs, construction timelapses. Cinemagraphs: still images with subtle movement — the format with the highest engagement on social media.</p>
+            <div class="acc-overlay"></div>
+            <span class="acc-title-v">Photography</span>
+            <div class="acc-content">
+                <h3>Photography</h3>
+                <p>Architectural and lifestyle photography that communicates the feel of a space, not just its form.</p>
             </div>
-            <div class="srv-card anim" style="transition-delay:0.26s">
-                <div id="srv4-badge" class="srv-badge">Sales tools</div>
-                <div class="srv-icon"><i class="fa fa-desktop"></i></div>
-                <h3 id="srv4-h3">Interactive virtual showroom</h3>
-                <p id="srv4-p">Digital walkthrough of the project, floor by floor. Live availability, loan calculator, lead form and analytics included.</p>
+        </div>
+        <div class="acc-item" data-idx="3">
+            <video class="acc-bg acc-video" src="animations/acc-film.mp4" muted loop playsinline preload="metadata"></video>
+            <div class="acc-overlay"></div>
+            <span class="acc-title-v">Film &amp; Motion</span>
+            <div class="acc-content">
+                <h3>Film &amp; Motion</h3>
+                <p>Cinematic videos and animations that tell the story of your project from concept to completion.</p>
             </div>
-            <div class="srv-card anim" style="transition-delay:0.33s">
-                <div id="srv5-badge" class="srv-badge">Design</div>
-                <div class="srv-icon"><i class="fa fa-th"></i></div>
-                <h3 id="srv5-h3">Interior design</h3>
-                <p id="srv5-p">Materiality, layout and ambiance proposal. Conceptual images to show how the space can be lived before it exists.</p>
-            </div>
-            <div class="srv-card anim" style="transition-delay:0.40s">
-                <div id="srv6-badge" class="srv-badge">Content</div>
-                <div class="srv-icon"><i class="fa fa-instagram"></i></div>
-                <h3 id="srv6-h3">Social media content</h3>
-                <p id="srv6-p">Posts, carousels, reels and stories aligned with the project's identity. Strategy designed to attract buyers, not just followers.</p>
-            </div>
-            <div class="srv-card anim" style="transition-delay:0.47s">
-                <div id="srv7-badge" class="srv-badge">Sales tools</div>
-                <div class="srv-icon"><i class="fa fa-map-o"></i></div>
-                <h3 id="srv7-h3">Interactive scale models</h3>
-                <p id="srv7-p">3D interactive masterplans that let buyers explore the development — units, views, availability — directly from any device.</p>
-            </div>
-            <div class="srv-card anim" style="transition-delay:0.54s">
-                <div id="srv8-badge" class="srv-badge">Visualization</div>
-                <div class="srv-icon"><i class="fa fa-street-view"></i></div>
-                <h3 id="srv8-h3">360° virtual tour</h3>
-                <p id="srv8-p">Immersive walkthrough of the space — room by room, at any stage of construction. Ready to embed on portals, social media, and landing pages.</p>
-            </div>
-            <div class="srv-card anim" style="transition-delay:0.61s">
-                <div id="srv9-badge" class="srv-badge">Sales tools</div>
-                <div class="srv-icon"><i class="fa fa-files-o"></i></div>
-                <h3 id="srv9-h3">Investor materials</h3>
-                <p id="srv9-p">Pitch decks, brochures and presentation PDFs designed to raise capital before construction begins. Data, renders and brand — all in one document.</p>
+        </div>
+        <div class="acc-item" data-idx="4">
+            <img class="acc-bg" src="img/acc-interactive-cover.webp" alt="Interactive">
+            <video class="acc-bg acc-video acc-contain acc-video-reveal" src="animations/acc-interactive.mp4" muted loop playsinline preload="metadata"></video>
+            <div class="acc-overlay"></div>
+            <span class="acc-title-v">Sales Platform</span>
+            <div class="acc-content">
+                <h3>Sales Platform</h3>
+                <p>Virtual showrooms, 3D viewers and masterplans that let clients explore your project on their own terms.</p>
             </div>
         </div>
     </div>
 </section>
 
+
 <!-- 4. PROCESO -->
 <section class="proceso-section" id="sec-3">
     <div class="container">
-        <div id="proc-tag" class="section-tag anim">Process</div>
-        <h2 id="proc-h2" class="section-title anim" style="transition-delay:0.1s">How we work</h2>
-        <p id="proc-sub" class="section-sub anim" style="transition-delay:0.2s">Every project is different, but the path always starts in the same place: before there's anything to show.</p>
+        <div class="proceso-top">
+            <div class="proceso-text">
+                <div id="proc-tag" class="section-tag anim">Process</div>
+                <h2 id="proc-h2" class="section-title anim" style="transition-delay:0.1s">You don't need a fully<br>defined project.</h2>
+                <p id="proc-sub" class="section-sub anim" style="transition-delay:0.2s">We work from early sketches — adding value at every stage of the architectural design process.</p>
+            </div>
+            <div class="reveal-wrap" id="revealWrapSrv">
+                <div class="reveal-after">
+                    <img src="img/reveal-render.webp" alt="Render">
+                </div>
+                <div class="reveal-before" id="revealBeforeSrv">
+                    <img src="img/reveal-sketch.webp" alt="Sketch">
+                </div>
+                <div class="reveal-handle" id="revealHandleSrv">
+                    <div class="reveal-handle-btn">
+                        <svg viewBox="0 0 20 20"><path d="M7 4l-4 6 4 6M13 4l4 6-4 6"/></svg>
+                    </div>
+                </div>
+                <span class="reveal-label left">Sketch</span>
+                <span class="reveal-label right">Vision</span>
+            </div>
+        </div>
         <div class="proceso-steps">
             <div class="proceso-line"></div>
             <div class="step anim" style="transition-delay:0.1s">
@@ -189,48 +199,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
 </section>
 
-<!-- 5. MODELO DE COBRO -->
-<section class="modelo-section" id="sec-4">
-    <div class="container">
-        <div class="modelo-inner">
-            <div class="modelo-left anim-left">
-                <div id="mod-tag" class="section-tag">Investment</div>
-                <h2 class="section-title"><span id="mod-h2a">The work is structured</span><br><span id="mod-h2b">in two moments.</span></h2>
-                <p id="mod-intro" class="modelo-intro">We don't charge per image or per hour. We structure the work as what it is: a project with a start, production phase, and market life.</p>
-                <div class="modelo-insight anim" style="transition-delay:0.3s">
-                    <div class="modelo-insight-line"></div>
-                    <p id="mod-insight">The project cost is recovered with the first unit sold. From there, everything we generate is profitability for your project.</p>
-                </div>
-            </div>
-            <div class="modelo-cards anim-right" style="transition-delay:0.15s">
-                <div class="modelo-card">
-                    <div class="modelo-card-num">01</div>
-                    <div class="modelo-card-body">
-                        <h3 id="mod1-h3">Project production</h3>
-                        <p id="mod1-p">All visual materials defined upfront: brand identity, images, video, virtual showroom, 360 tour, investor materials. Agreed once, paid in stages. No surprises.</p>
-                        <ul class="modelo-list">
-                            <li id="mod1-li1">Closed scope from the start</li>
-                            <li id="mod1-li2">Revisions included in the process</li>
-                            <li id="mod1-li3">Materials remain the client's property</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="modelo-card">
-                    <div class="modelo-card-num">02</div>
-                    <div class="modelo-card-body">
-                        <h3 id="mod2-h3">Monthly support</h3>
-                        <p id="mod2-p">Once the project launches, the materials need ongoing life: new content, availability updates, active social media, lead reports. A dedicated team without having to re-explain the project.</p>
-                        <ul class="modelo-list">
-                            <li id="mod2-li1">Continuity on what already exists</li>
-                            <li id="mod2-li2">Scales with the project's stage</li>
-                            <li id="mod2-li3">Can be added from day one or after launch</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
 <!-- 6. CTA -->
 <section class="cta-section" id="sec-5">

@@ -111,7 +111,7 @@
             0%, 100% { transform: translateX(-50%) scaleY(1); opacity: 0.5; }
             50%       { transform: translateX(-50%) scaleY(1.18); opacity: 1; }
         }
-        #s1 .scroll-hint {
+        .scroll-hint {
             position: absolute;
             bottom: 32px;
             left: 50%;
@@ -122,13 +122,13 @@
             gap: 10px;
             cursor: pointer;
         }
-        #s1 .scroll-hint .scroll-line {
+        .scroll-hint .scroll-line {
             width: 1px;
             height: 40px;
             background: #c9a96e;
             animation: scrollPulse 2s ease-in-out infinite;
         }
-        #s1 .scroll-hint .scroll-label {
+        .scroll-hint .scroll-label {
             font-family: 'aktiv-grotesk', sans-serif;
             font-size: 0.6rem;
             font-weight: 500;
@@ -285,192 +285,6 @@
             transition: width 0.35s ease;
         }
 
-        /* ── Services accordion ── */
-        #s-services { background: #000; padding: 0; }
-        .acc-wrap {
-            display: flex;
-            width: 100%;
-            height: 100%;
-        }
-        .acc-item {
-            flex: 1;
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-            border-right: 1px solid rgba(255,255,255,0.06);
-            transition: flex 0.65s cubic-bezier(0.77,0,0.175,1);
-        }
-        .acc-item:last-child { border-right: none; }
-        .acc-item.open { flex: 5; }
-        .acc-bg {
-            position: absolute;
-            inset: 0;
-            width: 100%; height: 100%;
-            object-fit: cover;
-            opacity: 0.3;
-            transition: opacity 0.5s;
-            pointer-events: none;
-        }
-        .acc-item.open .acc-bg { opacity: 0.6; }
-        .acc-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to right, rgba(0,0,0,0.75) 30%, transparent 100%);
-            opacity: 0;
-            transition: opacity 0.5s;
-            pointer-events: none;
-        }
-        .acc-item.open .acc-overlay { opacity: 1; }
-        .acc-title-v {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%) rotate(-90deg);
-            white-space: nowrap;
-            font-family: 'aktiv-grotesk', sans-serif;
-            font-weight: 200;
-            font-size: 0.72rem;
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.7);
-            transition: opacity 0.25s;
-            pointer-events: none;
-        }
-        .acc-item.open .acc-title-v { opacity: 0; }
-        .acc-content {
-            position: absolute;
-            bottom: 56px;
-            left: 48px;
-            right: 48px;
-            opacity: 0;
-            transform: translateY(12px);
-            transition: opacity 0.35s 0.2s, transform 0.35s 0.2s;
-            pointer-events: none;
-        }
-        .acc-item.open .acc-content {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .acc-content h3 {
-            font-family: 'aktiv-grotesk', sans-serif;
-            font-weight: 200;
-            font-size: clamp(1.6rem, 2.8vw, 2.6rem);
-            color: #fff;
-            letter-spacing: -0.02em;
-            margin-bottom: 14px;
-        }
-        .acc-content p {
-            font-family: 'Poppins', sans-serif;
-            font-size: 0.82rem;
-            font-weight: 300;
-            color: rgba(255,255,255,0.55);
-            line-height: 1.85;
-            max-width: 300px;
-        }
-        @media (max-width: 768px) {
-            .acc-wrap { flex-direction: column; }
-            .acc-item { flex: 1; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
-            .acc-item.open { flex: 4; }
-            .acc-title-v { transform: translate(-50%, -50%); font-size: 0.65rem; }
-            .acc-item.open .acc-title-v { opacity: 0; }
-            .acc-content { left: 24px; right: 24px; bottom: 28px; }
-            .acc-overlay { background: linear-gradient(to top, rgba(0,0,0,0.75) 30%, transparent 100%); }
-        }
-
-        /* ── Reveal slider ── */
-        #s-reveal {
-            background: #080808;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 36px;
-            padding: 0 40px;
-        }
-        .reveal-copy {
-            text-align: center;
-            max-width: 720px;
-        }
-        .reveal-copy h2 {
-            font-family: 'aktiv-grotesk', sans-serif;
-            font-weight: 200;
-            font-size: clamp(1.8rem, 4vw, 3.2rem);
-            color: #fff;
-            letter-spacing: -0.02em;
-            line-height: 1.15;
-        }
-        .reveal-copy h2 em {
-            font-style: normal;
-            color: #c9a96e;
-        }
-        .reveal-copy p {
-            font-family: 'Poppins', sans-serif;
-            font-size: clamp(0.78rem, 1.2vw, 0.92rem);
-            font-weight: 300;
-            color: rgba(255,255,255,0.45);
-            margin-top: 14px;
-            line-height: 1.8;
-        }
-        .reveal-wrap {
-            position: relative;
-            width: min(760px, 90vw);
-            aspect-ratio: 16/9;
-            overflow: hidden;
-            user-select: none;
-            flex-shrink: 0;
-            cursor: col-resize;
-        }
-        .reveal-after, .reveal-before {
-            position: absolute;
-            inset: 0;
-        }
-        .reveal-after img, .reveal-before img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            pointer-events: none;
-        }
-        .reveal-before { clip-path: inset(0 50% 0 0); }
-        .reveal-handle {
-            position: absolute;
-            top: 0; bottom: 0;
-            left: 50%;
-            width: 2px;
-            background: #fff;
-            transform: translateX(-50%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .reveal-handle-btn {
-            width: 36px; height: 36px;
-            border-radius: 50%;
-            background: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
-            flex-shrink: 0;
-        }
-        .reveal-handle-btn svg { width: 18px; height: 18px; fill: #000; }
-        .reveal-label {
-            position: absolute;
-            bottom: 12px;
-            font-family: 'aktiv-grotesk', sans-serif;
-            font-size: 0.55rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.7);
-            background: rgba(0,0,0,0.4);
-            padding: 4px 10px;
-            pointer-events: none;
-        }
-        .reveal-label.left  { left: 12px; }
-        .reveal-label.right { right: 12px; }
-        @media (max-width: 768px) {
-            #s-reveal { gap: 24px; padding: 0 20px; }
-        }
-
         /* ── Typewriter cursor ── */
         #typer-cursor {
             display: inline-block;
@@ -489,6 +303,41 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .mosaic-grid {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            grid-template-rows: repeat(3, 33.333%);
+            pointer-events: none;
+            z-index: 0;
+            align-items: stretch;
+            justify-items: stretch;
+        }
+        .mosaic-tile {
+            width: 100%;
+            height: 100%;
+            min-width: 0;
+            min-height: 0;
+            object-fit: cover;
+            opacity: 0.07;
+            transition: opacity 0.7s ease;
+            filter: grayscale(15%);
+            display: block;
+        }
+        .mosaic-tile.lit {
+            opacity: 0.5;
+            transition: opacity 0.25s ease;
+        }
+        .mosaic-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(8,8,8,0.65);
+            z-index: 1;
+            pointer-events: none;
         }
         .stats-wrap {
             display: flex;
@@ -497,6 +346,8 @@
             justify-content: center;
             flex-wrap: wrap;
             padding: 0 40px;
+            position: relative;
+            z-index: 2;
         }
         .stat-item {
             text-align: center;
@@ -536,6 +387,7 @@
             .carousel-nav  { right: 24px; bottom: 48px; }
             .text-block, .text-block-cta { padding: 0 24px; }
             .stats-wrap { gap: 40px; }
+            .mosaic-grid { grid-template-columns: repeat(5, 1fr); }
         }
     </style>
 
@@ -618,8 +470,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <!-- S2 — TEXTO -->
     <section class="section" id="s2">
-        <div class="text-block">
-            <p id="translateFirstParagraph">We are a creative agency. We specialize in brand identity, photography and audiovisual production for architecture and real estate projects. What drives us is building the experience of a project before it exists — because a great image doesn't just show what something will be, it makes people want it.</p>
+        <div class="text-block text-block-cta">
+            <p id="translateFirstParagraph">We are a creative agency for architecture and real estate. Every project starts with one question: what should people feel when they see this? The answer is built with image, brand and motion — making a project desirable before the first brick is laid.</p>
+            <p class="cta" id="translateSecondParagraphDos">Shall we start building together?</p>
+            <a href="https://calendly.com/imabox" target="_blank" rel="noopener" class="btn-call" id="btnBookCall">Book a call</a>
+        </div>
+        <div class="scroll-hint" onclick="window.snapGoTo(2)">
+            <div class="scroll-line"></div>
+            <span class="scroll-label">Scroll down</span>
         </div>
     </section>
 
@@ -665,91 +523,37 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
     </section>
 
-    <!-- S4 — TEXTO 2 -->
-    <section class="section" id="s4">
-        <div class="text-block text-block-cta">
-            <p id="translateSecondParagraph">We work with developers and architecture firms on real estate, commercial and urban projects. Every job starts with a simple question: what should people feel when they see this? The answer is built with image, brand and motion — the three languages we use to make a project exist before it exists.</p>
-            <p class="cta" id="translateSecondParagraphDos">Shall we start building together?</p>
-            <a href="https://calendly.com/imabox" target="_blank" rel="noopener" class="btn-call" id="btnBookCall">Book a call</a>
-        </div>
-    </section>
-
-    <!-- REVEAL SLIDER -->
-    <section class="section" id="s-reveal">
-        <div class="reveal-copy">
-            <h2>You don't need a fully defined project.<br><em>A simple idea is enough.</em></h2>
-            <p>We work from early sketches — adding value at every stage of the architectural design process.</p>
-        </div>
-        <div class="reveal-wrap" id="revealWrap">
-            <div class="reveal-after">
-                <img src="img/reveal-render.webp" alt="Render">
-            </div>
-            <div class="reveal-before" id="revealBefore">
-                <img src="img/reveal-sketch.webp" alt="Sketch">
-            </div>
-            <div class="reveal-handle" id="revealHandle">
-                <div class="reveal-handle-btn">
-                    <svg viewBox="0 0 20 20"><path d="M7 4l-4 6 4 6M13 4l4 6-4 6"/></svg>
-                </div>
-            </div>
-            <span class="reveal-label left">Sketch</span>
-            <span class="reveal-label right">Vision</span>
-        </div>
-    </section>
-
-    <!-- SERVICES ACCORDION -->
-    <section class="section" id="s-services">
-        <div class="acc-wrap" id="accWrap">
-            <div class="acc-item open" data-idx="0">
-                <img class="acc-bg" src="img/cover2index.webp" alt="3D Visualization">
-                <div class="acc-overlay"></div>
-                <span class="acc-title-v">3D Visualization</span>
-                <div class="acc-content">
-                    <h3>3D Visualization</h3>
-                    <p>Photorealistic renders and animations that make your project feel real before it's built.</p>
-                </div>
-            </div>
-            <div class="acc-item" data-idx="1">
-                <img class="acc-bg" src="img/cover3index.webp" alt="Brand & Identity">
-                <div class="acc-overlay"></div>
-                <span class="acc-title-v">Brand & Identity</span>
-                <div class="acc-content">
-                    <h3>Brand & Identity</h3>
-                    <p>Visual identity systems built for architecture and real estate — from logo to full brand rollout.</p>
-                </div>
-            </div>
-            <div class="acc-item" data-idx="2">
-                <img class="acc-bg" src="img/cover4index.webp" alt="Photography">
-                <div class="acc-overlay"></div>
-                <span class="acc-title-v">Photography</span>
-                <div class="acc-content">
-                    <h3>Photography</h3>
-                    <p>Architectural and lifestyle photography that communicates the feel of a space, not just its form.</p>
-                </div>
-            </div>
-            <div class="acc-item" data-idx="3">
-                <img class="acc-bg" src="img/cover6index.webp" alt="Film & Motion">
-                <div class="acc-overlay"></div>
-                <span class="acc-title-v">Film & Motion</span>
-                <div class="acc-content">
-                    <h3>Film & Motion</h3>
-                    <p>Cinematic videos and animations that tell the story of your project from concept to completion.</p>
-                </div>
-            </div>
-            <div class="acc-item" data-idx="4">
-                <img class="acc-bg" src="img/cover7index.webp" alt="Interactive">
-                <div class="acc-overlay"></div>
-                <span class="acc-title-v">Interactive</span>
-                <div class="acc-content">
-                    <h3>Interactive</h3>
-                    <p>Virtual showrooms, 3D viewers and masterplans that let clients explore your project on their own terms.</p>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- STATS -->
     <section class="section" id="s-stats">
+        <div class="mosaic-grid" id="mosaicGrid">
+            <img class="mosaic-tile" src="img/parpadeo/01-colinas de maladonado.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/01-exterior.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/01-general aerea 01.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/01-housing competition.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/01-jardines de areco.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/01-la guadalupe.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/01-tfc.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/02-esquina comercial.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/02-garage.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/02-garda malvin.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/02-la guadalupe.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/03-av italia y arroyo.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/03-balneario ipora.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/04-balneario ipora.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/06-general exterior skybar.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/09-torre 1 02.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/10-esquina comercial nocturno.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/13-living 02.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/14-cowork dic.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/15-torre 1 03.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/19-RenderExterior-SativaTour-high.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/22 - Corona Interior - high.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/24 - Hunting Hotel bedroom - high.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/25 -  bedroom apartment - high.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/27-Renderexterior-observatory-high.webp" alt="">
+        </div>
+        <div class="mosaic-overlay"></div>
         <div class="stats-wrap">
             <div class="stat-item">
                 <div class="stat-row">
@@ -926,52 +730,6 @@ document.querySelectorAll('.carousel-wrap').forEach(function (wrap) {
     carouselNavs[id] = { prev: function(){ go(cur - 1); }, next: function(){ go(cur + 1); } };
 });
 
-/* ── Services accordion ── */
-(function () {
-    var wrap  = document.getElementById('accWrap');
-    if (!wrap) return;
-    var items = Array.from(wrap.querySelectorAll('.acc-item'));
-
-    function open(idx) {
-        items.forEach(function (item, i) {
-            item.classList.toggle('open', i === idx);
-        });
-    }
-
-    items.forEach(function (item, i) {
-        item.addEventListener('mouseenter', function () { open(i); });
-        item.addEventListener('click',      function () { open(i); });
-    });
-
-    wrap.addEventListener('mouseleave', function () { open(0); });
-})();
-
-/* ── Reveal slider ── */
-(function () {
-    var wrap   = document.getElementById('revealWrap');
-    var before = document.getElementById('revealBefore');
-    var handle = document.getElementById('revealHandle');
-    if (!wrap) return;
-    var dragging = false;
-
-    function setPos(x) {
-        var rect = wrap.getBoundingClientRect();
-        var pct  = Math.max(2, Math.min(98, ((x - rect.left) / rect.width) * 100));
-        before.style.clipPath = 'inset(0 ' + (100 - pct) + '% 0 0)';
-        handle.style.left     = pct + '%';
-    }
-
-    handle.addEventListener('mousedown',  function (e) { dragging = true; e.preventDefault(); });
-    document.addEventListener('mouseup',  function ()  { dragging = false; });
-    document.addEventListener('mousemove', function (e) { if (dragging) setPos(e.clientX); });
-
-    wrap.addEventListener('touchstart', function (e) { dragging = true; }, { passive: true });
-    wrap.addEventListener('touchend',   function ()  { dragging = false; });
-    wrap.addEventListener('touchmove',  function (e) {
-        if (dragging) { setPos(e.touches[0].clientX); e.stopPropagation(); }
-    }, { passive: true });
-})();
-
 /* ── Typewriter ── */
 (function () {
     var el = document.getElementById('typer');
@@ -1021,7 +779,7 @@ document.querySelectorAll('.carousel-wrap').forEach(function (wrap) {
         animated = true;
         counters.forEach(function (el) {
             var target = parseInt(el.dataset.target, 10);
-            var duration = target > 20 ? 1400 : 900;
+            var duration = target > 20 ? 2800 : 1800;
             var start = performance.now();
             function step(now) {
                 var p = Math.min((now - start) / duration, 1);
@@ -1037,6 +795,91 @@ document.querySelectorAll('.carousel-wrap').forEach(function (wrap) {
     }, { threshold: 0.4 });
     var statsSection = document.getElementById('s-stats');
     if (statsSection) io.observe(statsSection);
+})();
+
+/* ── Mosaic flash + rotate ── */
+(function () {
+    var tiles = Array.from(document.querySelectorAll('.mosaic-tile'));
+    if (!tiles.length) return;
+
+    var pool = [
+        'img/parpadeo/01-colinas de maladonado.webp',
+        'img/parpadeo/01-exterior.webp',
+        'img/parpadeo/01-general aerea 01.webp',
+        'img/parpadeo/01-housing competition.webp',
+        'img/parpadeo/01-jardines de areco.webp',
+        'img/parpadeo/01-la guadalupe.webp',
+        'img/parpadeo/01-tfc.webp',
+        'img/parpadeo/02-esquina comercial.webp',
+        'img/parpadeo/02-garage.webp',
+        'img/parpadeo/02-garda malvin.webp',
+        'img/parpadeo/02-la guadalupe.webp',
+        'img/parpadeo/03-av italia y arroyo.webp',
+        'img/parpadeo/03-balneario ipora.webp',
+        'img/parpadeo/04-balneario ipora.webp',
+        'img/parpadeo/06-general exterior skybar.webp',
+        'img/parpadeo/09-torre 1 02.webp',
+        'img/parpadeo/10-esquina comercial nocturno.webp',
+        'img/parpadeo/13-living 02.webp',
+        'img/parpadeo/14-cowork dic.webp',
+        'img/parpadeo/15-torre 1 03.webp',
+        'img/parpadeo/19-RenderExterior-SativaTour-high.webp',
+        'img/parpadeo/22 - Corona Interior - high.webp',
+        'img/parpadeo/24 - Hunting Hotel bedroom - high.webp',
+        'img/parpadeo/25 -  bedroom apartment - high.webp',
+        'img/parpadeo/27-Renderexterior-observatory-high.webp',
+        'img/parpadeo/35 - ArecoGarden high copy.webp',
+        'img/parpadeo/4-Brickvisual-Model-high.webp',
+        'img/parpadeo/40 - vive high.webp',
+        'img/parpadeo/41 - parque termal ipora high.webp',
+        'img/parpadeo/42 - Exterior Menara One-high.webp',
+        'img/parpadeo/43 - sta lucia housing high.webp',
+        'img/parpadeo/44 - terrazas de polo piscina.webp',
+        'img/parpadeo/45 - terrazas de polo hall.webp'
+    ];
+
+    var flashInterval = null;
+    var busy = new Set();
+
+    function swapImage(tile) {
+        var current = tile.src.split('/').slice(-2).join('/');
+        var others = pool.filter(function (p) { return !p.endsWith(current.split('/').pop()); });
+        tile.src = others[Math.floor(Math.random() * others.length)];
+    }
+
+    function flashRandom() {
+        var available = tiles.filter(function (t) { return !busy.has(t); });
+        if (!available.length) return;
+        var count = 2 + Math.floor(Math.random() * 2);
+        available.sort(function () { return Math.random() - 0.5; });
+        available.slice(0, count).forEach(function (tile) {
+            busy.add(tile);
+            tile.classList.add('lit');
+            var hold = 500 + Math.random() * 800;
+            setTimeout(function () {
+                tile.classList.remove('lit');
+                setTimeout(function () {
+                    swapImage(tile);
+                    busy.delete(tile);
+                }, 700);
+            }, hold);
+        });
+    }
+
+    var statsSection = document.getElementById('s-stats');
+    var ioMosaic = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+            if (e.isIntersecting) {
+                flashRandom();
+                flashInterval = setInterval(flashRandom, 480);
+            } else {
+                clearInterval(flashInterval);
+                tiles.forEach(function (t) { t.classList.remove('lit'); });
+                busy.clear();
+            }
+        });
+    }, { threshold: 0.3 });
+    if (statsSection) ioMosaic.observe(statsSection);
 })();
 
 /* ── Edge click handler (conecta circle.js con navegación) ── */

@@ -80,6 +80,77 @@ document.addEventListener('mousemove', (e) => {
 });
 
 
+/* ── Reveal slider (proceso section) ── */
+(function () {
+    var wrap   = document.getElementById('revealWrapSrv');
+    var before = document.getElementById('revealBeforeSrv');
+    var handle = document.getElementById('revealHandleSrv');
+    if (!wrap) return;
+    var dragging = false;
+
+    function setPos(x) {
+        var rect = wrap.getBoundingClientRect();
+        var pct  = Math.max(2, Math.min(98, ((x - rect.left) / rect.width) * 100));
+        before.style.clipPath = 'inset(0 ' + (100 - pct) + '% 0 0)';
+        handle.style.left     = pct + '%';
+    }
+
+    handle.addEventListener('mousedown',  function (e) { dragging = true; e.preventDefault(); });
+    document.addEventListener('mouseup',  function ()  { dragging = false; });
+    document.addEventListener('mousemove', function (e) { if (dragging) setPos(e.clientX); });
+
+    wrap.addEventListener('touchstart', function () { dragging = true; }, { passive: true });
+    wrap.addEventListener('touchend',   function () { dragging = false; });
+    wrap.addEventListener('touchmove',  function (e) {
+        if (dragging) { setPos(e.touches[0].clientX); e.stopPropagation(); }
+    }, { passive: true });
+})();
+
+/* ── Services accordion ── */
+(function () {
+    var wrap = document.getElementById('accWrap');
+    if (!wrap) return;
+    var items = Array.from(wrap.querySelectorAll('.acc-item'));
+
+    var slideInterval = null;
+    var slideIdx = 0;
+    var photoSlides = Array.from(document.querySelectorAll('#acc-photo-srv .acc-slide'));
+
+    function startSlideshow() {
+        stopSlideshow();
+        if (!photoSlides.length) return;
+        slideInterval = setInterval(function () {
+            photoSlides[slideIdx].classList.remove('active');
+            slideIdx = (slideIdx + 1) % photoSlides.length;
+            photoSlides[slideIdx].classList.add('active');
+        }, 3000);
+    }
+
+    function stopSlideshow() {
+        clearInterval(slideInterval);
+        slideInterval = null;
+        slideIdx = 0;
+        photoSlides.forEach(function (s, i) { s.classList.toggle('active', i === 0); });
+    }
+
+    function open(idx) {
+        items.forEach(function (item, i) {
+            var isOpen = i === idx;
+            item.classList.toggle('open', isOpen);
+            var vid = item.querySelector('.acc-video');
+            if (vid) { isOpen ? vid.play() : vid.pause(); }
+        });
+        if (idx === 2) { startSlideshow(); } else { stopSlideshow(); }
+    }
+
+    items.forEach(function (item, i) {
+        item.addEventListener('mouseenter', function () { open(i); });
+        item.addEventListener('click',      function () { open(i); });
+    });
+
+    wrap.addEventListener('mouseleave', function () { open(0); });
+})();
+
 /* ── Actualizar dot activo al hacer scroll manual (mobile) ── */
 if (window.innerWidth <= 900) {
     const ioSection = new IntersectionObserver((entries) => {
