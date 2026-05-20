@@ -87,135 +87,115 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </nav>
 </header>
 
-
 <!-- Scroll progress dots -->
 <nav class="scroll-progress" aria-label="Sections">
     <div class="sp-dot active" data-section="0"></div>
     <div class="sp-dot" data-section="1"></div>
-    <div class="sp-dot" data-section="2"></div>
-    <div class="sp-dot" data-section="3"></div>
-    <div class="sp-dot" data-section="4"></div>
 </nav>
 
-<!-- 1. HERO -->
-<section class="hero" id="sec-0">
-    <div class="hero-glow" id="heroGlow"></div>
-    <div class="container">
-        <div id="abt-hero-tag" class="hero-tag">About us</div>
-        <h1><span id="abt-hero-h1a">We are the creative agency behind</span><br><em id="abt-hero-h1b">your project's brand.</em></h1>
-        <p id="abt-hero-sub" class="hero-sub">We founded Imabox convinced that a project's image can be as decisive as the project itself — and that to do it right, you need to understand the space before you show it.</p>
-    </div>
-    <div class="hero-line"></div>
-</section>
+<!-- ══════════════════════════════════
+     SECCIÓN 1 — CONTENIDO + VIDEO VERTICAL
+     ══════════════════════════════════ -->
+<section class="hero-video-section" id="sec-0">
 
-<!-- 2. HISTORIA -->
-<section class="historia-section" id="sec-1">
-    <div class="container">
-        <div class="historia-inner">
-            <div class="historia-left anim-left">
-                <div id="hist-year" class="historia-year">2018</div>
-                <div id="hist-eyebrow" class="historia-eyebrow">Our story</div>
-                <h2 id="hist-h2">We started as what we are: architects.</h2>
+    <!-- Left: content -->
+    <div class="hero-video-inner">
+
+        <div class="hero-left">
+            <div class="eyebrow" id="abt-hero-tag">About us</div>
+            <h1>
+                <span id="abt-hero-h1a">We are the creative agency behind</span><br>
+                <em id="abt-hero-h1b">your project's brand.</em>
+            </h1>
+        </div>
+
+        <div class="hero-right">
+            <div class="tab-nav">
+                <button class="tab-btn active" data-tab="0" id="tab-btn-0">Our story</button>
+                <button class="tab-btn" data-tab="1" id="tab-btn-1">The journey</button>
+                <button class="tab-btn" data-tab="2" id="tab-btn-2">What drives us</button>
             </div>
-            <div class="historia-right">
-                <div class="historia-bloque anim" style="transition-delay:0.1s">
-                    <div class="historia-divider"></div>
-                    <p id="hist-p1">We graduated as architects and from day one we knew we wanted to do something different. Not build buildings — build the image that makes them desirable.</p>
+            <div class="tab-panels">
+                <div class="tab-panel active" id="tab-panel-0">
+                    <span class="tab-tag">2018 — Montevideo</span>
+                    <p id="tab0-p">We graduated as architects and from day one we knew we wanted to do something different. Not build buildings — <strong>build the image that makes them desirable.</strong> In 2018 we founded Imabox, not as a visualization studio, but as a creative agency that takes full ownership of a project's entire image — from brand identity to launch day.</p>
                 </div>
-                <div class="historia-bloque anim" style="transition-delay:0.25s">
-                    <div class="historia-divider"></div>
-                    <p id="hist-p2">Before founding Imabox we spent almost a year traveling the world. <strong>China, Korea, Japan, Italy, Switzerland, Germany, France, Colombia.</strong> Not as tourists — as architects with wide-open eyes. That gave our perspective something no studio teaches: real-world context.</p>
+                <div class="tab-panel" id="tab-panel-1">
+                    <span class="tab-tag">China · Korea · Japan · Europe</span>
+                    <p id="tab1-p">Before founding Imabox we spent almost a year traveling the world. <strong>China, Korea, Japan, Italy, Switzerland, Germany, France, Colombia.</strong> Not as tourists — as architects with wide-open eyes. That gave our perspective something no studio teaches: real-world context.</p>
                 </div>
-                <div class="historia-bloque anim" style="transition-delay:0.40s">
-                    <div class="historia-divider"></div>
-                    <p id="hist-p3">In <strong>2018 we founded Imabox in Montevideo</strong>. Not as a visualization studio, but as a creative agency that takes full ownership of a project's entire image — from brand identity to launch day.</p>
-                </div>
-                <div class="historia-bloque anim" style="transition-delay:0.55s">
-                    <div class="historia-divider"></div>
-                    <p id="hist-p4">North-facing orientation doesn't sell an apartment. <strong>Morning sunlight streaming through the window as you have your coffee, does.</strong> With every image, every video, every cinemagraph, we build the experience of living something that doesn't yet exist — so whoever sees it desires it before the first brick is laid.</p>
+                <div class="tab-panel" id="tab-panel-2">
+                    <span class="tab-tag">Our philosophy</span>
+                    <p id="tab2-p">North-facing orientation doesn't sell an apartment. <strong>Morning sunlight streaming through the window as you have your coffee, does.</strong> With every image, every video, every cinemagraph, we build the experience of living something that doesn't yet exist — so whoever sees it desires it before the first brick is laid.</p>
                 </div>
             </div>
         </div>
+
     </div>
+
+    <!-- Right: vertical video panel -->
+    <div class="hero-video-bg">
+        <video autoplay muted loop playsinline preload="auto">
+            <source src="animations/about-bg.mp4" type="video/mp4">
+        </video>
+    </div>
+
 </section>
 
-<!-- 3. DIFERENCIAL -->
-<section class="diferencial-section" id="sec-2">
-    <div class="container">
-        <div class="diferencial-inner">
-            <div class="diferencial-left anim-left">
+<!-- ══════════════════════════════════
+     SECCIÓN 2 — PILLARS + CTA
+     ══════════════════════════════════ -->
+<section class="pillars-section" id="sec-1">
+    <div class="pillars-inner">
+
+        <!-- Left: pillars + CTA -->
+        <div class="pillars-left">
+
+            <div class="pillars-heading anim">
                 <div class="eyebrow" id="dif-eyebrow">Why we're different</div>
                 <h2 id="dif-h2">We're not just a<br>visualization studio.</h2>
-                <p id="dif-p">We understand space before it exists. That changes everything we produce — from the first image to the launch campaign.</p>
             </div>
-            <div class="pillar-grid">
-                <div class="pillar-card anim" style="transition-delay:0.1s">
-                    <div class="pillar-icon"><i class="fa fa-pencil-square-o"></i></div>
-                    <div class="pillar-body">
-                        <h3 id="pillar1-h3">We are architects</h3>
-                        <p id="pillar1-p">Every image is a design decision. We understand scale, light, materiality — and when the project isn't fully defined yet, we complete it.</p>
-                    </div>
-                </div>
-                <div class="pillar-card anim" style="transition-delay:0.22s">
-                    <div class="pillar-icon"><i class="fa fa-lightbulb-o"></i></div>
-                    <div class="pillar-body">
-                        <h3 id="pillar2-h3">From day zero</h3>
-                        <p id="pillar2-p">We work when the project is still an idea on paper. We help define the name, visual identity, positioning — all before construction begins.</p>
-                    </div>
-                </div>
-                <div class="pillar-card anim" style="transition-delay:0.34s">
-                    <div class="pillar-icon"><i class="fa fa-th-large"></i></div>
-                    <div class="pillar-body">
-                        <h3 id="pillar3-h3">Everything visual, fully integrated</h3>
-                        <p id="pillar3-p">Brand, images, video, cinemagraphs, virtual showroom, 360 tour, social media, investor materials. One team maintaining coherence across every piece.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
-<!-- 4. VALORES -->
-<section class="valores-section" id="sec-3">
-    <div class="container">
-        <div class="valores-header">
-            <div id="val-tag" class="section-tag anim">What defines us</div>
-            <h2 id="val-h2" class="anim" style="transition-delay:0.12s">We don't just show the space.<br>We think it.</h2>
-        </div>
-        <div class="valores-grid">
-            <div class="valor-card anim" style="transition-delay:0.1s">
-                <div class="valor-num">01</div>
-                <h3 id="val1-h3">Spatial understanding</h3>
-                <p id="val1-p">We don't just render spaces — we think them through. We complete what isn't defined and correct what doesn't work, because we trained to build it.</p>
+            <div class="pillar-item anim" style="transition-delay:0.1s" data-img="0">
+                <div class="pillar-num">01</div>
+                <div class="pillar-body">
+                    <h3 id="pillar1-h3">We are architects</h3>
+                    <p id="pillar1-p">Every image is a design decision. We understand scale, light, materiality — and when the project isn't fully defined yet, we complete it.</p>
+                </div>
             </div>
-            <div class="valor-card anim" style="transition-delay:0.22s">
-                <div class="valor-num">02</div>
-                <h3 id="val2-h3">From day zero of the project</h3>
-                <p id="val2-p">We work before there's anything to show. Name, visual identity, positioning — all before construction begins. The earlier we come in, the better the result.</p>
-            </div>
-            <div class="valor-card anim" style="transition-delay:0.34s">
-                <div class="valor-num">03</div>
-                <h3 id="val3-h3">The total brand, integrated</h3>
-                <p id="val3-p">Images, video, cinemagraphs, virtual showroom, social content. One team, one creative direction — so every piece tells the same story.</p>
-            </div>
-        </div>
-    </div>
-</section>
 
-<!-- 4. CTA -->
-<section class="cta-section" id="sec-4">
-    <div class="container">
-        <div id="abt-cta-tag" class="section-tag anim">Let's talk</div>
-        <h2 class="anim" style="transition-delay:0.12s"><span id="abt-cta-h2a">Your project starts</span><br>with <em id="abt-cta-h2b">a conversation.</em></h2>
-        <p id="abt-cta-p" class="anim" style="transition-delay:0.24s">Tell us where it stands and within 24 hours we'll tell you how we'd approach it.</p>
-        <div class="cta-buttons anim" style="transition-delay:0.36s">
-            <a href="mailto:hello@imabox.uy" id="abt-btn-write" class="btn-primary">Write to us</a>
-            <a href="https://calendly.com/imabox/30min" target="_blank" id="abt-btn-meeting" class="btn-secondary"><i class="fa fa-calendar-o" style="margin-right:8px"></i>Schedule a meeting</a>
+            <div class="pillar-item anim" style="transition-delay:0.2s" data-img="1">
+                <div class="pillar-num">02</div>
+                <div class="pillar-body">
+                    <h3 id="pillar2-h3">From day zero</h3>
+                    <p id="pillar2-p">We work when the project is still an idea on paper. We help define the name, visual identity, positioning — all before construction begins.</p>
+                </div>
+            </div>
+
+            <div class="pillar-item anim" style="transition-delay:0.3s" data-img="2">
+                <div class="pillar-num">03</div>
+                <div class="pillar-body">
+                    <h3 id="pillar3-h3">Everything visual, fully integrated</h3>
+                    <p id="pillar3-p">Brand, images, video, virtual showroom, social content. One team, one creative direction — so every piece tells the same story.</p>
+                </div>
+            </div>
+
+            <!-- CTA -->
+            <div class="pillars-cta anim" style="transition-delay:0.4s">
+                <a href="mailto:hello@imabox.uy" id="abt-btn-write" class="btn-primary">Write to us</a>
+                <a href="https://wa.me/59898325902" target="_blank" class="cta-contact-link"><i class="fa fa-whatsapp"></i> WhatsApp</a>
+                <a href="mailto:hello@imabox.uy" class="cta-contact-link"><i class="fa fa-envelope-o"></i> hello@imabox.uy</a>
+            </div>
+
         </div>
-        <div class="cta-contact anim" style="transition-delay:0.48s">
-            <a href="mailto:hello@imabox.uy"><i class="fa fa-envelope-o"></i> hello@imabox.uy</a>
-            <a href="https://wa.me/59898325902" target="_blank"><i class="fa fa-whatsapp"></i> WhatsApp</a>
+
+        <!-- Right: image panel -->
+        <div class="pillars-right">
+            <div class="pillar-img active" id="pillar-img-0" style="background-image: url('img/cover2index.webp')"></div>
+            <div class="pillar-img" id="pillar-img-1" style="background-image: url('img/cover4index.webp')"></div>
+            <div class="pillar-img" id="pillar-img-2" style="background-image: url('img/cover6index.webp')"></div>
         </div>
+
     </div>
 </section>
 
