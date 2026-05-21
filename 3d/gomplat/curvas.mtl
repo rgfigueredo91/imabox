@@ -1,9 +1,0 @@
-# Gomez Platero Viewer - Curvas
-newmtl Muro_02_Revoque
-	Ns 71.4286
-	d 1.0000
-	illum 2
-	Ka 0.7000 0.7000 0.7000
-	Kd 0.7000 0.7000 0.7000
-	Ks 0.0000 0.0000 0.0000
-	Ke 0.0000 0.0000 0.0000
