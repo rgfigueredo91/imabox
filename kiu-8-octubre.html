@@ -92,8 +92,8 @@
             width: 100%; height: 100%; object-fit: cover; display: block;
             transition: transform 0.5s ease;
         }
-        .img:hover img { transform: scale(1.03); }
-        .img:hover { opacity: 0.88; }
+        .img:not(.slider-item):hover img { transform: scale(1.03); }
+        .img:not(.slider-item):hover { opacity: 0.88; }
 
         /* ── VIDEO items ── */
         .img video {
@@ -119,24 +119,61 @@
             color: rgba(255,255,255,0.8);
         }
 
+        /* ── REVEAL SLIDER ── */
+        .slider-item { cursor: ew-resize; }
+        .reveal-wrap {
+            position: absolute; inset: 0;
+            user-select: none; -webkit-user-select: none;
+        }
+        .reveal-after, .reveal-before {
+            position: absolute; inset: 0;
+        }
+        .reveal-after img, .reveal-before img {
+            width: 100%; height: 100%; object-fit: cover; display: block;
+            pointer-events: none;
+        }
+        .reveal-before { clip-path: inset(0 50% 0 0); }
+        .reveal-handle {
+            position: absolute; top: 0; bottom: 0;
+            left: 50%; transform: translateX(-50%);
+            width: 2px; background: #c9a96e;
+            display: flex; align-items: center; justify-content: center;
+            z-index: 10;
+        }
+        .reveal-handle-btn {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: #c9a96e;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.5);
+            flex-shrink: 0;
+        }
+        .reveal-handle-btn svg { width: 16px; height: 16px; fill: #000; }
+        .reveal-label {
+            position: absolute; bottom: 12px;
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase;
+            color: #fff; background: rgba(0,0,0,0.5);
+            padding: 4px 10px; pointer-events: none; z-index: 8;
+        }
+        .reveal-label.left  { left: 10px; }
+        .reveal-label.right { right: 10px; }
+
         #noselectgrid { -webkit-user-select: none; -moz-user-select: none; user-select: none; }
 
-        /* ── MASONRY POSITIONS — 5 cols × 5 rows, sin huecos ── */
+        /* ── MASONRY POSITIONS — 5 cols × 5 rows ── */
         /* fila 1-2 */
-        #img-aerea         { grid-row: 1/3;  grid-column: 1/4; }
-        #img-aerea-diurna  { grid-row: 1/2;  grid-column: 4/6; }
-        #img-aerea-balcon  { grid-row: 2/3;  grid-column: 4/6; }
+        #img-slider-aerea  { grid-row: 1/3;  grid-column: 1/4; }
+        #img-aerea-balcon  { grid-row: 1/2;  grid-column: 4/6; }
+        #img-barbacoa      { grid-row: 2/3;  grid-column: 4/6; }
         /* fila 3-4 */
         #img-cowork        { grid-row: 3/5;  grid-column: 1/4; }
-        #img-barbacoa      { grid-row: 3/4;  grid-column: 4/6; }
-        #img-living-703    { grid-row: 4/5;  grid-column: 4/5; }
-        #img-terraza-802   { grid-row: 4/5;  grid-column: 5/6; }
+        #img-slider-fachada{ grid-row: 3/5;  grid-column: 4/6; }
         /* fila 5 */
         #img-living-802    { grid-row: 5/6;  grid-column: 1/2; }
         #img-dorm-703      { grid-row: 5/6;  grid-column: 2/3; }
         #img-dorm-801      { grid-row: 5/6;  grid-column: 3/4; }
         #img-dorm-802      { grid-row: 5/6;  grid-column: 4/5; }
-        #img-magnific      { grid-row: 5/6;  grid-column: 5/6; }
+        #img-terraza-802   { grid-row: 5/6;  grid-column: 5/6; }
 
         /* footer */
         footer {
@@ -212,75 +249,89 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section class="gallery-section">
     <div class="hes-gallery" id="noselectgrid">
 
-        <div class="img" id="img-aerea">
-            <a href="img/kiu-8-octubre/aerea.webp" class="swipebox">
-                <img src="img/kiu-8-octubre/aerea.webp" alt="KIU 8 de Octubre aerial render — Imabox"/>
-            </a>
-        </div>
-
-        <div class="img" id="img-aerea-diurna">
-            <a href="img/kiu-8-octubre/aerea-diurna.webp" class="swipebox">
-                <img src="img/kiu-8-octubre/aerea-diurna.webp" alt="KIU 8 de Octubre aerial daytime render — Imabox"/>
-            </a>
+        <!-- SLIDER 1: Aerea noche / Aerea día -->
+        <div class="img slider-item" id="img-slider-aerea">
+            <div class="reveal-wrap" data-reveal>
+                <div class="reveal-after">
+                    <img src="img/kiu-8-octubre/aerea.webp" alt="KIU 8 de Octubre — vista aérea nocturna — Imabox"/>
+                </div>
+                <div class="reveal-before">
+                    <img src="img/kiu-8-octubre/aerea-diurna.webp" alt="KIU 8 de Octubre — vista aérea diurna — Imabox"/>
+                </div>
+                <div class="reveal-handle">
+                    <div class="reveal-handle-btn">
+                        <svg viewBox="0 0 24 24"><path d="M8 5l-7 7 7 7M16 5l7 7-7 7"/></svg>
+                    </div>
+                </div>
+                <span class="reveal-label left">Day</span>
+                <span class="reveal-label right">Night</span>
+            </div>
         </div>
 
         <div class="img" id="img-aerea-balcon">
             <a href="img/kiu-8-octubre/aerea-balcon.webp" class="swipebox">
-                <img src="img/kiu-8-octubre/aerea-balcon.webp" alt="KIU 8 de Octubre aerial balcony render — Imabox"/>
-            </a>
-        </div>
-
-        <div class="img" id="img-cowork">
-            <a href="img/kiu-8-octubre/cowork.webp" class="swipebox">
-                <img src="img/kiu-8-octubre/cowork.webp" alt="KIU 8 de Octubre cowork render — Imabox"/>
+                <img src="img/kiu-8-octubre/aerea-balcon.webp" alt="KIU 8 de Octubre — vista aérea desde balcón — Imabox"/>
             </a>
         </div>
 
         <div class="img" id="img-barbacoa">
             <a href="img/kiu-8-octubre/barbacoa.webp" class="swipebox">
-                <img src="img/kiu-8-octubre/barbacoa.webp" alt="KIU 8 de Octubre barbacoa render — Imabox"/>
+                <img src="img/kiu-8-octubre/barbacoa.webp" alt="KIU 8 de Octubre — barbacoa — Imabox"/>
             </a>
         </div>
 
-        <div class="img video-item" id="img-living-703">
-            <img src="img/kiu-8-octubre/living-703.webp" alt="KIU 8 de Octubre living 703 — Imabox"/>
-            <video src="animations/kiu8-transition-1.mp4" muted loop playsinline preload="none"></video>
-            <div class="video-badge"><i class="fa fa-play"></i><span>Video</span></div>
+        <div class="img" id="img-cowork">
+            <a href="img/kiu-8-octubre/cowork.webp" class="swipebox">
+                <img src="img/kiu-8-octubre/cowork.webp" alt="KIU 8 de Octubre — cowork — Imabox"/>
+            </a>
         </div>
 
-        <div class="img video-item" id="img-terraza-802">
-            <img src="img/kiu-8-octubre/terraza-802.webp" alt="KIU 8 de Octubre terraza 802 — Imabox"/>
-            <video src="animations/kiu8-transition-2.mp4" muted loop playsinline preload="none"></video>
-            <div class="video-badge"><i class="fa fa-play"></i><span>Video</span></div>
+        <!-- SLIDER 2: Fachada render / Lifestyle -->
+        <div class="img slider-item" id="img-slider-fachada">
+            <div class="reveal-wrap" data-reveal>
+                <div class="reveal-after">
+                    <img src="img/kiu-8-octubre/fachada-principal.webp" alt="KIU 8 de Octubre — fachada principal render — Imabox"/>
+                </div>
+                <div class="reveal-before">
+                    <img src="img/kiu-8-octubre/magnific-cover.webp" alt="KIU 8 de Octubre — lifestyle — Imabox"/>
+                </div>
+                <div class="reveal-handle">
+                    <div class="reveal-handle-btn">
+                        <svg viewBox="0 0 24 24"><path d="M8 5l-7 7 7 7M16 5l7 7-7 7"/></svg>
+                    </div>
+                </div>
+                <span class="reveal-label left">Lifestyle</span>
+                <span class="reveal-label right">Render</span>
+            </div>
         </div>
 
         <div class="img" id="img-living-802">
             <a href="img/kiu-8-octubre/living-802.webp" class="swipebox">
-                <img src="img/kiu-8-octubre/living-802.webp" alt="KIU 8 de Octubre living 802 — Imabox"/>
+                <img src="img/kiu-8-octubre/living-802.webp" alt="KIU 8 de Octubre — living 802 — Imabox"/>
             </a>
         </div>
 
-        <div class="img" id="img-dorm-703">
-            <a href="img/kiu-8-octubre/dormitorio-703.webp" class="swipebox">
-                <img src="img/kiu-8-octubre/dormitorio-703.webp" alt="KIU 8 de Octubre dormitorio 703 — Imabox"/>
-            </a>
+        <div class="img video-item" id="img-dorm-703">
+            <img src="img/kiu-8-octubre/dormitorio-703.webp" alt="KIU 8 de Octubre — dormitorio 703 — Imabox"/>
+            <video src="animations/kiu8-transition-2.mp4" muted loop playsinline preload="none"></video>
+            <div class="video-badge"><i class="fa fa-play"></i><span>Video</span></div>
         </div>
 
-        <div class="img" id="img-dorm-801">
-            <a href="img/kiu-8-octubre/dormitorio-801.webp" class="swipebox">
-                <img src="img/kiu-8-octubre/dormitorio-801.webp" alt="KIU 8 de Octubre dormitorio 801 — Imabox"/>
-            </a>
+        <div class="img video-item" id="img-dorm-801">
+            <img src="img/kiu-8-octubre/dormitorio-801.webp" alt="KIU 8 de Octubre — dormitorio 801 — Imabox"/>
+            <video src="animations/kiu8-transition-1.mp4" muted loop playsinline preload="none"></video>
+            <div class="video-badge"><i class="fa fa-play"></i><span>Video</span></div>
         </div>
 
         <div class="img" id="img-dorm-802">
             <a href="img/kiu-8-octubre/dormitorio-802.webp" class="swipebox">
-                <img src="img/kiu-8-octubre/dormitorio-802.webp" alt="KIU 8 de Octubre dormitorio 802 — Imabox"/>
+                <img src="img/kiu-8-octubre/dormitorio-802.webp" alt="KIU 8 de Octubre — dormitorio 802 — Imabox"/>
             </a>
         </div>
 
-        <div class="img" id="img-magnific">
-            <a href="img/kiu-8-octubre/magnific-cover.webp" class="swipebox">
-                <img src="img/kiu-8-octubre/magnific-cover.webp" alt="KIU 8 de Octubre — Imabox"/>
+        <div class="img" id="img-terraza-802">
+            <a href="img/kiu-8-octubre/terraza-802.webp" class="swipebox">
+                <img src="img/kiu-8-octubre/terraza-802.webp" alt="KIU 8 de Octubre — terraza 802 — Imabox"/>
             </a>
         </div>
 
@@ -304,11 +355,36 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script>
 $(document).ready(function(){ $('.swipebox').swipebox({ useSVG: false }); });
 
+/* ── Video hover ── */
 document.querySelectorAll('.img.video-item').forEach(function(item) {
     var video = item.querySelector('video');
     if (!video) return;
     item.addEventListener('mouseenter', function() { video.play(); });
     item.addEventListener('mouseleave', function() { video.pause(); video.currentTime = 0; });
+});
+
+/* ── Reveal sliders ── */
+document.querySelectorAll('[data-reveal]').forEach(function(wrap) {
+    var before  = wrap.querySelector('.reveal-before');
+    var handle  = wrap.querySelector('.reveal-handle');
+    var dragging = false;
+
+    function setPos(x) {
+        var rect = wrap.getBoundingClientRect();
+        var pct  = Math.max(2, Math.min(98, ((x - rect.left) / rect.width) * 100));
+        before.style.clipPath = 'inset(0 ' + (100 - pct) + '% 0 0)';
+        handle.style.left     = pct + '%';
+    }
+
+    handle.addEventListener('mousedown',  function(e) { dragging = true; e.preventDefault(); });
+    document.addEventListener('mouseup',  function()  { dragging = false; });
+    document.addEventListener('mousemove', function(e) { if (dragging) setPos(e.clientX); });
+
+    wrap.addEventListener('touchstart', function() { dragging = true; }, { passive: true });
+    wrap.addEventListener('touchend',   function() { dragging = false; });
+    wrap.addEventListener('touchmove',  function(e) {
+        if (dragging) { setPos(e.touches[0].clientX); e.stopPropagation(); }
+    }, { passive: true });
 });
 </script>
 
