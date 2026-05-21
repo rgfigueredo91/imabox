@@ -119,6 +119,32 @@
             color: rgba(255,255,255,0.8);
         }
 
+        /* ── 360 BADGE ── */
+        .badge-360 {
+            position: absolute; inset: 0;
+            display: flex; align-items: center; justify-content: center;
+            text-decoration: none; z-index: 10;
+        }
+        .badge-360-inner {
+            display: flex; flex-direction: column; align-items: center; gap: 6px;
+            padding: 16px 20px; transition: background 0.3s;
+        }
+        .badge-360:hover .badge-360-inner { background: none; }
+        .badge-360-sphere {
+            width: 48px; height: 48px; border-radius: 50%;
+            border: 2px solid #c9a96e;
+            display: flex; align-items: center; justify-content: center;
+            color: #c9a96e; font-size: 1.1rem;
+            background: rgba(0,0,0,0.35);
+            transition: background 0.3s, transform 0.3s;
+        }
+        .badge-360:hover .badge-360-sphere { background: rgba(201,169,110,0.2); transform: scale(1.1); }
+        .badge-360-label {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+            color: #c9a96e; text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+        }
+
         /* ── REVEAL SLIDER ── */
         .slider-item { cursor: ew-resize; }
         .reveal-wrap {
@@ -169,7 +195,8 @@
         #img-cowork        { grid-row: 3/5;  grid-column: 1/4; }
         #img-slider-fachada{ grid-row: 3/6;  grid-column: 4/6; }
         /* fila 5 cols 1-3 */
-        #img-dorm-703      { grid-row: 5/6;  grid-column: 1/3; }
+        #img-living-703    { grid-row: 5/6;  grid-column: 1/2; }
+        #img-dorm-703      { grid-row: 5/6;  grid-column: 2/3; }
         #img-dorm-801      { grid-row: 5/6;  grid-column: 3/4; }
         /* fila 6 */
         #img-living-802    { grid-row: 6/7;  grid-column: 1/2; }
@@ -241,7 +268,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
     <div class="project-meta">
         <div class="meta-item">Year <strong>2025</strong></div>
-        <div class="meta-item">Services <strong>3D Visualization · Branding</strong></div>
+        <div class="meta-item">Services <strong>3D Visualization · Branding · 360 Virtual Tour</strong></div>
         <div class="meta-item">Client <strong>Martín González Desarrollo · Cabrera Inciarte Arquitectos</strong></div>
     </div>
 </div>
@@ -309,6 +336,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="img" id="img-living-802">
             <a href="img/kiu-8-octubre/living-802.webp" class="swipebox">
                 <img src="img/kiu-8-octubre/living-802.webp" alt="KIU 8 de Octubre — living 802 — Imabox"/>
+            </a>
+        </div>
+
+        <!-- Living 703 — 360 Tour -->
+        <div class="img" id="img-living-703">
+            <img src="img/kiu-8-octubre/living-703.webp" alt="KIU 8 de Octubre — living 703 — 360 tour — Imabox"/>
+            <a href="https://imabox.uy/360/KIU.html" target="_blank" rel="noopener" class="badge-360" aria-label="Ver recorrido 360°">
+                <div class="badge-360-inner">
+                    <div class="badge-360-sphere"><i class="fa fa-globe"></i></div>
+                    <span class="badge-360-label">360°</span>
+                </div>
             </a>
         </div>
 
