@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-K99Z94HL');</script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0W0QJ3ZXQ5"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-0W0QJ3ZXQ5');
+    </script>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    <title>Link Center — Architectural Visualization | Imabox</title>
+    <meta name="description" content="Link Center — mixed-use complex with offices, mall and residences. 3D visualization and commercial animation by Imabox." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Link Center — Imabox" />
+    <meta property="og:description" content="3D visualization and commercial animation for Link Center, a mixed-use complex with towers, commercial mall and residences." />
+    <meta property="og:url" content="https://imabox.uy/link-center.html" />
+    <meta property="og:image" content="https://imabox.uy/img/link-center/aerea-01.webp" />
+    <link rel="shortcut icon" type="image/png" href="favicon.png" />
+    <link rel="canonical" href="https://imabox.uy/link-center.html" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.typekit.net/oov2wcw.css">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles/navbar.css" />
+    <link rel="stylesheet" href="styles/swipebox.css" />
+    <link rel="stylesheet" href="styles/cursor.css" />
+
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { background: #0e0e0e; color: #fff; font-family: 'Poppins', sans-serif; }
+        *::-webkit-scrollbar { display: none; }
+        * { scrollbar-width: none; }
+
+        /* ── PROJECT HEADER ── */
+        .project-header {
+            padding: 120px 48px 48px;
+            display: flex; align-items: flex-end;
+            justify-content: space-between; gap: 32px; flex-wrap: wrap;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            max-width: 1400px; margin: 0 auto;
+        }
+        .back-link {
+            display: inline-flex; align-items: center; gap: 8px;
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
+            color: rgba(255,255,255,0.35); text-decoration: none;
+            transition: color 0.2s; margin-bottom: 20px;
+        }
+        .back-link:hover { color: #c9a96e; }
+        .project-eyebrow {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase;
+            color: #c9a96e; margin-bottom: 10px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .project-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: #c9a96e; }
+        .project-header h1 {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 200; letter-spacing: -0.02em; line-height: 1; color: #fff;
+        }
+        .project-header h1 span { color: #c9a96e; }
+        .project-meta { display: flex; flex-direction: column; gap: 6px; text-align: right; }
+        .meta-item {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.7rem; letter-spacing: 0.12em; color: rgba(255,255,255,0.35);
+        }
+        .meta-item strong { color: rgba(255,255,255,0.7); font-weight: 400; margin-left: 6px; }
+
+        /* ── GALLERY ── */
+        .gallery-section { padding: 8px; margin-top: 8px; }
+        .hes-gallery {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            grid-auto-rows: 18vw;
+            gap: 2px;
+        }
+        .img {
+            position: relative; overflow: hidden; background: #1a1a1a; cursor: pointer;
+        }
+        .img img {
+            width: 100%; height: 100%; object-fit: cover; display: block;
+            transition: transform 0.6s ease;
+        }
+        .img:hover img { transform: scale(1.04); }
+        .img:hover { opacity: 0.9; }
+
+        /*
+         * ── GRID 6 cols × 12 rows, 18vw/row ──
+         * Cada celda asignada según ratio real de la imagen:
+         *   portrait 0.74–0.83  → 2col×2row (ratio 0.93)
+         *   landscape 1.78–1.81 → 2col×1row (ratio 1.85)
+         *   muy ancha 2.0–2.11  → 3col×1row (ratio 2.78)
+         *   hero 1.35           → 4col×2row (ratio 1.85)
+         *   cuadrada 1.0        → 2col×1row (crop mínimo)
+         */
+
+        /* ── EXTERIOR ── */
+        #lc-aerea-01      { grid-row: 1 / 3;  grid-column: 1 / 5; } /* 4×2 hero */
+        #lc-aerea-n       { grid-row: 1 / 3;  grid-column: 5 / 7; } /* 2×2 portrait */
+        #lc-contrapicada  { grid-row: 3 / 5;  grid-column: 1 / 3; } /* 2×2 portrait */
+        #lc-peatonal-n    { grid-row: 3 / 5;  grid-column: 3 / 5; } /* 2×2 portrait */
+        #lc-peatonal-d2   { grid-row: 3 / 5;  grid-column: 5 / 7; } /* 2×2 portrait */
+        #lc-peatonal-post { grid-row: 5 / 7;  grid-column: 1 / 3; } /* 2×2 portrait */
+        #lc-aerea-02      { grid-row: 5 / 6;  grid-column: 3 / 5; } /* 2×1 */
+        #lc-skybar-ext    { grid-row: 5 / 6;  grid-column: 5 / 7; } /* 2×1 */
+
+        /* ── MALL COMERCIAL ── */
+        #lc-mall-dropoff  { grid-row: 6 / 7;  grid-column: 3 / 5; } /* 2×1 */
+        #lc-mall-nivel03  { grid-row: 6 / 7;  grid-column: 5 / 7; } /* 2×1 */
+        #lc-mall-acceso   { grid-row: 7 / 9;  grid-column: 1 / 3; } /* 2×2 portrait */
+        #lc-mall-nivel05  { grid-row: 7 / 8;  grid-column: 3 / 5; } /* 2×1 */
+        #lc-mall-gym1     { grid-row: 7 / 8;  grid-column: 5 / 7; } /* 2×1 */
+        #lc-mall-gym2     { grid-row: 8 / 9;  grid-column: 3 / 7; } /* 4×1 muy ancha */
+
+        /* ── TORRE 1 ── */
+        #lc-t1-conf1      { grid-row: 9 / 10;  grid-column: 1 / 4; } /* 3×1 muy ancha */
+        #lc-t1-conf2      { grid-row: 9 / 10;  grid-column: 4 / 7; } /* 3×1 */
+        #lc-t1-hall       { grid-row: 10 / 11; grid-column: 1 / 3; } /* 2×1 */
+        #lc-t1-ofic2      { grid-row: 10 / 11; grid-column: 3 / 6; } /* 3×1 muy ancha */
+        #lc-t1-rooftop    { grid-row: 10 / 11; grid-column: 6 / 7; } /* 1×1 cuadrada */
+        #lc-t1-skybar     { grid-row: 11 / 12; grid-column: 1 / 3; } /* 2×1 */
+        #lc-t1-terraza    { grid-row: 11 / 12; grid-column: 3 / 5; } /* 2×1 */
+
+        /* ── TORRE 2 ── */
+        #lc-t2-piscina    { grid-row: 11 / 12; grid-column: 5 / 7; } /* 2×1 */
+        #lc-t2-dormitorio { grid-row: 12 / 13; grid-column: 1 / 3; } /* 2×1 */
+        #lc-t2-interior   { grid-row: 12 / 13; grid-column: 3 / 6; } /* 3×1 muy ancha */
+        #lc-t2-terraza    { grid-row: 12 / 13; grid-column: 6 / 7; } /* 1×1 */
+
+        /* ── VIDEO SECTION ── */
+        .video-section {
+            max-width: 1200px;
+            margin: 80px auto 0;
+            padding: 0 48px 80px;
+        }
+        .video-eyebrow {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase;
+            color: #c9a96e; margin-bottom: 16px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .video-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: #c9a96e; }
+        .video-section h2 {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: clamp(1.6rem, 3.5vw, 2.8rem);
+            font-weight: 200; letter-spacing: -0.02em; line-height: 1.1;
+            color: #fff; margin-bottom: 16px;
+        }
+        .video-section h2 em { color: #c9a96e; font-style: normal; }
+        .video-section p {
+            font-size: 0.88rem; line-height: 1.8;
+            color: rgba(255,255,255,0.45);
+            max-width: 600px; margin-bottom: 40px;
+            font-family: 'Poppins', sans-serif; font-weight: 300;
+        }
+        .video-wrap {
+            position: relative; width: 100%;
+            aspect-ratio: 16 / 9;
+            background: #111;
+            overflow: hidden;
+        }
+        .video-wrap video {
+            width: 100%; height: 100%;
+            object-fit: cover; display: block;
+        }
+
+        /* footer */
+        footer {
+            border-top: 1px solid rgba(255,255,255,0.08);
+            padding: 28px 48px; display: flex; align-items: center;
+            justify-content: space-between; flex-wrap: wrap; gap: 12px;
+        }
+        footer .logo { font-family: 'aktiv-grotesk', sans-serif; font-size: 0.9rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.3); }
+        footer p { font-size: 0.7rem; color: rgba(255,255,255,0.18); letter-spacing: 0.08em; }
+        .footer-social { display: flex; gap: 18px; align-items: center; }
+        .footer-social a { color: #c9a96e; font-size: 1.15rem; text-decoration: none; transition: opacity 0.2s; }
+        .footer-social a:hover { opacity: 0.65; }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 1024px) {
+            .hes-gallery { grid-template-columns: repeat(3, 1fr); grid-auto-rows: 30vw; }
+            .hes-gallery > .img { grid-row: auto !important; grid-column: auto !important; }
+            .project-header { padding: 100px 24px 36px; }
+            .project-meta { text-align: left; }
+            .video-section { padding: 0 24px 60px; margin-top: 60px; }
+        }
+        @media (max-width: 600px) {
+            .hes-gallery { grid-template-columns: 1fr 1fr; grid-auto-rows: 44vw; gap: 3px; }
+            .gallery-section { padding: 4px; }
+            footer { flex-direction: column; text-align: center; padding: 28px 24px; }
+            .video-section { padding: 0 16px 48px; margin-top: 48px; }
+        }
+    </style>
+</head>
+<body>
+
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K99Z94HL"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+<!-- NAV -->
+<header>
+    <nav class="navbar" id="navbar">
+        <a href="https://imabox.uy" class="nav-logo" id="link-font-index">imabox.</a>
+        <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+            <span class="nav-bar"></span>
+            <span class="nav-bar"></span>
+            <span class="nav-bar"></span>
+        </button>
+        <div class="nav-overlay">
+            <ul class="nav-links">
+                <li><a href="projects.html">Projects</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="nav-info">
+                <div class="nav-lang">
+                    <a href="#eng">eng</a><span>|</span><a href="#esp">esp</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<!-- PROJECT HEADER -->
+<div class="project-header">
+    <div>
+        <a href="projects.html" class="back-link"><i class="fa fa-arrow-left"></i> All projects</a>
+        <div class="project-eyebrow">Mixed-Use · Office · Residential · Commercial</div>
+        <h1>Link <span>Center</span></h1>
+    </div>
+    <div class="project-meta">
+        <div class="meta-item">Year <strong>2025</strong></div>
+        <div class="meta-item">Services <strong>3D Visualization · Commercial Animation</strong></div>
+    </div>
+</div>
+
+<!-- GALLERY -->
+<section class="gallery-section">
+    <div class="hes-gallery" id="noselectgrid">
+
+        <!-- ── EXTERIOR ── -->
+        <div class="img" id="lc-aerea-01">
+            <a href="img/link-center/aerea-01.webp" class="swipebox">
+                <img src="img/link-center/aerea-01.webp" alt="Link Center — vista aérea diurna — Imabox"/>
+            </a>
+        </div>
+
+        <div class="img" id="lc-aerea-n">
+            <a href="img/link-center/aerea-nocturna.webp" class="swipebox">
+                <img src="img/link-center/aerea-nocturna.webp" alt="Link Center — vista aérea nocturna — Imabox"/>
+            </a>
+        </div>
+
+        <div class="img" id="lc-contrapicada">
+            <a href="img/link-center/contrapicada.webp" class="swipebox">
+                <img src="img/link-center/contrapicada.webp" alt="Link Center — contrapicada — Imabox"/>
+            </a>
+        </div>
+
+        <div class="img" id="lc-peatonal-n">
+            <a href="img/link-center/peatonal-nocturna.webp" class="swipebox">
+                <img src="img/link-center/peatonal-nocturna.webp" alt="Link Center — peatonal nocturna — Imabox"/>
+            </a>
+        </div>
+
+        <div class="img" id="lc-aerea-02">
+            <a href="img/link-center/aerea-02.webp" class="swipebox">
+                <img src="img/link-center/aerea-02.webp" alt="Link Center — vista aérea 02 — Imabox"/>
+            </a>
+        </div>
+
+        <div class="img" id="lc-skybar-ext">
+            <a href="img/link-center/skybar-exterior.webp" class="swipebox">
+                <img src="img/link-center/skybar-exterior.webp" alt="Link Center — skybar exterior — Imabox"/>
+            </a>
+        </div>
+
+        <div class="img" id="lc-peatonal-d2">
+            <a href="img/link-center/peatonal-diurna-2.webp" class="swipebox">
+                <img src="img/link-center/peatonal-diurna-2.webp" alt="Link Center — peatonal diurna — Imabox"/>
+            </a>
+        </div>
+
+        <div class="img" id="lc-peatonal-post">
+            <a href="img/link-center/peatonal-posterior.webp" class="swipebox">
+                <img src="img/link-center/peatonal-posterior.webp" alt="Link Center — peatonal posterior — Imabox"/>
+            </a>
+        </div>
+
+        <!-- ── MALL COMERCIAL ── -->
+        <div class="img" id="lc-mall-dropoff">
+            <a href="img/link-center/mall-dropoff.webp" class="swipebox">
+                <img src="img/link-center/mall-dropoff.webp" alt="Link Center — mall dropoff nivel 00 — Imabox"/>
+            </a>
+        </div>
+
+        <div class="img" id="lc-mall-acceso">
+            <a href="img/link-center/mall-acceso.webp" class="swipebox">
+                <img src="img/link-center/mall-acceso.webp" alt="Link Center — mall acceso nivel 01 — Imabox"/>
+            </a>
+        </div>
+
+        <div class="img" id="lc-mall-nivel03">
+            <a href="img/link-center/mall-nivel-03.webp" class="swipebox">
+                <img src="img/link-center/mall-nivel-03.webp" alt="Link Center — mall nivel 03 — Imabox"/>
+            </a>
+        </div>
+
+        <div class="img" id="lc-mall-nivel05">
+            <a href="img/link-center/mall-nivel-05.webp" class="swipebox">
+                <img src="img/link-center/mall-nivel-05.webp" alt="Link Center — mall nivel 05 — Imabox"/>
+            </a>
+        </div>
+
+        <div class="img" id="lc-mall-gym1">
+            <a href="img/link-center/mall-gym-1.webp" class="swipebox">
+                <img src="img/link-center/mall-gym-1.webp" alt="Link Center — gym nivel 05 — Imabox"/>
+            </a>
+        </div>
+
+        <div class="img" id="lc-mall-gym2">
+            <a href="img/link-center/mall-gym-2.webp" class="swipebox">
+                <img src="img/link-center/mall-gym-2.webp" alt="Link Center — gym nivel 05 — Imabox"/>
+            </a>
+        </div>
+
+        <!-- ── TORRE 1 ── -->
+        <div class="img" id="lc-t1-hall">
+            <a href="img/link-center/torre1-hall.webp" class="swipebox">
+                <img src="img/link-center/torre1-hall.webp" alt="Link Center — torre 1 hall acceso — Imabox"/>
+            </a>
+        </div>
+
+        <div class="img" id="lc-t1-conf1">
+            <a href="img/link-center/torre1-conf-1.webp" class="swipebox">
+                <img src="img/link-center/torre1-conf-1.webp" alt="Link Center — torre 1 conference center — Imabox"/>
+            </a>
+        </div>
+
+        <div class="img" id="lc-t1-conf2">
+            <a href="img/link-center/torre1-conf-2.webp" class="swipebox">
+                <img src="img/link-center/torre1-conf-2.webp" alt="Link Center — torre 1 conference center — Imabox"/>
+            </a>
+        </div>
+
+        <div class="img" id="lc-t1-ofic2">
+            <a href="img/link-center/torre1-oficina-2.webp" class="swipebox">
+                <img src="img/link-center/torre1-oficina-2.webp" alt="Link Center — torre 1 interior oficina — Imabox"/>
+            </a>
+        </div>
+
+        <div class="img" id="lc-t1-skybar">
+            <a href="img/link-center/torre1-skybar.webp" class="swipebox">
+                <img src="img/link-center/torre1-skybar.webp" alt="Link Center — torre 1 skybar nivel 33 — Imabox"/>
+            </a>
+        </div>
+
+        <div class="img" id="lc-t1-terraza">
+            <a href="img/link-center/torre1-terraza.webp" class="swipebox">
+                <img src="img/link-center/torre1-terraza.webp" alt="Link Center — torre 1 terraza nivel 17 — Imabox"/>
+            </a>
+        </div>
+
+        <div class="img" id="lc-t1-rooftop">
+            <a href="img/link-center/torre1-rooftop.webp" class="swipebox">
+                <img src="img/link-center/torre1-rooftop.webp" alt="Link Center — torre 1 rooftop nivel 34 — Imabox"/>
+            </a>
+        </div>
+
+        <!-- ── TORRE 2 ── -->
+        <div class="img" id="lc-t2-piscina">
+            <a href="img/link-center/torre2-piscina.webp" class="swipebox">
+                <img src="img/link-center/torre2-piscina.webp" alt="Link Center — torre 2 piscina rooftop — Imabox"/>
+            </a>
+        </div>
+
+        <div class="img" id="lc-t2-dormitorio">
+            <a href="img/link-center/torre2-dormitorio.webp" class="swipebox">
+                <img src="img/link-center/torre2-dormitorio.webp" alt="Link Center — torre 2 dormitorio — Imabox"/>
+            </a>
+        </div>
+
+        <div class="img" id="lc-t2-interior">
+            <a href="img/link-center/torre2-interior.webp" class="swipebox">
+                <img src="img/link-center/torre2-interior.webp" alt="Link Center — torre 2 interior unidad — Imabox"/>
+            </a>
+        </div>
+
+        <div class="img" id="lc-t2-terraza">
+            <a href="img/link-center/torre2-terraza.webp" class="swipebox">
+                <img src="img/link-center/torre2-terraza.webp" alt="Link Center — torre 2 terraza exterior — Imabox"/>
+            </a>
+        </div>
+
+    </div>
+</section>
+
+<!-- VIDEO SECTION -->
+<section class="video-section">
+    <div class="video-eyebrow">Film &amp; Motion</div>
+    <h2>We took care of the <em>commercial animation</em></h2>
+    <p>From concept to final render, we produced the full presentation video for Link Center — a piece built to communicate the scale, atmosphere and quality of the project to its future buyers and investors.</p>
+    <div class="video-wrap">
+        <video controls preload="metadata" poster="img/link-center/aerea-01.webp">
+            <source src="animations/link-center.mp4" type="video/mp4"/>
+        </video>
+    </div>
+</section>
+
+<footer>
+    <div class="logo">Imabox</div>
+    <p>Creative agency · Architecture &amp; Real Estate — Montevideo, Uruguay</p>
+    <p>© 2025 Imabox. All rights reserved.</p>
+    <div class="footer-social">
+        <a href="https://www.instagram.com/imabox_uy" target="_blank"><i class="fa fa-instagram"></i></a>
+        <a href="https://www.linkedin.com/company/imabox" target="_blank"><i class="fa fa-linkedin"></i></a>
+    </div>
+</footer>
+
+<script src="js/navbar-hamburger.js"></script>
+<script src="js/jquery-2.1.0.min.js"></script>
+<script src="js/jquery.swipebox.min.js"></script>
+<script src="js/circle.js"></script>
+<script>
+$(document).ready(function(){ $('.swipebox').swipebox({ useSVG: false }); });
+</script>
+
+</body>
+</html>
