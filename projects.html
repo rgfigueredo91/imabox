@@ -128,5 +128,99 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script src="js/circle.js"></script>
 <script src="js/translate.js"></script>
 <script src="js/translate-branding.js"></script>
+
+<script>
+(function() {
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+    /* ── FLOATING PREVIEW ── */
+    var preview = document.createElement('div');
+    preview.id = 'proj-preview';
+    var label = document.createElement('div');
+    label.id = 'proj-preview-label';
+    label.innerHTML = '<span></span>';
+    preview.appendChild(label);
+    document.body.appendChild(preview);
+
+    var mx = 0, my = 0, cx = 0, cy = 0;
+    var PW = 300, PH = 300, PAD = 20;
+
+    document.addEventListener('mousemove', function(e) { mx = e.clientX; my = e.clientY; });
+
+    function targetPos() {
+        var tx = (mx + PW + 32 + PAD > window.innerWidth) ? mx - PW - 32 : mx + 32;
+        var ty = (my - PH - 24 < PAD) ? my + 24 : my - PH - 24;
+        return { x: tx, y: ty };
+    }
+
+    (function tick() {
+        var t = targetPos();
+        cx += (t.x - cx) * 0.1;
+        cy += (t.y - cy) * 0.1;
+        preview.style.left = cx + 'px';
+        preview.style.top  = cy + 'px';
+        requestAnimationFrame(tick);
+    })();
+
+    document.querySelectorAll('.proj-card').forEach(function(card) {
+        var bg = card.querySelector('.proj-bg');
+        if (!bg) return;
+        card.addEventListener('mouseenter', function() {
+            preview.style.backgroundImage = getComputedStyle(bg).backgroundImage;
+            label.querySelector('span').textContent = (card.querySelector('.proj-name') || {}).textContent || '';
+            preview.classList.add('visible');
+        });
+        card.addEventListener('mouseleave', function() {
+            preview.classList.remove('visible');
+        });
+    });
+
+    /* ── IRIS TRANSITION ── */
+    document.querySelectorAll('a.proj-card').forEach(function(card) {
+        card.addEventListener('click', function(e) {
+            e.preventDefault();
+            var href = this.getAttribute('href');
+            var ocx  = cx + PW / 2;
+            var ocy  = cy + PH / 2;
+
+            preview.classList.remove('visible');
+
+            // Contenedor con clip-path expandiendo
+            var wrap = document.createElement('div');
+            wrap.id  = 'proj-iris-wrap';
+            wrap.style.setProperty('--cx', ocx + 'px');
+            wrap.style.setProperty('--cy', ocy + 'px');
+
+            // iframe cargando la página destino
+            var ifrm = document.createElement('iframe');
+            ifrm.src = href;
+
+            // negro que cubre el iframe hasta que cargue
+            var black = document.createElement('div');
+            black.id  = 'proj-iris-black';
+
+            wrap.appendChild(ifrm);
+            wrap.appendChild(black);
+            document.body.appendChild(wrap);
+
+            // Arrancar expansión del círculo
+            requestAnimationFrame(function() {
+                requestAnimationFrame(function() {
+                    wrap.style.clipPath = 'circle(150% at ' + ocx + 'px ' + ocy + 'px)';
+                });
+            });
+
+            // Cuando el iframe carga → desvanecer el negro y mostrar la página
+            ifrm.addEventListener('load', function() {
+                black.style.opacity = '0';
+            });
+
+            // Navegar al terminar la animación
+            setTimeout(function() { window.location.href = href; }, 1900);
+        });
+    });
+
+})();
+</script>
 </body>
 </html>
