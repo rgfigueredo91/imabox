@@ -44,7 +44,7 @@
         .bg-4  { background: url('../img/jardines-de-areco.webp') center/cover no-repeat; }
         .bg-5  { background: url('../img/link-center.webp') center/cover no-repeat; }
         .bg-6  { background: url('../img/cala-del-yacht.webp') center/cover no-repeat; }
-        .bg-7  { background: url('../img/aero-met.webp') center/cover no-repeat; }
+        .bg-7  { background: url('../img/aero-met-cover.webp') center/cover no-repeat; }
         .bg-8  { background: url('../img/terrazas-de-polo.webp') center/cover no-repeat; }
         .bg-10 { background: url('../img/menara-one.webp') center/cover no-repeat; }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }

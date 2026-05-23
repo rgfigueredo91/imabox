@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-K99Z94HL');</script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0W0QJ3ZXQ5"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-0W0QJ3ZXQ5');
+    </script>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    <title>AeroMet & MM — Urban Visualization | Imabox</title>
+    <meta name="description" content="AeroMet & MM Movilidad Metropolitana — urban fotomontaje and visualization for transit infrastructure in Uruguay. By Imabox." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="AeroMet & MM — Imabox" />
+    <meta property="og:description" content="Urban visualization and fotomontaje for AeroMet & MM Movilidad Metropolitana, Uruguay." />
+    <meta property="og:url" content="https://imabox.uy/aero-met.html" />
+    <meta property="og:image" content="https://imabox.uy/img/aero-met/roosvelt.webp" />
+    <link rel="shortcut icon" type="image/png" href="favicon.png" />
+    <link rel="canonical" href="https://imabox.uy/aero-met.html" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.typekit.net/oov2wcw.css">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles/navbar.css" />
+    <link rel="stylesheet" href="styles/swipebox.css" />
+    <link rel="stylesheet" href="styles/cursor.css" />
+
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { background: #0e0e0e; color: #fff; font-family: 'Poppins', sans-serif; }
+        *::-webkit-scrollbar { display: none; }
+        * { scrollbar-width: none; }
+
+        /* ── PROJECT HEADER ── */
+        .project-header {
+            padding: 120px 48px 48px;
+            display: flex; align-items: flex-end;
+            justify-content: space-between; gap: 32px; flex-wrap: wrap;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            max-width: 1400px; margin: 0 auto;
+        }
+        .back-link {
+            display: inline-flex; align-items: center; gap: 8px;
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
+            color: rgba(255,255,255,0.35); text-decoration: none;
+            transition: color 0.2s; margin-bottom: 20px;
+        }
+        .back-link:hover { color: #c9a96e; }
+        .project-eyebrow {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase;
+            color: #c9a96e; margin-bottom: 10px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .project-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: #c9a96e; }
+        .project-header h1 {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 200; letter-spacing: -0.02em; line-height: 1; color: #fff;
+        }
+        .project-header h1 span { color: #c9a96e; }
+        .project-meta { display: flex; flex-direction: column; gap: 6px; text-align: right; }
+        .meta-item {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.7rem; letter-spacing: 0.12em; color: rgba(255,255,255,0.35);
+        }
+        .meta-item strong { color: rgba(255,255,255,0.7); font-weight: 400; margin-left: 6px; }
+
+        /* ── GALLERY ── */
+        .gallery-section { padding: 8px 8px 0; margin-top: 8px; }
+        .hes-gallery {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-auto-rows: 18vw;
+            gap: 2px;
+        }
+        .img {
+            position: relative; overflow: hidden; background: #1a1a1a; cursor: pointer;
+        }
+        .img img {
+            width: 100%; height: 100%; object-fit: cover; display: block;
+            transition: transform 0.5s ease;
+        }
+        .img:not(.slider-item):hover img { transform: scale(1.03); }
+        .img:not(.slider-item):hover { opacity: 0.88; }
+
+        /* ── VIDEO items ── */
+        .img video {
+            position: absolute; inset: 0; width: 100%; height: 100%;
+            object-fit: cover; opacity: 0;
+            transition: opacity 0.4s ease; pointer-events: none;
+        }
+        .img.video-item:hover video { opacity: 1; }
+        .img.video-item img { transition: opacity 0.4s ease; }
+        .img.video-item:hover img { opacity: 0; }
+        .video-badge {
+            position: absolute; bottom: 12px; left: 12px;
+            display: flex; align-items: center; gap: 6px;
+            background: rgba(0,0,0,0.55); border: 1px solid rgba(201,169,110,0.4);
+            padding: 5px 10px; z-index: 5; pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .img.video-item:hover .video-badge { opacity: 0; }
+        .video-badge i { color: #c9a96e; font-size: 0.7rem; }
+        .video-badge span {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase;
+            color: rgba(255,255,255,0.8);
+        }
+
+        /* ── REVEAL SLIDER ── */
+        .slider-item { cursor: ew-resize; }
+        .reveal-wrap {
+            position: absolute; inset: 0;
+            user-select: none; -webkit-user-select: none;
+        }
+        .reveal-after, .reveal-before {
+            position: absolute; inset: 0;
+        }
+        .reveal-after img, .reveal-before img {
+            width: 100%; height: 100%; object-fit: cover; display: block;
+            pointer-events: none;
+        }
+        .reveal-before { clip-path: inset(0 50% 0 0); }
+        .reveal-handle {
+            position: absolute; top: 0; bottom: 0;
+            left: 50%; transform: translateX(-50%);
+            width: 2px; background: #c9a96e;
+            display: flex; align-items: center; justify-content: center;
+            z-index: 10;
+        }
+        .reveal-handle-btn {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: #c9a96e;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.5);
+            flex-shrink: 0;
+        }
+        .reveal-handle-btn svg { width: 16px; height: 16px; fill: #000; }
+        .reveal-label {
+            position: absolute; bottom: 12px;
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase;
+            color: #fff; background: rgba(0,0,0,0.5);
+            padding: 4px 10px; pointer-events: none; z-index: 8;
+        }
+        .reveal-label.left  { left: 10px; }
+        .reveal-label.right { right: 10px; }
+
+        #noselectgrid { -webkit-user-select: none; -moz-user-select: none; user-select: none; }
+
+        /* ── GRID POSITIONS — 5 cols × 6 rows ── */
+        /* fila 1-2 */
+        #img-slider-zonamerica  { grid-row: 1/3; grid-column: 1/4; }
+        #img-roosvelt           { grid-row: 1/2; grid-column: 4/6; }
+        #img-peatonal           { grid-row: 2/3; grid-column: 4/6; }
+        /* fila 3-4 */
+        #img-slider-avitalia    { grid-row: 3/5; grid-column: 1/4; }
+        #img-slider-maldonado   { grid-row: 3/5; grid-column: 4/6; }
+        /* fila 5-6 */
+        #img-gianatasio         { grid-row: 5/7; grid-column: 1/3; }
+        #img-slider-geant       { grid-row: 5/7; grid-column: 3/6; }
+
+        /* ── VIDEO STRIP — portrait 9:16 | slider 2:1 | landscape 16:9 | portrait 9:16 ── */
+        .video-strip-section { padding: 2px 8px 8px; }
+        .video-strip {
+            display: grid;
+            grid-template-columns: 81fr 256fr 81fr;
+            height: 34.5vw;
+            gap: 2px;
+        }
+
+        /* footer */
+        footer {
+            border-top: 1px solid rgba(255,255,255,0.08);
+            padding: 28px 48px; display: flex; align-items: center;
+            justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-top: 8px;
+        }
+        footer .logo { font-family: 'aktiv-grotesk', sans-serif; font-size: 0.9rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.3); }
+        footer p { font-size: 0.7rem; color: rgba(255,255,255,0.18); letter-spacing: 0.08em; }
+        .footer-social { display: flex; gap: 18px; align-items: center; }
+        .footer-social a { color: #c9a96e; font-size: 1.15rem; text-decoration: none; transition: opacity 0.2s; }
+        .footer-social a:hover { opacity: 0.65; }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 1024px) {
+            .hes-gallery { grid-template-columns: repeat(3, 1fr); grid-auto-rows: 28vw; }
+            .hes-gallery > .img { grid-row: auto !important; grid-column: auto !important; }
+            .project-header { padding: 100px 24px 36px; }
+            .project-meta { text-align: left; }
+        }
+        @media (max-width: 600px) {
+            .hes-gallery { grid-template-columns: 1fr 1fr; grid-auto-rows: 44vw; gap: 3px; }
+            .gallery-section { padding: 4px; }
+            footer { flex-direction: column; text-align: center; padding: 28px 24px; }
+        }
+    </style>
+</head>
+<body>
+
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K99Z94HL"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+<!-- NAV -->
+<header>
+    <nav class="navbar" id="navbar">
+        <a href="https://imabox.uy" class="nav-logo" id="link-font-index">imabox.</a>
+        <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+            <span class="nav-bar"></span>
+            <span class="nav-bar"></span>
+            <span class="nav-bar"></span>
+        </button>
+        <div class="nav-overlay">
+            <ul class="nav-links">
+                <li><a href="projects.html">Projects</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="nav-info">
+                <div class="nav-lang">
+                    <a href="#eng">eng</a><span>|</span><a href="#esp">esp</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<!-- PROJECT HEADER -->
+<div class="project-header">
+    <div>
+        <a href="projects.html" class="back-link"><i class="fa fa-arrow-left"></i> All projects</a>
+        <div class="project-eyebrow">Urban Visualization · Montevideo, Uruguay</div>
+        <h1>AeroMet <span>& MM</span></h1>
+    </div>
+    <div class="project-meta">
+        <div class="meta-item">Year <strong>2025</strong></div>
+        <div class="meta-item">Services <strong>Fotomontaje · Urban Visualization · Motion</strong></div>
+        <div class="meta-item">Client <strong>AeroMet · MM Movilidad Metropolitana</strong></div>
+    </div>
+</div>
+
+<!-- GALLERY -->
+<section class="gallery-section">
+    <div class="hes-gallery" id="noselectgrid">
+
+        <!-- SLIDER 1: Zonamerica foto / render -->
+        <div class="img slider-item" id="img-slider-zonamerica">
+            <div class="reveal-wrap" data-reveal>
+                <div class="reveal-after">
+                    <img loading="lazy" src="img/aero-met/zonamerica-render.webp" alt="AeroMet — Zonamerica render — Imabox"/>
+                </div>
+                <div class="reveal-before">
+                    <img loading="lazy" src="img/aero-met/zonamerica-foto.webp" alt="AeroMet — Zonamerica foto original — Imabox"/>
+                </div>
+                <div class="reveal-handle">
+                    <div class="reveal-handle-btn">
+                        <svg viewBox="0 0 24 24"><path d="M8 5l-7 7 7 7M16 5l7 7-7 7"/></svg>
+                    </div>
+                </div>
+                <span class="reveal-label left">Foto</span>
+                <span class="reveal-label right">Proyecto</span>
+            </div>
+        </div>
+
+        <!-- Roosvelt render -->
+        <div class="img" id="img-roosvelt">
+            <a href="img/aero-met/roosvelt.webp" class="swipebox">
+                <img loading="lazy" src="img/aero-met/roosvelt.webp" alt="AeroMet — Roosvelt — Imabox"/>
+            </a>
+        </div>
+
+        <!-- Zonamerica peatonal -->
+        <div class="img" id="img-peatonal">
+            <a href="img/aero-met/peatonal.webp" class="swipebox">
+                <img loading="lazy" src="img/aero-met/peatonal.webp" alt="AeroMet — Zonamerica peatonal — Imabox"/>
+            </a>
+        </div>
+
+        <!-- Slider Av Italia y Arroyo -->
+        <div class="img slider-item" id="img-slider-avitalia">
+            <div class="reveal-wrap" data-reveal>
+                <div class="reveal-after">
+                    <img loading="lazy" src="img/aero-met/av-italia-render.webp" alt="AeroMet — Av. Italia y Arroyo render — Imabox"/>
+                </div>
+                <div class="reveal-before">
+                    <img loading="lazy" src="img/aero-met/av-italia-foto.webp" alt="AeroMet — Av. Italia y Arroyo foto original — Imabox"/>
+                </div>
+                <div class="reveal-handle">
+                    <div class="reveal-handle-btn">
+                        <svg viewBox="0 0 24 24"><path d="M8 5l-7 7 7 7M16 5l7 7-7 7"/></svg>
+                    </div>
+                </div>
+                <span class="reveal-label left">Foto</span>
+                <span class="reveal-label right">Proyecto</span>
+            </div>
+        </div>
+
+        <!-- Gianatasio render -->
+        <div class="img" id="img-gianatasio">
+            <a href="img/aero-met/gianatasio.webp" class="swipebox">
+                <img loading="lazy" src="img/aero-met/gianatasio.webp" alt="AeroMet — Gianatasio — Imabox"/>
+            </a>
+        </div>
+
+        <!-- SLIDER 3: Cno Maldonado -->
+        <div class="img slider-item" id="img-slider-maldonado">
+            <div class="reveal-wrap" data-reveal>
+                <div class="reveal-after">
+                    <img loading="lazy" src="img/aero-met/cno-maldonado-render.webp" alt="AeroMet — Cno. Maldonado render — Imabox"/>
+                </div>
+                <div class="reveal-before">
+                    <img loading="lazy" src="img/aero-met/cno-maldonado-foto.webp" alt="AeroMet — Cno. Maldonado foto original — Imabox"/>
+                </div>
+                <div class="reveal-handle">
+                    <div class="reveal-handle-btn">
+                        <svg viewBox="0 0 24 24"><path d="M8 5l-7 7 7 7M16 5l7 7-7 7"/></svg>
+                    </div>
+                </div>
+                <span class="reveal-label left">Foto</span>
+                <span class="reveal-label right">Proyecto</span>
+            </div>
+        </div>
+
+        <!-- Geant render -->
+        <div class="img" id="img-slider-geant">
+            <a href="img/aero-met/geant-render.webp" class="swipebox">
+                <img loading="lazy" src="img/aero-met/geant-render.webp" alt="AeroMet — Geant — Imabox"/>
+            </a>
+        </div>
+
+    </div>
+</section>
+
+<!-- VIDEO STRIP -->
+<section class="video-strip-section">
+    <div class="video-strip">
+
+        <!-- Portrait 9:16 -->
+        <div class="img video-item">
+            <img loading="lazy" src="img/aero-met/thumb-trenes-final.webp" alt="AeroMet — trenes MM — Imabox"/>
+            <video src="animations/aeromet-trenes-final.mp4" muted loop playsinline preload="none"></video>
+            <div class="video-badge"><i class="fa fa-play"></i><span>Video</span></div>
+        </div>
+
+        <!-- Landscape 16:9 -->
+        <div class="img video-item">
+            <img loading="lazy" src="img/aero-met/thumb-trenes-web.webp" alt="AeroMet — trenes MM — Imabox"/>
+            <video src="animations/aeromet-trenes.mp4" muted loop playsinline preload="none"></video>
+            <div class="video-badge"><i class="fa fa-play"></i><span>Video</span></div>
+        </div>
+
+        <!-- Portrait 9:16 -->
+        <div class="img video-item">
+            <img loading="lazy" src="img/aero-met/thumb-trenes-orig.webp" alt="AeroMet — trenes MM — Imabox"/>
+            <video src="animations/aeromet-trenes-orig.mp4" muted loop playsinline preload="none"></video>
+            <div class="video-badge"><i class="fa fa-play"></i><span>Video</span></div>
+        </div>
+
+    </div>
+</section>
+
+<footer>
+    <div class="logo">Imabox</div>
+    <p>Creative agency · Architecture &amp; Real Estate — Montevideo, Uruguay</p>
+    <p>© 2025 Imabox. All rights reserved.</p>
+    <div class="footer-social">
+        <a href="https://www.instagram.com/imabox_uy" target="_blank"><i class="fa fa-instagram"></i></a>
+        <a href="https://www.linkedin.com/company/imabox" target="_blank"><i class="fa fa-linkedin"></i></a>
+    </div>
+</footer>
+
+<script src="js/navbar-hamburger.js"></script>
+<script src="js/jquery-2.1.0.min.js"></script>
+<script src="js/jquery.swipebox.min.js"></script>
+<script src="js/circle.js"></script>
+<script>
+$(document).ready(function(){ $('.swipebox').swipebox({ useSVG: false }); });
+
+/* ── Video hover ── */
+document.querySelectorAll('.img.video-item').forEach(function(item) {
+    var video = item.querySelector('video');
+    if (!video) return;
+    item.addEventListener('mouseenter', function() { video.play(); });
+    item.addEventListener('mouseleave', function() { video.pause(); video.currentTime = 0; });
+});
+
+/* ── Reveal sliders ── */
+document.querySelectorAll('[data-reveal]').forEach(function(wrap) {
+    var before  = wrap.querySelector('.reveal-before');
+    var handle  = wrap.querySelector('.reveal-handle');
+    var dragging = false;
+
+    function setPos(x) {
+        var rect = wrap.getBoundingClientRect();
+        var pct  = Math.max(2, Math.min(98, ((x - rect.left) / rect.width) * 100));
+        before.style.clipPath = 'inset(0 ' + (100 - pct) + '% 0 0)';
+        handle.style.left     = pct + '%';
+    }
+
+    handle.addEventListener('mousedown',  function(e) { dragging = true; e.preventDefault(); });
+    document.addEventListener('mouseup',  function()  { dragging = false; });
+    document.addEventListener('mousemove', function(e) { if (dragging) setPos(e.clientX); });
+
+    wrap.addEventListener('touchstart', function() { dragging = true; }, { passive: true });
+    wrap.addEventListener('touchend',   function() { dragging = false; });
+    wrap.addEventListener('touchmove',  function(e) {
+        if (dragging) { setPos(e.touches[0].clientX); e.stopPropagation(); }
+    }, { passive: true });
+});
+</script>
+
+</body>
+</html>
