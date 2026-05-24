@@ -760,6 +760,40 @@
         #mp-camara-btn:hover { background: rgba(0,0,0,0.7); border-color: #fff; }
         #mp-camara-btn:disabled { opacity: 0.35; cursor: default; pointer-events: none; }
 
+        /* ── VER PARCELARIO / REGRESAR toggle ────────────────────── */
+        .mp-parcelario-wrap {
+            position: absolute;
+            bottom: 36px;
+            right: 36px;
+            z-index: 3;
+            width: fit-content;
+            height: fit-content;
+        }
+        .mp-parcelario-wrap button {
+            background: rgba(0,0,0,0.45);
+            border: 1.5px solid rgba(255,255,255,0.6);
+            color: #fff;
+            font-family: inherit;
+            font-size: 0.65rem;
+            font-weight: 300;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            padding: 14px 28px;
+            cursor: pointer;
+            display: flex; align-items: center; gap: 10px;
+            transition: opacity 0.3s ease, background 0.25s, border-color 0.25s;
+            white-space: nowrap;
+        }
+        .mp-parcelario-wrap button:hover { background: rgba(0,0,0,0.7); border-color: #fff; }
+        #mp-parcelario-back {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            pointer-events: none;
+        }
+        #mp-parcelario-back.visible  { opacity: 1; pointer-events: all; }
+        #mp-ver-parcelario.hidden    { opacity: 0; pointer-events: none; }
+
         /* ── VIDEO PLAYER sobre la imagen ─────────────────────────── */
         .mp-detail-video {
             position: absolute;
@@ -979,6 +1013,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 3.5h7.5a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1v-5a1 1 0 0 1 1-1z" stroke="white" stroke-width="1.2"/><path d="M9.5 5.8 13 4v6l-3.5-1.8V5.8z" stroke="white" stroke-width="1.2" stroke-linejoin="round"/></svg>
                 <span>Cámara inferior</span>
             </button>
+
+            <!-- Ver parcelario / Regresar -->
+            <div class="mp-parcelario-wrap">
+                <button id="mp-ver-parcelario">Ver parcelario</button>
+                <button id="mp-parcelario-back">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><polyline points="10,2 4,8 10,14" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    Regresar
+                </button>
+            </div>
         </div>
 
         <div class="mp-detail-location">
@@ -1715,6 +1758,23 @@ camaraBtn.addEventListener('click', () => {
             camaraBtn.disabled = false;
         }, { once: true });
     }
+});
+
+const verParcelarioBtn  = document.getElementById('mp-ver-parcelario');
+const parcelarioBackBtn = document.getElementById('mp-parcelario-back');
+
+function resetParcelario() {
+    verParcelarioBtn.classList.remove('hidden');
+    parcelarioBackBtn.classList.remove('visible');
+}
+
+verParcelarioBtn.addEventListener('click', () => {
+    verParcelarioBtn.classList.add('hidden');
+    parcelarioBackBtn.classList.add('visible');
+});
+
+parcelarioBackBtn.addEventListener('click', () => {
+    hidePadrones();
 });
 
 parcelasBtn.addEventListener("click", showPadrones);
