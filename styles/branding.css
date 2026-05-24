@@ -47,6 +47,10 @@
         .bg-7  { background: url('../img/aero-met-cover.webp') center/cover no-repeat; }
         .bg-8  { background: url('../img/terrazas-de-polo.webp') center/cover no-repeat; }
         .bg-10 { background: url('../img/menara-one.webp') center/cover no-repeat; }
+        .bg-9  { background: url('../img/crc-fitness.webp') center/cover no-repeat; }
+        .bg-11 { background: url('../img/cover1index.webp') center/cover no-repeat; }
+        .bg-12 { background: url('../img/cover2index.webp') center/cover no-repeat; }
+        .bg-13 { background: url('../img/cover6index.webp') center/cover no-repeat; }
         /* ── FLOATING PREVIEW ── */
         @media (hover: hover) and (pointer: fine) { .proj-content { display: none; } }
 
