@@ -739,6 +739,160 @@
         .mp-detail.is-clubhouse .mp-detail-close  { opacity: 0; pointer-events: none; }
         .mp-detail.show-inicio  .mp-padrones-back { opacity: 1; pointer-events: all; }
 
+        /* ── PADRON SIDE PANEL ───────────────────────────────────── */
+        .padron-panel {
+            position: fixed;
+            top: 0; right: 0;
+            width: min(400px, 100vw);
+            height: 100%;
+            background: rgba(8,8,8,0.97);
+            border-left: 1px solid rgba(255,255,255,0.07);
+            z-index: 500;
+            transform: translateX(100%);
+            transition: transform 0.45s cubic-bezier(0.4,0,0.2,1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            backdrop-filter: blur(12px);
+        }
+        .padron-panel.open { transform: translateX(0); }
+
+        .padron-panel-close {
+            position: absolute;
+            top: 24px; right: 28px;
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.5);
+            font-size: 1.4rem;
+            cursor: pointer;
+            line-height: 1;
+            padding: 4px;
+            z-index: 2;
+            transition: color 0.2s;
+        }
+        .padron-panel-close:hover { color: #fff; }
+
+        .padron-panel-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding: 40px 28px 24px;
+            scrollbar-width: none;
+        }
+        .padron-panel-scroll::-webkit-scrollbar { display: none; }
+
+        .padron-panel-eyebrow {
+            font-size: 0.5rem;
+            font-weight: 300;
+            letter-spacing: 0.45em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 4px;
+        }
+        .padron-panel-num {
+            font-size: clamp(1.6rem, 4vw, 2.2rem);
+            font-weight: 200;
+            letter-spacing: 0.05em;
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+        .padron-panel-status {
+            display: inline-block;
+            font-size: 0.48rem;
+            font-weight: 400;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 2px;
+            margin-bottom: 14px;
+        }
+        .padron-panel-status.disponible { background: rgba(80,200,120,0.18); color: #50c878; border: 1px solid rgba(80,200,120,0.35); }
+        .padron-panel-status.reservado  { background: rgba(255,190,50,0.15);  color: #ffc03a; border: 1px solid rgba(255,190,50,0.35); }
+        .padron-panel-status.vendido    { background: rgba(200,80,80,0.15);   color: #e06060; border: 1px solid rgba(200,80,80,0.35); }
+
+        .padron-panel-divider {
+            height: 1px;
+            background: rgba(255,255,255,0.07);
+            margin: 0 0 14px;
+        }
+        .padron-section-title {
+            font-size: 0.45rem;
+            font-weight: 400;
+            letter-spacing: 0.45em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.35);
+            margin-bottom: 6px;
+        }
+        .padron-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            gap: 12px;
+        }
+        .padron-row:last-child { border-bottom: none; }
+        .padron-row-label {
+            font-size: 0.52rem;
+            font-weight: 300;
+            letter-spacing: 0.12em;
+            color: rgba(255,255,255,0.5);
+            text-transform: uppercase;
+            flex-shrink: 0;
+        }
+        .padron-row-value {
+            font-size: 0.6rem;
+            font-weight: 300;
+            letter-spacing: 0.06em;
+            color: rgba(255,255,255,0.9);
+            text-align: right;
+        }
+        .padron-section { margin-bottom: 14px; }
+
+        .padron-services {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 6px 16px;
+            margin-bottom: 16px;
+        }
+        .padron-service-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.52rem;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            color: rgba(255,255,255,0.7);
+        }
+        .padron-service-dot {
+            width: 4px; height: 4px;
+            border-radius: 50%;
+            background: rgba(80,200,120,0.8);
+            flex-shrink: 0;
+        }
+
+        .padron-panel-cta {
+            display: block;
+            text-align: center;
+            background: none;
+            border: 1px solid rgba(255,255,255,0.35);
+            color: #fff;
+            font-family: inherit;
+            font-size: 0.52rem;
+            font-weight: 300;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            text-decoration: none;
+            padding: 13px 20px;
+            cursor: pointer;
+            transition: background 0.25s, border-color 0.25s;
+        }
+        .padron-panel-cta:hover { background: rgba(255,255,255,0.07); border-color: #fff; }
+
+        @media (max-width: 480px) {
+            .padron-panel-scroll { padding: 40px 20px 24px; }
+        }
+
         /* ── PADRONES HOVER CANVAS ──────────────────────────────── */
         #mp-padrones-hover-canvas {
             position: absolute;
@@ -887,7 +1041,7 @@
                 position: fixed;
                 pointer-events: none;
                 z-index: 300;
-                width: 220px; height: 220px;
+                width: 260px; height: 260px;
                 border-radius: 50%;
                 overflow: hidden;
                 background-size: cover;
@@ -915,14 +1069,14 @@
             }
             #mp-zone-preview-label span {
                 font-family: 'Poppins', sans-serif;
-                font-size: 0.58rem;
+                font-size: 0.5rem;
                 font-weight: 300;
-                letter-spacing: 0.38em;
+                letter-spacing: 0.28em;
                 text-transform: uppercase;
                 color: #fff;
                 text-shadow: 0 1px 6px rgba(0,0,0,0.7);
                 text-align: center;
-                padding: 0 12px;
+                padding: 0 18px;
             }
         }
         @media (hover: none) { #mp-zone-preview { display: none; } }
@@ -1064,7 +1218,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <!-- Animation video (plays over the still image) -->
         <video class="mp-detail-video" id="mp-detail-video"
                src="img/masterplanes/detail/Animate_slow_zoom_202604231030.mp4"
-               playsinline preload="none"></video>
+               playsinline preload="none" muted></video>
 
         <!-- Image slider (per-zone) -->
         <div class="mp-slider" id="mp-slider"></div>
@@ -1072,7 +1226,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <!-- Lightbox for expanded slider image / video -->
         <div class="mp-lightbox" id="mp-lightbox">
             <img class="mp-lightbox-img" id="mp-lightbox-img" src="" alt="" draggable="false" />
-            <video class="mp-lightbox-img" id="mp-lightbox-video" src="" playsinline controls style="display:none;background:#000;"></video>
+            <video class="mp-lightbox-img" id="mp-lightbox-video" src="" playsinline controls muted style="display:none;background:#000;"></video>
             <button class="mp-lightbox-arrow prev" id="mp-lb-prev">&#8249;</button>
             <button class="mp-lightbox-arrow next" id="mp-lb-next">&#8250;</button>
             <button class="mp-lightbox-close" id="mp-lb-close">&#10005;</button>
@@ -1080,6 +1234,53 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
         <!-- Botón parcelas en venta (solo visible en Clubhouse) -->
         <button class="mp-parcelas-btn" id="mp-parcelas-btn">Parcelas en venta</button>
+
+        <!-- Padron side panel -->
+        <div class="padron-panel" id="padron-panel">
+            <button class="padron-panel-close" id="padron-panel-close">&#10005;</button>
+            <div class="padron-panel-scroll">
+                <div class="padron-panel-eyebrow">Reserva de Mar</div>
+                <div class="padron-panel-num" id="pp-num">01</div>
+                <div class="padron-panel-status disponible" id="pp-status">Disponible</div>
+                <div class="padron-panel-divider"></div>
+                <div class="padron-section">
+                    <div class="padron-section-title">Superficie</div>
+                    <div class="padron-row"><span class="padron-row-label">Área total</span><span class="padron-row-value" id="pp-area">—</span></div>
+                    <div class="padron-row"><span class="padron-row-label">Frente</span><span class="padron-row-value" id="pp-frente">—</span></div>
+                    <div class="padron-row"><span class="padron-row-label">Fondo</span><span class="padron-row-value" id="pp-fondo">—</span></div>
+                </div>
+                <div class="padron-section">
+                    <div class="padron-section-title">Precio</div>
+                    <div class="padron-row"><span class="padron-row-label">Valor</span><span class="padron-row-value" id="pp-precio">—</span></div>
+                    <div class="padron-row"><span class="padron-row-label">Precio / m²</span><span class="padron-row-value" id="pp-precio-m2">—</span></div>
+                </div>
+                <div class="padron-section">
+                    <div class="padron-section-title">Normativa</div>
+                    <div class="padron-row"><span class="padron-row-label">Retiro frontal</span><span class="padron-row-value" id="pp-ret-front">—</span></div>
+                    <div class="padron-row"><span class="padron-row-label">Retiro lateral</span><span class="padron-row-value" id="pp-ret-lat">—</span></div>
+                    <div class="padron-row"><span class="padron-row-label">Retiro posterior</span><span class="padron-row-value" id="pp-ret-post">—</span></div>
+                    <div class="padron-row"><span class="padron-row-label">FOS</span><span class="padron-row-value" id="pp-fos">—</span></div>
+                    <div class="padron-row"><span class="padron-row-label">FOT</span><span class="padron-row-value" id="pp-fot">—</span></div>
+                    <div class="padron-row"><span class="padron-row-label">Altura máxima</span><span class="padron-row-value" id="pp-altura">—</span></div>
+                </div>
+                <div class="padron-section">
+                    <div class="padron-section-title">Características</div>
+                    <div class="padron-row"><span class="padron-row-label">Orientación</span><span class="padron-row-value" id="pp-orientacion">—</span></div>
+                    <div class="padron-row"><span class="padron-row-label">Vista</span><span class="padron-row-value" id="pp-vista">—</span></div>
+                    <div class="padron-row"><span class="padron-row-label">Uso</span><span class="padron-row-value" id="pp-uso">—</span></div>
+                    <div class="padron-row"><span class="padron-row-label">Topografía</span><span class="padron-row-value" id="pp-topografia">—</span></div>
+                </div>
+                <div class="padron-section-title">Servicios</div>
+                <div class="padron-services">
+                    <div class="padron-service-item"><div class="padron-service-dot"></div>Agua potable</div>
+                    <div class="padron-service-item"><div class="padron-service-dot"></div>Energía eléctrica</div>
+                    <div class="padron-service-item"><div class="padron-service-dot"></div>Gas natural</div>
+                    <div class="padron-service-item"><div class="padron-service-dot"></div>Saneamiento</div>
+                    <div class="padron-service-item"><div class="padron-service-dot"></div>Fibra óptica</div>
+                </div>
+                <a class="padron-panel-cta" id="pp-cta" href="mailto:ventas@reservademar.uy">Consultar disponibilidad</a>
+            </div>
+        </div>
 
         <!-- Vista padrones -->
         <div class="mp-padrones" id="mp-padrones">
@@ -1305,18 +1506,18 @@ arrowLeft.addEventListener("click", () => {
     // url + exact byte size for weighted byte-accurate progress
     const assets = [
         // Main images
-        { url: "img/masterplanes/start.webp",      b: 656998 },
-        { url: "img/masterplanes/end1.webp",        b: 504598 },
-        { url: "img/masterplanes/end2.webp",        b: 544320 },
-        { url: "img/masterplanes/noche.webp",       b: 348186 },
-        { url: "img/masterplanes/terreno.webp",     b: 500890 },
+        { url: "img/masterplanes/start.webp",      b: 644826 },
+        { url: "img/masterplanes/end1.webp",        b: 525880 },
+        { url: "img/masterplanes/end2.webp",        b: 563656 },
+        { url: "img/masterplanes/noche.webp",       b: 338192 },
+        { url: "img/masterplanes/terreno.webp",     b: 518862 },
         // Color map (para detección de zonas por pixel)
         { url: "img/masterplanes/colormap.png",     b:  25879 },
         { url: "img/masterplanes/detail/padrones.jpg",         b: 2016885 },
         { url: "img/masterplanes/detail/padrones-colormap.png", b:   51200 },
         { url: "videos/masterplanes/padrones-loop.mp4",      b: 14366000 },
-        { url: "videos/masterplanes/clubhouse-inferior.mp4", b: 26800000 },
-        { url: "videos/masterplanes/clubhouse-superior.mp4", b: 23400000 },
+        { url: "videos/masterplanes/clubhouse-inferior.mp4", b: 12305147 },
+        { url: "videos/masterplanes/clubhouse-superior.mp4", b: 11166854 },
         { url: "img/masterplanes/detail/clubhouse-s1.webp",  b:   785408 },
         // Detail stills
         { url: "img/masterplanes/detail/Gemini_Generated_Image_dih2xedih2xedih2.webp", b: 1126904 },
@@ -1404,16 +1605,16 @@ let   colorMapReady = false;
 // click: { introVideo, stillImg, clickVideo, detailLabel, sliderSrcs }
 const COLOR_ZONES = [
     { key:'bulevar',     r:255, g:  0, b:  0, label:'Bulevar Principal', pastel:[255,175,175,120], previewImg:'img/masterplanes/detail/Gemini_Generated_Image_cl1lvbcl1lvbcl1l.webp', click: null },
-    { key:'lago',        r: 18, g:  0, b:255, label:'Lago',              pastel:[165,185,255,120], previewImg:'img/masterplanes/end1.webp',                                             click: null },
+    { key:'lago',        r: 18, g:  0, b:255, label:'Sector Lago',       pastel:[165,185,255,120], previewImg:'img/masterplanes/detail/omni-6f803821-a455-4c84-8c9d-99863e33c64f.webp', click: null },
     { key:'residencial', r: 42, g:255, b:  0, label:'Residencial',       pastel:[175,255,180,120], previewImg:'img/masterplanes/detail/Gemini_Generated_Image_dih2xedih2xedih2.webp',  click: null },
-    { key:'clubhouse',   r:255, g:222, b:  0, label:'Clubhouse',         pastel:[255,252,145,120], previewImg:'img/masterplanes/detail/Gemini_Generated_Image_dxn5ubdxn5ubdxn5.webp',  click: {
+    { key:'clubhouse',   r:255, g:222, b:  0, label:'Sector Fitness House', pastel:[255,252,145,120], previewImg:'img/masterplanes/detail/w8_still.webp',  click: {
         introVideo:  'img/masterplanes/detail/zoom_out_smooth_w8_rev.mp4',
         stillImg:    'img/masterplanes/detail/w8_still.webp',
         clickVideo:  null,
-        detailLabel: 'Clubhouse',
+        detailLabel: 'Sector Fitness House',
         sliderSrcs:  [],
     }},
-    { key:'yates',       r:255, g:168, b:  0, label:'Yates',             pastel:[255,185,105,120], previewImg:'img/masterplanes/detail/w8_still.webp',                                 click: null },
+    { key:'yates',       r:255, g:168, b:  0, label:'Yates',             pastel:[255,185,105,120], previewImg:'img/masterplanes/detail/Gemini_Generated_Image_dxn5ubdxn5ubdxn5.webp', click: null },
     { key:'acceso',      r:  0, g:255, b:168, label:'Acceso Portal',     pastel:[155,255,220,120], previewImg:'img/masterplanes/detail/Gemini_Generated_Image_b4wkzlb4wkzlb4wk.webp', click: null },
 ];
 
@@ -1546,7 +1747,7 @@ document.body.appendChild(zonePreview);
 const zonePreviewLabel = zonePreview.querySelector('span');
 
 let pmx = 0, pmy = 0, pcx = 0, pcy = 0;
-const PPW = 220, PPH = 220, PPAD = 20;
+const PPW = 260, PPH = 260, PPAD = 20;
 
 (function previewTick() {
     const tx = (pmx + PPW + 36 + PPAD > window.innerWidth) ? pmx - PPW - 36 : pmx + 36;
@@ -1824,6 +2025,7 @@ function hidePadrones() {
     padronesEl.classList.remove("on");
     parcelasBtn.textContent = "Parcelas en venta";
     detailEl.classList.add("show-inicio");
+    if (typeof closePadronPanel === 'function') closePadronPanel();
 }
 
 const camaraVideo = document.getElementById('mp-camara-video');
@@ -2104,12 +2306,82 @@ padronesEl.addEventListener('mousemove', e => {
 
 padronesEl.addEventListener('mouseleave', () => activatePadron(null));
 
+/* ── PADRON DATA ─────────────────────────────────────────────── */
+const PADRON_DATA = {
+    p01: { num:'01', area:1250, frente:25.0,  fondo:50.0, precio:180000, estado:'disponible', retFront:5, retLat:3, retPost:3, fos:0.60, fot:1.2, altMax:9,  orientacion:'Noreste',   vista:'Reserva / Parque',    topografia:'Plano'            },
+    p02: { num:'02', area: 980, frente:20.0,  fondo:49.0, precio:142000, estado:'vendido',    retFront:5, retLat:3, retPost:3, fos:0.60, fot:1.2, altMax:9,  orientacion:'Norte',     vista:'Parque',               topografia:'Plano'            },
+    p03: { num:'03', area:1100, frente:22.0,  fondo:50.0, precio:161000, estado:'reservado',  retFront:5, retLat:3, retPost:3, fos:0.60, fot:1.2, altMax:9,  orientacion:'Noroeste',  vista:'Bulevar',              topografia:'Plano'            },
+    p04: { num:'04', area:1450, frente:29.0,  fondo:50.0, precio:215000, estado:'disponible', retFront:5, retLat:3, retPost:3, fos:0.60, fot:1.2, altMax:9,  orientacion:'Sur',       vista:'Lago',                 topografia:'Suave pendiente'  },
+    p05: { num:'05', area: 890, frente:18.0,  fondo:49.4, precio:128000, estado:'disponible', retFront:5, retLat:3, retPost:3, fos:0.60, fot:1.2, altMax:9,  orientacion:'Este',      vista:'Parque / Acceso',      topografia:'Plano'            },
+    p06: { num:'06', area:1320, frente:26.4,  fondo:50.0, precio:194000, estado:'reservado',  retFront:5, retLat:3, retPost:3, fos:0.60, fot:1.2, altMax:9,  orientacion:'Noreste',   vista:'Lago',                 topografia:'Plano'            },
+    p07: { num:'07', area:1050, frente:21.0,  fondo:50.0, precio:154000, estado:'disponible', retFront:5, retLat:3, retPost:3, fos:0.60, fot:1.2, altMax:9,  orientacion:'Norte',     vista:'Reserva',              topografia:'Plano'            },
+    p08: { num:'08', area:2100, frente:42.0,  fondo:50.0, precio:295000, estado:'disponible', retFront:5, retLat:3, retPost:3, fos:0.60, fot:1.2, altMax:9,  orientacion:'Noreste',   vista:'Lago / Mar',           topografia:'Suave pendiente'  },
+    p09: { num:'09', area:1680, frente:33.6,  fondo:50.0, precio:245000, estado:'vendido',    retFront:5, retLat:3, retPost:3, fos:0.60, fot:1.2, altMax:9,  orientacion:'Este',      vista:'Mar',                  topografia:'Plano'            },
+    p10: { num:'10', area:1420, frente:28.4,  fondo:50.0, precio:208000, estado:'disponible', retFront:5, retLat:3, retPost:3, fos:0.60, fot:1.2, altMax:9,  orientacion:'Sur',       vista:'Parque / Reserva',     topografia:'Ondulado'         },
+    p11: { num:'11', area:1180, frente:23.6,  fondo:50.0, precio:172000, estado:'disponible', retFront:5, retLat:3, retPost:3, fos:0.60, fot:1.2, altMax:9,  orientacion:'Suroeste',  vista:'Bulevar',              topografia:'Plano'            },
+    p12: { num:'12', area: 950, frente:19.0,  fondo:50.0, precio:138000, estado:'reservado',  retFront:5, retLat:3, retPost:3, fos:0.60, fot:1.2, altMax:9,  orientacion:'Oeste',     vista:'Acceso Portal',        topografia:'Plano'            },
+    p13: { num:'13', area:1380, frente:27.6,  fondo:50.0, precio:202000, estado:'disponible', retFront:5, retLat:3, retPost:3, fos:0.60, fot:1.2, altMax:9,  orientacion:'Norte',     vista:'Lago / Parque',        topografia:'Plano'            },
+};
+
+const padronPanel     = document.getElementById('padron-panel');
+const padronPanelClose = document.getElementById('padron-panel-close');
+const ppNum      = document.getElementById('pp-num');
+const ppStatus   = document.getElementById('pp-status');
+const ppArea     = document.getElementById('pp-area');
+const ppFrente   = document.getElementById('pp-frente');
+const ppFondo    = document.getElementById('pp-fondo');
+const ppPrecio   = document.getElementById('pp-precio');
+const ppPrecioM2 = document.getElementById('pp-precio-m2');
+const ppRetFront = document.getElementById('pp-ret-front');
+const ppRetLat   = document.getElementById('pp-ret-lat');
+const ppRetPost  = document.getElementById('pp-ret-post');
+const ppFos      = document.getElementById('pp-fos');
+const ppFot      = document.getElementById('pp-fot');
+const ppAltura   = document.getElementById('pp-altura');
+const ppOrient   = document.getElementById('pp-orientacion');
+const ppVista    = document.getElementById('pp-vista');
+const ppUso      = document.getElementById('pp-uso');
+const ppTopo     = document.getElementById('pp-topografia');
+const ppCta      = document.getElementById('pp-cta');
+
+const STATUS_LABELS = { disponible:'Disponible', reservado:'Reservado', vendido:'Vendido' };
+
+function openPadronPanel(zone) {
+    const d = PADRON_DATA[zone.key];
+    if (!d) return;
+    ppNum.textContent      = 'Padrón ' + d.num;
+    ppStatus.textContent   = STATUS_LABELS[d.estado];
+    ppStatus.className     = 'padron-panel-status ' + d.estado;
+    ppArea.textContent     = d.area.toLocaleString('es-UY') + ' m²';
+    ppFrente.textContent   = d.frente.toFixed(1) + ' m';
+    ppFondo.textContent    = d.fondo.toFixed(1) + ' m';
+    ppPrecio.textContent   = 'USD ' + d.precio.toLocaleString('es-UY');
+    ppPrecioM2.textContent = 'USD ' + Math.round(d.precio / d.area).toLocaleString('es-UY');
+    ppRetFront.textContent = d.retFront + ' m';
+    ppRetLat.textContent   = d.retLat + ' m';
+    ppRetPost.textContent  = d.retPost + ' m';
+    ppFos.textContent      = d.fos.toFixed(2);
+    ppFot.textContent      = d.fot.toFixed(1);
+    ppAltura.textContent   = d.altMax + ' m';
+    ppOrient.textContent   = d.orientacion;
+    ppVista.textContent    = d.vista;
+    ppUso.textContent      = 'Residencial';
+    ppTopo.textContent     = d.topografia;
+    ppCta.href = 'mailto:ventas@reservademar.uy?subject=Consulta%20Padrón%20' + d.num + '%20—%20Reserva%20de%20Mar';
+    padronPanel.classList.add('open');
+}
+
+function closePadronPanel() {
+    padronPanel.classList.remove('open');
+}
+
+padronPanelClose.addEventListener('click', closePadronPanel);
+
 padronesEl.addEventListener('click', e => {
     if (!padronesEl.classList.contains('on')) return;
     if (camaraVideo.classList.contains('on') || camaraState !== 'inferior') return;
-    if (!activePadron) return;
-    // TODO: abrir detalle del padrón
-    console.log('Padrón clickeado:', activePadron.label);
+    if (!activePadron) { closePadronPanel(); return; }
+    openPadronPanel(activePadron);
 });
 </script>
 
