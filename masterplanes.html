@@ -360,20 +360,24 @@
 
         .mp-detail-close {
             position: absolute;
-            top: 24px;
-            right: 32px;
-            background: rgba(0,0,0,0.45);
-            border: 1.5px solid rgba(255,255,255,0.55);
+            top: 28px;
+            left: 36px;
+            background: rgba(0,0,0,0.4);
+            border: 1.5px solid rgba(255,255,255,0.5);
             color: #fff;
             font-family: inherit;
-            font-size: 1rem;
-            width: 44px; height: 44px;
-            display: flex; align-items: center; justify-content: center;
+            font-size: 0.6rem;
+            font-weight: 300;
+            letter-spacing: 0.32em;
+            text-transform: uppercase;
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 22px 10px 18px;
             cursor: pointer;
             transition: background 0.2s, border-color 0.2s;
             z-index: 2;
         }
-        .mp-detail-close:hover { background: rgba(0,0,0,0.75); border-color: #fff; }
+        .mp-detail-close:hover { background: rgba(0,0,0,0.7); border-color: #fff; }
+        .mp-detail-close svg { flex-shrink: 0; }
 
         /* ── DETAIL LOCATION LABEL ────────────────────────────────── */
         .mp-detail-location {
@@ -659,6 +663,103 @@
         .mp-lightbox-arrow.prev { left: 28px; }
         .mp-lightbox-arrow.next { right: 28px; }
 
+        /* ── BOTÓN PARCELAS EN VENTA ─────────────────────────────── */
+        .mp-parcelas-btn {
+            position: absolute;
+            bottom: 36px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 5;
+            background: rgba(0,0,0,0.45);
+            border: 1.5px solid rgba(255,255,255,0.6);
+            color: #fff;
+            font-family: inherit;
+            font-size: 0.68rem;
+            font-weight: 300;
+            letter-spacing: 0.38em;
+            text-transform: uppercase;
+            padding: 14px 40px;
+            cursor: pointer;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease 0.3s, background 0.25s, border-color 0.25s;
+        }
+        .mp-parcelas-btn.visible { opacity: 1; pointer-events: all; }
+        .mp-parcelas-btn:hover   { background: rgba(0,0,0,0.7); border-color: #fff; }
+
+        /* ── VISTA PADRONES ───────────────────────────────────────── */
+        .mp-padrones {
+            position: absolute;
+            inset: 0;
+            z-index: 4;
+            background: #000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        .mp-padrones.on { opacity: 1; pointer-events: all; }
+        .mp-padrones-img {
+            position: absolute;
+            inset: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+        .mp-padrones-back {
+            position: absolute;
+            top: 28px;
+            left: 36px;
+            background: rgba(0,0,0,0.4);
+            border: 1.5px solid rgba(255,255,255,0.5);
+            color: #fff;
+            font-family: inherit;
+            font-size: 0.6rem;
+            font-weight: 300;
+            letter-spacing: 0.32em;
+            text-transform: uppercase;
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 22px 10px 18px;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+            z-index: 3;
+        }
+        .mp-padrones-back:hover { background: rgba(0,0,0,0.7); border-color: #fff; }
+
+        /* ── VIDEO CÁMARA dentro de padrones ─────────────────────── */
+        #mp-camara-video {
+            position: absolute;
+            inset: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            object-position: center;
+            z-index: 1;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        #mp-camara-video.on { opacity: 1; }
+
+        #mp-camara-btn {
+            position: absolute;
+            bottom: 36px;
+            left: 36px;
+            z-index: 3;
+            background: rgba(0,0,0,0.45);
+            border: 1.5px solid rgba(255,255,255,0.6);
+            color: #fff;
+            font-family: inherit;
+            font-size: 0.65rem;
+            font-weight: 300;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            display: flex; align-items: center; gap: 10px;
+            padding: 14px 28px;
+            cursor: pointer;
+            transition: background 0.25s, border-color 0.25s;
+        }
+        #mp-camara-btn:hover { background: rgba(0,0,0,0.7); border-color: #fff; }
+        #mp-camara-btn:disabled { opacity: 0.35; cursor: default; pointer-events: none; }
+
         /* ── VIDEO PLAYER sobre la imagen ─────────────────────────── */
         .mp-detail-video {
             position: absolute;
@@ -863,11 +964,31 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <button class="mp-lightbox-close" id="mp-lb-close">&#10005;</button>
         </div>
 
+        <!-- Botón parcelas en venta (solo visible en Clubhouse) -->
+        <button class="mp-parcelas-btn" id="mp-parcelas-btn">Parcelas en venta</button>
+
+        <!-- Vista padrones -->
+        <div class="mp-padrones" id="mp-padrones">
+            <img class="mp-padrones-img" src="img/masterplanes/detail/padrones.jpg" alt="Padrones" draggable="false" />
+            <video id="mp-camara-video" playsinline muted></video>
+            <button class="mp-padrones-back" id="mp-padrones-back">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><polyline points="10,2 4,8 10,14" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Volver
+            </button>
+            <button id="mp-camara-btn">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 3.5h7.5a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1v-5a1 1 0 0 1 1-1z" stroke="white" stroke-width="1.2"/><path d="M9.5 5.8 13 4v6l-3.5-1.8V5.8z" stroke="white" stroke-width="1.2" stroke-linejoin="round"/></svg>
+                <span>Cámara inferior</span>
+            </button>
+        </div>
+
         <div class="mp-detail-location">
             <span class="mp-detail-location-name" id="mp-detail-location-name"></span>
         </div>
 
-        <button class="mp-detail-close" id="mp-detail-close">&#10005;</button>
+        <button class="mp-detail-close" id="mp-detail-close">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><polyline points="10,2 4,8 10,14" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Volver
+        </button>
     </div>
 
     <!-- Gomez Platero brand -->
@@ -1059,6 +1180,7 @@ arrowLeft.addEventListener("click", () => {
         { url: "img/masterplanes/terreno.webp",     b: 500890 },
         // Color map (para detección de zonas por pixel)
         { url: "img/masterplanes/colormap.png",     b:  25879 },
+        { url: "img/masterplanes/detail/padrones.jpg", b: 2016885 },
         // Detail stills
         { url: "img/masterplanes/detail/Gemini_Generated_Image_dih2xedih2xedih2.webp", b: 1126904 },
         { url: "img/masterplanes/detail/Gemini_Generated_Image_dxn5ubdxn5ubdxn5.webp", b:  835226 },
@@ -1138,13 +1260,20 @@ const colorCtx    = colorCanvas.getContext('2d', { willReadFrequently: true });
 let   colorMapReady = false;
 
 // pastel: [r, g, b, alpha 0-255]
+// click: { introVideo, stillImg, clickVideo, detailLabel, sliderSrcs }
 const COLOR_ZONES = [
-    { key:'bulevar',     r:255, g:  0, b:  0, label:'Bulevar Principal', pastel:[255,175,175,120], previewImg:'img/masterplanes/detail/Gemini_Generated_Image_cl1lvbcl1lvbcl1l.webp' },
-    { key:'lago',        r: 18, g:  0, b:255, label:'Lago',              pastel:[165,185,255,120], previewImg:'img/masterplanes/end1.webp' },
-    { key:'residencial', r: 42, g:255, b:  0, label:'Residencial',       pastel:[175,255,180,120], previewImg:'img/masterplanes/detail/Gemini_Generated_Image_dih2xedih2xedih2.webp' },
-    { key:'clubhouse',   r:255, g:222, b:  0, label:'Clubhouse',         pastel:[255,252,145,120], previewImg:'img/masterplanes/detail/Gemini_Generated_Image_dxn5ubdxn5ubdxn5.webp' },
-    { key:'yates',       r:255, g:168, b:  0, label:'Yates',             pastel:[255,185,105,120], previewImg:'img/masterplanes/detail/w8_still.webp' },
-    { key:'acceso',      r:  0, g:255, b:168, label:'Acceso Portal',     pastel:[155,255,220,120], previewImg:'img/masterplanes/detail/Gemini_Generated_Image_b4wkzlb4wkzlb4wk.webp' },
+    { key:'bulevar',     r:255, g:  0, b:  0, label:'Bulevar Principal', pastel:[255,175,175,120], previewImg:'img/masterplanes/detail/Gemini_Generated_Image_cl1lvbcl1lvbcl1l.webp', click: null },
+    { key:'lago',        r: 18, g:  0, b:255, label:'Lago',              pastel:[165,185,255,120], previewImg:'img/masterplanes/end1.webp',                                             click: null },
+    { key:'residencial', r: 42, g:255, b:  0, label:'Residencial',       pastel:[175,255,180,120], previewImg:'img/masterplanes/detail/Gemini_Generated_Image_dih2xedih2xedih2.webp',  click: null },
+    { key:'clubhouse',   r:255, g:222, b:  0, label:'Clubhouse',         pastel:[255,252,145,120], previewImg:'img/masterplanes/detail/Gemini_Generated_Image_dxn5ubdxn5ubdxn5.webp',  click: {
+        introVideo:  'img/masterplanes/detail/zoom_out_smooth_w8_rev.mp4',
+        stillImg:    'img/masterplanes/detail/w8_still.webp',
+        clickVideo:  null,
+        detailLabel: 'Clubhouse',
+        sliderSrcs:  [],
+    }},
+    { key:'yates',       r:255, g:168, b:  0, label:'Yates',             pastel:[255,185,105,120], previewImg:'img/masterplanes/detail/w8_still.webp',                                 click: null },
+    { key:'acceso',      r:  0, g:255, b:168, label:'Acceso Portal',     pastel:[155,255,220,120], previewImg:'img/masterplanes/detail/Gemini_Generated_Image_b4wkzlb4wkzlb4wk.webp', click: null },
 ];
 
 const DIST_SQ = 50 * 50 * 3;
@@ -1309,16 +1438,8 @@ function activateZone(zone) {
     }
 }
 
-scene.addEventListener('mousemove', e => {
-    pmx = e.clientX;
-    pmy = e.clientY;
-    if (!scene.classList.contains('is-done1') ||
-         scene.classList.contains('is-terreno') ||
-         scene.classList.contains('is-nocturna') ||
-         !colorMapReady) {
-        if (activeColorZone) activateZone(null);
-        return;
-    }
+function getZoneAtEvent(e) {
+    if (!colorMapReady) return null;
     const rect  = scene.getBoundingClientRect();
     const iw = colorCanvas.width, ih = colorCanvas.height;
     const scale = Math.max(rect.width / iw, rect.height / ih);
@@ -1326,12 +1447,62 @@ scene.addEventListener('mousemove', e => {
     const oy    = (rect.height - ih * scale) / 2;
     const cx    = ((e.clientX - rect.left) - ox) / scale;
     const cy    = ((e.clientY - rect.top)  - oy) / scale;
-    if (cx < 0 || cy < 0 || cx >= iw || cy >= ih) { activateZone(null); return; }
+    if (cx < 0 || cy < 0 || cx >= iw || cy >= ih) return null;
     const px = colorCtx.getImageData(Math.round(cx), Math.round(cy), 1, 1).data;
-    activateZone(matchZoneColor(px[0], px[1], px[2]));
+    return matchZoneColor(px[0], px[1], px[2]);
+}
+
+scene.addEventListener('mousemove', e => {
+    pmx = e.clientX;
+    pmy = e.clientY;
+    if (!scene.classList.contains('is-done1') ||
+         scene.classList.contains('is-terreno') ||
+         scene.classList.contains('is-nocturna')) {
+        if (activeColorZone) activateZone(null);
+        return;
+    }
+    activateZone(getZoneAtEvent(e));
 });
 
 scene.addEventListener('mouseleave', () => activateZone(null));
+
+scene.addEventListener('click', e => {
+    if (!scene.classList.contains('is-done1') ||
+         scene.classList.contains('is-terreno') ||
+         scene.classList.contains('is-nocturna')) return;
+    const zone = getZoneAtEvent(e);
+    if (!zone?.click) return;
+    const { introVideo, stillImg, clickVideo, detailLabel, sliderSrcs } = zone.click;
+    detailLocName.textContent = detailLabel;
+    if (sliderSrcs?.length) buildSlider(sliderSrcs);
+    if (introVideo) {
+        pendingStill     = stillImg   || '';
+        pendingPlayVideo = clickVideo || '';
+        detailImg.src    = '';
+        detailImg.style.opacity = '0';
+        playBtn.style.display   = 'none';
+        detailEl.classList.add('on');
+        detailVideo.src = introVideo;
+        detailVideo.load();
+        detailVideo.classList.add('on');
+        detailVideo.play();
+        if (sliderSrcs?.length) sliderEl.classList.add('on');
+    } else if (stillImg) {
+        pendingStill     = '';
+        pendingPlayVideo = clickVideo || '';
+        scene.style.transformOrigin = `${e.clientX}px ${e.clientY}px`;
+        scene.style.transition = 'transform 0.28s cubic-bezier(0.4,0,1,1)';
+        scene.style.transform  = 'scale(5)';
+        setTimeout(() => {
+            scene.style.transition      = 'none';
+            scene.style.transform       = '';
+            scene.style.transformOrigin = '';
+            showStillWithPlay(stillImg, clickVideo || '');
+            detailEl.classList.add('on');
+            if (sliderSrcs?.length) sliderEl.classList.add('on');
+        }, 280);
+    }
+});
 
 /* ── Zone hover + click ──────────────────────────────────────── */
 
@@ -1443,11 +1614,19 @@ function showStillWithPlay(imgSrc, playVideoSrc) {
     detailImg.src    = imgSrc;
     detailImg.style.opacity = "1";
     playBtn.style.display   = playVideoSrc ? "" : "none";
+    // Mostrar botón parcelas solo en w8_still (Clubhouse)
+    if (imgSrc.includes("w8_still")) {
+        parcelasBtn.classList.add("visible");
+    } else {
+        parcelasBtn.classList.remove("visible");
+    }
 }
 
 function closeDetail() {
     resetVideo();
     closeLightbox();
+    hidePadrones();
+    parcelasBtn.classList.remove("visible");
     sliderEl.classList.remove("on");
     sliderEl.innerHTML = "";
     sliderItems = [];
@@ -1480,54 +1659,77 @@ playBtn.addEventListener("click", () => {
     // pendingPlayVideo kept so play button reappears after video ends
 });
 
-detailClose.addEventListener("click", closeDetail);
-detailEl.addEventListener("click", e => { if (e.target === detailEl || e.target === detailImg) closeDetail(); });
-document.addEventListener("keydown", e => { if (e.key === "Escape" && !lightboxEl.classList.contains("on")) closeDetail(); });
+const parcelasBtn  = document.getElementById("mp-parcelas-btn");
+const padronesEl   = document.getElementById("mp-padrones");
+const padronesBack = document.getElementById("mp-padrones-back");
 
-document.querySelectorAll(".mp-zone").forEach(zone => {
-    const introVideo  = zone.dataset.introVideo;
-    const clickImg    = zone.dataset.clickImg;
-    const clickVideo  = zone.dataset.clickVideo;
-    const detailLabel = zone.dataset.detailLabel || "";
-    const sliderSrcs  = zone.dataset.slider ? zone.dataset.slider.split(",") : [];
+function showPadrones() {
+    padronesEl.classList.add("on");
+}
+function hidePadrones() {
+    resetCamara();
+    padronesEl.classList.remove("on");
+}
 
-    zone.addEventListener("click", e => {
-        detailLocName.textContent = detailLabel;
+const camaraVideo = document.getElementById('mp-camara-video');
+const camaraBtn   = document.getElementById('mp-camara-btn');
+const camaraLabel = camaraBtn.querySelector('span');
+let camaraState   = 'inferior';
 
-        if (sliderSrcs.length) {
-            buildSlider(sliderSrcs);
-        }
+function resetCamara() {
+    camaraVideo.pause();
+    camaraVideo.removeAttribute('src');
+    camaraVideo.load();
+    camaraVideo.classList.remove('on');
+    camaraState = 'inferior';
+    camaraLabel.textContent = 'Cámara inferior';
+    camaraBtn.disabled = false;
+}
 
-        if (introVideo) {
-            pendingStill     = clickImg   || "";
-            pendingPlayVideo = clickVideo || "";
-            detailImg.src    = "";
-            detailImg.style.opacity = "0";
-            playBtn.style.display   = "none";
-            detailEl.classList.add("on");
-            detailVideo.src = introVideo;
-            detailVideo.load();
-            detailVideo.classList.add("on");
-            detailVideo.play();
-            if (sliderSrcs.length) sliderEl.classList.add("on");
+camaraBtn.addEventListener('click', () => {
+    camaraBtn.disabled = true;
 
-        } else if (clickImg) {
-            pendingStill     = "";
-            pendingPlayVideo = clickVideo || "";
-            scene.style.transformOrigin = `${e.clientX}px ${e.clientY}px`;
-            scene.style.transition = "transform 0.28s cubic-bezier(0.4,0,1,1)";
-            scene.style.transform  = "scale(5)";
-            setTimeout(() => {
-                scene.style.transition      = "none";
-                scene.style.transform       = "";
-                scene.style.transformOrigin = "";
-                showStillWithPlay(clickImg, clickVideo || "");
-                detailEl.classList.add("on");
-                if (sliderSrcs.length) sliderEl.classList.add("on");
-            }, 280);
-        }
-    });
+    if (camaraState === 'inferior') {
+        camaraVideo.src = 'videos/masterplanes/camara-inferior.mp4';
+        camaraVideo.load();
+        camaraVideo.classList.add('on');
+        camaraVideo.play();
+        camaraVideo.addEventListener('ended', () => {
+            // Quedar en último frame (video pausado, visible)
+            camaraState = 'superior';
+            camaraLabel.textContent = 'Cámara superior';
+            camaraBtn.disabled = false;
+        }, { once: true });
+
+    } else {
+        // Reproducir reverso desde el último frame (ya cargado)
+        camaraVideo.src = 'videos/masterplanes/camara-superior.mp4';
+        camaraVideo.load();
+        camaraVideo.play();
+        camaraVideo.addEventListener('ended', () => {
+            // Volver a mostrar padrones.jpg
+            camaraVideo.classList.remove('on');
+            setTimeout(() => { camaraVideo.removeAttribute('src'); camaraVideo.load(); }, 420);
+            camaraState = 'inferior';
+            camaraLabel.textContent = 'Cámara inferior';
+            camaraBtn.disabled = false;
+        }, { once: true });
+    }
 });
+
+parcelasBtn.addEventListener("click", showPadrones);
+padronesBack.addEventListener("click", hidePadrones);
+
+detailClose.addEventListener("click", () => { hidePadrones(); closeDetail(); });
+detailEl.addEventListener("click", e => { if (e.target === detailEl) closeDetail(); });
+document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && !lightboxEl.classList.contains("on")) {
+        if (padronesEl.classList.contains("on")) hidePadrones();
+        else closeDetail();
+    }
+});
+
+// Click por zona migrado al handler de scene (canvas-based, ver arriba)
 </script>
 
 </body>
