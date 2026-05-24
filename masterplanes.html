@@ -678,6 +678,7 @@
             left: 50%;
             transform: translateX(-50%);
             z-index: 5;
+            z-index: 5;
             background: rgba(0,0,0,0.45);
             border: 1.5px solid rgba(255,255,255,0.6);
             color: #fff;
@@ -717,6 +718,8 @@
             position: absolute;
             top: 28px;
             left: 36px;
+            opacity: 0;
+            pointer-events: none;
             background: rgba(0,0,0,0.4);
             border: 1.5px solid rgba(255,255,255,0.5);
             color: #fff;
@@ -732,6 +735,41 @@
             z-index: 3;
         }
         .mp-padrones-back:hover { background: rgba(0,0,0,0.7); border-color: #fff; }
+        /* Ocultar Volver en Clubhouse, mostrar Inicio solo en loop */
+        .mp-detail.is-clubhouse .mp-detail-close  { opacity: 0; pointer-events: none; }
+        .mp-detail.show-inicio  .mp-padrones-back { opacity: 1; pointer-events: all; }
+
+        /* ── PADRONES HOVER CANVAS ──────────────────────────────── */
+        #mp-padrones-hover-canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+        #mp-padrones-hover-canvas.on { opacity: 1; }
+
+        /* ── PADRON PREVIEW LABEL ─────────────────────────────── */
+        #padron-preview {
+            position: fixed;
+            z-index: 300;
+            pointer-events: none;
+            background: rgba(0,0,0,0.55);
+            border: 1px solid rgba(255,255,255,0.35);
+            padding: 10px 20px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.58rem;
+            font-weight: 300;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: #fff;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            white-space: nowrap;
+        }
+        #padron-preview.visible { opacity: 1; }
 
         /* ── VIDEO CÁMARA dentro de padrones ─────────────────────── */
         #mp-camara-video {
@@ -768,16 +806,35 @@
         #mp-camara-btn:hover { background: rgba(0,0,0,0.7); border-color: #fff; }
         #mp-camara-btn:disabled { opacity: 0.35; cursor: default; pointer-events: none; }
 
-        /* ── VER PARCELARIO / REGRESAR toggle ────────────────────── */
-        .mp-parcelario-wrap {
+
+        /* ── CAMARA en CLUBHOUSE detail ──────────────────────────── */
+        #mp-clubhouse-camara-video {
+            position: absolute;
+            inset: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+            z-index: 2;
+        }
+        #mp-clubhouse-camara-video.on { opacity: 1; }
+        #mp-clubhouse-camara-still {
+            position: absolute;
+            inset: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+            z-index: 2;
+        }
+        #mp-clubhouse-camara-still.on { opacity: 1; }
+        #mp-clubhouse-camara-btn {
             position: absolute;
             bottom: 36px;
-            right: 36px;
-            z-index: 3;
-            width: fit-content;
-            height: fit-content;
-        }
-        .mp-parcelario-wrap button {
+            left: 36px;
+            z-index: 6;
             background: rgba(0,0,0,0.45);
             border: 1.5px solid rgba(255,255,255,0.6);
             color: #fff;
@@ -788,19 +845,27 @@
             text-transform: uppercase;
             padding: 14px 28px;
             cursor: pointer;
-            display: flex; align-items: center; gap: 10px;
-            transition: opacity 0.3s ease, background 0.25s, border-color 0.25s;
-            white-space: nowrap;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            transition: background 0.25s, border-color 0.25s;
         }
-        .mp-parcelario-wrap button:hover { background: rgba(0,0,0,0.7); border-color: #fff; }
-        #mp-parcelario-back {
+        #mp-clubhouse-camara-btn:hover { background: rgba(0,0,0,0.7); border-color: #fff; }
+        #mp-clubhouse-camara-btn:disabled { opacity: 0.35; cursor: default; pointer-events: none; }
+        .mp-detail.is-clubhouse #mp-clubhouse-camara-btn { display: flex; }
+
+        /* ── LOOP VIDEO fondo de detail (ej. Clubhouse) ──────────── */
+        .mp-detail-loop {
             position: absolute;
             inset: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            object-position: center;
             opacity: 0;
-            pointer-events: none;
+            transition: opacity 0.6s ease;
+            z-index: 0;
         }
-        #mp-parcelario-back.visible  { opacity: 1; pointer-events: all; }
-        #mp-ver-parcelario.hidden    { opacity: 0; pointer-events: none; }
+        .mp-detail-loop.on { opacity: 1; }
 
         /* ── VIDEO PLAYER sobre la imagen ─────────────────────────── */
         .mp-detail-video {
@@ -981,6 +1046,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- Detail view (post-zoom fullscreen image) -->
     <div class="mp-detail" id="mp-detail">
         <img class="mp-detail-img" id="mp-detail-img" src="" alt="" draggable="false" />
+        <video class="mp-detail-loop" id="mp-detail-loop" src="videos/masterplanes/padrones-loop.mp4" muted loop playsinline></video>
+        <video id="mp-clubhouse-camara-video" playsinline muted></video>
+        <img   id="mp-clubhouse-camara-still" src="img/masterplanes/detail/clubhouse-s1.webp" draggable="false" />
+        <button id="mp-clubhouse-camara-btn">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 3.5h7.5a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1v-5a1 1 0 0 1 1-1z" stroke="white" stroke-width="1.2"/><path d="M9.5 5.8 13 4v6l-3.5-1.8V5.8z" stroke="white" stroke-width="1.2" stroke-linejoin="round"/></svg>
+            <span>Cámara inferior</span>
+        </button>
 
         <!-- Animated play button -->
         <button class="mp-play-btn" id="mp-play-btn" aria-label="Ver animación">
@@ -1012,24 +1084,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <!-- Vista padrones -->
         <div class="mp-padrones" id="mp-padrones">
             <img class="mp-padrones-img" src="img/masterplanes/detail/padrones.jpg" alt="Padrones" draggable="false" />
+            <canvas id="mp-padrones-hover-canvas"></canvas>
             <video id="mp-camara-video" playsinline muted></video>
-            <button class="mp-padrones-back" id="mp-padrones-back">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><polyline points="10,2 4,8 10,14" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                Volver
-            </button>
             <button id="mp-camara-btn">
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 3.5h7.5a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1v-5a1 1 0 0 1 1-1z" stroke="white" stroke-width="1.2"/><path d="M9.5 5.8 13 4v6l-3.5-1.8V5.8z" stroke="white" stroke-width="1.2" stroke-linejoin="round"/></svg>
                 <span>Cámara inferior</span>
             </button>
 
-            <!-- Ver parcelario / Regresar -->
-            <div class="mp-parcelario-wrap">
-                <button id="mp-ver-parcelario">Ver parcelario</button>
-                <button id="mp-parcelario-back">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><polyline points="10,2 4,8 10,14" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    Regresar
-                </button>
-            </div>
         </div>
 
         <div class="mp-detail-location">
@@ -1039,6 +1100,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <button class="mp-detail-close" id="mp-detail-close">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><polyline points="10,2 4,8 10,14" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             Volver
+        </button>
+        <button class="mp-padrones-back" id="mp-padrones-back">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><polyline points="10,2 4,8 10,14" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Inicio
         </button>
     </div>
 
@@ -1247,7 +1312,12 @@ arrowLeft.addEventListener("click", () => {
         { url: "img/masterplanes/terreno.webp",     b: 500890 },
         // Color map (para detección de zonas por pixel)
         { url: "img/masterplanes/colormap.png",     b:  25879 },
-        { url: "img/masterplanes/detail/padrones.jpg", b: 2016885 },
+        { url: "img/masterplanes/detail/padrones.jpg",         b: 2016885 },
+        { url: "img/masterplanes/detail/padrones-colormap.png", b:   51200 },
+        { url: "videos/masterplanes/padrones-loop.mp4",      b: 14366000 },
+        { url: "videos/masterplanes/clubhouse-inferior.mp4", b: 26800000 },
+        { url: "videos/masterplanes/clubhouse-superior.mp4", b: 23400000 },
+        { url: "img/masterplanes/detail/clubhouse-s1.webp",  b:   785408 },
         // Detail stills
         { url: "img/masterplanes/detail/Gemini_Generated_Image_dih2xedih2xedih2.webp", b: 1126904 },
         { url: "img/masterplanes/detail/Gemini_Generated_Image_dxn5ubdxn5ubdxn5.webp", b:  835226 },
@@ -1286,6 +1356,7 @@ arrowLeft.addEventListener("click", () => {
         { url: "img/masterplanes/detail/Animate_slow_zoom_202604231030.mp4",  b: 4395132 },
         { url: "img/masterplanes/detail/zoom_in_smooth_202604242001.mp4",     b: 3598973 },
         { url: "img/masterplanes/detail/zoom_out_smooth_w8_rev.mp4",          b: 3612865 },
+        { url: "img/masterplanes/detail/zoom_out_smooth_w8_fwd.mp4",          b: 3200000 },
         { url: "img/masterplanes/detail/w8/v1.mp4",                           b: 2657908 },
     ];
 
@@ -1677,16 +1748,25 @@ function resetVideo() {
     detailVideo.classList.remove("on");
 }
 
+const detailLoopVid = document.getElementById("mp-detail-loop");
+
 function showStillWithPlay(imgSrc, playVideoSrc) {
     pendingPlayVideo = playVideoSrc || "";
     detailImg.src    = imgSrc;
     detailImg.style.opacity = "1";
     playBtn.style.display   = playVideoSrc ? "" : "none";
-    // Mostrar botón parcelas solo en w8_still (Clubhouse)
+    // Mostrar botón parcelas, video loop e Inicio solo en w8_still (Clubhouse)
     if (imgSrc.includes("w8_still")) {
         parcelasBtn.classList.add("visible");
+        detailEl.classList.add("is-clubhouse", "show-inicio");
+        detailImg.style.opacity = "0";
+        detailLoopVid.classList.add("on");
+        detailLoopVid.play();
     } else {
         parcelasBtn.classList.remove("visible");
+        detailEl.classList.remove("is-clubhouse", "show-inicio");
+        detailLoopVid.classList.remove("on");
+        detailLoopVid.pause();
     }
 }
 
@@ -1694,11 +1774,14 @@ function closeDetail() {
     resetVideo();
     closeLightbox();
     hidePadrones();
+    resetClubCamara();
     parcelasBtn.classList.remove("visible");
+    detailLoopVid.classList.remove("on");
+    detailLoopVid.pause();
     sliderEl.classList.remove("on");
     sliderEl.innerHTML = "";
     sliderItems = [];
-    detailEl.classList.remove("on");
+    detailEl.classList.remove("on", "is-clubhouse", "show-inicio");
     detailImg.style.opacity = "";
     playBtn.style.display   = "";
     setTimeout(() => { detailImg.src = ""; }, 350);
@@ -1733,10 +1816,14 @@ const padronesBack = document.getElementById("mp-padrones-back");
 
 function showPadrones() {
     padronesEl.classList.add("on");
+    parcelasBtn.textContent = "Regresar";
+    detailEl.classList.remove("show-inicio");
 }
 function hidePadrones() {
     resetCamara();
     padronesEl.classList.remove("on");
+    parcelasBtn.textContent = "Parcelas en venta";
+    detailEl.classList.add("show-inicio");
 }
 
 const camaraVideo = document.getElementById('mp-camara-video');
@@ -1785,25 +1872,79 @@ camaraBtn.addEventListener('click', () => {
     }
 });
 
-const verParcelarioBtn  = document.getElementById('mp-ver-parcelario');
-const parcelarioBackBtn = document.getElementById('mp-parcelario-back');
+function resetParcelario() {}
 
-function resetParcelario() {
-    verParcelarioBtn.classList.remove('hidden');
-    parcelarioBackBtn.classList.remove('visible');
+/* ── CÁMARA CLUBHOUSE ────────────────────────────────────────── */
+const clubCamaraVideo = document.getElementById('mp-clubhouse-camara-video');
+const clubCamaraStill = document.getElementById('mp-clubhouse-camara-still');
+const clubCamaraBtn   = document.getElementById('mp-clubhouse-camara-btn');
+const clubCamaraLabel = clubCamaraBtn.querySelector('span');
+let clubCamaraState   = 'inferior';
+
+function resetClubCamara() {
+    clubCamaraVideo.pause();
+    clubCamaraVideo.removeAttribute('src');
+    clubCamaraVideo.load();
+    clubCamaraVideo.classList.remove('on');
+    clubCamaraStill.classList.remove('on');
+    clubCamaraState = 'inferior';
+    clubCamaraLabel.textContent = 'Cámara inferior';
+    clubCamaraBtn.disabled = false;
 }
 
-verParcelarioBtn.addEventListener('click', () => {
-    verParcelarioBtn.classList.add('hidden');
-    parcelarioBackBtn.classList.add('visible');
+clubCamaraBtn.addEventListener('click', () => {
+    clubCamaraBtn.disabled = true;
+
+    if (clubCamaraState === 'inferior') {
+        parcelasBtn.classList.remove('visible');
+        detailEl.classList.remove('show-inicio');
+        clubCamaraVideo.src = 'videos/masterplanes/clubhouse-inferior.mp4';
+        clubCamaraVideo.load();
+        clubCamaraVideo.classList.add('on');
+        clubCamaraVideo.play();
+        clubCamaraVideo.addEventListener('ended', () => {
+            clubCamaraVideo.classList.remove('on');
+            clubCamaraStill.classList.add('on');
+            clubCamaraState = 'superior';
+            clubCamaraLabel.textContent = 'Cámara superior';
+            clubCamaraBtn.disabled = false;
+        }, { once: true });
+    } else {
+        clubCamaraStill.classList.remove('on');
+        clubCamaraVideo.src = 'videos/masterplanes/clubhouse-superior.mp4';
+        clubCamaraVideo.load();
+        clubCamaraVideo.classList.add('on');
+        clubCamaraVideo.play();
+        clubCamaraVideo.addEventListener('ended', () => {
+            clubCamaraVideo.classList.remove('on');
+            setTimeout(() => { clubCamaraVideo.removeAttribute('src'); clubCamaraVideo.load(); }, 420);
+            clubCamaraState = 'inferior';
+            clubCamaraLabel.textContent = 'Cámara inferior';
+            clubCamaraBtn.disabled = false;
+            parcelasBtn.classList.add('visible');
+            detailEl.classList.add('show-inicio');
+        }, { once: true });
+    }
 });
 
-parcelarioBackBtn.addEventListener('click', () => {
+parcelasBtn.addEventListener("click", () => {
+    if (padronesEl.classList.contains("on")) hidePadrones();
+    else showPadrones();
+});
+padronesBack.addEventListener("click", () => {
     hidePadrones();
+    resetClubCamara();
+    detailLoopVid.classList.remove("on");
+    detailLoopVid.pause();
+    detailImg.style.opacity = "0";
+    playBtn.style.display   = "none";
+    parcelasBtn.classList.remove("visible");
+    detailVideo.src = "img/masterplanes/detail/zoom_out_smooth_w8_fwd.mp4";
+    detailVideo.load();
+    detailVideo.classList.add("on");
+    detailVideo.play();
+    detailVideo.addEventListener("ended", () => { closeDetail(); }, { once: true });
 });
-
-parcelasBtn.addEventListener("click", showPadrones);
-padronesBack.addEventListener("click", hidePadrones);
 
 detailClose.addEventListener("click", () => { hidePadrones(); closeDetail(); });
 detailEl.addEventListener("click", e => { if (e.target === detailEl) closeDetail(); });
@@ -1815,6 +1956,161 @@ document.addEventListener("keydown", e => {
 });
 
 // Click por zona migrado al handler de scene (canvas-based, ver arriba)
+
+/* ══════════════════════════════════════════════════════════════
+   PADRONES HOVER SYSTEM — canvas pixel color detection
+   ══════════════════════════════════════════════════════════════ */
+const PADRON_ZONES = [
+    { key:'p01', r:200, g:141, b:120, label:'Padrón 01', pastel:[220,180,165,120] },
+    { key:'p02', r:148, g: 56, b: 44, label:'Padrón 02', pastel:[210,130,120,120] },
+    { key:'p03', r:234, g: 61, b: 38, label:'Padrón 03', pastel:[245,145,135,120] },
+    { key:'p04', r:107, g: 35, b: 10, label:'Padrón 04', pastel:[185,120,100,120] },
+    { key:'p05', r:123, g: 84, b: 71, label:'Padrón 05', pastel:[195,165,150,120] },
+    { key:'p06', r: 45, g: 25, b: 18, label:'Padrón 06', pastel:[155,130,120,120] },
+    { key:'p07', r: 70, g: 27, b: 12, label:'Padrón 07', pastel:[170,130,110,120] },
+    { key:'p08', r: 40, g: 70, b: 12, label:'Padrón 08', pastel:[130,185,110,120] },
+    { key:'p09', r: 73, g:118, b: 29, label:'Padrón 09', pastel:[150,200,125,120] },
+    { key:'p10', r:121, g:152, b: 91, label:'Padrón 10', pastel:[175,210,155,120] },
+    { key:'p11', r:172, g:211, b:133, label:'Padrón 11', pastel:[205,230,175,120] },
+    { key:'p12', r:170, g:235, b:107, label:'Padrón 12', pastel:[200,245,165,120] },
+    { key:'p13', r:117, g:201, b: 35, label:'Padrón 13', pastel:[175,230,130,120] },
+];
+const PADRON_DIST_SQ = 800;
+
+const padronesHoverCanvas = document.getElementById('mp-padrones-hover-canvas');
+const padronesHoverCtx    = padronesHoverCanvas.getContext('2d');
+const padronMasks   = {};
+let   padronColorData = null;
+let   padronImgW = 0, padronImgH = 0;
+let   activePadron = null;
+
+/* Load colormap and pre-render masks */
+const padronColorImg = new Image();
+padronColorImg.src = 'img/masterplanes/detail/padrones-colormap.png';
+padronColorImg.onload = () => {
+    padronImgW = padronColorImg.naturalWidth;
+    padronImgH = padronColorImg.naturalHeight;
+    const off = document.createElement('canvas');
+    off.width = padronImgW; off.height = padronImgH;
+    const ctx = off.getContext('2d');
+    ctx.drawImage(padronColorImg, 0, 0);
+    padronColorData = ctx.getImageData(0, 0, padronImgW, padronImgH);
+    preRenderPadronMasks();
+};
+
+function preRenderPadronMasks() {
+    const src = padronColorData, w = padronImgW, h = padronImgH;
+    PADRON_ZONES.forEach(z => {
+        const [pr, pg, pb, pa] = z.pastel;
+        const mask = new ImageData(w, h);
+        for (let j = 0; j < src.data.length; j += 4) {
+            const r = src.data[j], g = src.data[j+1], b = src.data[j+2];
+            const dThis = (r-z.r)**2 + (g-z.g)**2 + (b-z.b)**2;
+            if (dThis >= PADRON_DIST_SQ) continue;
+            let closest = true;
+            for (const o of PADRON_ZONES) {
+                if (o === z) continue;
+                if ((r-o.r)**2 + (g-o.g)**2 + (b-o.b)**2 < dThis) { closest = false; break; }
+            }
+            if (!closest) continue;
+            mask.data[j]=pr; mask.data[j+1]=pg; mask.data[j+2]=pb; mask.data[j+3]=pa;
+        }
+        const mc = document.createElement('canvas');
+        mc.width = w; mc.height = h;
+        mc.getContext('2d').putImageData(mask, 0, 0);
+        padronMasks[z.key] = mc;
+    });
+}
+
+function padronCoverParams() {
+    const sw = padronesHoverCanvas.width, sh = padronesHoverCanvas.height;
+    const scale = Math.max(sw / padronImgW, sh / padronImgH);
+    return { scale, dx: (sw - padronImgW * scale) / 2, dy: (sh - padronImgH * scale) / 2 };
+}
+
+function matchPadronAt(mx, my) {
+    if (!padronColorData) return null;
+    const { scale, dx, dy } = padronCoverParams();
+    const ix = Math.round((mx - dx) / scale);
+    const iy = Math.round((my - dy) / scale);
+    if (ix < 0 || iy < 0 || ix >= padronImgW || iy >= padronImgH) return null;
+    const idx = (iy * padronImgW + ix) * 4;
+    const r = padronColorData.data[idx], g = padronColorData.data[idx+1], b = padronColorData.data[idx+2];
+    let best = null, bestD = PADRON_DIST_SQ;
+    for (const z of PADRON_ZONES) {
+        const d = (r-z.r)**2 + (g-z.g)**2 + (b-z.b)**2;
+        if (d < bestD) { bestD = d; best = z; }
+    }
+    return best;
+}
+
+function drawPadronMask(zone) {
+    const { scale, dx, dy } = padronCoverParams();
+    padronesHoverCtx.clearRect(0, 0, padronesHoverCanvas.width, padronesHoverCanvas.height);
+    if (zone && padronMasks[zone.key]) {
+        padronesHoverCtx.drawImage(padronMasks[zone.key], dx, dy, padronImgW * scale, padronImgH * scale);
+    }
+}
+
+function activatePadron(zone) {
+    if (zone === activePadron) return;
+    activePadron = zone;
+    if (zone) {
+        padronesHoverCanvas.classList.add('on');
+        drawPadronMask(zone);
+        padronPreviewEl.textContent = zone.label;
+        padronPreview.classList.add('visible');
+    } else {
+        padronesHoverCanvas.classList.remove('on');
+        padronesHoverCtx.clearRect(0, 0, padronesHoverCanvas.width, padronesHoverCanvas.height);
+        padronPreview.classList.remove('visible');
+    }
+}
+
+function resizePadronesCanvas() {
+    padronesHoverCanvas.width  = padronesEl.clientWidth  || window.innerWidth;
+    padronesHoverCanvas.height = padronesEl.clientHeight || window.innerHeight;
+    if (activePadron) drawPadronMask(activePadron);
+}
+window.addEventListener('resize', resizePadronesCanvas);
+resizePadronesCanvas();
+
+/* Floating preview label */
+const padronPreview = document.createElement('div');
+padronPreview.id = 'padron-preview';
+const padronPreviewEl = document.createElement('span');
+padronPreview.appendChild(padronPreviewEl);
+document.body.appendChild(padronPreview);
+
+let ppMx = 0, ppMy = 0, ppCx = 0, ppCy = 0;
+document.addEventListener('mousemove', e => { ppMx = e.clientX; ppMy = e.clientY; });
+(function tickPadronPreview() {
+    ppCx += (ppMx + 24 - ppCx) * 0.12;
+    ppCy += (ppMy - 20 - ppCy) * 0.12;
+    padronPreview.style.left = ppCx + 'px';
+    padronPreview.style.top  = ppCy + 'px';
+    requestAnimationFrame(tickPadronPreview);
+})();
+
+/* Mouse events — only active when padrones is visible and no camera playing */
+padronesEl.addEventListener('mousemove', e => {
+    if (!padronesEl.classList.contains('on')) return;
+    if (camaraVideo.classList.contains('on') || camaraState !== 'inferior') {
+        activatePadron(null); return;
+    }
+    const rect = padronesEl.getBoundingClientRect();
+    activatePadron(matchPadronAt(e.clientX - rect.left, e.clientY - rect.top));
+});
+
+padronesEl.addEventListener('mouseleave', () => activatePadron(null));
+
+padronesEl.addEventListener('click', e => {
+    if (!padronesEl.classList.contains('on')) return;
+    if (camaraVideo.classList.contains('on') || camaraState !== 'inferior') return;
+    if (!activePadron) return;
+    // TODO: abrir detalle del padrón
+    console.log('Padrón clickeado:', activePadron.label);
+});
 </script>
 
 </body>
