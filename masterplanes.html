@@ -99,7 +99,8 @@
         .mp-scene.is-playing .mp-overlay,
         .mp-scene.is-done1   .mp-overlay,
         .mp-scene.is-playing2 .mp-overlay,
-        .mp-scene.is-done2   .mp-overlay { opacity: 0; }
+        .mp-scene.is-done2   .mp-overlay,
+        .mp-scene.is-done3   .mp-overlay { opacity: 0; }
 
         /* ── LANDING ─────────────────────────────────────────────── */
         .mp-landing {
@@ -117,7 +118,8 @@
         .mp-scene.is-playing  .mp-landing,
         .mp-scene.is-done1    .mp-landing,
         .mp-scene.is-playing2 .mp-landing,
-        .mp-scene.is-done2    .mp-landing { opacity: 0; pointer-events: none; }
+        .mp-scene.is-done2    .mp-landing,
+        .mp-scene.is-done3    .mp-landing { opacity: 0; pointer-events: none; }
 
         .mp-title-wrap {
             display: flex;
@@ -180,7 +182,8 @@
         .mp-scene.is-playing .mp-btn-iniciar,
         .mp-scene.is-done1   .mp-btn-iniciar,
         .mp-scene.is-playing2 .mp-btn-iniciar,
-        .mp-scene.is-done2   .mp-btn-iniciar { opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        .mp-scene.is-done2   .mp-btn-iniciar,
+        .mp-scene.is-done3   .mp-btn-iniciar { opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
         .mp-btn-iniciar:hover { background: rgba(0,0,0,0.65); border-color: #fff; }
 
         /* ── NAV ARROWS (right / left sides, vertically centered) ── */
@@ -209,8 +212,12 @@
         /* Show right arrow after video 1 ends */
         .mp-scene.is-done1 .mp-arrow-right { opacity: 1; pointer-events: all; }
 
-        /* Show left arrow after video 2 ends */
+        /* Show left arrow after video 1 ends (→ vista norte) and after video 2 (→ back) */
+        .mp-scene.is-done1 .mp-arrow-left  { opacity: 1; pointer-events: all; }
         .mp-scene.is-done2 .mp-arrow-left  { opacity: 1; pointer-events: all; }
+
+        /* Show right arrow in done3 to go back */
+        .mp-scene.is-done3 .mp-arrow-right { opacity: 1; pointer-events: all; }
 
         /* ── HOVER CANVAS OVERLAY ────────────────────────────────── */
         #mp-hover-canvas {
@@ -507,7 +514,8 @@
             transition: opacity 0.5s ease;
         }
         .mp-scene.is-done1 .mp-location,
-        .mp-scene.is-done2 .mp-location { opacity: 1; }
+        .mp-scene.is-done2 .mp-location,
+        .mp-scene.is-done3 .mp-location { opacity: 1; }
 
         .mp-location-name {
             font-size: clamp(1.6rem, 4vw, 3.2rem);
@@ -1188,23 +1196,44 @@ btnIniciar.addEventListener("click", () => {
     });
 });
 
-/* ── Arrow right → izquierda.mp4 forward ───────────────────── */
+/* ── Arrow right ─────────────────────────────────────────────── */
 arrowRight.addEventListener("click", () => {
-    resetTabs();
-    scene.classList.remove("is-done1", "is-done2");
-    playNext("videos/masterplanes/izquierda.mp4", "img/masterplanes/end1.webp", () => {
-        showStill("img/masterplanes/end2.webp");
-        scene.classList.add("is-done2");
-    });
+    if (scene.classList.contains("is-done3")) {
+        // is-done3 → back to is-done1 (vista norte reversed)
+        scene.classList.remove("is-done3");
+        playNext("videos/masterplanes/vista-norte-rev.mp4", "img/masterplanes/end3.webp", () => {
+            showStill("img/masterplanes/end1.webp");
+            scene.classList.add("is-done1");
+        });
+    } else {
+        // is-done1 → is-done2 (izquierda forward)
+        resetTabs();
+        scene.classList.remove("is-done1", "is-done2");
+        playNext("videos/masterplanes/izquierda.mp4", "img/masterplanes/end1.webp", () => {
+            showStill("img/masterplanes/end2.webp");
+            scene.classList.add("is-done2");
+        });
+    }
 });
 
-/* ── Arrow left → izquierda.mp4 reversed ───────────────────── */
+/* ── Arrow left ──────────────────────────────────────────────── */
 arrowLeft.addEventListener("click", () => {
-    scene.classList.remove("is-done1", "is-done2");
-    playNext("videos/masterplanes/izquierda-rev.mp4", "img/masterplanes/end2.webp", () => {
-        showStill("img/masterplanes/end1.webp");
-        scene.classList.add("is-done1");
-    });
+    if (scene.classList.contains("is-done1")) {
+        // is-done1 → is-done3 (vista norte forward)
+        resetTabs();
+        scene.classList.remove("is-done1");
+        playNext("videos/masterplanes/vista-norte.mp4", "img/masterplanes/end1.webp", () => {
+            showStill("img/masterplanes/end3.webp");
+            scene.classList.add("is-done3");
+        });
+    } else {
+        // is-done2 → back to is-done1 (izquierda reversed)
+        scene.classList.remove("is-done1", "is-done2");
+        playNext("videos/masterplanes/izquierda-rev.mp4", "img/masterplanes/end2.webp", () => {
+            showStill("img/masterplanes/end1.webp");
+            scene.classList.add("is-done1");
+        });
+    }
 });
 
 /* ── Preload ─────────────────────────────────────────────────── */
@@ -1249,6 +1278,9 @@ arrowLeft.addEventListener("click", () => {
         { url: "videos/masterplanes/zoom.mp4",          b: 5731192 },
         { url: "videos/masterplanes/izquierda.mp4",     b: 2408453 },
         { url: "videos/masterplanes/izquierda-rev.mp4", b: 2178161 },
+        { url: "videos/masterplanes/vista-norte.mp4",     b: 7200000 },
+        { url: "videos/masterplanes/vista-norte-rev.mp4", b: 6300000 },
+        { url: "img/masterplanes/end3.webp",              b:  869376 },
         // Detail videos
         { url: "img/masterplanes/detail/fast_cinematic_zoom_out.mp4",        b: 3961702 },
         { url: "img/masterplanes/detail/animate_slow_zoom_202604222231.mp4",  b: 5519241 },
