@@ -231,7 +231,7 @@
         }
         #mp-hover-canvas.on { opacity: 1; }
 
-        /* ── ZONA HOVER — solo activa en is-done1 ────────────────── */
+        /* ── ZONA HOVER — solo activa en is-done1 sin detail abierto ── */
         .mp-zone-layer {
             position: absolute;
             inset: 0;
@@ -239,7 +239,7 @@
             z-index: 7;
             pointer-events: none;
         }
-        .mp-scene.is-done1 .mp-zone-layer { pointer-events: all; }
+        .mp-scene.is-done1:not(.is-detail) .mp-zone-layer { pointer-events: all; }
 
         .mp-zone {
             position: absolute;
@@ -1797,7 +1797,8 @@ scene.addEventListener('mousemove', e => {
     pmy = e.clientY;
     if (!scene.classList.contains('is-done1') ||
          scene.classList.contains('is-terreno') ||
-         scene.classList.contains('is-nocturna')) {
+         scene.classList.contains('is-nocturna') ||
+         scene.classList.contains('is-detail')) {
         if (activeColorZone) activateZone(null);
         return;
     }
@@ -1809,7 +1810,8 @@ scene.addEventListener('mouseleave', () => activateZone(null));
 scene.addEventListener('click', e => {
     if (!scene.classList.contains('is-done1') ||
          scene.classList.contains('is-terreno') ||
-         scene.classList.contains('is-nocturna')) return;
+         scene.classList.contains('is-nocturna') ||
+         scene.classList.contains('is-detail')) return;
     const zone = getZoneAtEvent(e);
     if (!zone?.click) return;
     const { introVideo, stillImg, clickVideo, detailLabel, sliderSrcs } = zone.click;
@@ -1821,6 +1823,8 @@ scene.addEventListener('click', e => {
         detailImg.src    = '';
         detailImg.style.opacity = '0';
         playBtn.style.display   = 'none';
+        scene.classList.add('is-detail');
+        activateZone(null);
         detailEl.classList.add('on');
         detailVideo.src = introVideo;
         detailVideo.load();
@@ -1837,6 +1841,8 @@ scene.addEventListener('click', e => {
             scene.style.transition      = 'none';
             scene.style.transform       = '';
             scene.style.transformOrigin = '';
+            scene.classList.add('is-detail');
+            activateZone(null);
             showStillWithPlay(stillImg, clickVideo || '');
             detailEl.classList.add('on');
             if (sliderSrcs?.length) sliderEl.classList.add('on');
@@ -1983,6 +1989,7 @@ function closeDetail() {
     sliderEl.innerHTML = "";
     sliderItems = [];
     detailEl.classList.remove("on", "is-clubhouse", "show-inicio");
+    scene.classList.remove("is-detail");
     detailImg.style.opacity = "";
     playBtn.style.display   = "";
     setTimeout(() => { detailImg.src = ""; }, 350);
