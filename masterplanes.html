@@ -1505,11 +1505,9 @@ function activateZone(zone) {
         zonePreviewLabel.textContent = zone.label;
         zonePreview.classList.add('visible');
         scene.style.cursor = 'pointer';
-        setLocationLabel(zone.label);
     } else {
         zonePreview.classList.remove('visible');
         scene.style.cursor = '';
-        setLocationLabel(DEFAULT_LABEL);
     }
 }
 
