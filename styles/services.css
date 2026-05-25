@@ -518,6 +518,7 @@
         .acc-video-reveal { opacity: 0 !important; transition: opacity 0.5s ease; }
         .acc-item.open .acc-video-reveal { opacity: 1 !important; }
         #acc-photo-srv.open > .acc-bg,
+        [data-idx="0"].open > img.acc-bg,
         [data-idx="4"].open > img.acc-bg { opacity: 0 !important; }
         .acc-slideshow { position: absolute; inset: 0; }
         .acc-slide {
