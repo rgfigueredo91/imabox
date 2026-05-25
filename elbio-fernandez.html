@@ -116,6 +116,99 @@
         }
         #noselectgrid { -webkit-user-select: none; -moz-user-select: none; user-select: none; }
 
+        /* ── COMPARE SLIDER ── */
+        .compare-slider {
+            position: relative; overflow: hidden; cursor: ew-resize;
+            width: 100%; height: 100%; user-select: none;
+        }
+        .compare-slider .cs-after,
+        .compare-slider .cs-before {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%; object-fit: cover; display: block;
+            pointer-events: none; transition: none;
+        }
+        .compare-slider .cs-before { clip-path: inset(0 50% 0 0); }
+        .compare-slider .cs-handle {
+            position: absolute; top: 0; bottom: 0; left: 50%;
+            width: 2px; background: rgba(201,169,110,0.85);
+            transform: translateX(-50%);
+            pointer-events: none; z-index: 10;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .compare-slider .cs-circle {
+            width: 34px; height: 34px; border-radius: 50%;
+            background: #c9a96e; display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+        .compare-slider .cs-circle i { color: #000; font-size: 0.72rem; }
+        .compare-slider .cs-label {
+            position: absolute; top: 12px;
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase;
+            color: #fff; text-shadow: 0 1px 6px rgba(0,0,0,0.8);
+            pointer-events: none; z-index: 10;
+            background: rgba(0,0,0,0.32); padding: 3px 8px;
+        }
+        .compare-slider .cs-label-left  { left: 12px; }
+        .compare-slider .cs-label-right { right: 12px; }
+
+        .img.compare-cell { cursor: ew-resize; }
+        .img.compare-cell:hover { opacity: 1; }
+        .img.compare-cell:hover img { transform: none; }
+
+        /* ── MASONRY POSITIONS — 5 cols × 9 rows ── */
+        /* row 1-3: frontal ~1:1 matches 1920×2048 source */
+        #img-frontal    { grid-row: 1/4; grid-column: 1/4; }
+        #img-n01        { grid-row: 1/2; grid-column: 4/6; }
+        #img-n02        { grid-row: 2/4; grid-column: 4/6; }
+        /* row 4-5 */
+        #img-picada     { grid-row: 4/6; grid-column: 1/3; }
+        #img-nueva03    { grid-row: 4/6; grid-column: 3/5; }
+        #img-nucleo     { grid-row: 4/6; grid-column: 5/6; }
+        /* row 6-7 */
+        #img-ai-a       { grid-row: 6/8; grid-column: 1/3; }
+        #img-ai-d       { grid-row: 6/8; grid-column: 3/4; }
+        #img-ai-c       { grid-row: 6/8; grid-column: 4/6; }
+        /* row 8-9 */
+        #img-ai-e       { grid-row: 8/10; grid-column: 1/2; }
+        #img-ai-f       { grid-row: 8/9;  grid-column: 2/4; }
+        #img-ai-g       { grid-row: 8/9;  grid-column: 4/5; }
+        #img-ai-h       { grid-row: 8/10; grid-column: 5/6; }
+        #img-ai-i       { grid-row: 9/10; grid-column: 2/5; }
+
+        /* ── VIDEO SECTION ── */
+        .video-section {
+            max-width: 1200px;
+            margin: 80px auto 0;
+            padding: 0 48px 80px;
+        }
+        .video-eyebrow {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase;
+            color: #c9a96e; margin-bottom: 16px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .video-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: #c9a96e; }
+        .video-section h2 {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: clamp(1.6rem, 3.5vw, 2.8rem);
+            font-weight: 200; letter-spacing: -0.02em; line-height: 1.1;
+            color: #fff; margin-bottom: 16px;
+        }
+        .video-section h2 em { color: #c9a96e; font-style: normal; }
+        .video-section p {
+            font-size: 0.88rem; line-height: 1.8;
+            color: rgba(255,255,255,0.45);
+            max-width: 600px; margin-bottom: 40px;
+            font-family: 'Poppins', sans-serif; font-weight: 300;
+        }
+        .video-wrap {
+            position: relative; width: 100%;
+            aspect-ratio: 16 / 9;
+            background: #111; overflow: hidden;
+        }
+        .video-wrap video { width: 100%; height: 100%; object-fit: cover; display: block; }
+
         footer {
             border-top: 1px solid rgba(255,255,255,0.08);
             padding: 28px 48px; display: flex; align-items: center;
@@ -132,11 +225,13 @@
             .hes-gallery > .img { grid-row: auto !important; grid-column: auto !important; }
             .project-header { padding: 100px 24px 36px; }
             .project-meta { text-align: left; }
+            .video-section { padding: 0 24px 60px; margin-top: 60px; }
         }
         @media (max-width: 600px) {
             .hes-gallery { grid-template-columns: 1fr; grid-auto-rows: 60vw; gap: 3px; }
             .gallery-section { padding: 4px; }
             footer { flex-direction: column; text-align: center; padding: 28px 24px; }
+            .video-section { padding: 0 16px 48px; margin-top: 48px; }
         }
     </style>
 </head>
@@ -176,15 +271,110 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <h1>Escuela y Liceo <span>Elbio Fernández</span></h1>
     </div>
     <div class="project-meta">
+        <div class="meta-item">Client <strong>MPR · Escuela y Liceo Elbio Fernández</strong></div>
         <div class="meta-item">Year <strong>2024</strong></div>
         <div class="meta-item">Services <strong>3D Visualization · Visual Campaign</strong></div>
-        <div class="meta-item">Client <strong>Elbio Fernández</strong></div>
     </div>
 </div>
 
 <section class="gallery-section">
     <div class="hes-gallery" id="noselectgrid">
-        <!-- Las imágenes y videos se cargan aquí -->
+
+        <div class="img compare-cell" id="img-frontal">
+            <div class="compare-slider" data-slider="1">
+                <img class="cs-after" src="img/elbio-fernandez/frontal-nocturno.webp" alt="Elbio Fernández — Frontal nocturno — Imabox"/>
+                <img class="cs-before" src="img/elbio-fernandez/frontal-diurno.webp" alt="Elbio Fernández — Frontal diurno — Imabox"/>
+                <div class="cs-handle">
+                    <div class="cs-circle"><i class="fa fa-arrows-h"></i></div>
+                </div>
+                <span class="cs-label cs-label-left">Día</span>
+                <span class="cs-label cs-label-right">Noche</span>
+            </div>
+        </div>
+        <div class="img" id="img-n01">
+            <a href="img/elbio-fernandez/n01.webp" class="swipebox">
+                <img loading="lazy" src="img/elbio-fernandez/n01.webp" alt="Elbio Fernández — Imabox"/>
+            </a>
+        </div>
+        <div class="img" id="img-n02">
+            <a href="img/elbio-fernandez/n02.webp" class="swipebox">
+                <img loading="lazy" src="img/elbio-fernandez/n02.webp" alt="Elbio Fernández — Imabox"/>
+            </a>
+        </div>
+        <div class="img" id="img-picada">
+            <a href="img/elbio-fernandez/contra-picada.webp" class="swipebox">
+                <img loading="lazy" src="img/elbio-fernandez/contra-picada.webp" alt="Elbio Fernández — Contra picada — Imabox"/>
+            </a>
+        </div>
+        <div class="img compare-cell" id="img-nueva03">
+            <div class="compare-slider" data-slider="2">
+                <img class="cs-after" loading="lazy" src="img/elbio-fernandez/nocturna.webp" alt="Elbio Fernández — Vista nocturna — Imabox"/>
+                <img class="cs-before" loading="lazy" src="img/elbio-fernandez/diurna.webp" alt="Elbio Fernández — Vista diurna — Imabox"/>
+                <div class="cs-handle">
+                    <div class="cs-circle"><i class="fa fa-arrows-h"></i></div>
+                </div>
+                <span class="cs-label cs-label-left">Día</span>
+                <span class="cs-label cs-label-right">Noche</span>
+            </div>
+        </div>
+        <div class="img" id="img-nucleo">
+            <a href="img/elbio-fernandez/nucleo.webp" class="swipebox">
+                <img loading="lazy" src="img/elbio-fernandez/nucleo.webp" alt="Elbio Fernández — Núcleo — Imabox"/>
+            </a>
+        </div>
+        <div class="img" id="img-ai-a">
+            <a href="img/elbio-fernandez/ai-a.webp" class="swipebox">
+                <img loading="lazy" src="img/elbio-fernandez/ai-a.webp" alt="Elbio Fernández — Imabox"/>
+            </a>
+        </div>
+        <div class="img" id="img-ai-c">
+            <a href="img/elbio-fernandez/ai-c.webp" class="swipebox">
+                <img loading="lazy" src="img/elbio-fernandez/ai-c.webp" alt="Elbio Fernández — Imabox"/>
+            </a>
+        </div>
+        <div class="img" id="img-ai-d">
+            <a href="img/elbio-fernandez/ai-d.webp" class="swipebox">
+                <img loading="lazy" src="img/elbio-fernandez/ai-d.webp" alt="Elbio Fernández — Imabox"/>
+            </a>
+        </div>
+        <div class="img" id="img-ai-e">
+            <a href="img/elbio-fernandez/ai-e.webp" class="swipebox">
+                <img loading="lazy" src="img/elbio-fernandez/ai-e.webp" alt="Elbio Fernández — Imabox"/>
+            </a>
+        </div>
+        <div class="img" id="img-ai-f">
+            <a href="img/elbio-fernandez/ai-f.webp" class="swipebox">
+                <img loading="lazy" src="img/elbio-fernandez/ai-f.webp" alt="Elbio Fernández — Imabox"/>
+            </a>
+        </div>
+        <div class="img" id="img-ai-g">
+            <a href="img/elbio-fernandez/ai-g.webp" class="swipebox">
+                <img loading="lazy" src="img/elbio-fernandez/ai-g.webp" alt="Elbio Fernández — Imabox"/>
+            </a>
+        </div>
+        <div class="img" id="img-ai-h">
+            <a href="img/elbio-fernandez/ai-h.webp" class="swipebox">
+                <img loading="lazy" src="img/elbio-fernandez/ai-h.webp" alt="Elbio Fernández — Imabox"/>
+            </a>
+        </div>
+        <div class="img" id="img-ai-i">
+            <a href="img/elbio-fernandez/ai-i.webp" class="swipebox">
+                <img loading="lazy" src="img/elbio-fernandez/ai-i.webp" alt="Elbio Fernández — Imabox"/>
+            </a>
+        </div>
+
+    </div>
+</section>
+
+<!-- VIDEO SECTION -->
+<section class="video-section">
+    <div class="video-eyebrow">Film &amp; Motion</div>
+    <h2>We took care of the <em>commercial animation</em></h2>
+    <p>From concept to final render, we produced the full presentation video for Escuela y Liceo Elbio Fernández — a piece built to communicate the scale, atmosphere and quality of the project.</p>
+    <div class="video-wrap">
+        <video controls preload="metadata" poster="img/elbio-fernandez/frontal-maldonado.webp">
+            <source src="animations/elbio-fernandez.mp4" type="video/mp4"/>
+        </video>
     </div>
 </section>
 
@@ -211,6 +401,29 @@ document.querySelectorAll('.img.video-item').forEach(function(item) {
     item.addEventListener('mouseenter', function() { video.play(); });
     item.addEventListener('mouseleave', function() { video.pause(); video.currentTime = 0; });
 });
+
+(function() {
+    document.querySelectorAll('.compare-slider').forEach(function(slider) {
+        var before = slider.querySelector('.cs-before');
+        var handle = slider.querySelector('.cs-handle');
+        var active = false;
+
+        function setPos(clientX) {
+            var rect = slider.getBoundingClientRect();
+            var pct = Math.max(0, Math.min(100, (clientX - rect.left) / rect.width * 100));
+            before.style.clipPath = 'inset(0 ' + (100 - pct).toFixed(2) + '% 0 0)';
+            handle.style.left = pct.toFixed(2) + '%';
+        }
+
+        slider.addEventListener('mousedown', function(e) { active = true; setPos(e.clientX); e.preventDefault(); });
+        window.addEventListener('mousemove', function(e) { if (active) setPos(e.clientX); });
+        window.addEventListener('mouseup', function() { active = false; });
+
+        slider.addEventListener('touchstart', function(e) { active = true; setPos(e.touches[0].clientX); }, { passive: true });
+        window.addEventListener('touchmove', function(e) { if (active) setPos(e.touches[0].clientX); }, { passive: true });
+        window.addEventListener('touchend', function() { active = false; });
+    });
+})();
 </script>
 
 </body>

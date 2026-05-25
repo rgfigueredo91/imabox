@@ -116,6 +116,25 @@
         }
         #noselectgrid { -webkit-user-select: none; -moz-user-select: none; user-select: none; }
 
+        /* ── MASONRY POSITIONS — 5 cols × 5 rows ── */
+        /* row 1-2: featured */
+        #col-frontal  { grid-row: 1/3; grid-column: 1/4; }
+        #col-diagonal { grid-row: 1/3; grid-column: 4/6; }
+        /* rows 3-4: uniform small cells */
+        #col-ai01 { grid-row: 3/4; grid-column: 1/2; }
+        #col-ai02 { grid-row: 3/4; grid-column: 2/3; }
+        #col-ai03 { grid-row: 3/4; grid-column: 3/4; }
+        #col-ai04 { grid-row: 3/4; grid-column: 4/5; }
+        #col-ai05 { grid-row: 3/4; grid-column: 5/6; }
+        #col-ai06 { grid-row: 4/5; grid-column: 1/2; }
+        #col-ai07 { grid-row: 4/5; grid-column: 2/3; }
+        #col-ai08 { grid-row: 4/5; grid-column: 3/4; }
+        #col-ai09 { grid-row: 4/5; grid-column: 4/5; }
+        #col-ai10 { grid-row: 4/5; grid-column: 5/6; }
+        /* row 5: last two fill full width */
+        #col-ai11 { grid-row: 5/6; grid-column: 1/4; }
+        #col-ai12 { grid-row: 5/6; grid-column: 4/6; }
+
         footer {
             border-top: 1px solid rgba(255,255,255,0.08);
             padding: 28px 48px; display: flex; align-items: center;
@@ -178,13 +197,81 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="project-meta">
         <div class="meta-item">Year <strong>2024</strong></div>
         <div class="meta-item">Services <strong>3D Visualization · Visual Campaign</strong></div>
-        <div class="meta-item">Client <strong>Colinas de Maldonado</strong></div>
     </div>
 </div>
 
 <section class="gallery-section">
     <div class="hes-gallery" id="noselectgrid">
-        <!-- Las imágenes y videos se cargan aquí -->
+        <div class="img" id="col-frontal">
+            <a href="img/colinas-de-maldonado/frontal.webp" class="swipebox">
+                <img src="img/colinas-de-maldonado/frontal.webp" alt="Colinas de Maldonado — Exterior frontal — Imabox"/>
+            </a>
+        </div>
+        <div class="img" id="col-diagonal">
+            <a href="img/colinas-de-maldonado/diagonal.webp" class="swipebox">
+                <img src="img/colinas-de-maldonado/diagonal.webp" alt="Colinas de Maldonado — Exterior diagonal — Imabox"/>
+            </a>
+        </div>
+        <div class="img" id="col-ai01">
+            <a href="img/colinas-de-maldonado/ai-01.webp" class="swipebox">
+                <img loading="lazy" src="img/colinas-de-maldonado/ai-01.webp" alt="Colinas de Maldonado — Imabox"/>
+            </a>
+        </div>
+        <div class="img" id="col-ai02">
+            <a href="img/colinas-de-maldonado/ai-02.webp" class="swipebox">
+                <img loading="lazy" src="img/colinas-de-maldonado/ai-02.webp" alt="Colinas de Maldonado — Imabox"/>
+            </a>
+        </div>
+        <div class="img" id="col-ai03">
+            <a href="img/colinas-de-maldonado/ai-03.webp" class="swipebox">
+                <img loading="lazy" src="img/colinas-de-maldonado/ai-03.webp" alt="Colinas de Maldonado — Imabox"/>
+            </a>
+        </div>
+        <div class="img" id="col-ai04">
+            <a href="img/colinas-de-maldonado/ai-04.webp" class="swipebox">
+                <img loading="lazy" src="img/colinas-de-maldonado/ai-04.webp" alt="Colinas de Maldonado — Imabox"/>
+            </a>
+        </div>
+        <div class="img" id="col-ai05">
+            <a href="img/colinas-de-maldonado/ai-05.webp" class="swipebox">
+                <img loading="lazy" src="img/colinas-de-maldonado/ai-05.webp" alt="Colinas de Maldonado — Imabox"/>
+            </a>
+        </div>
+        <div class="img" id="col-ai06">
+            <a href="img/colinas-de-maldonado/ai-06.webp" class="swipebox">
+                <img loading="lazy" src="img/colinas-de-maldonado/ai-06.webp" alt="Colinas de Maldonado — Imabox"/>
+            </a>
+        </div>
+        <div class="img" id="col-ai07">
+            <a href="img/colinas-de-maldonado/ai-07.webp" class="swipebox">
+                <img loading="lazy" src="img/colinas-de-maldonado/ai-07.webp" alt="Colinas de Maldonado — Imabox"/>
+            </a>
+        </div>
+        <div class="img" id="col-ai08">
+            <a href="img/colinas-de-maldonado/ai-08.webp" class="swipebox">
+                <img loading="lazy" src="img/colinas-de-maldonado/ai-08.webp" alt="Colinas de Maldonado — Imabox"/>
+            </a>
+        </div>
+        <div class="img" id="col-ai09">
+            <a href="img/colinas-de-maldonado/ai-09.webp" class="swipebox">
+                <img loading="lazy" src="img/colinas-de-maldonado/ai-09.webp" alt="Colinas de Maldonado — Imabox"/>
+            </a>
+        </div>
+        <div class="img" id="col-ai10">
+            <a href="img/colinas-de-maldonado/ai-10.webp" class="swipebox">
+                <img loading="lazy" src="img/colinas-de-maldonado/ai-10.webp" alt="Colinas de Maldonado — Imabox"/>
+            </a>
+        </div>
+        <div class="img" id="col-ai11">
+            <a href="img/colinas-de-maldonado/ai-11.webp" class="swipebox">
+                <img loading="lazy" src="img/colinas-de-maldonado/ai-11.webp" alt="Colinas de Maldonado — Imabox"/>
+            </a>
+        </div>
+        <div class="img" id="col-ai12">
+            <a href="img/colinas-de-maldonado/ai-12.webp" class="swipebox">
+                <img loading="lazy" src="img/colinas-de-maldonado/ai-12.webp" alt="Colinas de Maldonado — Imabox"/>
+            </a>
+        </div>
     </div>
 </section>
 
