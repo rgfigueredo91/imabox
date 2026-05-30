@@ -18,8 +18,8 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
-    <title>Imabox — Creative Agency for Architecture &amp; Real Estate | Montevideo, Uruguay</title>
-    <meta name="description" content="Imabox is a creative agency for real estate developers and architects. We deliver 3D visualization, brand identity, film and virtual showrooms — from concept to launch." />
+    <title>Imabox — Visualización 3D y Branding para Proyectos Inmobiliarios | Montevideo</title>
+    <meta name="description" content="Ayudamos a desarrolladores inmobiliarios a vender sus proyectos antes de construirlos — visualización 3D, identidad de marca y contenido digital. Montevideo, Uruguay." />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Imabox — Creative Agency for Architecture &amp; Real Estate" />
     <meta property="og:description" content="3D visualization, brand identity, film and virtual showrooms for real estate developers — Montevideo, Uruguay." />
@@ -33,474 +33,629 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://use.typekit.net/oov2wcw.css">
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-
-    <!-- navbar siempre primero -->
     <link rel="stylesheet" href="styles/navbar.css" />
     <link rel="stylesheet" href="styles/cursor.css" />
 
     <style>
-        /* ── reset mínimo ── */
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         html, body { height: 100%; background: #000; color: #fff; font-family: 'Poppins', sans-serif; }
         *::-webkit-scrollbar { display: none; }
         * { scrollbar-width: none; }
 
-        /* ── scroll container ── */
-        .snap-container {
-            height: 100vh;
-            height: 100dvh;
-            overflow-y: scroll;
+        :root {
+            --gold: #c9a96e;
+            --gold-dim: rgba(201,169,110,0.12);
+            --gold-border: rgba(201,169,110,0.3);
         }
 
-        /* ── secciones ── */
+        /* ── snap container ── */
+        .snap-container { height: 100dvh; overflow-y: scroll; }
+
+        /* ── sections ── */
         .section {
-            height: 100vh;
             height: 100dvh;
             width: 100%;
             position: relative;
             overflow: hidden;
         }
 
-        /* ── SECTION 1 — video ── */
-        #s1 video {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        /* ── anims ── */
+        .anim {
+            opacity: 0; transform: translateY(22px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
         }
-        #s1 .video-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(0,0,0,0.42);
-            pointer-events: none;
-        }
-        #s1 .video-hero {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 0 24px;
-            pointer-events: none;
-        }
-        #s1 .video-hero h1 {
-            font-family: 'aktiv-grotesk', sans-serif;
-            font-size: clamp(2.2rem, 5.5vw, 5rem);
-            font-weight: 300;
-            line-height: 1.15;
-            letter-spacing: -0.01em;
-            color: #fff;
-            margin-bottom: 20px;
-            max-width: 900px;
-        }
-        #s1 .video-hero h1 em {
-            font-style: normal;
-            color: #c9a96e;
-        }
-        #s1 .video-hero p {
-            font-family: 'Poppins', sans-serif;
-            font-size: clamp(0.82rem, 1.4vw, 1rem);
-            font-weight: 300;
-            color: rgba(255,255,255,0.55);
-            letter-spacing: 0.04em;
+        .anim.visible { opacity: 1; transform: translateY(0); }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
         @keyframes scrollPulse {
-            0%, 100% { transform: translateX(-50%) scaleY(1); opacity: 0.5; }
-            50%       { transform: translateX(-50%) scaleY(1.18); opacity: 1; }
+            0%,100% { transform: translateX(-50%) scaleY(1); opacity: 0.5; }
+            50%      { transform: translateX(-50%) scaleY(1.18); opacity: 1; }
         }
+
+        /* ──────────────────────────────────────────
+           S1 — HERO
+        ────────────────────────────────────────── */
+        #s-hero video {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%; object-fit: cover;
+        }
+        #s-hero .overlay {
+            position: absolute; inset: 0;
+            background: rgba(0,0,0,0.50); pointer-events: none;
+        }
+        .hero-content {
+            position: absolute; inset: 0;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            text-align: center; padding: 0 28px;
+            pointer-events: none;
+        }
+        .hero-pretag {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase;
+            color: var(--gold); margin-bottom: 24px;
+            opacity: 0; animation: fadeUp 1s ease 0.4s forwards;
+        }
+        #s-hero h1 {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: clamp(2rem, 5.5vw, 4.8rem);
+            font-weight: 300; line-height: 1.1; letter-spacing: -0.02em;
+            color: #fff; margin-bottom: 20px; max-width: 920px;
+            opacity: 0; animation: fadeUp 1s ease 0.7s forwards;
+        }
+        #s-hero h1 em { font-style: normal; color: var(--gold); }
+        .hero-sub {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(0.78rem, 1.3vw, 0.95rem);
+            font-weight: 300; color: rgba(255,255,255,0.5);
+            letter-spacing: 0.03em; max-width: 580px; line-height: 1.8;
+            margin-bottom: 44px;
+            opacity: 0; animation: fadeUp 1s ease 1s forwards;
+        }
+        .hero-ctas {
+            display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+            pointer-events: all;
+            opacity: 0; animation: fadeUp 1s ease 1.3s forwards;
+        }
+        .btn-gold {
+            padding: 14px 34px;
+            background: var(--gold); color: #000;
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+        .btn-gold:hover { opacity: 0.85; }
+        .btn-outline {
+            padding: 14px 34px;
+            border: 1px solid rgba(255,255,255,0.28);
+            color: rgba(255,255,255,0.65);
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
+            text-decoration: none; cursor: pointer;
+            transition: border-color 0.2s, color 0.2s;
+            background: none;
+        }
+        .btn-outline:hover { border-color: rgba(255,255,255,0.55); color: #fff; }
+
         .scroll-hint {
-            position: absolute;
-            bottom: 32px;
-            left: 50%;
+            position: absolute; bottom: 32px; left: 50%;
             transform: translateX(-50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
+            display: flex; flex-direction: column; align-items: center; gap: 10px;
             cursor: pointer;
         }
-        .scroll-hint .scroll-line {
-            width: 1px;
-            height: 40px;
-            background: #c9a96e;
+        .scroll-line {
+            width: 1px; height: 38px; background: var(--gold);
             animation: scrollPulse 2s ease-in-out infinite;
         }
-        .scroll-hint .scroll-label {
+        .scroll-label {
             font-family: 'aktiv-grotesk', sans-serif;
-            font-size: 0.6rem;
-            font-weight: 500;
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.45);
+            font-size: 0.58rem; letter-spacing: 0.25em; text-transform: uppercase;
+            color: rgba(255,255,255,0.38);
         }
 
-        /* ── SECTION 2 — texto ── */
-        #s2 {
-            background: #080808;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .text-block {
-            max-width: 1000px;
-            padding: 0 80px;
-            text-align: center;
-        }
-        .text-block p {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 300;
-            font-size: clamp(1rem, 2vw, 1.35rem);
-            line-height: 2.2;
-            color: rgba(255,255,255,0.78);
-        }
-
-        /* ── SECTION 3 / 5 — carousel ── */
-        #s3, #s5 { background: #000; }
-
-        /* ── Hotspot ── */
-        .hotspot {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 10;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .hotspot-ring {
-            position: absolute;
-            border-radius: 50%;
-            border: 1px solid rgba(201,169,110,0.6);
-            animation: hotspot-expand 2.4s ease-out infinite;
-        }
-        .hotspot-ring:nth-child(1) { width: 48px;  height: 48px;  animation-delay: 0s; }
-        .hotspot-ring:nth-child(2) { width: 72px;  height: 72px;  animation-delay: 0.6s; }
-        .hotspot-ring:nth-child(3) { width: 96px; height: 96px; animation-delay: 1.2s; }
-        @keyframes hotspot-expand {
-            0%   { opacity: 0.8; transform: scale(0.6); }
-            100% { opacity: 0;   transform: scale(1); }
-        }
-        .hotspot-core {
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            background: #c9a96e;
-            box-shadow: 0 0 0 3px rgba(201,169,110,0.25), 0 0 16px rgba(201,169,110,0.4);
-            position: relative;
-            z-index: 1;
-            transition: transform 0.2s ease;
-        }
-        .hotspot:hover .hotspot-core {
-            transform: scale(1.3);
-        }
-        .hotspot-label {
-            position: absolute;
-            top: calc(100% + 14px);
-            left: 50%;
-            transform: translateX(-50%);
-            white-space: nowrap;
-            font-family: 'aktiv-grotesk', sans-serif;
-            font-size: 0.55rem;
-            font-weight: 500;
-            letter-spacing: 0.22em;
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.75);
-            background: rgba(0,0,0,0.45);
-            padding: 5px 12px;
-            backdrop-filter: blur(6px);
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.25s ease, transform 0.25s ease;
-            transform: translateX(-50%) translateY(4px);
-        }
-        .hotspot:hover .hotspot-label {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        .carousel-wrap {
-            position: relative;
-            width: 100%;
-            height: 100%;
-        }
-        .slide {
-            position: absolute;
-            inset: 0;
-            opacity: 0;
-            transition: opacity 0.6s ease;
-        }
-        .slide.active { opacity: 1; }
-        .slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-        .slide-caption {
-            position: absolute;
-            bottom: 60px;
-            left: 48px;
-        }
-        .slide-caption h2 {
-            font-family: 'aktiv-grotesk', sans-serif;
-            font-weight: 200;
-            font-size: clamp(1.4rem, 3vw, 2rem);
-            color: #fff;
-            letter-spacing: -0.02em;
-        }
-        .slide-caption p {
-            font-family: 'Poppins', sans-serif;
-            font-size: 0.78rem;
-            color: rgba(255,255,255,0.5);
-            margin-top: 4px;
-        }
-        .carousel-nav {
-            position: absolute;
-            bottom: 60px;
-            right: 48px;
-            display: flex;
-            gap: 10px;
-        }
-        .carousel-btn {
-            width: 38px;
-            height: 38px;
-            border: 1px solid rgba(255,255,255,0.25);
-            background: none;
-            color: #fff;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: border-color 0.2s, background 0.2s;
-        }
-        .carousel-btn:hover { border-color: #c9a96e; background: rgba(201,169,110,0.1); }
-        .carousel-btn svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-
-        /* ── SECTION 4 — texto 2 ── */
-        #s4 {
-            background: #0a0a0a;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .text-block-cta p { color: rgba(255,255,255,0.72); }
-        .text-block-cta .cta {
-            margin-top: 32px;
-            font-family: 'aktiv-grotesk', sans-serif;
-            font-size: 0.7rem;
-            letter-spacing: 0.22em;
-            text-transform: uppercase;
-            color: #c9a96e;
-        }
-        .btn-call {
-            display: inline-block;
-            margin-top: 40px;
-            padding: 14px 36px;
-            border: 1px solid #c9a96e;
-            color: #c9a96e;
-            font-family: 'aktiv-grotesk', sans-serif;
-            font-size: 0.7rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            text-decoration: none;
-            transition: background 0.25s ease, color 0.25s ease;
-        }
-        .btn-call:hover {
-            background: #c9a96e;
-            color: #000;
-        }
-
-        /* ── preloader ── */
-        #ix-loader {
-            position: fixed;
-            inset: 0;
-            z-index: 9000;
-            background: #0e0e0e;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 18px;
-            transition: opacity 0.7s ease;
-        }
-        #ix-loader.out { opacity: 0; pointer-events: none; }
-        .loader-brand {
-            font-family: 'Poppins', sans-serif;
-            font-size: clamp(2.4rem, 7vw, 4rem);
-            font-weight: 300;
-            color: #fff;
-        }
-        .loader-track {
-            width: 140px;
-            height: 1px;
-            background: rgba(201,169,110,0.2);
-            overflow: hidden;
-        }
-        .loader-bar {
-            height: 100%;
-            width: 0%;
-            background: #c9a96e;
-            transition: width 0.35s ease;
-        }
-
-        /* ── Hotspot video overlay ── */
-        #hotspotVideoWrap {
-            position: absolute;
-            inset: 0;
-            z-index: 20;
-            background: #000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.5s ease;
-        }
-        #hotspotVideoWrap.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-        #hotspotVideo {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        /* ── Slide back button ── */
-        .slide-back {
-            position: absolute;
-            top: 28px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0,0,0,0.45);
-            border: 1px solid rgba(255,255,255,0.18);
-            color: rgba(255,255,255,0.75);
-            font-family: 'aktiv-grotesk', sans-serif;
-            font-size: 0.6rem;
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
-            padding: 8px 18px 8px 12px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            backdrop-filter: blur(6px);
-            transition: color 0.2s, border-color 0.2s;
-            white-space: nowrap;
-        }
-        .slide-back:hover { color: #fff; border-color: rgba(255,255,255,0.4); }
-        .slide-back svg {
-            width: 12px; height: 12px;
-            stroke: currentColor; fill: none;
-            stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
-        }
-
-        /* ── Typewriter cursor ── */
+        /* typewriter cursor */
         #typer-cursor {
-            display: inline-block;
-            width: 2px;
-            height: 0.85em;
-            background: #c9a96e;
-            margin-left: 3px;
+            display: inline-block; width: 2px; height: 0.85em;
+            background: var(--gold); margin-left: 3px;
             vertical-align: middle;
             animation: blink 0.9s step-end infinite;
         }
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
 
-        /* ── Stats section ── */
+        /* ──────────────────────────────────────────
+           S2 — LOGOS
+        ────────────────────────────────────────── */
+        #s-logos {
+            background: #0a0a0a;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            gap: 40px;
+        }
+        .logos-label {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.58rem; letter-spacing: 0.32em; text-transform: uppercase;
+            color: rgba(255,255,255,0.25);
+        }
+        .marquee-wrap { width: 100%; overflow: hidden; }
+        .marquee-track {
+            display: flex; align-items: center; gap: 64px;
+            width: max-content;
+            animation: marquee 40s linear infinite;
+        }
+        .marquee-wrap:hover .marquee-track { animation-play-state: paused; }
+        .marquee-track img {
+            height: 36px; width: auto; flex-shrink: 0;
+            filter: brightness(0) invert(1);
+            opacity: 0.42;
+            transition: opacity 0.3s;
+        }
+        .marquee-track img:hover { opacity: 0.72; }
+        @keyframes marquee {
+            from { transform: translateX(0); }
+            to   { transform: translateX(-50%); }
+        }
+        @keyframes marqueeRtl {
+            from { transform: translateX(-50%); }
+            to   { transform: translateX(0); }
+        }
+        .marquee-track-rtl { animation: marqueeRtl 46s linear infinite; }
+        .marquee-wrap:hover .marquee-track-rtl { animation-play-state: paused; }
+
+        /* ──────────────────────────────────────────
+           S3 — WHY
+        ────────────────────────────────────────── */
+        #s-why {
+            background: #080808;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .why-inner {
+            max-width: 1100px; width: 100%; padding: 0 80px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 100px;
+            align-items: center;
+        }
+        .section-tag {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.58rem; letter-spacing: 0.3em; text-transform: uppercase;
+            color: var(--gold); margin-bottom: 20px;
+        }
+        .why-heading {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-weight: 200; font-size: clamp(1.7rem, 3.2vw, 2.8rem);
+            letter-spacing: -0.02em; line-height: 1.15;
+            color: rgba(255,255,255,0.9); margin-bottom: 24px;
+        }
+        .why-heading em { font-style: normal; color: var(--gold); }
+        .why-desc {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.88rem; font-weight: 300;
+            color: rgba(255,255,255,0.42); line-height: 1.9;
+        }
+        .why-items { display: flex; flex-direction: column; gap: 36px; }
+        .why-item { display: flex; gap: 20px; align-items: flex-start; }
+        .why-num {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.58rem; letter-spacing: 0.18em;
+            color: var(--gold); opacity: 0.65;
+            margin-top: 3px; flex-shrink: 0;
+        }
+        .why-item-body h4 {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-weight: 300; font-size: 0.95rem; letter-spacing: 0.01em;
+            color: rgba(255,255,255,0.85); margin-bottom: 6px;
+        }
+        .why-item-body p {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.78rem; font-weight: 300;
+            color: rgba(255,255,255,0.38); line-height: 1.75;
+        }
+
+        /* ──────────────────────────────────────────
+           S4 — SERVICES ACCORDION
+        ────────────────────────────────────────── */
+        #s-services { padding: 0; background: #000; }
+        .acc-wrap { display: flex; width: 100%; height: 100%; }
+        .acc-item {
+            flex: 1; position: relative; overflow: hidden;
+            cursor: pointer; border-right: 1px solid rgba(255,255,255,0.06);
+            transition: flex 0.65s cubic-bezier(0.77,0,0.175,1);
+        }
+        .acc-item:last-child { border-right: none; }
+        .acc-item.open { flex: 5; }
+        .acc-bg {
+            position: absolute; inset: 0; width: 100%; height: 100%;
+            object-fit: cover; opacity: 0.3; transition: opacity 0.5s; pointer-events: none;
+        }
+        .acc-item.open .acc-bg { opacity: 0.6; }
+        video.acc-bg { object-fit: cover; }
+        video.acc-contain { object-fit: contain; background: #000; }
+        .acc-video-reveal { opacity: 0 !important; transition: opacity 0.5s ease; }
+        .acc-item.open .acc-video-reveal { opacity: 1 !important; }
+        #acc-photo-srv.open > .acc-bg,
+        [data-idx="0"].open > img.acc-bg,
+        [data-idx="4"].open > img.acc-bg { opacity: 0 !important; }
+        .acc-slideshow { position: absolute; inset: 0; }
+        .acc-slide {
+            position: absolute; inset: 0; width: 100%; height: 100%;
+            object-fit: cover; opacity: 0; transition: opacity 0.9s ease; pointer-events: none;
+        }
+        .acc-slide.active { opacity: 0.35; }
+        .acc-item.open .acc-slide.active { opacity: 0.88; }
+        .acc-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(to right, rgba(0,0,0,0.75) 30%, transparent 100%);
+            opacity: 0; transition: opacity 0.5s; pointer-events: none;
+        }
+        .acc-item.open .acc-overlay { opacity: 1; }
+        .acc-title-v {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%) rotate(-90deg);
+            white-space: nowrap;
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-weight: 200; font-size: 0.72rem; letter-spacing: 0.18em;
+            text-transform: uppercase; color: rgba(255,255,255,0.7);
+            transition: opacity 0.25s; pointer-events: none;
+        }
+        .acc-item.open .acc-title-v { opacity: 0; }
+        .acc-content {
+            position: absolute; bottom: 56px; left: 48px; right: 48px;
+            opacity: 0; transform: translateY(12px);
+            transition: opacity 0.35s 0.2s, transform 0.35s 0.2s; pointer-events: none;
+        }
+        .acc-item.open .acc-content { opacity: 1; transform: translateY(0); }
+        .acc-content h3 {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-weight: 200; font-size: clamp(1.6rem, 2.8vw, 2.6rem);
+            color: #fff; letter-spacing: -0.02em; margin-bottom: 14px;
+        }
+        .acc-content p {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.82rem; font-weight: 300;
+            color: rgba(255,255,255,0.55); line-height: 1.85; max-width: 300px;
+        }
+
+        /* ──────────────────────────────────────────
+           S5 — STATS
+        ────────────────────────────────────────── */
         #s-stats {
             background: #080808;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
+            position: relative; overflow: hidden;
         }
         .mosaic-grid {
-            position: absolute;
-            inset: 0;
+            position: absolute; inset: 0;
             display: grid;
             grid-template-columns: repeat(8, 1fr);
             grid-template-rows: repeat(3, 33.333%);
-            pointer-events: none;
-            z-index: 0;
-            align-items: stretch;
-            justify-items: stretch;
+            pointer-events: none; z-index: 0;
+            align-items: stretch; justify-items: stretch;
         }
         .mosaic-tile {
-            width: 100%;
-            height: 100%;
-            min-width: 0;
-            min-height: 0;
-            object-fit: cover;
-            opacity: 0.07;
-            transition: opacity 0.7s ease;
-            filter: grayscale(15%);
-            display: block;
+            width: 100%; height: 100%; min-width: 0; min-height: 0;
+            object-fit: cover; opacity: 0.07;
+            transition: opacity 0.7s ease; filter: grayscale(15%); display: block;
         }
-        .mosaic-tile.lit {
-            opacity: 0.5;
-            transition: opacity 0.25s ease;
-        }
+        .mosaic-tile.lit { opacity: 0.5; transition: opacity 0.25s ease; }
         .mosaic-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(8,8,8,0.65);
-            z-index: 1;
-            pointer-events: none;
+            position: absolute; inset: 0;
+            background: rgba(8,8,8,0.65); z-index: 1; pointer-events: none;
         }
         .stats-wrap {
-            display: flex;
-            gap: clamp(40px, 8vw, 120px);
-            align-items: flex-start;
-            justify-content: center;
-            flex-wrap: wrap;
-            padding: 0 40px;
-            position: relative;
-            z-index: 2;
+            display: flex; gap: clamp(40px, 8vw, 120px);
+            align-items: flex-start; justify-content: center;
+            flex-wrap: wrap; padding: 0 40px;
+            position: relative; z-index: 2;
         }
-        .stat-item {
-            text-align: center;
-        }
+        .stat-item { text-align: center; }
         .stat-row {
-            display: flex;
-            align-items: baseline;
-            justify-content: center;
-            gap: 2px;
-            line-height: 1;
+            display: flex; align-items: baseline; justify-content: center;
+            gap: 2px; line-height: 1;
         }
         .stat-num {
             font-family: 'aktiv-grotesk', sans-serif;
             font-size: clamp(3.5rem, 9vw, 7rem);
-            font-weight: 200;
-            color: #fff;
-            letter-spacing: -0.03em;
+            font-weight: 200; color: #fff; letter-spacing: -0.03em;
         }
         .stat-suffix {
             font-family: 'aktiv-grotesk', sans-serif;
             font-size: clamp(2rem, 5vw, 4rem);
-            font-weight: 200;
-            color: #c9a96e;
+            font-weight: 200; color: var(--gold);
         }
         .stat-label {
             font-family: 'Poppins', sans-serif;
-            font-size: 0.7rem;
-            font-weight: 300;
-            color: rgba(255,255,255,0.4);
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            margin-top: 12px;
+            font-size: 0.7rem; font-weight: 300;
+            color: rgba(255,255,255,0.4); letter-spacing: 0.15em;
+            text-transform: uppercase; margin-top: 12px;
         }
 
-        @media (max-width: 768px) {
-            .slide-caption { left: 24px; bottom: 48px; }
-            .carousel-nav  { right: 24px; bottom: 48px; }
-            .text-block, .text-block-cta { padding: 0 24px; }
+        /* ──────────────────────────────────────────
+           S6 — PROJECTS
+        ────────────────────────────────────────── */
+        #s-projects {
+            background: #060606;
+            display: flex; flex-direction: column;
+        }
+        .proj-header {
+            padding: 44px 80px 24px;
+            display: flex; align-items: center; justify-content: space-between;
+            flex-shrink: 0;
+        }
+        .proj-header h2 {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-weight: 200; font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+            letter-spacing: -0.01em; color: rgba(255,255,255,0.88);
+        }
+        .proj-view-all {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase;
+            color: var(--gold); text-decoration: none; opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        .proj-view-all:hover { opacity: 1; }
+        .proj-grid {
+            flex: 1; display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 1px; background: rgba(255,255,255,0.06);
+            overflow: hidden;
+        }
+        .proj-card {
+            position: relative; overflow: hidden;
+            text-decoration: none; display: block;
+        }
+        .proj-card-bg {
+            position: absolute; inset: 0;
+            background-size: cover; background-position: center;
+            opacity: 0.72;
+            transition: transform 0.7s cubic-bezier(0.22,1,0.36,1), opacity 0.3s;
+        }
+        .proj-card:hover .proj-card-bg { transform: scale(1.05); opacity: 0.88; }
+        .proj-card-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.72) 30%, transparent 70%);
+        }
+        .proj-card-info {
+            position: absolute; bottom: 20px; left: 22px; right: 22px;
+        }
+        .proj-card-name {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-weight: 200; font-size: clamp(0.8rem, 1.2vw, 1rem);
+            color: rgba(255,255,255,0.92); letter-spacing: 0.01em;
+        }
+        .proj-card-client {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.65rem; color: rgba(255,255,255,0.4);
+            margin-top: 3px; font-weight: 300;
+        }
+
+        /* ──────────────────────────────────────────
+           S7 — PROCESS
+        ────────────────────────────────────────── */
+        #s-process {
+            background: #0a0a0a;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .process-inner {
+            max-width: 1100px; width: 100%; padding: 0 80px;
+        }
+        .process-steps {
+            display: grid; grid-template-columns: repeat(5, 1fr);
+            gap: 32px; margin-top: 48px;
+        }
+        .step-item {}
+        .step-num-label {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.56rem; letter-spacing: 0.22em;
+            color: var(--gold); opacity: 0.6; margin-bottom: 16px;
+        }
+        .step-bar {
+            width: 100%; height: 1px;
+            background: rgba(255,255,255,0.09); margin-bottom: 18px;
+        }
+        .step-name {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-weight: 300; font-size: 0.95rem;
+            color: rgba(255,255,255,0.82); margin-bottom: 10px;
+        }
+        .step-desc {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.75rem; font-weight: 300;
+            color: rgba(255,255,255,0.35); line-height: 1.75;
+        }
+
+        /* ──────────────────────────────────────────
+           S8 — FAQ
+        ────────────────────────────────────────── */
+        #s-faq {
+            background: #080808;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .faq-inner {
+            max-width: 820px; width: 100%; padding: 0 48px;
+        }
+        .faq-items { margin-top: 40px; }
+        .faq-item { border-top: 1px solid rgba(255,255,255,0.07); }
+        .faq-item:last-child { border-bottom: 1px solid rgba(255,255,255,0.07); }
+        .faq-q {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 22px 0; cursor: pointer; user-select: none;
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-weight: 300; font-size: 0.92rem;
+            color: rgba(255,255,255,0.75); gap: 20px;
+            transition: color 0.2s;
+        }
+        .faq-q:hover { color: #fff; }
+        .faq-icon {
+            width: 18px; height: 18px; flex-shrink: 0;
+            stroke: currentColor; fill: none; stroke-width: 1.6;
+            stroke-linecap: round; stroke-linejoin: round;
+            transition: transform 0.35s ease;
+        }
+        .faq-item.open .faq-icon { transform: rotate(45deg); }
+        .faq-a {
+            max-height: 0; overflow: hidden;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.82rem; font-weight: 300;
+            color: rgba(255,255,255,0.42); line-height: 1.9;
+            transition: max-height 0.4s ease, padding 0.35s ease;
+            padding-bottom: 0;
+        }
+        .faq-item.open .faq-a { max-height: 160px; padding-bottom: 22px; }
+
+        /* ──────────────────────────────────────────
+           S9 — CONTACT
+        ────────────────────────────────────────── */
+        #s-contact {
+            background: #0a0a0a;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .contact-inner {
+            max-width: 1100px; width: 100%; padding: 0 80px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 88px; align-items: center;
+        }
+        .contact-title {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-weight: 200; font-size: clamp(1.6rem, 3vw, 2.4rem);
+            letter-spacing: -0.02em; line-height: 1.15;
+            color: rgba(255,255,255,0.9); margin-bottom: 14px;
+        }
+        .contact-title em { font-style: normal; color: var(--gold); }
+        .contact-sub {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85rem; font-weight: 300;
+            color: rgba(255,255,255,0.38); line-height: 1.85; margin-bottom: 36px;
+        }
+        .contact-links { display: flex; flex-direction: column; gap: 13px; }
+        .contact-link {
+            display: flex; align-items: center; gap: 12px;
+            font-family: 'Poppins', sans-serif; font-size: 0.82rem;
+            color: rgba(255,255,255,0.45); text-decoration: none;
+            transition: color 0.2s;
+        }
+        .contact-link:hover { color: rgba(255,255,255,0.85); }
+        .contact-link i { color: var(--gold); width: 16px; text-align: center; }
+
+        /* form */
+        .contact-form { display: flex; flex-direction: column; gap: 14px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        .form-group label {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.56rem; letter-spacing: 0.22em; text-transform: uppercase;
+            color: rgba(255,255,255,0.3);
+        }
+        .form-group input,
+        .form-group select {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.8);
+            font-family: 'Poppins', sans-serif; font-size: 0.82rem; font-weight: 300;
+            padding: 11px 14px; outline: none;
+            transition: border-color 0.2s;
+            appearance: none; -webkit-appearance: none;
+        }
+        .form-group input::placeholder { color: rgba(255,255,255,0.2); }
+        .form-group input:focus,
+        .form-group select:focus { border-color: rgba(201,169,110,0.45); }
+        .form-group select option { background: #111; }
+        .form-actions {
+            display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+            margin-top: 6px;
+        }
+        .btn-submit {
+            padding: 13px 32px;
+            background: var(--gold); color: #000;
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.66rem; letter-spacing: 0.18em; text-transform: uppercase;
+            border: none; cursor: pointer; transition: opacity 0.2s;
+        }
+        .btn-submit:hover { opacity: 0.85; }
+        .form-or {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.56rem; letter-spacing: 0.2em; text-transform: uppercase;
+            color: rgba(255,255,255,0.22);
+        }
+        .btn-book-call {
+            padding: 13px 28px;
+            border: 1px solid rgba(201,169,110,0.35);
+            color: rgba(201,169,110,0.8);
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.66rem; letter-spacing: 0.18em; text-transform: uppercase;
+            text-decoration: none; transition: background 0.2s, color 0.2s, border-color 0.2s;
+        }
+        .btn-book-call:hover { background: var(--gold); color: #000; border-color: var(--gold); }
+
+        /* ──────────────────────────────────────────
+           PRELOADER
+        ────────────────────────────────────────── */
+        #ix-loader {
+            position: fixed; inset: 0; z-index: 9000;
+            background: #0e0e0e;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center; gap: 18px;
+            transition: opacity 0.7s ease;
+        }
+        #ix-loader.out { opacity: 0; pointer-events: none; }
+        .loader-brand {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(2.4rem, 7vw, 4rem); font-weight: 300; color: #fff;
+        }
+        .loader-track {
+            width: 140px; height: 1px;
+            background: rgba(201,169,110,0.2); overflow: hidden;
+        }
+        .loader-bar { height: 100%; width: 0%; background: var(--gold); transition: width 0.35s ease; }
+
+        /* WhatsApp FAB */
+        .wsp-fab {
+            position: fixed; bottom: 28px; right: 28px; z-index: 9999;
+            width: 56px; height: 56px; border-radius: 50%;
+            background: var(--gold); color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.35);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            text-decoration: none;
+        }
+        .wsp-fab:hover { transform: scale(1.1); box-shadow: 0 6px 24px rgba(0,0,0,0.45); }
+
+        /* ──────────────────────────────────────────
+           RESPONSIVE
+        ────────────────────────────────────────── */
+        @media (max-width: 900px) {
+            /* accordion vertical */
+            #s-services { overflow: hidden; }
+            .acc-wrap { flex-direction: column; }
+            .acc-item { flex: 1; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
+            .acc-item.open { flex: 4; }
+            .acc-title-v { transform: translate(-50%, -50%); font-size: 0.68rem; letter-spacing: 0.14em; }
+            .acc-item.open .acc-title-v { opacity: 0; }
+            .acc-content { left: 20px; right: 20px; bottom: 20px; }
+            .acc-content h3 { font-size: 1.4rem; margin-bottom: 8px; }
+            .acc-content p { font-size: 0.78rem; max-width: 100%; }
+            .acc-overlay { background: linear-gradient(to top, rgba(0,0,0,0.8) 35%, transparent 100%); }
+
+            .why-inner { grid-template-columns: 1fr; gap: 36px; padding: 0 32px; }
+            .process-inner { padding: 0 32px; }
+            .process-steps { grid-template-columns: 1fr 1fr; gap: 24px; }
+            .proj-header { padding: 40px 28px 20px; }
+            .proj-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(3, 1fr); }
+            .faq-inner { padding: 0 28px; }
+            .contact-inner { grid-template-columns: 1fr; gap: 36px; padding: 0 32px; }
             .stats-wrap { gap: 40px; }
             .mosaic-grid { grid-template-columns: repeat(5, 1fr); }
+        }
+        @media (max-width: 600px) {
+            .process-steps { grid-template-columns: 1fr; }
+            .proj-grid { grid-template-columns: repeat(2, 1fr); }
+            .form-row { grid-template-columns: 1fr; }
+            .hero-ctas { flex-direction: column; align-items: center; gap: 12px; }
+            .faq-inner { padding: 0 20px; }
+            .contact-inner { padding: 0 24px; }
+            .why-inner { padding: 0 24px; }
+            .process-inner { padding: 0 24px; }
         }
     </style>
 
@@ -542,10 +697,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </button>
         <div class="nav-overlay">
             <ul class="nav-links">
-                <li><a href="projects.html">Projects</a></li>
-                <li><a href="services.html">Services</a></li>
+                <li><a href="#" onclick="window.snapGoTo(5);return false;">Projects</a></li>
+                <li><a href="#" onclick="window.snapGoTo(3);return false;">Services</a></li>
                 <li><a href="about.html">About</a></li>
-                <li><a href="contact.html">Contact</a></li>
+                <li><a href="#" onclick="window.snapGoTo(8);return false;">Contact</a></li>
             </ul>
             <div class="nav-info">
                 <div class="nav-lang">
@@ -558,76 +713,203 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </nav>
 </header>
 
-<!-- SNAP SCROLL CONTAINER -->
+<!-- ── SNAP CONTAINER ── -->
 <div class="snap-container" id="snapContainer">
 
-    <!-- S1 — VIDEO -->
-    <section class="section" id="s1">
+    <!-- ── S1 HERO ── -->
+    <section class="section" id="s-hero">
         <video id="mainVideo" autoplay loop muted playsinline
                poster="img/cover1index.webp"
-               src="animations/presentation.mp4">
-        </video>
-        <div class="video-overlay"></div>
-        <div class="video-hero">
-            <h1>Creative agency for<br><em id="typer">architecture &amp; real estate.</em><span id="typer-cursor"></span></h1>
-            <p id="idx-hero-p">From brand identity to 3D visualization — Montevideo, Uruguay.</p>
+               src="animations/presentation.mp4"></video>
+        <div class="overlay"></div>
+        <div class="hero-content">
+            <p class="hero-pretag" id="hero-pretag">Real estate visualization · Brand &amp; Identity · Digital content</p>
+            <h1 id="hero-h1">Tu proyecto no existe todavía.<br><em id="typer">Lo hacemos real.</em><span id="typer-cursor"></span></h1>
+            <p class="hero-sub" id="hero-sub">Ayudamos a desarrolladores inmobiliarios a vender sus proyectos antes de construirlos — visualización 3D, identidad de marca y contenido digital completo.</p>
+            <div class="hero-ctas">
+                <a href="https://calendly.com/imabox" target="_blank" rel="noopener" class="btn-gold" id="hero-btn-cta">Hablemos de tu proyecto</a>
+                <button class="btn-outline" id="hero-btn-work" onclick="window.snapGoTo(5)">Ver proyectos</button>
+            </div>
         </div>
         <div class="scroll-hint" onclick="window.snapGoTo(1)">
             <div class="scroll-line"></div>
-            <span class="scroll-label">Scroll down</span>
+            <span class="scroll-label">Scroll</span>
         </div>
     </section>
 
-    <!-- S2 — TEXTO -->
-    <section class="section" id="s2">
-        <div class="text-block text-block-cta">
-            <p id="translateFirstParagraph">We are a creative agency for architecture and real estate. Every project starts with one question: what should people feel when they see this? The answer is built with image, brand and motion — making a project desirable before the first brick is laid.</p>
-            <p class="cta" id="translateSecondParagraphDos">Shall we start building together?</p>
-            <a href="https://calendly.com/imabox" target="_blank" rel="noopener" class="btn-call" id="btnBookCall">Book a call</a>
+    <!-- ── S2 LOGOS ── -->
+    <section class="section" id="s-logos">
+        <p class="logos-label anim" id="logos-label">Confían en nosotros</p>
+
+        <!-- Fila 1 → izquierda -->
+        <div class="marquee-wrap">
+            <div class="marquee-track">
+                <img src="img/clientes/gomez-platero.png" alt="Gomez Platero">
+                <img src="img/clientes/teyma.png" alt="Teyma">
+                <img src="img/clientes/bekres.png" alt="Bekres">
+                <img src="img/clientes/sigmaplus.png" alt="Sigma Plus">
+                <img src="img/clientes/hifglobal.png" alt="HIF Global">
+                <img src="img/clientes/martin-gonzalez.png" alt="Martín González">
+                <img src="img/clientes/cabrera-inciarte.png" alt="Cabrera Inciarte">
+                <img src="img/clientes/latu.png" alt="LATU">
+                <img src="img/clientes/1987.png" alt="1987">
+                <!-- duplicate -->
+                <img src="img/clientes/gomez-platero.png" alt="Gomez Platero">
+                <img src="img/clientes/teyma.png" alt="Teyma">
+                <img src="img/clientes/bekres.png" alt="Bekres">
+                <img src="img/clientes/sigmaplus.png" alt="Sigma Plus">
+                <img src="img/clientes/hifglobal.png" alt="HIF Global">
+                <img src="img/clientes/martin-gonzalez.png" alt="Martín González">
+                <img src="img/clientes/cabrera-inciarte.png" alt="Cabrera Inciarte">
+                <img src="img/clientes/latu.png" alt="LATU">
+                <img src="img/clientes/1987.png" alt="1987">
+            </div>
         </div>
-        <div class="scroll-hint" onclick="window.snapGoTo(2)">
-            <div class="scroll-line"></div>
-            <span class="scroll-label">Scroll down</span>
+
+        <!-- Fila 2 → derecha (RTL) -->
+        <div class="marquee-wrap">
+            <div class="marquee-track marquee-track-rtl">
+                <img src="img/clientes/teyma.png" alt="Teyma">
+                <img src="img/clientes/1987.png" alt="1987">
+                <img src="img/clientes/latu.png" alt="LATU">
+                <img src="img/clientes/bekres.png" alt="Bekres">
+                <img src="img/clientes/cabrera-inciarte.png" alt="Cabrera Inciarte">
+                <img src="img/clientes/sigmaplus.png" alt="Sigma Plus">
+                <img src="img/clientes/gomez-platero.png" alt="Gomez Platero">
+                <img src="img/clientes/hifglobal.png" alt="HIF Global">
+                <img src="img/clientes/martin-gonzalez.png" alt="Martín González">
+                <!-- duplicate -->
+                <img src="img/clientes/teyma.png" alt="Teyma">
+                <img src="img/clientes/1987.png" alt="1987">
+                <img src="img/clientes/latu.png" alt="LATU">
+                <img src="img/clientes/bekres.png" alt="Bekres">
+                <img src="img/clientes/cabrera-inciarte.png" alt="Cabrera Inciarte">
+                <img src="img/clientes/sigmaplus.png" alt="Sigma Plus">
+                <img src="img/clientes/gomez-platero.png" alt="Gomez Platero">
+                <img src="img/clientes/hifglobal.png" alt="HIF Global">
+                <img src="img/clientes/martin-gonzalez.png" alt="Martín González">
+            </div>
+        </div>
+
+        <!-- Fila 3 → izquierda (velocidad diferente) -->
+        <div class="marquee-wrap">
+            <div class="marquee-track" style="animation-duration:52s">
+                <img src="img/clientes/cabrera-inciarte.png" alt="Cabrera Inciarte">
+                <img src="img/clientes/martin-gonzalez.png" alt="Martín González">
+                <img src="img/clientes/sigmaplus.png" alt="Sigma Plus">
+                <img src="img/clientes/teyma.png" alt="Teyma">
+                <img src="img/clientes/1987.png" alt="1987">
+                <img src="img/clientes/gomez-platero.png" alt="Gomez Platero">
+                <img src="img/clientes/bekres.png" alt="Bekres">
+                <img src="img/clientes/latu.png" alt="LATU">
+                <img src="img/clientes/hifglobal.png" alt="HIF Global">
+                <!-- duplicate -->
+                <img src="img/clientes/cabrera-inciarte.png" alt="Cabrera Inciarte">
+                <img src="img/clientes/martin-gonzalez.png" alt="Martín González">
+                <img src="img/clientes/sigmaplus.png" alt="Sigma Plus">
+                <img src="img/clientes/teyma.png" alt="Teyma">
+                <img src="img/clientes/1987.png" alt="1987">
+                <img src="img/clientes/gomez-platero.png" alt="Gomez Platero">
+                <img src="img/clientes/bekres.png" alt="Bekres">
+                <img src="img/clientes/latu.png" alt="LATU">
+                <img src="img/clientes/hifglobal.png" alt="HIF Global">
+            </div>
         </div>
     </section>
 
-    <!-- S3 — IPORÁ -->
-    <section class="section" id="s3">
-        <div class="carousel-wrap" data-carousel="ipora">
-            <div class="slide active">
-                <img src="img/cover2index.webp" alt="Iporá Thermal Park">
-                <div class="slide-caption">
-                    <h2 id="iporaUnoTitle">Iporá Thermal Park</h2>
-                    <p id="iporaUnoSubtitle">Figarola Davila Architects</p>
-                </div>
-                <div class="hotspot" id="hotspotPool">
-                    <div class="hotspot-ring"></div>
-                    <div class="hotspot-ring"></div>
-                    <div class="hotspot-ring"></div>
-                    <div class="hotspot-core"></div>
-                    <span class="hotspot-label" id="hotspot-pool-label">Enter the pool</span>
-                </div>
+    <!-- ── S3 WHY ── -->
+    <section class="section" id="s-why">
+        <div class="why-inner">
+            <div class="why-left">
+                <p class="section-tag anim" id="why-tag">El desafío</p>
+                <h2 class="why-heading anim" style="transition-delay:0.1s" id="why-heading">Tu proyecto necesita vender<br>antes de que <em>exista.</em></h2>
+                <p class="why-desc anim" style="transition-delay:0.2s" id="why-desc">Los desarrolladores inmobiliarios necesitan atraer inversores, pre-vender unidades y generar expectativa en el mercado — antes de poner el primer ladrillo. El problema es que nadie puede ver, sentir ni querer algo que todavía no existe.</p>
             </div>
-            <div class="slide">
-                <img loading="lazy" src="img/img window/2024/03-balneario ipora.webp" alt="Iporá — Pool interior">
-                <div class="slide-caption">
-                    <h2 id="ipora-slide2-h2">Iporá Thermal Park</h2>
-                    <p id="ipora-slide2-p">Thermal pool — interior view</p>
+            <div class="why-items">
+                <div class="why-item anim" style="transition-delay:0.1s">
+                    <span class="why-num">01</span>
+                    <div class="why-item-body">
+                        <h4 id="why-i1-h">Lo hacemos visible</h4>
+                        <p id="why-i1-p">Renders fotorrealistas, animaciones y tours virtuales que muestran tu proyecto terminado — antes de que la obra empiece.</p>
+                    </div>
                 </div>
-                <button class="slide-back" id="hotspotBack">
-                    <svg viewBox="0 0 16 16"><polyline points="10,3 5,8 10,13"/></svg>
-                    Back
-                </button>
-            </div>
-            <!-- Hotspot video overlay -->
-            <div id="hotspotVideoWrap">
-                <video id="hotspotVideo" src="animations/ipora-hotspot.mp4" muted playsinline preload="none"></video>
+                <div class="why-item anim" style="transition-delay:0.2s">
+                    <span class="why-num">02</span>
+                    <div class="why-item-body">
+                        <h4 id="why-i2-h">Lo hacemos deseable</h4>
+                        <p id="why-i2-p">Identidad de marca, naming y sistema visual completo — para que tu proyecto tenga una personalidad clara y diferenciada.</p>
+                    </div>
+                </div>
+                <div class="why-item anim" style="transition-delay:0.3s">
+                    <span class="why-num">03</span>
+                    <div class="why-item-body">
+                        <h4 id="why-i3-h">Lo hacemos vendible</h4>
+                        <p id="why-i3-p">Showroom virtual, visor 3D y contenido para redes — las herramientas digitales para cerrar ventas antes y mejor.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
+    <!-- ── S4 SERVICES ACCORDION ── -->
+    <section class="section" id="s-services">
+        <div class="acc-wrap" id="accWrapHome">
+            <div class="acc-item open" data-idx="0">
+                <img class="acc-bg" src="img/img window/2025/09-torre 1 02.webp" alt="3D Visualization">
+                <video class="acc-bg acc-video acc-contain acc-video-reveal" src="animations/acc-3d.mp4" muted loop playsinline preload="metadata"></video>
+                <div class="acc-overlay"></div>
+                <span class="acc-title-v" id="acc0-title">3D Visualization</span>
+                <div class="acc-content">
+                    <h3 id="acc0-h3">3D Visualization</h3>
+                    <p id="acc0-p">Renders fotorrealistas, animaciones y tours virtuales — incluyendo experiencias 3D interactivas en tiempo real donde los compradores navegan el proyecto a su propio ritmo.</p>
+                </div>
+            </div>
+            <div class="acc-item" data-idx="1">
+                <video class="acc-bg acc-video" src="animations/acc-brand.mp4" muted loop playsinline preload="metadata"></video>
+                <div class="acc-overlay"></div>
+                <span class="acc-title-v" id="acc1-title">Brand &amp; Identity</span>
+                <div class="acc-content">
+                    <h3 id="acc1-h3">Brand &amp; Identity</h3>
+                    <p id="acc1-p">Sistemas de identidad visual construidos para arquitectura y real estate — desde el logo hasta el despliegue completo de marca.</p>
+                </div>
+            </div>
+            <div class="acc-item" data-idx="2" id="acc-photo-srv">
+                <div class="acc-slideshow">
+                    <img class="acc-slide active" src="img/acc-photo-2.webp" alt="Photography">
+                    <img class="acc-slide" src="img/acc-photo-5.webp" alt="Photography">
+                    <img class="acc-slide" src="img/acc-photo-3.webp" alt="Photography">
+                    <img class="acc-slide" src="img/acc-photo-4.webp" alt="Photography">
+                </div>
+                <div class="acc-overlay"></div>
+                <span class="acc-title-v" id="acc2-title">Photography &amp; Drone</span>
+                <div class="acc-content">
+                    <h3 id="acc2-h3">Photography &amp; Drone</h3>
+                    <p id="acc2-p">Fotografía arquitectónica y de estilo de vida que comunica la sensación de un espacio, no solo su forma.</p>
+                </div>
+            </div>
+            <div class="acc-item" data-idx="3">
+                <video class="acc-bg acc-video" src="animations/acc-film.mp4" muted loop playsinline preload="metadata"></video>
+                <div class="acc-overlay"></div>
+                <span class="acc-title-v" id="acc3-title">Film &amp; Motion</span>
+                <div class="acc-content">
+                    <h3 id="acc3-h3">Film &amp; Motion</h3>
+                    <p id="acc3-p">Videos cinematográficos y animaciones que cuentan la historia de tu proyecto desde el concepto hasta la entrega.</p>
+                </div>
+            </div>
+            <div class="acc-item" data-idx="4">
+                <img class="acc-bg" src="img/acc-interactive-cover.webp" alt="Interactive">
+                <video class="acc-bg acc-video acc-contain acc-video-reveal" src="animations/acc-interactive.mp4" muted loop playsinline preload="metadata"></video>
+                <div class="acc-overlay"></div>
+                <span class="acc-title-v" id="acc4-title">Sales Platform</span>
+                <div class="acc-content">
+                    <h3 id="acc4-h3">Sales Platform</h3>
+                    <p id="acc4-p">Showrooms virtuales, visores 3D y masterplanos que permiten a los compradores explorar tu proyecto en sus propios términos.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <!-- STATS -->
+    <!-- ── S5 STATS ── -->
     <section class="section" id="s-stats">
         <div class="mosaic-grid" id="mosaicGrid">
             <img class="mosaic-tile" src="img/parpadeo/01-colinas de maladonado.webp" alt="">
@@ -663,62 +945,232 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     <span class="stat-num" data-target="60">0</span>
                     <span class="stat-suffix">+</span>
                 </div>
-                <p class="stat-label" id="stat-label-1">Projects delivered</p>
+                <p class="stat-label" id="stat-label-1">Proyectos entregados</p>
             </div>
             <div class="stat-item">
                 <div class="stat-row">
                     <span class="stat-num" data-target="7">0</span>
                     <span class="stat-suffix">+</span>
                 </div>
-                <p class="stat-label" id="stat-label-2">Countries</p>
+                <p class="stat-label" id="stat-label-2">Países</p>
             </div>
             <div class="stat-item">
                 <div class="stat-row">
                     <span class="stat-num" data-target="10">0</span>
                     <span class="stat-suffix">+</span>
                 </div>
-                <p class="stat-label" id="stat-label-3">Years of experience</p>
+                <p class="stat-label" id="stat-label-3">Años de experiencia</p>
             </div>
         </div>
     </section>
 
-    <!-- S5 — CAROUSEL Areco -->
-    <section class="section" id="s5">
-        <div class="carousel-wrap" data-carousel="areco">
-            <div class="slide active">
-                <img src="img/cover1index.webp" alt="Areco Gardens">
-                <div class="slide-caption">
-                    <h2 id="arecoUnoTitle">Areco Gardens</h2>
-                    <p id="arecoUnoSubtitle">Gomez Platero Architecture and Urban Planning</p>
+    <!-- ── S6 PROJECTS ── -->
+    <section class="section" id="s-projects">
+        <div class="proj-header">
+            <h2 id="proj-heading">Highlight Projects</h2>
+            <a href="projects.html" class="proj-view-all" id="proj-view-all">View all projects →</a>
+        </div>
+        <div class="proj-grid">
+            <a href="link-center.html" class="proj-card">
+                <div class="proj-card-bg" style="background-image:url('img/link-center.webp')"></div>
+                <div class="proj-card-overlay"></div>
+                <div class="proj-card-info">
+                    <div class="proj-card-name">Link Center</div>
+                    <div class="proj-card-client">Sigma Plus</div>
+                </div>
+            </a>
+            <a href="kiu-av-italia.html" class="proj-card">
+                <div class="proj-card-bg" style="background-image:url('img/kiu-av-italia.webp')"></div>
+                <div class="proj-card-overlay"></div>
+                <div class="proj-card-info">
+                    <div class="proj-card-name">KIU Av. Italia</div>
+                    <div class="proj-card-client">BEKRES</div>
+                </div>
+            </a>
+            <a href="kiu-8-octubre.html" class="proj-card">
+                <div class="proj-card-bg" style="background-image:url('img/kiu-8-octubre.webp')"></div>
+                <div class="proj-card-overlay"></div>
+                <div class="proj-card-info">
+                    <div class="proj-card-name">KIU 8 de Octubre</div>
+                    <div class="proj-card-client">BEKRES</div>
+                </div>
+            </a>
+            <a href="aero-met.html" class="proj-card">
+                <div class="proj-card-bg" style="background-image:url('img/aero-met-cover.webp')"></div>
+                <div class="proj-card-overlay"></div>
+                <div class="proj-card-info">
+                    <div class="proj-card-name">AeroMet &amp; MM</div>
+                    <div class="proj-card-client">AeroMet</div>
+                </div>
+            </a>
+            <a href="crc-fitness.html" class="proj-card">
+                <div class="proj-card-bg" style="background-image:url('img/crc-fitness.webp')"></div>
+                <div class="proj-card-overlay"></div>
+                <div class="proj-card-info">
+                    <div class="proj-card-name">CRC Fitness</div>
+                    <div class="proj-card-client">CRC</div>
+                </div>
+            </a>
+            <a href="cala-del-yacht.html" class="proj-card">
+                <div class="proj-card-bg" style="background-image:url('img/cala-del-yacht.webp')"></div>
+                <div class="proj-card-overlay"></div>
+                <div class="proj-card-info">
+                    <div class="proj-card-name">Cala del Yacht</div>
+                    <div class="proj-card-client">Martín González</div>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- ── S7 PROCESS ── -->
+    <section class="section" id="s-process">
+        <div class="process-inner">
+            <p class="section-tag anim" id="proc-tag">Cómo trabajamos</p>
+            <h2 class="why-heading anim" style="transition-delay:0.1s; max-width:600px" id="proc-heading">No necesitás un proyecto<br>terminado para empezar.</h2>
+            <div class="process-steps">
+                <div class="step-item anim" style="transition-delay:0.1s">
+                    <p class="step-num-label">01</p>
+                    <div class="step-bar"></div>
+                    <h4 class="step-name" id="step1-name">Concepto</h4>
+                    <p class="step-desc" id="step1-desc">Entendemos el proyecto: ubicación, programa, mercado. Definimos qué quiere comunicar y a quién.</p>
+                </div>
+                <div class="step-item anim" style="transition-delay:0.18s">
+                    <p class="step-num-label">02</p>
+                    <div class="step-bar"></div>
+                    <h4 class="step-name" id="step2-name">Identidad</h4>
+                    <p class="step-desc" id="step2-desc">Desarrollamos la marca del edificio: nombre, logo, paleta, tipografía. El ADN visual de todo.</p>
+                </div>
+                <div class="step-item anim" style="transition-delay:0.26s">
+                    <p class="step-num-label">03</p>
+                    <div class="step-bar"></div>
+                    <h4 class="step-name" id="step3-name">Visualización</h4>
+                    <p class="step-desc" id="step3-desc">Imágenes, videos y cinematografías. Los visuales que hacen real el proyecto antes de que exista.</p>
+                </div>
+                <div class="step-item anim" style="transition-delay:0.34s">
+                    <p class="step-num-label">04</p>
+                    <div class="step-bar"></div>
+                    <h4 class="step-name" id="step4-name">Herramientas</h4>
+                    <p class="step-desc" id="step4-desc">Showroom virtual, tour 360 y materiales de venta. El ecosistema digital completo del proyecto.</p>
+                </div>
+                <div class="step-item anim" style="transition-delay:0.42s">
+                    <p class="step-num-label">05</p>
+                    <div class="step-bar"></div>
+                    <h4 class="step-name" id="step5-name">Lanzamiento</h4>
+                    <p class="step-desc" id="step5-desc">Activamos el contenido, publicamos en portales y redes. El proyecto sale al mercado listo para vender.</p>
                 </div>
             </div>
-            <div class="slide">
-                <img loading="lazy" src="img/cover6index.webp" alt="Areco Gardens">
-                <div class="slide-caption">
-                    <h2 id="arecoDosTitle">Areco Gardens</h2>
-                    <p id="arecoDosSubtitle">Gomez Platero Architecture and Urban Planning</p>
+        </div>
+    </section>
+
+    <!-- ── S8 FAQ ── -->
+    <section class="section" id="s-faq">
+        <div class="faq-inner">
+            <p class="section-tag anim" id="faq-tag">Preguntas frecuentes</p>
+            <h2 class="why-heading anim" style="transition-delay:0.08s; max-width:540px" id="faq-heading">Todo lo que necesitás<br>saber antes de empezar.</h2>
+            <div class="faq-items">
+                <div class="faq-item">
+                    <div class="faq-q" id="faq-q1">
+                        <span>¿Necesito tener los planos terminados para empezar?</span>
+                        <svg class="faq-icon" viewBox="0 0 16 16"><line x1="8" y1="2" x2="8" y2="14"/><line x1="2" y1="8" x2="14" y2="8"/></svg>
+                    </div>
+                    <div class="faq-a" id="faq-a1">No. Trabajamos desde bocetos y anteproyectos iniciales. Cuanto antes nos sumamos, más valor agregamos al proceso de diseño y comunicación. Sólo necesitamos una referencia de lo que querés hacer.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q" id="faq-q2">
+                        <span>¿Trabajan solo en Uruguay?</span>
+                        <svg class="faq-icon" viewBox="0 0 16 16"><line x1="8" y1="2" x2="8" y2="14"/><line x1="2" y1="8" x2="14" y2="8"/></svg>
+                    </div>
+                    <div class="faq-a" id="faq-a2">No. Trabajamos de forma remota con clientes en más de 7 países. El proceso es 100% digital — desde el brief hasta la entrega de archivos finales.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q" id="faq-q3">
+                        <span>¿Cuánto tarda un proyecto?</span>
+                        <svg class="faq-icon" viewBox="0 0 16 16"><line x1="8" y1="2" x2="8" y2="14"/><line x1="2" y1="8" x2="14" y2="8"/></svg>
+                    </div>
+                    <div class="faq-a" id="faq-a3">Depende del alcance. Un render puntual: 2–3 semanas. Una campaña visual completa (branding + renders + video): 6–10 semanas. Todo se define en la propuesta inicial con fechas claras.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q" id="faq-q4">
+                        <span>¿Qué material necesito proveer?</span>
+                        <svg class="faq-icon" viewBox="0 0 16 16"><line x1="8" y1="2" x2="8" y2="14"/><line x1="2" y1="8" x2="14" y2="8"/></svg>
+                    </div>
+                    <div class="faq-a" id="faq-a4">Planos en DWG o PDF, referencias de materiales y estilo, y contexto del proyecto. Te guiamos en cada paso para que el proceso sea simple, incluso si es la primera vez que trabajás con visualización.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q" id="faq-q5">
+                        <span>¿Tienen paquetes o trabajan a medida?</span>
+                        <svg class="faq-icon" viewBox="0 0 16 16"><line x1="8" y1="2" x2="8" y2="14"/><line x1="2" y1="8" x2="14" y2="8"/></svg>
+                    </div>
+                    <div class="faq-a" id="faq-a5">Ambas opciones. Tenemos servicios individuales (solo renders, solo branding) y campañas integrales completas. Lo más común es que armemos una propuesta a medida según el tipo y tamaño del proyecto.</div>
                 </div>
             </div>
-            <div class="slide">
-                <img loading="lazy" src="img/cover7index.webp" alt="Areco Gardens">
-                <div class="slide-caption">
-                    <h2 id="arecoTresTitle">Areco Gardens</h2>
-                    <p id="arecoTresSubtitle">Gomez Platero Architecture and Urban Planning</p>
+        </div>
+    </section>
+
+    <!-- ── S9 CONTACT ── -->
+    <section class="section" id="s-contact">
+        <div class="contact-inner">
+            <div class="contact-left">
+                <p class="section-tag anim" id="contact-tag">Hablemos</p>
+                <h2 class="contact-title anim" style="transition-delay:0.1s" id="contact-heading">Tu proyecto empieza<br>con una <em>conversación.</em></h2>
+                <p class="contact-sub anim" style="transition-delay:0.2s" id="contact-sub">Contanos en qué etapa está y en 24 horas te decimos cómo lo encaramos.</p>
+                <div class="contact-links anim" style="transition-delay:0.3s">
+                    <a href="mailto:hello@imabox.uy" class="contact-link"><i class="fa fa-envelope-o"></i> hello@imabox.uy</a>
+                    <a href="https://wa.me/59898325902" target="_blank" class="contact-link"><i class="fa fa-whatsapp"></i> WhatsApp</a>
+                    <a href="https://www.linkedin.com/company/imabox" target="_blank" class="contact-link"><i class="fa fa-linkedin"></i> LinkedIn</a>
+                    <a href="https://www.instagram.com/imabox_uy" target="_blank" class="contact-link"><i class="fa fa-instagram"></i> @imabox_uy</a>
                 </div>
             </div>
-            <nav class="carousel-nav" aria-label="carousel controls">
-                <button class="carousel-btn prev" aria-label="Previous">
-                    <svg viewBox="0 0 16 16"><polyline points="10,3 5,8 10,13"/></svg>
-                </button>
-                <button class="carousel-btn next" aria-label="Next">
-                    <svg viewBox="0 0 16 16"><polyline points="6,3 11,8 6,13"/></svg>
-                </button>
-            </nav>
+            <form class="contact-form anim" style="transition-delay:0.15s"
+                  action="https://formspree.io/f/mojbqjjw" method="POST">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="cf-name" id="cf-label-name">Nombre</label>
+                        <input type="text" id="cf-name" name="name" placeholder="Tu nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cf-company" id="cf-label-company">Empresa</label>
+                        <input type="text" id="cf-company" name="company" placeholder="Desarrolladora / Estudio">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="cf-type" id="cf-label-type">Tipo de proyecto</label>
+                    <select id="cf-type" name="project_type">
+                        <option value="" disabled selected>Seleccioná una opción</option>
+                        <option value="residencial">Edificio residencial</option>
+                        <option value="turistico">Desarrollo turístico</option>
+                        <option value="comercial">Local / Oficinas comerciales</option>
+                        <option value="housing">Housing / Urbanización</option>
+                        <option value="otro">Otro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="cf-stage" id="cf-label-stage">Etapa del proyecto</label>
+                    <select id="cf-stage" name="stage">
+                        <option value="" disabled selected>Seleccioná una opción</option>
+                        <option value="boceto">Boceto / Idea inicial</option>
+                        <option value="anteproyecto">Anteproyecto</option>
+                        <option value="proyecto">Proyecto aprobado</option>
+                        <option value="construccion">En construcción</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-submit" id="cf-submit">Enviar consulta</button>
+                    <span class="form-or" id="cf-or">o</span>
+                    <a href="https://calendly.com/imabox" target="_blank" rel="noopener" class="btn-book-call" id="cf-book">Agendar llamada</a>
+                </div>
+            </form>
         </div>
     </section>
 
 </div><!-- /snap-container -->
 
+<!-- WhatsApp FAB -->
+<a href="https://wa.me/59898325902" target="_blank" rel="noopener" class="wsp-fab" aria-label="WhatsApp">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="28" height="28">
+    <path d="M20.52 3.48A11.93 11.93 0 0 0 12 0C5.37 0 0 5.37 0 12c0 2.11.55 4.16 1.6 5.97L0 24l6.22-1.57A11.94 11.94 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.21-1.25-6.23-3.48-8.52zM12 21.9a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.69.93.98-3.6-.24-.38A9.88 9.88 0 0 1 2.1 12C2.1 6.53 6.53 2.1 12 2.1c2.63 0 5.1 1.02 6.96 2.88A9.79 9.79 0 0 1 21.9 12c0 5.47-4.43 9.9-9.9 9.9zm5.42-7.4c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.48-1.76-1.66-2.06-.17-.3-.02-.46.13-.6.13-.13.3-.34.45-.51.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.2 2.1 3.2 5.09 4.49.71.31 1.27.49 1.7.63.72.23 1.37.2 1.89.12.58-.09 1.76-.72 2.01-1.41.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.34z"/>
+  </svg>
+</a>
 
 <!-- SCRIPTS -->
 <script src="js/navbar-hamburger.js"></script>
@@ -727,27 +1179,26 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script src="js/translate-index.js"></script>
 
 <script>
+function timedRefresh() { setTimeout("location.reload(true);", 600); }
+
 /* ── Preloader ── */
 (function () {
-    const loader = document.getElementById('ix-loader');
-    const bar    = document.getElementById('loader-bar');
-    const video  = document.getElementById('mainVideo');
-
-    let prog = 0;
-    const ticker = setInterval(() => {
+    var loader = document.getElementById('ix-loader');
+    var bar    = document.getElementById('loader-bar');
+    var video  = document.getElementById('mainVideo');
+    var prog   = 0;
+    var ticker = setInterval(function () {
         prog = Math.min(prog + Math.random() * 12, 88);
         bar.style.width = prog + '%';
     }, 180);
-
     function hide() {
         clearInterval(ticker);
         bar.style.width = '100%';
-        setTimeout(() => {
+        setTimeout(function () {
             loader.classList.add('out');
-            loader.addEventListener('transitionend', () => loader.remove(), { once: true });
+            loader.addEventListener('transitionend', function () { loader.remove(); }, { once: true });
         }, 300);
     }
-
     if (video) {
         video.addEventListener('canplay', hide, { once: true });
         video.addEventListener('error',   hide, { once: true });
@@ -755,13 +1206,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     setTimeout(hide, 6000);
 })();
 
-/* ── Snap scroll navigation ── */
+/* ── Snap scroll ── */
 var snapCurrent = 0;
 var snapLocked  = false;
 var snapSections;
 
 (function () {
-    const container = document.getElementById('snapContainer');
+    var container = document.getElementById('snapContainer');
     snapSections = Array.from(container.querySelectorAll('.section'));
 
     window.snapGoTo = function (index) {
@@ -773,21 +1224,17 @@ var snapSections;
         setTimeout(function () { snapLocked = false; }, 900);
     };
 
-
-    /* mouse wheel */
     container.addEventListener('wheel', function (e) {
         e.preventDefault();
         if (snapLocked) return;
         window.snapGoTo(snapCurrent + (e.deltaY > 0 ? 1 : -1));
     }, { passive: false });
 
-    /* keyboard arrows */
     document.addEventListener('keydown', function (e) {
         if (e.key === 'ArrowDown' || e.key === 'PageDown') { e.preventDefault(); window.snapGoTo(snapCurrent + 1); }
         if (e.key === 'ArrowUp'   || e.key === 'PageUp')   { e.preventDefault(); window.snapGoTo(snapCurrent - 1); }
     });
 
-    /* touch swipe — umbral 50px para evitar swipe accidental */
     var touchStartY = 0;
     container.addEventListener('touchstart', function (e) {
         touchStartY = e.touches[0].clientY;
@@ -805,276 +1252,182 @@ var snapSections;
         }
     }, { passive: true });
 
-    /* sync snapCurrent tras resize */
-    var observer = new IntersectionObserver(function (entries) {
+    var io = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
             if (entry.isIntersecting) snapCurrent = snapSections.indexOf(entry.target);
         });
     }, { threshold: 0.5 });
-    snapSections.forEach(function (s) { observer.observe(s); });
-})();
-
-/* ── Carousels ── */
-var carouselNavs = {};
-
-document.querySelectorAll('.carousel-wrap').forEach(function (wrap) {
-    var slides  = Array.from(wrap.querySelectorAll('.slide'));
-    var cur     = 0;
-    var id      = wrap.dataset.carousel;
-
-    function go(n) {
-        slides[cur].classList.remove('active');
-        cur = (n + slides.length) % slides.length;
-        slides[cur].classList.add('active');
-    }
-
-    var nextBtn = wrap.querySelector('.next');
-    var prevBtn = wrap.querySelector('.prev');
-    if (nextBtn) nextBtn.addEventListener('click', function () { go(cur + 1); });
-    if (prevBtn) prevBtn.addEventListener('click', function () { go(cur - 1); });
-
-    carouselNavs[id] = { prev: function(){ go(cur - 1); }, next: function(){ go(cur + 1); }, go: go };
-});
-
-/* ── Hotspot video ── */
-(function () {
-    var hotspot  = document.getElementById('hotspotPool');
-    var backBtn  = document.getElementById('hotspotBack');
-    var videoWrap = document.getElementById('hotspotVideoWrap');
-    var video    = document.getElementById('hotspotVideo');
-    if (!hotspot || !videoWrap || !video) return;
-
-    hotspot.addEventListener('click', function () {
-        video.currentTime = 0;
-        videoWrap.classList.add('active');
-        video.play();
-    });
-
-    video.addEventListener('ended', function () {
-        carouselNavs['ipora'].go(1);
-        setTimeout(function () {
-            videoWrap.classList.remove('active');
-            video.pause();
-            video.currentTime = 0;
-        }, 500);
-    });
-
-    if (backBtn) backBtn.addEventListener('click', function () { carouselNavs['ipora'].go(0); });
+    snapSections.forEach(function (s) { io.observe(s); });
 })();
 
 /* ── Typewriter ── */
 (function () {
     var el = document.getElementById('typer');
-    var phrases = ['architecture.', 'real estate.', 'urban development.', 'your next project.'];
-    var idx = 0;
-    var charIdx = phrases[0].length;
-    var deleting = false;
-    var wait = 0;
-
+    if (!el) return;
+    var phrases = ['Lo hacemos real.', 'Lo hacemos visible.', 'Lo hacemos deseable.', 'Lo hacemos vendible.'];
+    var idx = 0, charIdx = phrases[0].length, deleting = false, wait = 0;
     function tick() {
         var cur = phrases[idx];
         if (wait > 0) { wait--; setTimeout(tick, 80); return; }
         if (!deleting) {
-            if (charIdx < cur.length) {
-                charIdx++;
-                el.textContent = cur.slice(0, charIdx);
-                setTimeout(tick, 85);
-            } else {
-                wait = 22;
-                deleting = true;
-                setTimeout(tick, 80);
-            }
+            if (charIdx < cur.length) { charIdx++; el.textContent = cur.slice(0, charIdx); setTimeout(tick, 85); }
+            else { wait = 22; deleting = true; setTimeout(tick, 80); }
         } else {
-            if (charIdx > 0) {
-                charIdx--;
-                el.textContent = cur.slice(0, charIdx);
-                setTimeout(tick, 42);
-            } else {
-                deleting = false;
-                idx = (idx + 1) % phrases.length;
-                setTimeout(tick, 280);
-            }
+            if (charIdx > 0) { charIdx--; el.textContent = cur.slice(0, charIdx); setTimeout(tick, 42); }
+            else { deleting = false; idx = (idx + 1) % phrases.length; setTimeout(tick, 280); }
         }
     }
-    setTimeout(tick, 2000);
+    setTimeout(tick, 2200);
 })();
 
-/* ── Counters ── */
+/* ── Intersection observer — .anim elements ── */
+(function () {
+    var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+            if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+        });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.anim').forEach(function (el) { io.observe(el); });
+})();
+
+/* ── Services accordion ── */
+(function () {
+    var wrap = document.getElementById('accWrapHome');
+    if (!wrap) return;
+    var items = Array.from(wrap.querySelectorAll('.acc-item'));
+    var slideInterval = null, slideIdx = 0;
+    var photoSlides = Array.from(document.querySelectorAll('#acc-photo-srv .acc-slide'));
+
+    function startSlideshow() {
+        stopSlideshow();
+        if (!photoSlides.length) return;
+        slideInterval = setInterval(function () {
+            photoSlides[slideIdx].classList.remove('active');
+            slideIdx = (slideIdx + 1) % photoSlides.length;
+            photoSlides[slideIdx].classList.add('active');
+        }, 3000);
+    }
+    function stopSlideshow() {
+        clearInterval(slideInterval); slideInterval = null; slideIdx = 0;
+        photoSlides.forEach(function (s, i) { s.classList.toggle('active', i === 0); });
+    }
+    function open(idx) {
+        items.forEach(function (item, i) {
+            var isOpen = i === idx;
+            item.classList.toggle('open', isOpen);
+            var vid = item.querySelector('.acc-video');
+            if (vid) { isOpen ? vid.play() : vid.pause(); }
+        });
+        if (idx === 2) { startSlideshow(); } else { stopSlideshow(); }
+    }
+    items.forEach(function (item, i) {
+        item.addEventListener('mouseenter', function () { open(i); });
+        item.addEventListener('click',      function () { open(i); });
+    });
+    wrap.addEventListener('mouseleave', function () { open(0); });
+})();
+
+/* ── Stats counters ── */
 (function () {
     var counters = Array.from(document.querySelectorAll('.stat-num'));
     var animated = false;
-
     function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
-
-    function runCounters() {
-        if (animated) return;
-        animated = true;
+    function run() {
+        if (animated) return; animated = true;
         counters.forEach(function (el) {
             var target = parseInt(el.dataset.target, 10);
             var duration = target > 20 ? 2800 : 1800;
             var start = performance.now();
-            function step(now) {
+            (function step(now) {
                 var p = Math.min((now - start) / duration, 1);
                 el.textContent = Math.round(easeOut(p) * target);
                 if (p < 1) requestAnimationFrame(step);
-            }
-            requestAnimationFrame(step);
+            })(performance.now());
         });
     }
-
     var io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (e) { if (e.isIntersecting) runCounters(); });
+        entries.forEach(function (e) { if (e.isIntersecting) run(); });
     }, { threshold: 0.4 });
-    var statsSection = document.getElementById('s-stats');
-    if (statsSection) io.observe(statsSection);
+    var stats = document.getElementById('s-stats');
+    if (stats) io.observe(stats);
 })();
 
-/* ── Mosaic flash + rotate ── */
+/* ── Mosaic flash ── */
 (function () {
     var tiles = Array.from(document.querySelectorAll('.mosaic-tile'));
     if (!tiles.length) return;
-
     var pool = [
-        'img/parpadeo/01-colinas de maladonado.webp',
-        'img/parpadeo/01-exterior.webp',
-        'img/parpadeo/01-general aerea 01.webp',
-        'img/parpadeo/01-housing competition.webp',
-        'img/parpadeo/01-jardines de areco.webp',
-        'img/parpadeo/01-la guadalupe.webp',
-        'img/parpadeo/01-tfc.webp',
-        'img/parpadeo/02-esquina comercial.webp',
-        'img/parpadeo/02-garage.webp',
-        'img/parpadeo/02-garda malvin.webp',
-        'img/parpadeo/02-la guadalupe.webp',
-        'img/parpadeo/03-av italia y arroyo.webp',
-        'img/parpadeo/03-balneario ipora.webp',
-        'img/parpadeo/04-balneario ipora.webp',
-        'img/parpadeo/06-general exterior skybar.webp',
-        'img/parpadeo/09-torre 1 02.webp',
-        'img/parpadeo/10-esquina comercial nocturno.webp',
-        'img/parpadeo/13-living 02.webp',
-        'img/parpadeo/14-cowork dic.webp',
-        'img/parpadeo/15-torre 1 03.webp',
-        'img/parpadeo/19-RenderExterior-SativaTour-high.webp',
-        'img/parpadeo/22 - Corona Interior - high.webp',
-        'img/parpadeo/24 - Hunting Hotel bedroom - high.webp',
-        'img/parpadeo/25 -  bedroom apartment - high.webp',
-        'img/parpadeo/27-Renderexterior-observatory-high.webp',
-        'img/parpadeo/35 - ArecoGarden high copy.webp',
-        'img/parpadeo/4-Brickvisual-Model-high.webp',
-        'img/parpadeo/40 - vive high.webp',
-        'img/parpadeo/41 - parque termal ipora high.webp',
-        'img/parpadeo/42 - Exterior Menara One-high.webp',
-        'img/parpadeo/43 - sta lucia housing high.webp',
-        'img/parpadeo/44 - terrazas de polo piscina.webp',
+        'img/parpadeo/01-colinas de maladonado.webp','img/parpadeo/01-exterior.webp',
+        'img/parpadeo/01-general aerea 01.webp','img/parpadeo/01-housing competition.webp',
+        'img/parpadeo/01-jardines de areco.webp','img/parpadeo/01-la guadalupe.webp',
+        'img/parpadeo/01-tfc.webp','img/parpadeo/02-esquina comercial.webp',
+        'img/parpadeo/02-garage.webp','img/parpadeo/02-garda malvin.webp',
+        'img/parpadeo/02-la guadalupe.webp','img/parpadeo/03-av italia y arroyo.webp',
+        'img/parpadeo/03-balneario ipora.webp','img/parpadeo/04-balneario ipora.webp',
+        'img/parpadeo/06-general exterior skybar.webp','img/parpadeo/09-torre 1 02.webp',
+        'img/parpadeo/10-esquina comercial nocturno.webp','img/parpadeo/13-living 02.webp',
+        'img/parpadeo/14-cowork dic.webp','img/parpadeo/15-torre 1 03.webp',
+        'img/parpadeo/19-RenderExterior-SativaTour-high.webp','img/parpadeo/22 - Corona Interior - high.webp',
+        'img/parpadeo/24 - Hunting Hotel bedroom - high.webp','img/parpadeo/25 -  bedroom apartment - high.webp',
+        'img/parpadeo/27-Renderexterior-observatory-high.webp','img/parpadeo/35 - ArecoGarden high copy.webp',
+        'img/parpadeo/4-Brickvisual-Model-high.webp','img/parpadeo/40 - vive high.webp',
+        'img/parpadeo/41 - parque termal ipora high.webp','img/parpadeo/42 - Exterior Menara One-high.webp',
+        'img/parpadeo/43 - sta lucia housing high.webp','img/parpadeo/44 - terrazas de polo piscina.webp',
         'img/parpadeo/45 - terrazas de polo hall.webp'
     ];
-
-    var flashInterval = null;
-    var busy = new Set();
-
+    var flashInterval = null, busy = new Set();
     function swapImage(tile) {
-        var current = tile.src.split('/').slice(-2).join('/');
-        var others = pool.filter(function (p) { return !p.endsWith(current.split('/').pop()); });
+        var cur = tile.src.split('/').pop();
+        var others = pool.filter(function (p) { return !p.endsWith(cur); });
         tile.src = others[Math.floor(Math.random() * others.length)];
     }
-
     function flashRandom() {
         var available = tiles.filter(function (t) { return !busy.has(t); });
         if (!available.length) return;
-        var count = 2 + Math.floor(Math.random() * 2);
         available.sort(function () { return Math.random() - 0.5; });
-        available.slice(0, count).forEach(function (tile) {
-            busy.add(tile);
-            tile.classList.add('lit');
-            var hold = 500 + Math.random() * 800;
+        available.slice(0, 2 + Math.floor(Math.random() * 2)).forEach(function (tile) {
+            busy.add(tile); tile.classList.add('lit');
             setTimeout(function () {
                 tile.classList.remove('lit');
-                setTimeout(function () {
-                    swapImage(tile);
-                    busy.delete(tile);
-                }, 700);
-            }, hold);
+                setTimeout(function () { swapImage(tile); busy.delete(tile); }, 700);
+            }, 500 + Math.random() * 800);
         });
     }
-
-    var statsSection = document.getElementById('s-stats');
-    var ioMosaic = new IntersectionObserver(function (entries) {
+    var io = new IntersectionObserver(function (entries) {
         entries.forEach(function (e) {
-            if (e.isIntersecting) {
-                flashRandom();
-                flashInterval = setInterval(flashRandom, 480);
-            } else {
-                clearInterval(flashInterval);
-                tiles.forEach(function (t) { t.classList.remove('lit'); });
-                busy.clear();
-            }
+            if (e.isIntersecting) { flashRandom(); flashInterval = setInterval(flashRandom, 480); }
+            else { clearInterval(flashInterval); tiles.forEach(function (t) { t.classList.remove('lit'); }); busy.clear(); }
         });
     }, { threshold: 0.3 });
-    if (statsSection) ioMosaic.observe(statsSection);
+    var stats = document.getElementById('s-stats');
+    if (stats) io.observe(stats);
 })();
 
-/* ── Edge click handler (conecta circle.js con navegación) ── */
+/* ── FAQ accordion ── */
+(function () {
+    document.querySelectorAll('.faq-item').forEach(function (item) {
+        item.querySelector('.faq-q').addEventListener('click', function () {
+            var isOpen = item.classList.contains('open');
+            document.querySelectorAll('.faq-item').forEach(function (i) { i.classList.remove('open'); });
+            if (!isOpen) item.classList.add('open');
+        });
+    });
+})();
+
+/* ── Edge click handler ── */
 (function () {
     var EDGE = 72;
     document.addEventListener('click', function (e) {
         var tag = e.target.tagName;
-        if (tag === 'A' || tag === 'BUTTON' || tag === 'INPUT') return;
-
-        var vw = window.innerWidth;
-        var vh = window.innerHeight;
-        var inCorner = (e.clientX < EDGE || e.clientX > vw - EDGE) &&
-                       (e.clientY < EDGE || e.clientY > vh - EDGE);
+        if (tag === 'A' || tag === 'BUTTON' || tag === 'INPUT' || tag === 'SELECT') return;
+        var vw = window.innerWidth, vh = window.innerHeight;
+        var inCorner = (e.clientX < EDGE || e.clientX > vw - EDGE) && (e.clientY < EDGE || e.clientY > vh - EDGE);
         if (inCorner) return;
-
-        if (e.clientY < EDGE) {
-            window.snapGoTo(snapCurrent - 1);
-        } else if (e.clientY > vh - EDGE) {
-            window.snapGoTo(snapCurrent + 1);
-        } else if (e.clientX < EDGE || e.clientX > vw - EDGE) {
-            /* navega carousel de la sección actual */
-            var sec = snapSections[snapCurrent];
-            var wrap = sec && sec.querySelector('.carousel-wrap');
-            if (wrap) {
-                var id = wrap.dataset.carousel;
-                if (carouselNavs[id]) {
-                    e.clientX < EDGE ? carouselNavs[id].prev() : carouselNavs[id].next();
-                }
-            }
-        }
+        if (e.clientY < EDGE)       window.snapGoTo(snapCurrent - 1);
+        else if (e.clientY > vh - EDGE) window.snapGoTo(snapCurrent + 1);
     });
 })();
 </script>
-
-<!-- WhatsApp floating button -->
-<a href="https://wa.me/59898325902" target="_blank" rel="noopener" class="wsp-fab" aria-label="Contactar por WhatsApp">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="28" height="28">
-    <path d="M20.52 3.48A11.93 11.93 0 0 0 12 0C5.37 0 0 5.37 0 12c0 2.11.55 4.16 1.6 5.97L0 24l6.22-1.57A11.94 11.94 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.21-1.25-6.23-3.48-8.52zM12 21.9a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.69.93.98-3.6-.24-.38A9.88 9.88 0 0 1 2.1 12C2.1 6.53 6.53 2.1 12 2.1c2.63 0 5.1 1.02 6.96 2.88A9.79 9.79 0 0 1 21.9 12c0 5.47-4.43 9.9-9.9 9.9zm5.42-7.4c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.48-1.76-1.66-2.06-.17-.3-.02-.46.13-.6.13-.13.3-.34.45-.51.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.2 2.1 3.2 5.09 4.49.71.31 1.27.49 1.7.63.72.23 1.37.2 1.89.12.58-.09 1.76-.72 2.01-1.41.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.34z"/>
-  </svg>
-</a>
-<style>
-.wsp-fab {
-  position: fixed;
-  bottom: 28px;
-  right: 28px;
-  z-index: 9999;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: #c9a96e;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 18px rgba(0,0,0,0.35);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  text-decoration: none;
-}
-.wsp-fab:hover {
-  transform: scale(1.1);
-  box-shadow: 0 6px 24px rgba(0,0,0,0.45);
-}
-</style>
 
 </body>
 </html>

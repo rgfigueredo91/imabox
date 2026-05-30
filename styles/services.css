@@ -586,7 +586,7 @@
             line-height: 1.85;
             max-width: 300px;
         }
-        @media (max-width: 768px) {
+        @media (max-width: 900px) {
             .acc-section { height: 100dvh !important; min-height: 0 !important; overflow: hidden !important; }
             .acc-wrap { flex-direction: column; height: 100%; }
             .acc-item { flex: 1; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
