@@ -109,8 +109,8 @@
         #s-hero h1 em { font-style: normal; color: var(--gold); }
         .hero-sub {
             font-family: 'Poppins', sans-serif;
-            font-size: clamp(0.78rem, 1.3vw, 0.95rem);
-            font-weight: 300; color: rgba(255,255,255,0.5);
+            font-size: clamp(0.88rem, 1.4vw, 1.05rem);
+            font-weight: 300; color: rgba(255,255,255,0.65);
             letter-spacing: 0.03em; max-width: 580px; line-height: 1.8;
             margin-bottom: 44px;
             opacity: 0; animation: fadeUp 1s ease 1s forwards;
@@ -178,7 +178,7 @@
         .logos-label {
             font-family: 'aktiv-grotesk', sans-serif;
             font-size: 0.58rem; letter-spacing: 0.32em; text-transform: uppercase;
-            color: rgba(255,255,255,0.25);
+            color: rgba(255,255,255,0.42);
         }
         .marquee-wrap { width: 100%; overflow: hidden; }
         .marquee-track {
@@ -280,12 +280,19 @@
         ────────────────────────────────────────── */
         #s-why {
             background: #080808;
-            display: flex; align-items: center; justify-content: center;
+            display: flex; flex-direction: column; align-items: center;
+            justify-content: center; position: relative; overflow: hidden;
         }
         .why-inner {
             max-width: 1200px; width: 100%; padding: 0 80px;
             display: grid; grid-template-columns: 1fr 1.6fr; gap: 64px;
-            align-items: center;
+            align-items: center; position: relative; z-index: 2;
+            flex: 1;
+        }
+        .why-stats {
+            width: 100%; position: relative; z-index: 2;
+            padding: 28px 0 32px;
+            flex-shrink: 0;
         }
         .section-tag {
             font-family: 'aktiv-grotesk', sans-serif;
@@ -301,8 +308,8 @@
         .why-heading em { font-style: normal; color: var(--gold); }
         .why-desc {
             font-family: 'Poppins', sans-serif;
-            font-size: 0.88rem; font-weight: 300;
-            color: rgba(255,255,255,0.42); line-height: 1.9;
+            font-size: 0.94rem; font-weight: 300;
+            color: rgba(255,255,255,0.60); line-height: 1.9;
         }
         .why-items { display: flex; flex-direction: column; gap: 22px; margin-top: 28px; }
         .why-item { display: flex; gap: 16px; align-items: flex-start; }
@@ -319,8 +326,8 @@
         }
         .why-item-body p {
             font-family: 'Poppins', sans-serif;
-            font-size: 0.78rem; font-weight: 300;
-            color: rgba(255,255,255,0.38); line-height: 1.75;
+            font-size: 0.84rem; font-weight: 300;
+            color: rgba(255,255,255,0.56); line-height: 1.75;
         }
 
         /* ──────────────────────────────────────────
@@ -383,18 +390,13 @@
         }
         .acc-content p {
             font-family: 'Poppins', sans-serif;
-            font-size: 0.82rem; font-weight: 300;
-            color: rgba(255,255,255,0.55); line-height: 1.85; max-width: 300px;
+            font-size: 0.86rem; font-weight: 300;
+            color: rgba(255,255,255,0.68); line-height: 1.85; max-width: 300px;
         }
 
         /* ──────────────────────────────────────────
            S5 — STATS
         ────────────────────────────────────────── */
-        #s-stats {
-            background: #080808;
-            display: flex; align-items: center; justify-content: center;
-            position: relative; overflow: hidden;
-        }
         .mosaic-grid {
             position: absolute; inset: 0;
             display: grid;
@@ -405,10 +407,10 @@
         }
         .mosaic-tile {
             width: 100%; height: 100%; min-width: 0; min-height: 0;
-            object-fit: cover; opacity: 0.07;
+            object-fit: cover; opacity: 0.18;
             transition: opacity 0.7s ease; filter: grayscale(15%); display: block;
         }
-        .mosaic-tile.lit { opacity: 0.5; transition: opacity 0.25s ease; }
+        .mosaic-tile.lit { opacity: 0.65; transition: opacity 0.25s ease; }
         .mosaic-overlay {
             position: absolute; inset: 0;
             background: rgba(8,8,8,0.65); z-index: 1; pointer-events: none;
@@ -436,8 +438,8 @@
         }
         .stat-label {
             font-family: 'Poppins', sans-serif;
-            font-size: 0.7rem; font-weight: 300;
-            color: rgba(255,255,255,0.4); letter-spacing: 0.15em;
+            font-size: 0.72rem; font-weight: 300;
+            color: rgba(255,255,255,0.58); letter-spacing: 0.15em;
             text-transform: uppercase; margin-top: 12px;
         }
 
@@ -450,13 +452,15 @@
         }
         .proj-header {
             padding: 44px 80px 24px;
-            display: flex; align-items: center; justify-content: space-between;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: 10px;
             flex-shrink: 0;
         }
         .proj-header h2 {
             font-family: 'aktiv-grotesk', sans-serif;
             font-weight: 200; font-size: clamp(1.4rem, 2.5vw, 1.9rem);
             letter-spacing: -0.01em; color: rgba(255,255,255,0.88);
+            text-align: center;
         }
         .proj-view-all {
             font-family: 'aktiv-grotesk', sans-serif;
@@ -552,8 +556,8 @@
         }
         .step-desc {
             font-family: 'Poppins', sans-serif;
-            font-size: 0.75rem; font-weight: 300;
-            color: rgba(255,255,255,0.35); line-height: 1.75;
+            font-size: 0.82rem; font-weight: 300;
+            color: rgba(255,255,255,0.55); line-height: 1.75;
         }
 
         /* ──────────────────────────────────────────
@@ -573,8 +577,8 @@
             display: flex; align-items: center; justify-content: space-between;
             padding: 22px 0; cursor: pointer; user-select: none;
             font-family: 'aktiv-grotesk', sans-serif;
-            font-weight: 300; font-size: 0.92rem;
-            color: rgba(255,255,255,0.75); gap: 20px;
+            font-weight: 300; font-size: 0.98rem;
+            color: rgba(255,255,255,0.82); gap: 20px;
             transition: color 0.2s;
         }
         .faq-q:hover { color: #fff; }
@@ -588,8 +592,8 @@
         .faq-a {
             max-height: 0; overflow: hidden;
             font-family: 'Poppins', sans-serif;
-            font-size: 0.82rem; font-weight: 300;
-            color: rgba(255,255,255,0.42); line-height: 1.9;
+            font-size: 0.88rem; font-weight: 300;
+            color: rgba(255,255,255,0.60); line-height: 1.9;
             transition: max-height 0.4s ease, padding 0.35s ease;
             padding-bottom: 0;
         }
@@ -615,14 +619,14 @@
         .contact-title em { font-style: normal; color: var(--gold); }
         .contact-sub {
             font-family: 'Poppins', sans-serif;
-            font-size: 0.85rem; font-weight: 300;
-            color: rgba(255,255,255,0.38); line-height: 1.85; margin-bottom: 36px;
+            font-size: 0.92rem; font-weight: 300;
+            color: rgba(255,255,255,0.58); line-height: 1.85; margin-bottom: 36px;
         }
         .contact-links { display: flex; flex-direction: column; gap: 13px; }
         .contact-link {
             display: flex; align-items: center; gap: 12px;
-            font-family: 'Poppins', sans-serif; font-size: 0.82rem;
-            color: rgba(255,255,255,0.45); text-decoration: none;
+            font-family: 'Poppins', sans-serif; font-size: 0.88rem;
+            color: rgba(255,255,255,0.62); text-decoration: none;
             transition: color 0.2s;
         }
         .contact-link:hover { color: rgba(255,255,255,0.85); }
@@ -634,8 +638,8 @@
         .form-group { display: flex; flex-direction: column; gap: 6px; }
         .form-group label {
             font-family: 'aktiv-grotesk', sans-serif;
-            font-size: 0.56rem; letter-spacing: 0.22em; text-transform: uppercase;
-            color: rgba(255,255,255,0.3);
+            font-size: 0.58rem; letter-spacing: 0.22em; text-transform: uppercase;
+            color: rgba(255,255,255,0.48);
         }
         .form-group input,
         .form-group select {
@@ -647,7 +651,7 @@
             transition: border-color 0.2s;
             appearance: none; -webkit-appearance: none;
         }
-        .form-group input::placeholder { color: rgba(255,255,255,0.2); }
+        .form-group input::placeholder { color: rgba(255,255,255,0.32); }
         .form-group input:focus,
         .form-group select:focus { border-color: rgba(201,169,110,0.45); }
         .form-group select option { background: #111; }
@@ -714,39 +718,153 @@
         /* ──────────────────────────────────────────
            RESPONSIVE
         ────────────────────────────────────────── */
+        /* ── iPad landscape (1024px y menos) ── */
+        @media (max-width: 1100px) {
+            .why-inner { padding: 0 48px; gap: 40px; }
+            .process-inner { padding: 0 48px; }
+            .contact-inner { padding: 0 48px; gap: 56px; }
+            .proj-header { padding: 36px 48px 18px; }
+        }
+
+        /* ── iPad portrait + tablet (900px y menos) ── */
         @media (max-width: 900px) {
             /* accordion vertical */
             #s-services { overflow: hidden; }
             .acc-wrap { flex-direction: column; }
             .acc-item { flex: 1; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
             .acc-item.open { flex: 4; }
-            .acc-title-v { transform: translate(-50%, -50%); font-size: 0.68rem; letter-spacing: 0.14em; }
+            .acc-title-v { transform: translate(-50%, -50%); font-size: 0.7rem; letter-spacing: 0.14em; }
             .acc-item.open .acc-title-v { opacity: 0; }
-            .acc-content { left: 20px; right: 20px; bottom: 20px; }
-            .acc-content h3 { font-size: 1.4rem; margin-bottom: 8px; }
-            .acc-content p { font-size: 0.78rem; max-width: 100%; }
+            .acc-content { left: 24px; right: 24px; bottom: 24px; }
+            .acc-content h3 { font-size: 1.5rem; margin-bottom: 10px; }
+            .acc-content p { font-size: 0.84rem; max-width: 100%; }
             .acc-overlay { background: linear-gradient(to top, rgba(0,0,0,0.8) 35%, transparent 100%); }
 
-            .why-inner { grid-template-columns: 1fr; gap: 28px; padding: 0 32px; }
+            .why-inner { grid-template-columns: 1fr; gap: 24px; padding: 0 48px; text-align: center; }
+            .why-heading { font-size: clamp(1.8rem, 4.5vw, 2.6rem); }
+            .why-desc { font-size: 1rem; max-width: 560px; margin: 0 auto; }
+            .why-items { align-items: center; }
+            .why-item { flex-direction: column; align-items: center; gap: 8px; }
+            .why-item-body h4 { font-size: 1.05rem; }
+            .why-item-body p { font-size: 0.9rem; }
             .reveal-wrap { display: none; }
-            .process-inner { padding: 0 32px; }
-            .process-steps { grid-template-columns: 1fr 1fr; gap: 24px; }
-            .proj-header { padding: 40px 28px 20px; }
+            #s-process { align-items: stretch; justify-content: flex-start; }
+            .process-inner { padding: 80px 48px 32px; display: flex; flex-direction: column; height: 100%; }
+            .process-inner .section-tag { text-align: center; }
+            .process-inner .why-heading { text-align: center; max-width: 100% !important; }
+            .process-steps { flex: 1; display: flex; flex-direction: column; justify-content: space-between; margin-top: 20px; }
+            .step-item { display: grid; grid-template-columns: 44px 1fr; grid-template-rows: auto auto; column-gap: 16px; flex: 1; border-top: 1px solid rgba(255,255,255,0.07); align-items: center; padding: 0 0; }
+            .step-item:last-child { border-bottom: 1px solid rgba(255,255,255,0.07); }
+            .step-num-label { grid-column: 1; grid-row: 1 / 3; align-self: center; margin-bottom: 0; font-size: 0.62rem; }
+            .step-bar { display: none; }
+            .step-name { grid-column: 2; grid-row: 1; font-size: 1rem; margin-bottom: 3px; }
+            .step-desc { grid-column: 2; grid-row: 2; font-size: 0.84rem; }
+            .proj-header { padding: 36px 32px 16px; }
             .proj-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(3, 1fr); }
-            .faq-inner { padding: 0 28px; }
-            .contact-inner { grid-template-columns: 1fr; gap: 36px; padding: 0 32px; }
-            .stats-wrap { gap: 40px; }
+            .faq-inner { padding: 0 40px; text-align: center; }
+            .faq-inner .why-heading { text-align: center; max-width: 100%; margin-left: auto; margin-right: auto; }
+            .faq-items { text-align: left; }
+            .faq-q { font-size: 0.96rem; }
+            .faq-a { font-size: 0.88rem; }
+            .contact-inner { grid-template-columns: 1fr; gap: 32px; padding: 0 40px; }
+            .contact-title { font-size: clamp(1.5rem, 4vw, 2.2rem); text-align: center; }
+            .contact-sub { font-size: 0.9rem; margin-bottom: 24px; text-align: center; }
+            .contact-inner .section-tag { text-align: center; }
+            .stats-wrap { gap: clamp(28px, 6vw, 60px); }
             .mosaic-grid { grid-template-columns: repeat(5, 1fr); }
+            /* iPad portrait — distribuir verticalmente y agrandar tipografía */
+            #s-why { justify-content: space-between; padding-top: 80px; }
+            .why-inner { padding: 28px 48px 0; }
+            .why-heading { font-size: clamp(2rem, 4.8vw, 3rem); }
+            .why-items { gap: 28px; }
+            .why-item-body h4 { font-size: 1.15rem; }
+            .why-item-body p { font-size: 0.95rem; }
+            .why-stats { padding: 28px 0 40px; }
         }
+
+        /* ── iPad portrait específico (601px–900px) ── */
+        @media (min-width: 601px) and (max-width: 900px) {
+            .process-inner { padding: 124px 48px 60px !important; }
+            .process-steps { justify-content: flex-start !important; gap: 52px !important; margin-top: 48px !important; }
+            .step-item { flex: none !important; }
+        }
+
+        /* ── Móvil (600px y menos) ── */
         @media (max-width: 600px) {
-            .process-steps { grid-template-columns: 1fr; }
+            .section-tag, .why-heading, .why-item-body h4, .why-item-body p,
+            .step-name, .step-desc, .faq-q, .faq-a,
+            .contact-title, .contact-sub, .contact-tag,
+            .proc-heading, .section-tag { text-align: center; }
+            .contact-links { justify-content: center; }
+            .hero-sub { text-align: center; }
+            .process-inner .section-tag, .process-inner .why-heading { text-align: center; }
+            .why-item { flex-direction: column; align-items: center; gap: 6px; }
+            .why-num { margin-top: 0; }
+            /* Por qué nosotros — ocupa todo el alto disponible */
+            #s-why { justify-content: space-between; padding: 80px 0 0; }
+            .why-inner { flex: 1; padding: 0 22px; align-items: flex-start; }
+            .why-left { display: flex; flex-direction: column; justify-content: center; height: 100%; }
+            .reveal-wrap { display: none; }
+            .why-heading { font-size: clamp(1.3rem, 5.5vw, 1.9rem) !important; margin-bottom: 14px; }
+            .why-desc { display: none; }
+            .why-items { gap: 22px; margin-top: auto; padding-top: 24px; }
+            .why-item { flex-direction: column; align-items: center; gap: 6px; text-align: center; }
+            .why-item-body h4 { font-size: 0.92rem; margin-bottom: 4px; }
+            .why-item-body p { font-size: 0.82rem; line-height: 1.65; }
+            .why-stats { padding: 20px 0 72px; flex-shrink: 0; }
+            .stat-num { font-size: clamp(2.8rem, 13vw, 4rem); }
+            .stat-suffix { font-size: clamp(1.5rem, 7vw, 2.4rem); }
+            .stat-label { font-size: 0.66rem; letter-spacing: 0.1em; margin-top: 6px; }
+            .stats-wrap { gap: 16px; padding: 0 12px; flex-wrap: nowrap; justify-content: center; }
+            .mosaic-grid { grid-template-columns: repeat(4, 1fr); }
+
+            /* WhatsApp FAB más chico en mobile */
+            .wsp-fab { width: 44px; height: 44px; bottom: 18px; right: 18px; }
+            .wsp-fab svg { width: 22px; height: 22px; }
+
+            /* Cómo trabajamos — empieza debajo del navbar */
+            #s-process { justify-content: flex-start !important; }
+            .process-inner { padding: 92px 22px 12px; }
+            .process-inner .section-tag { margin-bottom: 8px; }
+            .process-inner .why-heading { font-size: clamp(1.1rem, 4.5vw, 1.5rem) !important; margin-bottom: 8px; }
+            .process-steps { margin-top: 10px !important; gap: 18px; justify-content: flex-start !important; }
+            .step-item { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0; border-top: none !important; border-bottom: none !important; flex: none; }
+            .step-item:last-child { border-bottom: none !important; }
+            .step-num-label { grid-column: unset; grid-row: unset; align-self: unset; margin-bottom: 2px; font-size: 0.54rem; }
+            .step-name { grid-column: unset; grid-row: unset; font-size: 0.82rem; margin-bottom: 2px; }
+            .step-desc { grid-column: unset; grid-row: unset; font-size: 0.72rem; line-height: 1.5; }
+
+            /* Contacto — empieza debajo del navbar, todo izquierda */
+            #s-contact { align-items: flex-start; overflow-y: auto; }
+            .contact-inner { padding: 80px 22px 32px; gap: 18px; width: 100%; text-align: center; }
+            .contact-title { font-size: clamp(1.3rem, 5.5vw, 1.8rem); margin-bottom: 8px; }
+            .contact-sub { font-size: 0.84rem; margin-bottom: 16px; line-height: 1.7; }
+            .contact-links { display: flex; flex-direction: row; gap: 20px; margin-bottom: 4px; }
+            .contact-links a:nth-child(1),
+            .contact-links a:nth-child(2) { display: none; }
+            .contact-form { gap: 10px; }
+            .form-group input, .form-group select { padding: 9px 12px; font-size: 0.8rem; }
+            .form-actions { margin-top: 4px; gap: 12px; justify-content: center; }
+            .form-or { display: none; }
+
+            /* Proyectos */
             .proj-grid { grid-template-columns: repeat(2, 1fr); }
-            .form-row { grid-template-columns: 1fr; }
-            .hero-ctas { flex-direction: column; align-items: center; gap: 12px; }
+            .proj-header { padding: 84px 20px 14px; }
+
+            /* FAQ */
             .faq-inner { padding: 0 20px; }
-            .contact-inner { padding: 0 24px; }
-            .why-inner { padding: 0 24px; }
-            .process-inner { padding: 0 24px; }
+            .faq-q { font-size: 0.9rem; padding: 16px 0; }
+            .faq-a { font-size: 0.84rem; }
+
+            /* Hero */
+            .hero-ctas { flex-direction: column; align-items: center; gap: 12px; }
+            .hero-sub { font-size: 0.88rem; }
+
+            /* Form */
+            .form-row { grid-template-columns: 1fr; }
+
+            /* Accordion */
+            .acc-content h3 { font-size: 1.3rem; }
         }
     </style>
 
@@ -788,14 +906,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </button>
         <div class="nav-overlay">
             <ul class="nav-links">
-                <li><a href="#" onclick="window.snapGoTo(0);return false;">Inicio</a></li>
                 <li><a href="#" onclick="window.snapGoTo(1);return false;">Clientes</a></li>
                 <li><a href="#" onclick="window.snapGoTo(2);return false;">Por qué nosotros</a></li>
                 <li><a href="#" onclick="window.snapGoTo(3);return false;">Servicios</a></li>
-                <li><a href="#" onclick="window.snapGoTo(5);return false;">Proyectos</a></li>
-                <li><a href="#" onclick="window.snapGoTo(6);return false;">Cómo trabajamos</a></li>
-                <li><a href="#" onclick="window.snapGoTo(7);return false;">FAQs</a></li>
-                <li><a href="#" onclick="window.snapGoTo(8);return false;">Contacto</a></li>
+                <li><a href="#" onclick="window.snapGoTo(4);return false;">Proyectos</a></li>
+                <li><a href="#" onclick="window.snapGoTo(5);return false;">Cómo trabajamos</a></li>
+                <li><a href="#" onclick="window.snapGoTo(6);return false;">FAQs</a></li>
+                <li><a href="#" onclick="window.snapGoTo(7);return false;">Contacto</a></li>
             </ul>
             <div class="nav-info">
                 <div class="nav-lang">
@@ -818,12 +935,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                src="animations/presentation.mp4"></video>
         <div class="overlay"></div>
         <div class="hero-content">
-            <p class="hero-pretag" id="hero-pretag">Real estate visualization · Brand &amp; Identity · Digital content</p>
+            <p class="hero-pretag" id="hero-pretag">Visualización 3D · Marca e Identidad · Contenido Digital</p>
             <h1 id="hero-h1">Tu proyecto no existe todavía.<br><em id="typer">Lo hacemos real.</em><span id="typer-cursor"></span></h1>
             <p class="hero-sub" id="hero-sub">Ayudamos a desarrolladores inmobiliarios a vender sus proyectos antes de construirlos — visualización 3D, identidad de marca y contenido digital completo.</p>
             <div class="hero-ctas">
-                <a href="https://calendly.com/imabox" target="_blank" rel="noopener" class="btn-gold" id="hero-btn-cta">Hablemos de tu proyecto</a>
-                <button class="btn-outline" id="hero-btn-work" onclick="window.snapGoTo(5)">Ver proyectos</button>
+                <a href="#" onclick="window.snapGoTo(7);return false;" class="btn-gold" id="hero-btn-cta">Hablemos de tu proyecto</a>
+                <button class="btn-outline" id="hero-btn-work" onclick="window.snapGoTo(4)">Ver proyectos</button>
             </div>
         </div>
         <div class="scroll-hint" onclick="window.snapGoTo(1)">
@@ -910,14 +1027,45 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <img src="img/clientes/hifglobal.png" alt="HIF Global">
             </div>
         </div>
+        <div class="scroll-hint" onclick="window.snapGoTo(2)">
+            <div class="scroll-line"></div>
+            <span class="scroll-label">Scroll</span>
+        </div>
     </section>
 
-    <!-- ── S3 WHY ── -->
+    <!-- ── S3 WHY + STATS ── -->
     <section class="section" id="s-why">
+        <div class="mosaic-grid" id="mosaicGrid">
+            <img class="mosaic-tile" src="img/parpadeo/01-colinas de maladonado.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/01-exterior.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/01-general aerea 01.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/01-housing competition.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/01-jardines de areco.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/01-la guadalupe.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/01-tfc.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/02-esquina comercial.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/02-garage.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/02-garda malvin.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/02-la guadalupe.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/03-av italia y arroyo.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/03-balneario ipora.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/04-balneario ipora.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/06-general exterior skybar.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/09-torre 1 02.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/10-esquina comercial nocturno.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/13-living 02.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/14-cowork dic.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/15-torre 1 03.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/19-RenderExterior-SativaTour-high.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/22 - Corona Interior - high.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/24 - Hunting Hotel bedroom - high.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/25 -  bedroom apartment - high.webp" alt="">
+            <img class="mosaic-tile" src="img/parpadeo/27-Renderexterior-observatory-high.webp" alt="">
+        </div>
+        <div class="mosaic-overlay"></div>
         <div class="why-inner">
             <div class="why-left">
-                <p class="section-tag anim" id="why-tag">El desafío</p>
-                <h2 class="why-heading anim" style="transition-delay:0.1s" id="why-heading">Tu proyecto necesita vender<br>antes de que <em>exista.</em></h2>
+<h2 class="why-heading anim" style="transition-delay:0.1s" id="why-heading">Tu proyecto necesita vender<br>antes de que <em>exista.</em></h2>
                 <p class="why-desc anim" style="transition-delay:0.2s" id="why-desc">Los desarrolladores inmobiliarios necesitan atraer inversores, pre-vender unidades y generar expectativa — antes de poner el primer ladrillo. El problema es que nadie puede ver, sentir ni querer algo que todavía no existe.</p>
                 <div class="why-items">
                     <div class="why-item anim" style="transition-delay:0.25s">
@@ -956,8 +1104,33 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                             <svg viewBox="0 0 20 20"><path d="M7 4l-4 6 4 6M13 4l4 6-4 6"/></svg>
                         </div>
                     </div>
-                    <span class="reveal-label left" id="reveal-label-left">Sketch</span>
-                    <span class="reveal-label right" id="reveal-label-right">Vision</span>
+                    <span class="reveal-label left" id="reveal-label-left">Boceto</span>
+                    <span class="reveal-label right" id="reveal-label-right">Visión</span>
+                </div>
+            </div>
+        </div>
+        <div class="why-stats">
+            <div class="stats-wrap">
+                <div class="stat-item">
+                    <div class="stat-row">
+                        <span class="stat-num" data-target="60">0</span>
+                        <span class="stat-suffix">+</span>
+                    </div>
+                    <p class="stat-label" id="stat-label-1">Proyectos entregados</p>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-row">
+                        <span class="stat-num" data-target="7">0</span>
+                        <span class="stat-suffix">+</span>
+                    </div>
+                    <p class="stat-label" id="stat-label-2">Países</p>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-row">
+                        <span class="stat-num" data-target="10">0</span>
+                        <span class="stat-suffix">+</span>
+                    </div>
+                    <p class="stat-label" id="stat-label-3">Años de experiencia</p>
                 </div>
             </div>
         </div>
@@ -970,18 +1143,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <img class="acc-bg" src="img/img window/2025/09-torre 1 02.webp" alt="3D Visualization">
                 <video class="acc-bg acc-video acc-contain acc-video-reveal" src="animations/acc-3d.mp4" muted loop playsinline preload="metadata"></video>
                 <div class="acc-overlay"></div>
-                <span class="acc-title-v" id="acc0-title">3D Visualization</span>
+                <span class="acc-title-v" id="acc0-title">Visualización 3D</span>
                 <div class="acc-content">
-                    <h3 id="acc0-h3">3D Visualization</h3>
+                    <h3 id="acc0-h3">Visualización 3D</h3>
                     <p id="acc0-p">Renders fotorrealistas, animaciones y tours virtuales — incluyendo experiencias 3D interactivas en tiempo real donde los compradores navegan el proyecto a su propio ritmo.</p>
                 </div>
             </div>
             <div class="acc-item" data-idx="1">
                 <video class="acc-bg acc-video" src="animations/acc-brand.mp4" muted loop playsinline preload="metadata"></video>
                 <div class="acc-overlay"></div>
-                <span class="acc-title-v" id="acc1-title">Brand &amp; Identity</span>
+                <span class="acc-title-v" id="acc1-title">Marca e Identidad</span>
                 <div class="acc-content">
-                    <h3 id="acc1-h3">Brand &amp; Identity</h3>
+                    <h3 id="acc1-h3">Marca e Identidad</h3>
                     <p id="acc1-p">Sistemas de identidad visual construidos para arquitectura y real estate — desde el logo hasta el despliegue completo de marca.</p>
                 </div>
             </div>
@@ -993,18 +1166,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     <img class="acc-slide" src="img/acc-photo-4.webp" alt="Photography">
                 </div>
                 <div class="acc-overlay"></div>
-                <span class="acc-title-v" id="acc2-title">Photography &amp; Drone</span>
+                <span class="acc-title-v" id="acc2-title">Fotografía y Drone</span>
                 <div class="acc-content">
-                    <h3 id="acc2-h3">Photography &amp; Drone</h3>
+                    <h3 id="acc2-h3">Fotografía y Drone</h3>
                     <p id="acc2-p">Fotografía arquitectónica y de estilo de vida que comunica la sensación de un espacio, no solo su forma.</p>
                 </div>
             </div>
             <div class="acc-item" data-idx="3">
                 <video class="acc-bg acc-video" src="animations/acc-film.mp4" muted loop playsinline preload="metadata"></video>
                 <div class="acc-overlay"></div>
-                <span class="acc-title-v" id="acc3-title">Film &amp; Motion</span>
+                <span class="acc-title-v" id="acc3-title">Video y Motion</span>
                 <div class="acc-content">
-                    <h3 id="acc3-h3">Film &amp; Motion</h3>
+                    <h3 id="acc3-h3">Video y Motion</h3>
                     <p id="acc3-p">Videos cinematográficos y animaciones que cuentan la historia de tu proyecto desde el concepto hasta la entrega.</p>
                 </div>
             </div>
@@ -1012,75 +1185,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <img class="acc-bg" src="img/acc-interactive-cover.webp" alt="Interactive">
                 <video class="acc-bg acc-video acc-contain acc-video-reveal" src="animations/acc-interactive.mp4" muted loop playsinline preload="metadata"></video>
                 <div class="acc-overlay"></div>
-                <span class="acc-title-v" id="acc4-title">Sales Platform</span>
+                <span class="acc-title-v" id="acc4-title">Plataforma de Ventas</span>
                 <div class="acc-content">
-                    <h3 id="acc4-h3">Sales Platform</h3>
+                    <h3 id="acc4-h3">Plataforma de Ventas</h3>
                     <p id="acc4-p">Showrooms virtuales, visores 3D y masterplanos que permiten a los compradores explorar tu proyecto en sus propios términos.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ── S5 STATS ── -->
-    <section class="section" id="s-stats">
-        <div class="mosaic-grid" id="mosaicGrid">
-            <img class="mosaic-tile" src="img/parpadeo/01-colinas de maladonado.webp" alt="">
-            <img class="mosaic-tile" src="img/parpadeo/01-exterior.webp" alt="">
-            <img class="mosaic-tile" src="img/parpadeo/01-general aerea 01.webp" alt="">
-            <img class="mosaic-tile" src="img/parpadeo/01-housing competition.webp" alt="">
-            <img class="mosaic-tile" src="img/parpadeo/01-jardines de areco.webp" alt="">
-            <img class="mosaic-tile" src="img/parpadeo/01-la guadalupe.webp" alt="">
-            <img class="mosaic-tile" src="img/parpadeo/01-tfc.webp" alt="">
-            <img class="mosaic-tile" src="img/parpadeo/02-esquina comercial.webp" alt="">
-            <img class="mosaic-tile" src="img/parpadeo/02-garage.webp" alt="">
-            <img class="mosaic-tile" src="img/parpadeo/02-garda malvin.webp" alt="">
-            <img class="mosaic-tile" src="img/parpadeo/02-la guadalupe.webp" alt="">
-            <img class="mosaic-tile" src="img/parpadeo/03-av italia y arroyo.webp" alt="">
-            <img class="mosaic-tile" src="img/parpadeo/03-balneario ipora.webp" alt="">
-            <img class="mosaic-tile" src="img/parpadeo/04-balneario ipora.webp" alt="">
-            <img class="mosaic-tile" src="img/parpadeo/06-general exterior skybar.webp" alt="">
-            <img class="mosaic-tile" src="img/parpadeo/09-torre 1 02.webp" alt="">
-            <img class="mosaic-tile" src="img/parpadeo/10-esquina comercial nocturno.webp" alt="">
-            <img class="mosaic-tile" src="img/parpadeo/13-living 02.webp" alt="">
-            <img class="mosaic-tile" src="img/parpadeo/14-cowork dic.webp" alt="">
-            <img class="mosaic-tile" src="img/parpadeo/15-torre 1 03.webp" alt="">
-            <img class="mosaic-tile" src="img/parpadeo/19-RenderExterior-SativaTour-high.webp" alt="">
-            <img class="mosaic-tile" src="img/parpadeo/22 - Corona Interior - high.webp" alt="">
-            <img class="mosaic-tile" src="img/parpadeo/24 - Hunting Hotel bedroom - high.webp" alt="">
-            <img class="mosaic-tile" src="img/parpadeo/25 -  bedroom apartment - high.webp" alt="">
-            <img class="mosaic-tile" src="img/parpadeo/27-Renderexterior-observatory-high.webp" alt="">
-        </div>
-        <div class="mosaic-overlay"></div>
-        <div class="stats-wrap">
-            <div class="stat-item">
-                <div class="stat-row">
-                    <span class="stat-num" data-target="60">0</span>
-                    <span class="stat-suffix">+</span>
-                </div>
-                <p class="stat-label" id="stat-label-1">Proyectos entregados</p>
-            </div>
-            <div class="stat-item">
-                <div class="stat-row">
-                    <span class="stat-num" data-target="7">0</span>
-                    <span class="stat-suffix">+</span>
-                </div>
-                <p class="stat-label" id="stat-label-2">Países</p>
-            </div>
-            <div class="stat-item">
-                <div class="stat-row">
-                    <span class="stat-num" data-target="10">0</span>
-                    <span class="stat-suffix">+</span>
-                </div>
-                <p class="stat-label" id="stat-label-3">Años de experiencia</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- ── S6 PROJECTS ── -->
+    <!-- ── S5 PROJECTS ── -->
     <section class="section" id="s-projects">
         <div class="proj-header">
-            <h2 id="proj-heading">Highlight Projects</h2>
-            <a href="projects.html" class="proj-view-all" id="proj-view-all">View all projects →</a>
+            <h2 id="proj-heading">Proyectos destacados</h2>
+            <a href="projects.html" class="proj-view-all" id="proj-view-all">Ver todos los proyectos →</a>
         </div>
         <div class="proj-grid">
             <a href="link-center.html" class="proj-card">
@@ -1140,31 +1258,31 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <p class="section-tag anim" id="proc-tag">Cómo trabajamos</p>
             <h2 class="why-heading anim" style="transition-delay:0.1s; max-width:600px" id="proc-heading">No necesitás un proyecto<br>terminado para empezar.</h2>
             <div class="process-steps">
-                <div class="step-item anim" style="transition-delay:0.1s" data-preview="img/parpadeo/01-housing competition.webp">
+                <div class="step-item anim" style="transition-delay:0.1s" data-preview-flip="img/reveal-sketch.webp|img/reveal-render.webp">
                     <p class="step-num-label">01</p>
                     <div class="step-bar"></div>
                     <h4 class="step-name" id="step1-name">Concepto</h4>
                     <p class="step-desc" id="step1-desc">Entendemos el proyecto: ubicación, programa, mercado. Definimos qué quiere comunicar y a quién.</p>
                 </div>
-                <div class="step-item anim" style="transition-delay:0.18s" data-preview="img/parpadeo/02-garda malvin.webp">
+                <div class="step-item anim" style="transition-delay:0.18s" data-preview-video="animations/acc-brand.mp4" data-preview-video-start="4" data-preview-video-end="7">
                     <p class="step-num-label">02</p>
                     <div class="step-bar"></div>
                     <h4 class="step-name" id="step2-name">Identidad</h4>
                     <p class="step-desc" id="step2-desc">Desarrollamos la marca del edificio: nombre, logo, paleta, tipografía. El ADN visual de todo.</p>
                 </div>
-                <div class="step-item anim" style="transition-delay:0.26s" data-preview="img/parpadeo/09-torre 1 02.webp">
+                <div class="step-item anim" style="transition-delay:0.26s" data-preview-video="animations/acc-3d.mp4" data-preview-video-start="0" data-preview-video-end="6">
                     <p class="step-num-label">03</p>
                     <div class="step-bar"></div>
                     <h4 class="step-name" id="step3-name">Visualización</h4>
                     <p class="step-desc" id="step3-desc">Imágenes, videos y cinematografías. Los visuales que hacen real el proyecto antes de que exista.</p>
                 </div>
-                <div class="step-item anim" style="transition-delay:0.34s" data-preview="img/parpadeo/14-cowork dic.webp">
+                <div class="step-item anim" style="transition-delay:0.34s" data-preview-video="animations/acc-interactive.mp4" data-preview-video-start="0" data-preview-video-end="6">
                     <p class="step-num-label">04</p>
                     <div class="step-bar"></div>
                     <h4 class="step-name" id="step4-name">Herramientas</h4>
                     <p class="step-desc" id="step4-desc">Showroom virtual, tour 360 y materiales de venta. El ecosistema digital completo del proyecto.</p>
                 </div>
-                <div class="step-item anim" style="transition-delay:0.42s" data-preview="img/parpadeo/06-general exterior skybar.webp">
+                <div class="step-item anim" style="transition-delay:0.42s" data-preview-video="animations/acc-brand.mp4" data-preview-video-start="0" data-preview-video-end="3">
                     <p class="step-num-label">05</p>
                     <div class="step-bar"></div>
                     <h4 class="step-name" id="step5-name">Lanzamiento</h4>
@@ -1370,6 +1488,12 @@ var snapSections;
         });
     }, { threshold: 0.5 });
     snapSections.forEach(function (s) { io.observe(s); });
+
+    /* hash navigation — e.g. index.html#s-projects */
+    var hashMap = { '#s-hero':0,'#s-logos':1,'#s-why':2,'#s-services':3,'#s-projects':4,'#s-process':5,'#s-faq':6,'#s-contact':7 };
+    if (location.hash && hashMap[location.hash] !== undefined) {
+        setTimeout(function() { window.snapGoTo(hashMap[location.hash]); }, 100);
+    }
 })();
 
 /* ── Typewriter ── */
@@ -1460,7 +1584,7 @@ var snapSections;
     var io = new IntersectionObserver(function (entries) {
         entries.forEach(function (e) { if (e.isIntersecting) run(); });
     }, { threshold: 0.4 });
-    var stats = document.getElementById('s-stats');
+    var stats = document.getElementById('s-why');
     if (stats) io.observe(stats);
 })();
 
@@ -1511,7 +1635,7 @@ var snapSections;
             else { clearInterval(flashInterval); tiles.forEach(function (t) { t.classList.remove('lit'); }); busy.clear(); }
         });
     }, { threshold: 0.3 });
-    var stats = document.getElementById('s-stats');
+    var stats = document.getElementById('s-why');
     if (stats) io.observe(stats);
 })();
 
@@ -1549,15 +1673,51 @@ var snapSections;
         requestAnimationFrame(tick);
     })();
 
+    var procVid = null;
+    var flipInterval = null;
+
     document.querySelectorAll('#s-process .step-item').forEach(function (step) {
-        var src = step.dataset.preview;
-        if (!src) return;
+        var src      = step.dataset.preview;
+        var vidSrc   = step.dataset.previewVideo;
+        var flipSrc  = step.dataset.previewFlip;
+
         step.addEventListener('mouseenter', function () {
-            preview.style.backgroundImage = 'url(' + src + ')';
-            preview.classList.add('visible');
+            if (flipSrc) {
+                var imgs = flipSrc.split('|');
+                var idx = 0;
+                preview.style.backgroundImage = 'url(' + imgs[0] + ')';
+                preview.classList.add('visible');
+                flipInterval = setInterval(function () {
+                    idx = (idx + 1) % imgs.length;
+                    preview.style.backgroundImage = 'url(' + imgs[idx] + ')';
+                }, 400);
+            } else if (vidSrc) {
+                var vStart = parseFloat(step.dataset.previewVideoStart || 0);
+                var vEnd   = parseFloat(step.dataset.previewVideoEnd   || 3);
+                preview.style.backgroundImage = 'none';
+                if (!procVid) {
+                    procVid = document.createElement('video');
+                    procVid.muted = true; procVid.playsInline = true; procVid.loop = false;
+                    procVid.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:50%;';
+                    preview.appendChild(procVid);
+                }
+                procVid.src = vidSrc;
+                procVid.currentTime = vStart;
+                procVid.play();
+                procVid.ontimeupdate = function () {
+                    if (procVid.currentTime >= vEnd) { procVid.currentTime = vStart; procVid.play(); }
+                };
+                preview.classList.add('visible');
+            } else if (src) {
+                if (procVid) { procVid.pause(); procVid.src = ''; }
+                preview.style.backgroundImage = 'url(' + src + ')';
+                preview.classList.add('visible');
+            }
         });
         step.addEventListener('mouseleave', function () {
             preview.classList.remove('visible');
+            if (procVid) { procVid.pause(); }
+            if (flipInterval) { clearInterval(flipInterval); flipInterval = null; }
         });
     });
 })();

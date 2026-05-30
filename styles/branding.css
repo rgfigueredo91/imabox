@@ -14,6 +14,9 @@
         *::-webkit-scrollbar { display: none; }
         html, body { background: var(--bg); color: var(--text); font-family: "Poppins", sans-serif; font-weight: 300; line-height: 1.7; overflow-x: hidden; }
         .container { max-width: 1100px; margin: 0 auto; padding: 0 48px; width: 100%; }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); text-decoration: none; margin-bottom: 28px; transition: color 0.2s; }
+        .back-link:hover { color: var(--gold); }
+        .back-link i { font-size: 0.55rem; }
         .hero { padding: 140px 0 60px; position: relative; }
         .hero::after { content: ""; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: linear-gradient(to right, transparent, var(--gold-border) 30%, var(--gold-border) 70%, transparent); }
         .hero-tag { font-size: 0.6rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; animation: fadeUp 0.7s var(--ease-out) 0.1s both; }

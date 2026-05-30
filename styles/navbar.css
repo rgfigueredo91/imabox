@@ -123,12 +123,12 @@
 
 .nav-links a {
     font-family: 'aktiv-grotesk', sans-serif;
-    font-size: clamp(2.8rem, 6.5vw, 5.8rem);
+    font-size: clamp(2rem, 4.2vw, 4.2rem);
     font-weight: 200;
     color: rgba(255,255,255,0.82);
     text-decoration: none;
     display: block;
-    line-height: 1.12;
+    line-height: 1.15;
     letter-spacing: -0.03em;
     transform: translateY(110%);
     transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
@@ -139,6 +139,10 @@
 .navbar.open .nav-links li:nth-child(2) a { transform: translateY(0); transition-delay: 0.09s; }
 .navbar.open .nav-links li:nth-child(3) a { transform: translateY(0); transition-delay: 0.14s; }
 .navbar.open .nav-links li:nth-child(4) a { transform: translateY(0); transition-delay: 0.19s; }
+.navbar.open .nav-links li:nth-child(5) a { transform: translateY(0); transition-delay: 0.24s; }
+.navbar.open .nav-links li:nth-child(6) a { transform: translateY(0); transition-delay: 0.29s; }
+.navbar.open .nav-links li:nth-child(7) a { transform: translateY(0); transition-delay: 0.34s; }
+.navbar.open .nav-links li:nth-child(8) a { transform: translateY(0); transition-delay: 0.39s; }
 
 .nav-links a:hover,
 .nav-links a.current { color: #c9a96e; }
@@ -188,17 +192,19 @@
 .nav-lang a:hover { color: #c9a96e; }
 
 /* ── RESPONSIVE ── */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .navbar { padding: 0 24px; }
     .nav-overlay {
         flex-direction: column;
-        justify-content: flex-end;
-        align-items: flex-start;
+        justify-content: center;
+        align-items: center;
         padding: 72px 32px 56px;
-        gap: 40px;
+        gap: 0;
     }
     .nav-overlay::before { left: 24px; right: 24px; }
-    .nav-info { text-align: left; }
-    .nav-lang { justify-content: flex-start; }
-    .nav-links a { font-size: clamp(2.4rem, 10vw, 3.6rem); }
+    .nav-links { text-align: center; width: 100%; }
+    .nav-links li { text-align: center; }
+    .nav-links a { font-size: clamp(2.2rem, 6vw, 3.8rem); }
+    .nav-info { text-align: center; margin-top: 32px; }
+    .nav-lang { justify-content: center; }
 }
