@@ -206,6 +206,76 @@
         .marquee-wrap:hover .marquee-track-rtl { animation-play-state: paused; }
 
         /* ──────────────────────────────────────────
+           REVEAL SLIDER
+        ────────────────────────────────────────── */
+        .reveal-wrap {
+            position: relative; width: 100%; aspect-ratio: 16/9;
+            overflow: hidden; user-select: none; cursor: col-resize;
+            border: 1px solid rgba(255,255,255,0.07);
+        }
+        .reveal-after, .reveal-before { position: absolute; inset: 0; }
+        .reveal-after img, .reveal-before img {
+            width: 100%; height: 100%; object-fit: cover;
+            display: block; pointer-events: none;
+        }
+        .reveal-before { clip-path: inset(0 50% 0 0); }
+        .reveal-handle {
+            position: absolute; top: 0; bottom: 0; left: 50%;
+            width: 2px; background: rgba(255,255,255,0.9);
+            transform: translateX(-50%);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .reveal-handle-btn {
+            width: 32px; height: 32px; border-radius: 50%;
+            background: #fff; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.6); flex-shrink: 0;
+        }
+        .reveal-handle-btn svg { width: 16px; height: 16px; fill: #000; }
+        .reveal-label {
+            position: absolute; bottom: 10px;
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.5rem; letter-spacing: 0.2em; text-transform: uppercase;
+            color: rgba(255,255,255,0.7); background: rgba(0,0,0,0.45); padding: 3px 8px;
+            pointer-events: none;
+        }
+        .reveal-label.left  { left: 10px; }
+        .reveal-label.right { right: 10px; }
+
+        /* ──────────────────────────────────────────
+           PROJ PREVIEW CIRCULAR + IRIS
+        ────────────────────────────────────────── */
+        #proj-preview {
+            position: fixed; pointer-events: none; z-index: 500;
+            width: 300px; height: 300px; border-radius: 50%; overflow: hidden;
+            background-size: cover; background-position: center;
+            opacity: 0; transform: scale(0.82);
+            transition: opacity 0.22s ease, transform 0.22s ease;
+            box-shadow: 0 24px 60px rgba(0,0,0,0.55);
+            outline: 2px solid var(--gold); outline-offset: 4px;
+        }
+        #proj-preview.visible { opacity: 1; transform: scale(1); }
+        #proj-preview-label {
+            position: absolute; bottom: 0; left: 0; right: 0; height: 55%;
+            background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, transparent 100%);
+            display: flex; align-items: flex-end; justify-content: center;
+            padding-bottom: 28px;
+        }
+        #proj-preview-label span {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase;
+            color: #fff; text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+        }
+        @media (hover: none) { #proj-preview { display: none; } }
+        #proj-iris-wrap {
+            position: fixed; inset: 0; z-index: 9000; pointer-events: none;
+            clip-path: circle(0% at var(--cx, 50%) var(--cy, 50%));
+            transition: clip-path 1.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        #proj-iris-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+        #proj-iris-black { position: absolute; inset: 0; background: #0e0e0e; z-index: 1; transition: opacity 0.5s ease; }
+        @media (hover: hover) and (pointer: fine) { .proj-card-name, .proj-card-client { display: none; } }
+
+        /* ──────────────────────────────────────────
            S3 — WHY
         ────────────────────────────────────────── */
         #s-why {
@@ -213,8 +283,8 @@
             display: flex; align-items: center; justify-content: center;
         }
         .why-inner {
-            max-width: 1100px; width: 100%; padding: 0 80px;
-            display: grid; grid-template-columns: 1fr 1fr; gap: 100px;
+            max-width: 1200px; width: 100%; padding: 0 80px;
+            display: grid; grid-template-columns: 1fr 1.6fr; gap: 64px;
             align-items: center;
         }
         .section-tag {
@@ -234,8 +304,8 @@
             font-size: 0.88rem; font-weight: 300;
             color: rgba(255,255,255,0.42); line-height: 1.9;
         }
-        .why-items { display: flex; flex-direction: column; gap: 36px; }
-        .why-item { display: flex; gap: 20px; align-items: flex-start; }
+        .why-items { display: flex; flex-direction: column; gap: 22px; margin-top: 28px; }
+        .why-item { display: flex; gap: 16px; align-items: flex-start; }
         .why-num {
             font-family: 'aktiv-grotesk', sans-serif;
             font-size: 0.58rem; letter-spacing: 0.18em;
@@ -429,6 +499,26 @@
             font-family: 'Poppins', sans-serif;
             font-size: 0.65rem; color: rgba(255,255,255,0.4);
             margin-top: 3px; font-weight: 300;
+        }
+
+        /* ──────────────────────────────────────────
+           PROCESS PREVIEW CIRCULAR
+        ────────────────────────────────────────── */
+        #proc-preview {
+            position: fixed; pointer-events: none; z-index: 500;
+            width: 260px; height: 260px; border-radius: 50%; overflow: hidden;
+            background-size: cover; background-position: center;
+            opacity: 0; transform: scale(0.78);
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            box-shadow: 0 20px 52px rgba(0,0,0,0.65);
+            outline: 2px solid var(--gold); outline-offset: 4px;
+        }
+        #proc-preview.visible { opacity: 1; transform: scale(1); }
+        @media (hover: none) { #proc-preview { display: none; } }
+        @media (hover: hover) and (pointer: fine) {
+            #s-process .step-item { cursor: crosshair; }
+            #s-process .step-item:hover .step-name { color: var(--gold); transition: color 0.2s; }
+            #s-process .step-item:hover .step-bar { background: rgba(201,169,110,0.28); transition: background 0.3s; }
         }
 
         /* ──────────────────────────────────────────
@@ -637,7 +727,8 @@
             .acc-content p { font-size: 0.78rem; max-width: 100%; }
             .acc-overlay { background: linear-gradient(to top, rgba(0,0,0,0.8) 35%, transparent 100%); }
 
-            .why-inner { grid-template-columns: 1fr; gap: 36px; padding: 0 32px; }
+            .why-inner { grid-template-columns: 1fr; gap: 28px; padding: 0 32px; }
+            .reveal-wrap { display: none; }
             .process-inner { padding: 0 32px; }
             .process-steps { grid-template-columns: 1fr 1fr; gap: 24px; }
             .proj-header { padding: 40px 28px 20px; }
@@ -697,10 +788,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </button>
         <div class="nav-overlay">
             <ul class="nav-links">
-                <li><a href="#" onclick="window.snapGoTo(5);return false;">Projects</a></li>
-                <li><a href="#" onclick="window.snapGoTo(3);return false;">Services</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="#" onclick="window.snapGoTo(8);return false;">Contact</a></li>
+                <li><a href="#" onclick="window.snapGoTo(0);return false;">Inicio</a></li>
+                <li><a href="#" onclick="window.snapGoTo(1);return false;">Clientes</a></li>
+                <li><a href="#" onclick="window.snapGoTo(2);return false;">Por qué nosotros</a></li>
+                <li><a href="#" onclick="window.snapGoTo(3);return false;">Servicios</a></li>
+                <li><a href="#" onclick="window.snapGoTo(5);return false;">Proyectos</a></li>
+                <li><a href="#" onclick="window.snapGoTo(6);return false;">Cómo trabajamos</a></li>
+                <li><a href="#" onclick="window.snapGoTo(7);return false;">FAQs</a></li>
+                <li><a href="#" onclick="window.snapGoTo(8);return false;">Contacto</a></li>
             </ul>
             <div class="nav-info">
                 <div class="nav-lang">
@@ -823,29 +918,46 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <div class="why-left">
                 <p class="section-tag anim" id="why-tag">El desafío</p>
                 <h2 class="why-heading anim" style="transition-delay:0.1s" id="why-heading">Tu proyecto necesita vender<br>antes de que <em>exista.</em></h2>
-                <p class="why-desc anim" style="transition-delay:0.2s" id="why-desc">Los desarrolladores inmobiliarios necesitan atraer inversores, pre-vender unidades y generar expectativa en el mercado — antes de poner el primer ladrillo. El problema es que nadie puede ver, sentir ni querer algo que todavía no existe.</p>
+                <p class="why-desc anim" style="transition-delay:0.2s" id="why-desc">Los desarrolladores inmobiliarios necesitan atraer inversores, pre-vender unidades y generar expectativa — antes de poner el primer ladrillo. El problema es que nadie puede ver, sentir ni querer algo que todavía no existe.</p>
+                <div class="why-items">
+                    <div class="why-item anim" style="transition-delay:0.25s">
+                        <span class="why-num">01</span>
+                        <div class="why-item-body">
+                            <h4 id="why-i1-h">Lo hacemos visible</h4>
+                            <p id="why-i1-p">Renders fotorrealistas, animaciones y tours antes de que la obra empiece.</p>
+                        </div>
+                    </div>
+                    <div class="why-item anim" style="transition-delay:0.35s">
+                        <span class="why-num">02</span>
+                        <div class="why-item-body">
+                            <h4 id="why-i2-h">Lo hacemos deseable</h4>
+                            <p id="why-i2-p">Identidad de marca y sistema visual completo para diferenciarte.</p>
+                        </div>
+                    </div>
+                    <div class="why-item anim" style="transition-delay:0.45s">
+                        <span class="why-num">03</span>
+                        <div class="why-item-body">
+                            <h4 id="why-i3-h">Lo hacemos vendible</h4>
+                            <p id="why-i3-p">Showroom virtual, visor 3D y contenido para cerrar ventas antes y mejor.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="why-items">
-                <div class="why-item anim" style="transition-delay:0.1s">
-                    <span class="why-num">01</span>
-                    <div class="why-item-body">
-                        <h4 id="why-i1-h">Lo hacemos visible</h4>
-                        <p id="why-i1-p">Renders fotorrealistas, animaciones y tours virtuales que muestran tu proyecto terminado — antes de que la obra empiece.</p>
+            <div class="why-right anim" style="transition-delay:0.15s">
+                <div class="reveal-wrap" id="revealWrapIdx">
+                    <div class="reveal-after">
+                        <img src="img/reveal-render.webp" alt="Render">
                     </div>
-                </div>
-                <div class="why-item anim" style="transition-delay:0.2s">
-                    <span class="why-num">02</span>
-                    <div class="why-item-body">
-                        <h4 id="why-i2-h">Lo hacemos deseable</h4>
-                        <p id="why-i2-p">Identidad de marca, naming y sistema visual completo — para que tu proyecto tenga una personalidad clara y diferenciada.</p>
+                    <div class="reveal-before" id="revealBeforeIdx">
+                        <img src="img/reveal-sketch.webp" alt="Sketch">
                     </div>
-                </div>
-                <div class="why-item anim" style="transition-delay:0.3s">
-                    <span class="why-num">03</span>
-                    <div class="why-item-body">
-                        <h4 id="why-i3-h">Lo hacemos vendible</h4>
-                        <p id="why-i3-p">Showroom virtual, visor 3D y contenido para redes — las herramientas digitales para cerrar ventas antes y mejor.</p>
+                    <div class="reveal-handle" id="revealHandleIdx">
+                        <div class="reveal-handle-btn">
+                            <svg viewBox="0 0 20 20"><path d="M7 4l-4 6 4 6M13 4l4 6-4 6"/></svg>
+                        </div>
                     </div>
+                    <span class="reveal-label left" id="reveal-label-left">Sketch</span>
+                    <span class="reveal-label right" id="reveal-label-right">Vision</span>
                 </div>
             </div>
         </div>
@@ -1028,31 +1140,31 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <p class="section-tag anim" id="proc-tag">Cómo trabajamos</p>
             <h2 class="why-heading anim" style="transition-delay:0.1s; max-width:600px" id="proc-heading">No necesitás un proyecto<br>terminado para empezar.</h2>
             <div class="process-steps">
-                <div class="step-item anim" style="transition-delay:0.1s">
+                <div class="step-item anim" style="transition-delay:0.1s" data-preview="img/parpadeo/01-housing competition.webp">
                     <p class="step-num-label">01</p>
                     <div class="step-bar"></div>
                     <h4 class="step-name" id="step1-name">Concepto</h4>
                     <p class="step-desc" id="step1-desc">Entendemos el proyecto: ubicación, programa, mercado. Definimos qué quiere comunicar y a quién.</p>
                 </div>
-                <div class="step-item anim" style="transition-delay:0.18s">
+                <div class="step-item anim" style="transition-delay:0.18s" data-preview="img/parpadeo/02-garda malvin.webp">
                     <p class="step-num-label">02</p>
                     <div class="step-bar"></div>
                     <h4 class="step-name" id="step2-name">Identidad</h4>
                     <p class="step-desc" id="step2-desc">Desarrollamos la marca del edificio: nombre, logo, paleta, tipografía. El ADN visual de todo.</p>
                 </div>
-                <div class="step-item anim" style="transition-delay:0.26s">
+                <div class="step-item anim" style="transition-delay:0.26s" data-preview="img/parpadeo/09-torre 1 02.webp">
                     <p class="step-num-label">03</p>
                     <div class="step-bar"></div>
                     <h4 class="step-name" id="step3-name">Visualización</h4>
                     <p class="step-desc" id="step3-desc">Imágenes, videos y cinematografías. Los visuales que hacen real el proyecto antes de que exista.</p>
                 </div>
-                <div class="step-item anim" style="transition-delay:0.34s">
+                <div class="step-item anim" style="transition-delay:0.34s" data-preview="img/parpadeo/14-cowork dic.webp">
                     <p class="step-num-label">04</p>
                     <div class="step-bar"></div>
                     <h4 class="step-name" id="step4-name">Herramientas</h4>
                     <p class="step-desc" id="step4-desc">Showroom virtual, tour 360 y materiales de venta. El ecosistema digital completo del proyecto.</p>
                 </div>
-                <div class="step-item anim" style="transition-delay:0.42s">
+                <div class="step-item anim" style="transition-delay:0.42s" data-preview="img/parpadeo/06-general exterior skybar.webp">
                     <p class="step-num-label">05</p>
                     <div class="step-bar"></div>
                     <h4 class="step-name" id="step5-name">Lanzamiento</h4>
@@ -1410,6 +1522,145 @@ var snapSections;
             var isOpen = item.classList.contains('open');
             document.querySelectorAll('.faq-item').forEach(function (i) { i.classList.remove('open'); });
             if (!isOpen) item.classList.add('open');
+        });
+    });
+})();
+
+/* ── Process step preview ── */
+(function () {
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+    var preview = document.createElement('div');
+    preview.id = 'proc-preview';
+    document.body.appendChild(preview);
+
+    var mx = 0, my = 0, cx = -999, cy = -999;
+    var PW = 260, PH = 260, PAD = 20;
+
+    document.addEventListener('mousemove', function (e) { mx = e.clientX; my = e.clientY; });
+
+    (function tick() {
+        var tx = (mx + PW + 32 + PAD > window.innerWidth) ? mx - PW - 32 : mx + 32;
+        var ty = Math.max(PAD, Math.min(window.innerHeight - PH - PAD, my - PH / 2));
+        cx += (tx - cx) * 0.12;
+        cy += (ty - cy) * 0.12;
+        preview.style.left = cx + 'px';
+        preview.style.top  = cy + 'px';
+        requestAnimationFrame(tick);
+    })();
+
+    document.querySelectorAll('#s-process .step-item').forEach(function (step) {
+        var src = step.dataset.preview;
+        if (!src) return;
+        step.addEventListener('mouseenter', function () {
+            preview.style.backgroundImage = 'url(' + src + ')';
+            preview.classList.add('visible');
+        });
+        step.addEventListener('mouseleave', function () {
+            preview.classList.remove('visible');
+        });
+    });
+})();
+
+/* ── Reveal slider (Why section) ── */
+(function () {
+    var wrap   = document.getElementById('revealWrapIdx');
+    var before = document.getElementById('revealBeforeIdx');
+    var handle = document.getElementById('revealHandleIdx');
+    if (!wrap) return;
+    var dragging = false;
+
+    function setPos(x) {
+        var rect = wrap.getBoundingClientRect();
+        var pct  = Math.max(2, Math.min(98, ((x - rect.left) / rect.width) * 100));
+        before.style.clipPath = 'inset(0 ' + (100 - pct) + '% 0 0)';
+        handle.style.left     = pct + '%';
+    }
+
+    handle.addEventListener('mousedown',  function (e) { dragging = true; e.preventDefault(); });
+    document.addEventListener('mouseup',  function ()  { dragging = false; });
+    document.addEventListener('mousemove', function (e) { if (dragging) setPos(e.clientX); });
+
+    wrap.addEventListener('touchstart', function () { dragging = true; }, { passive: true });
+    wrap.addEventListener('touchend',   function () { dragging = false; });
+    wrap.addEventListener('touchmove',  function (e) {
+        if (dragging) { setPos(e.touches[0].clientX); e.stopPropagation(); }
+    }, { passive: true });
+})();
+
+/* ── Floating preview + iris (Highlight Projects) ── */
+(function () {
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+    var preview = document.createElement('div');
+    preview.id = 'proj-preview';
+    var label = document.createElement('div');
+    label.id = 'proj-preview-label';
+    label.innerHTML = '<span></span>';
+    preview.appendChild(label);
+    document.body.appendChild(preview);
+
+    var mx = 0, my = 0, cx = 0, cy = 0;
+    var PW = 300, PH = 300, PAD = 20;
+
+    document.addEventListener('mousemove', function (e) { mx = e.clientX; my = e.clientY; });
+
+    (function tick() {
+        var tx = (mx + PW + 32 + PAD > window.innerWidth) ? mx - PW - 32 : mx + 32;
+        var ty = (my - PH - 24 < PAD) ? my + 24 : my - PH - 24;
+        cx += (tx - cx) * 0.1;
+        cy += (ty - cy) * 0.1;
+        preview.style.left = cx + 'px';
+        preview.style.top  = cy + 'px';
+        requestAnimationFrame(tick);
+    })();
+
+    document.querySelectorAll('#s-projects .proj-card').forEach(function (card) {
+        var bg = card.querySelector('.proj-card-bg');
+        if (!bg) return;
+        card.addEventListener('mouseenter', function () {
+            preview.style.backgroundImage = bg.style.backgroundImage;
+            label.querySelector('span').textContent = (card.querySelector('.proj-card-name') || {}).textContent || '';
+            preview.classList.add('visible');
+        });
+        card.addEventListener('mouseleave', function () {
+            preview.classList.remove('visible');
+        });
+    });
+
+    /* iris transition */
+    document.querySelectorAll('#s-projects a.proj-card').forEach(function (card) {
+        card.addEventListener('click', function (e) {
+            e.preventDefault();
+            var href = this.getAttribute('href');
+            var ocx  = cx + PW / 2;
+            var ocy  = cy + PH / 2;
+
+            preview.classList.remove('visible');
+
+            var wrap = document.createElement('div');
+            wrap.id  = 'proj-iris-wrap';
+            wrap.style.setProperty('--cx', ocx + 'px');
+            wrap.style.setProperty('--cy', ocy + 'px');
+
+            var ifrm = document.createElement('iframe');
+            ifrm.src = href;
+
+            var black = document.createElement('div');
+            black.id  = 'proj-iris-black';
+
+            wrap.appendChild(ifrm);
+            wrap.appendChild(black);
+            document.body.appendChild(wrap);
+
+            requestAnimationFrame(function () {
+                requestAnimationFrame(function () {
+                    wrap.style.clipPath = 'circle(150% at ' + ocx + 'px ' + ocy + 'px)';
+                });
+            });
+
+            ifrm.addEventListener('load', function () { black.style.opacity = '0'; });
+            setTimeout(function () { window.location.href = href; }, 1900);
         });
     });
 })();
