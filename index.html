@@ -941,19 +941,20 @@
             .why-item-body p { display: block !important; font-size: 0.84rem; }
         }
 
-        /* ── iPad landscape / iPad Pro portrait (901px–1100px) ── */
+        /* ── iPad Pro portrait (901px–1100px) ── */
         @media (min-width: 901px) and (max-width: 1100px) {
-            /* Por qué nosotros — 1 columna, más grande */
-            #s-why { padding-top: 52px; }
-            .why-inner { grid-template-columns: 1fr; gap: 32px; padding: 24px 80px 0; flex: none; width: 100%; }
+            /* Por qué nosotros — equidistante, separado del navbar */
+            #s-why { padding-top: 72px; justify-content: space-evenly; }
+            .why-inner { grid-template-columns: 1fr; gap: 28px; padding: 0 80px; flex: none; width: 100%; }
             .why-heading { font-size: clamp(2rem, 3.8vw, 3rem); }
             .why-desc { font-size: 1rem; max-width: 680px; }
             .why-items { grid-template-columns: 1fr 1fr; gap: 24px 64px; }
             .why-item-body h4 { font-size: 1.05rem; }
             .why-item-body p { font-size: 0.92rem; display: block; }
             .why-cta-row { display: flex; }
+            .why-stats { padding: 0; }
 
-            /* Servicios — accordion vertical igual que mobile */
+            /* Servicios — accordion vertical */
             #s-services { overflow: hidden; }
             .acc-wrap { flex-direction: column; }
             .acc-item { flex: 1; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
@@ -965,35 +966,40 @@
             .acc-content p { font-size: 0.9rem; max-width: 100%; }
             .acc-overlay { background: linear-gradient(to top, rgba(0,0,0,0.8) 35%, transparent 100%); }
 
-            /* Proyectos — 2 columnas, más espacio del navbar */
-            .proj-header { padding: 56px 48px 24px; }
+            /* Proyectos — 2 columnas, espacio navbar consistente */
+            .proj-header { padding: 72px 48px 24px; }
             .proj-header h2 { font-size: clamp(1.6rem, 2.6vw, 2rem); }
             .proj-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(3, 1fr); }
 
-            /* Planes — 1 columna ancho completo */
+            /* Planes — 1 columna centrada, con lista completa */
             #s-packages { justify-content: center; align-items: center; overflow: hidden; }
             .pkg-inner { padding: 0 60px; }
-            #s-packages .section-tag { margin-bottom: 12px; }
-            #s-packages .why-heading { font-size: clamp(1.6rem, 2.8vw, 2.2rem); margin-bottom: 16px; }
+            #s-packages .section-tag { margin-bottom: 12px; text-align: center; }
+            #s-packages .why-heading { font-size: clamp(1.6rem, 2.8vw, 2.2rem); margin-bottom: 16px; text-align: center; }
             .pkg-grid { grid-template-columns: 1fr; margin-top: 20px; }
-            .pkg-card { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); padding: 20px 36px; gap: 10px; }
+            .pkg-card { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); padding: 18px 36px; gap: 10px; }
             .pkg-card:last-child { border-bottom: none; }
-            .pkg-name { font-size: 1.3rem; }
+            .pkg-name { font-size: 1.25rem; }
             .pkg-desc { font-size: 0.86rem; }
-            .pkg-list { display: none; }
+            .pkg-list { display: flex; }
+            .pkg-list li { font-size: 0.8rem; }
+            .pkg-cta { margin-top: 8px; }
 
-            /* Contacto — apilado, más grande */
-            #s-contact { align-items: flex-start; justify-content: flex-start; overflow-y: auto; }
-            .contact-inner { grid-template-columns: 1fr; gap: 36px; padding: 80px 80px 40px; }
-            .contact-title { font-size: clamp(1.8rem, 3.2vw, 2.6rem); }
-            .contact-sub { font-size: 0.96rem; }
-            .contact-inner .section-tag { text-align: left; }
-
-            /* FAQ */
-            #s-faq { align-items: flex-start; justify-content: flex-start; overflow-y: auto; }
-            .faq-inner { padding: 80px 80px 40px; }
+            /* FAQ — centrado, separado del navbar */
+            #s-faq { align-items: center; justify-content: center; }
+            .faq-inner { padding: 0 80px; max-width: 820px; width: 100%; }
+            .faq-inner .section-tag { text-align: center; }
+            .faq-inner .why-heading { text-align: center; font-size: clamp(1.6rem, 2.6vw, 2rem); }
             .faq-q { font-size: 1.05rem; }
             .faq-a { font-size: 0.92rem; }
+
+            /* Contacto — centrado, apilado */
+            #s-contact { align-items: center; justify-content: center; overflow-y: auto; }
+            .contact-inner { grid-template-columns: 1fr; gap: 36px; padding: 0 80px; max-width: 720px; width: 100%; }
+            .contact-inner .section-tag { text-align: center; }
+            .contact-title { font-size: clamp(1.8rem, 3.2vw, 2.6rem); text-align: center; }
+            .contact-sub { font-size: 0.96rem; text-align: center; }
+            .contact-links { align-items: center; }
         }
 
         /* ── Móvil (600px y menos) ── */
