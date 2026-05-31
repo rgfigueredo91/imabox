@@ -899,23 +899,28 @@
                 padding: 16px 0; cursor: pointer; flex: 1;
                 border-top: 1px solid rgba(255,255,255,0.07);
                 position: relative; gap: 0;
+                transition: background 0.2s, padding-left 0.2s;
             }
+            .step-item:active { background: rgba(201,169,110,0.05); padding-left: 6px; }
+            .step-item.expanded { background: rgba(201,169,110,0.04); padding-left: 6px; }
             .step-item:last-child { border-bottom: 1px solid rgba(255,255,255,0.07); }
             .step-num-label {
                 width: 52px; margin-bottom: 0; font-size: 0.62rem;
                 flex-shrink: 0; align-self: center;
                 grid-column: unset; grid-row: unset;
+                color: var(--gold); opacity: 0.8;
             }
             .step-bar { display: none; }
             .step-name {
                 flex: 1; font-size: clamp(1rem, 1.8vw, 1.35rem);
                 margin-bottom: 0; align-self: center;
                 grid-column: unset; grid-row: unset;
+                color: rgba(255,255,255,0.9);
             }
             .step-toggle-icon {
                 width: 28px; height: 28px; flex-shrink: 0;
                 display: flex; align-items: center; justify-content: center;
-                opacity: 0.45; border: 1px solid rgba(255,255,255,0.18);
+                opacity: 0.65; border: 1px solid rgba(255,255,255,0.28);
                 border-radius: 50%;
                 transition: opacity 0.2s, border-color 0.2s, background 0.2s;
             }
@@ -2161,6 +2166,19 @@ var snapSections;
         preview.style.transform = 'scale(0.82)';
         clearInterval(tabFlip);
         if (tabVid) { tabVid.pause(); }
+    }
+
+    /* apagar círculo y resetear accordion al salir de la sección */
+    var procSection = document.getElementById('s-process');
+    if (procSection) {
+        new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (!entry.isIntersecting) {
+                    hidePreview();
+                    steps.forEach(function (s) { s.classList.remove('expanded'); });
+                }
+            });
+        }, { threshold: 0.3 }).observe(procSection);
     }
 
     steps.forEach(function (step) {
