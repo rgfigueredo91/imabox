@@ -273,7 +273,7 @@
         }
         #proj-iris-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
         #proj-iris-black { position: absolute; inset: 0; background: #0e0e0e; z-index: 1; transition: opacity 0.5s ease; }
-        @media (hover: hover) and (pointer: fine) { .proj-card-name, .proj-card-client { display: none; } }
+        @media (hover: hover) and (pointer: fine) { .proj-card-name { display: block; } }
 
         /* ──────────────────────────────────────────
            S3 — WHY
@@ -281,17 +281,22 @@
         #s-why {
             background: #080808;
             display: flex; flex-direction: column; align-items: center;
-            justify-content: center; position: relative; overflow: hidden;
+            justify-content: space-between; position: relative; overflow: hidden;
+            padding-top: 44px;
         }
         .why-inner {
             max-width: 1200px; width: 100%; padding: 0 80px;
-            display: grid; grid-template-columns: 1fr 1.6fr; gap: 64px;
+            display: grid; grid-template-columns: 1fr 1.25fr; gap: 72px;
             align-items: center; position: relative; z-index: 2;
-            flex: 1;
+            flex: 1; align-content: center;
+        }
+        .why-items {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 28px 40px;
         }
         .why-stats {
             width: 100%; position: relative; z-index: 2;
-            padding: 28px 0 32px;
+            padding: 20px 0 28px;
             flex-shrink: 0;
         }
         .section-tag {
@@ -311,7 +316,6 @@
             font-size: 0.94rem; font-weight: 300;
             color: rgba(255,255,255,0.60); line-height: 1.9;
         }
-        .why-items { display: flex; flex-direction: column; gap: 22px; margin-top: 28px; }
         .why-item { display: flex; gap: 16px; align-items: flex-start; }
         .why-num {
             font-family: 'aktiv-grotesk', sans-serif;
@@ -501,8 +505,8 @@
         }
         .proj-card-client {
             font-family: 'Poppins', sans-serif;
-            font-size: 0.65rem; color: rgba(255,255,255,0.4);
-            margin-top: 3px; font-weight: 300;
+            font-size: 0.65rem; color: var(--gold);
+            margin-top: 3px; font-weight: 300; opacity: 0.8;
         }
 
         /* ──────────────────────────────────────────
@@ -597,7 +601,7 @@
             transition: max-height 0.4s ease, padding 0.35s ease;
             padding-bottom: 0;
         }
-        .faq-item.open .faq-a { max-height: 160px; padding-bottom: 22px; }
+        .faq-item.open .faq-a { max-height: 260px; padding-bottom: 22px; }
 
         /* ──────────────────────────────────────────
            S9 — CONTACT
@@ -718,6 +722,74 @@
         /* ──────────────────────────────────────────
            RESPONSIVE
         ────────────────────────────────────────── */
+        /* ──────────────────────────────────────────
+           WHY CTA + LOGOS STRIP
+        ────────────────────────────────────────── */
+        .why-cta-row {
+            margin-top: 32px; pointer-events: all;
+        }
+
+        .why-logos-strip {
+            width: 100%; padding: 18px 0 28px;
+            display: flex; flex-direction: column; align-items: center; gap: 14px;
+            position: relative; z-index: 2;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            flex-shrink: 0;
+        }
+
+        /* ──────────────────────────────────────────
+           S-PACKAGES
+        ────────────────────────────────────────── */
+        #s-packages {
+            background: #050505;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .pkg-inner {
+            max-width: 1100px; width: 100%; padding: 0 80px;
+        }
+        .pkg-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            margin-top: 52px;
+            border: 1px solid rgba(255,255,255,0.07);
+        }
+        .pkg-card {
+            padding: 44px 40px;
+            border-right: 1px solid rgba(255,255,255,0.07);
+            display: flex; flex-direction: column; gap: 16px;
+        }
+        .pkg-card:last-child { border-right: none; }
+        .pkg-card-mid { background: rgba(201,169,110,0.04); }
+        .pkg-label {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.56rem; letter-spacing: 0.22em;
+            color: var(--gold); opacity: 0.65;
+        }
+        .pkg-name {
+            font-family: 'aktiv-grotesk', sans-serif;
+            font-weight: 200; font-size: 1.5rem;
+            color: rgba(255,255,255,0.9); letter-spacing: -0.01em;
+        }
+        .pkg-desc {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.86rem; font-weight: 300;
+            color: rgba(255,255,255,0.56); line-height: 1.8;
+        }
+        .pkg-list {
+            list-style: none; display: flex; flex-direction: column;
+            gap: 8px; flex: 1;
+        }
+        .pkg-list li {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.82rem; font-weight: 300;
+            color: rgba(255,255,255,0.65); line-height: 1.5;
+            padding-left: 16px; position: relative;
+        }
+        .pkg-list li::before {
+            content: '—'; position: absolute; left: 0;
+            color: var(--gold); opacity: 0.6; font-size: 0.7rem;
+        }
+        .pkg-cta { margin-top: 12px; align-self: flex-start; }
+
         /* ── iPad landscape (1024px y menos) ── */
         @media (max-width: 1100px) {
             .why-inner { padding: 0 48px; gap: 40px; }
@@ -728,6 +800,17 @@
 
         /* ── iPad portrait + tablet (900px y menos) ── */
         @media (max-width: 900px) {
+            /* Packages — tablet portrait: 1 columna compacta, todo en pantalla */
+            #s-packages { align-items: center; justify-content: center; overflow: hidden; }
+            .pkg-inner { padding: 0 40px; }
+            #s-packages .section-tag { margin-bottom: 12px; }
+            #s-packages .why-heading { font-size: clamp(1.3rem, 3vw, 1.8rem); margin-bottom: 16px; }
+            .pkg-grid { grid-template-columns: 1fr; margin-top: 20px; }
+            .pkg-card { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); padding: 18px 28px; gap: 8px; }
+            .pkg-card:last-child { border-bottom: none; }
+            .pkg-name { font-size: 1.2rem; }
+            .pkg-desc { font-size: 0.82rem; }
+            .pkg-list { display: none; }
             /* Servicios — accordion vertical */
             #s-services { overflow: hidden; }
             .acc-wrap { flex-direction: column; }
@@ -741,16 +824,16 @@
             .acc-overlay { background: linear-gradient(to top, rgba(0,0,0,0.8) 35%, transparent 100%); }
 
             /* Por qué nosotros */
-            #s-why { justify-content: space-between; padding-top: 80px; }
-            .why-inner { grid-template-columns: 1fr; gap: 24px; padding: 28px 48px 0; text-align: center; }
-            .why-heading { font-size: clamp(2rem, 4.8vw, 3rem); }
-            .why-desc { font-size: 1rem; max-width: 560px; margin: 0 auto; }
-            .why-items { align-items: center; gap: 28px; }
-            .why-item { flex-direction: column; align-items: center; gap: 8px; }
-            .why-item-body h4 { font-size: 1.15rem; }
-            .why-item-body p { font-size: 0.95rem; }
-            .reveal-wrap { display: none; }
-            .why-stats { padding: 28px 0 40px; }
+            #s-why { padding-top: 52px; }
+            .why-inner { grid-template-columns: 1fr; gap: 28px; padding: 24px 48px 0; flex: none; width: 100%; }
+            .why-cta-row { display: flex; justify-content: center; }
+            .why-heading { font-size: clamp(1.7rem, 4vw, 2.6rem); }
+            .why-desc { font-size: 0.95rem; }
+            .why-items { grid-template-columns: 1fr 1fr; gap: 20px 32px; }
+            .why-item-body h4 { font-size: 0.92rem; }
+            .why-item-body p { font-size: 0.82rem; }
+            .why-stats { padding: 16px 0 0; }
+            .stats-wrap { gap: clamp(20px, 4vw, 48px); }
             .mosaic-grid { grid-template-columns: repeat(5, 1fr); }
             .stats-wrap { gap: clamp(28px, 6vw, 60px); }
 
@@ -771,6 +854,9 @@
             .proj-header { padding: 36px 32px 16px; }
             .proj-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(3, 1fr); }
 
+            /* Packages */
+            #s-packages { align-items: flex-start; overflow-y: auto; }
+
             /* FAQ */
             .faq-inner { padding: 0 40px; }
             .faq-inner .section-tag { text-align: center; }
@@ -780,17 +866,36 @@
             .faq-a { font-size: 0.88rem; }
 
             /* Contacto */
-            .contact-inner { grid-template-columns: 1fr; gap: 32px; padding: 0 40px; }
+            #s-contact { align-items: flex-start; overflow-y: auto; justify-content: flex-start; }
+            .contact-inner { grid-template-columns: 1fr; gap: 32px; padding: 80px 40px 40px; }
             .contact-inner .section-tag { text-align: center; }
             .contact-title { font-size: clamp(1.5rem, 4vw, 2.2rem); text-align: center; }
             .contact-sub { font-size: 0.9rem; margin-bottom: 24px; text-align: center; }
+
+            /* FAQ */
+            #s-faq { align-items: flex-start; overflow-y: auto; justify-content: flex-start; }
+            .faq-inner { padding: 80px 40px 40px; }
         }
 
         /* ── iPad portrait específico (601px–900px) ── */
         @media (min-width: 601px) and (max-width: 900px) {
-            .process-inner { padding: 124px 48px 60px !important; }
-            .process-steps { justify-content: flex-start !important; gap: 52px !important; margin-top: 48px !important; }
+            .process-inner { padding: 96px 48px 40px !important; }
+            .process-steps { justify-content: flex-start !important; gap: 36px !important; margin-top: 32px !important; }
             .step-item { flex: none !important; }
+            .why-items { grid-template-columns: 1fr 1fr !important; gap: 22px 36px !important; }
+            .why-item-body p { display: block !important; font-size: 0.84rem; }
+        }
+
+        /* ── iPad landscape (901px–1100px) ── */
+        @media (min-width: 901px) and (max-width: 1100px) {
+            .why-inner { padding: 0 48px; gap: 48px; }
+            .pkg-inner { padding: 0 48px; }
+            .pkg-card { padding: 32px 28px; }
+            .pkg-name { font-size: 1.3rem; }
+            .pkg-desc { font-size: 0.82rem; }
+            .pkg-list li { font-size: 0.78rem; }
+            .contact-inner { padding: 0 48px; gap: 48px; }
+            .process-inner { padding: 0 48px; }
         }
 
         /* ── Móvil (600px y menos) ── */
@@ -804,23 +909,36 @@
             .process-inner .section-tag, .process-inner .why-heading { text-align: center; }
             .why-item { flex-direction: column; align-items: center; gap: 6px; }
             .why-num { margin-top: 0; }
-            /* Por qué nosotros — ocupa todo el alto disponible */
-            #s-why { justify-content: space-between; padding: 80px 0 0; }
-            .why-inner { flex: 1; padding: 0 22px; align-items: flex-start; }
-            .why-left { display: flex; flex-direction: column; justify-content: center; height: 100%; }
-            .reveal-wrap { display: none; }
-            .why-heading { font-size: clamp(1.3rem, 5.5vw, 1.9rem) !important; margin-bottom: 14px; }
+            /* Por qué nosotros — mobile */
+            #s-why { padding-top: 48px; }
+            .why-inner { padding: 0 20px; gap: 20px; }
+            .why-heading { font-size: clamp(1.3rem, 5.5vw, 1.7rem) !important; margin-bottom: 10px; }
             .why-desc { display: none; }
-            .why-items { gap: 22px; margin-top: auto; padding-top: 24px; }
-            .why-item { flex-direction: column; align-items: center; gap: 6px; text-align: center; }
-            .why-item-body h4 { font-size: 0.92rem; margin-bottom: 4px; }
-            .why-item-body p { font-size: 0.82rem; line-height: 1.65; }
-            .why-stats { padding: 20px 0 72px; flex-shrink: 0; }
-            .stat-num { font-size: clamp(2.8rem, 13vw, 4rem); }
-            .stat-suffix { font-size: clamp(1.5rem, 7vw, 2.4rem); }
-            .stat-label { font-size: 0.66rem; letter-spacing: 0.1em; margin-top: 6px; }
-            .stats-wrap { gap: 16px; padding: 0 12px; flex-wrap: nowrap; justify-content: center; }
+            .why-items { grid-template-columns: 1fr 1fr; gap: 14px 18px; }
+            .why-item-body p { display: none; }
+            .why-item-body h4 { font-size: 0.82rem; margin-bottom: 0; }
+            .why-num { font-size: 0.52rem; }
+            .why-cta-row { margin-top: 14px; display: flex; justify-content: center; }
+            /* Equidistancia: why-inner no crece, space-between distribuye los 3 bloques */
+            .why-inner { flex: none; width: 100%; }
+            #s-why { justify-content: space-evenly; padding-bottom: 0; }
+            .why-stats { padding: 12px 0 0; }
+            .stat-num { font-size: clamp(2.4rem, 11vw, 3.5rem); }
+            .stat-suffix { font-size: clamp(1.3rem, 6vw, 2rem); }
+            .stat-label { font-size: 0.6rem; letter-spacing: 0.08em; margin-top: 4px; }
+            .stats-wrap { gap: 12px; padding: 0 10px; flex-wrap: wrap; justify-content: center; }
             .mosaic-grid { grid-template-columns: repeat(4, 1fr); }
+
+            /* Logos strip — compacto en mobile para entrar en viewport */
+            .why-logos-strip { padding: 8px 0 10px; gap: 8px; }
+            .why-logos-strip .logos-label { font-size: 0.52rem; }
+            .marquee-track img { height: 26px; }
+
+            /* FAQ mobile — scrollable */
+            #s-faq { align-items: flex-start; overflow-y: auto; justify-content: flex-start; }
+            .faq-inner { padding: 72px 20px 32px; }
+            .faq-inner .section-tag { text-align: center; }
+            .faq-inner .why-heading { text-align: center; }
 
             /* WhatsApp FAB más chico en mobile */
             .wsp-fab { width: 44px; height: 44px; bottom: 18px; right: 18px; }
@@ -855,8 +973,22 @@
             .proj-grid { grid-template-columns: repeat(2, 1fr); }
             .proj-header { padding: 84px 20px 14px; }
 
+            /* Packages — mobile: todo tiene que entrar en 100dvh sin scroll */
+            #s-packages { justify-content: flex-start; overflow: hidden; align-items: flex-start; }
+            .pkg-inner { padding: 60px 20px 14px; }
+            #s-packages .section-tag { margin-bottom: 10px; }
+            #s-packages .why-heading { font-size: 1.15rem !important; margin-bottom: 12px; line-height: 1.2; }
+            .pkg-grid { margin-top: 14px; }
+            .pkg-card { padding: 11px 16px; gap: 5px; }
+            .pkg-list { display: none; }
+            .pkg-name { font-size: 0.95rem; }
+            .pkg-desc { font-size: 0.75rem; line-height: 1.55;
+                display: -webkit-box; -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical; overflow: hidden; }
+            .pkg-label { font-size: 0.48rem; }
+            .pkg-cta { margin-top: 5px; padding: 9px 20px; font-size: 0.6rem; }
+
             /* FAQ */
-            .faq-inner { padding: 0 20px; }
             .faq-q { font-size: 0.9rem; padding: 16px 0; }
             .faq-a { font-size: 0.84rem; }
 
@@ -910,11 +1042,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </button>
         <div class="nav-overlay">
             <ul class="nav-links">
-                <li><a href="#" onclick="window.snapGoTo(1);return false;">Clientes</a></li>
-                <li><a href="#" onclick="window.snapGoTo(2);return false;">Por qué nosotros</a></li>
-                <li><a href="#" onclick="window.snapGoTo(3);return false;">Servicios</a></li>
+                <li><a href="#" onclick="window.snapGoTo(1);return false;">Por qué nosotros</a></li>
+                <li><a href="#" onclick="window.snapGoTo(2);return false;">Servicios</a></li>
+                <li><a href="#" onclick="window.snapGoTo(3);return false;">Cómo trabajamos</a></li>
                 <li><a href="#" onclick="window.snapGoTo(4);return false;">Proyectos</a></li>
-                <li><a href="#" onclick="window.snapGoTo(5);return false;">Cómo trabajamos</a></li>
+                <li><a href="#" onclick="window.snapGoTo(5);return false;">Alcances</a></li>
                 <li><a href="#" onclick="window.snapGoTo(6);return false;">FAQs</a></li>
                 <li><a href="#" onclick="window.snapGoTo(7);return false;">Contacto</a></li>
             </ul>
@@ -953,91 +1085,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
     </section>
 
-    <!-- ── S2 LOGOS ── -->
-    <section class="section" id="s-logos">
-        <p class="logos-label anim" id="logos-label">Confían en nosotros</p>
-
-        <!-- Fila 1 → izquierda -->
-        <div class="marquee-wrap">
-            <div class="marquee-track">
-                <img src="img/clientes/gomez-platero.png" alt="Gomez Platero">
-                <img src="img/clientes/teyma.png" alt="Teyma">
-                <img src="img/clientes/bekres.png" alt="Bekres">
-                <img src="img/clientes/sigmaplus.png" alt="Sigma Plus">
-                <img src="img/clientes/hifglobal.png" alt="HIF Global">
-                <img src="img/clientes/martin-gonzalez.png" alt="Martín González">
-                <img src="img/clientes/cabrera-inciarte.png" alt="Cabrera Inciarte">
-                <img src="img/clientes/latu.png" alt="LATU">
-                <img src="img/clientes/1987.png" alt="1987">
-                <!-- duplicate -->
-                <img src="img/clientes/gomez-platero.png" alt="Gomez Platero">
-                <img src="img/clientes/teyma.png" alt="Teyma">
-                <img src="img/clientes/bekres.png" alt="Bekres">
-                <img src="img/clientes/sigmaplus.png" alt="Sigma Plus">
-                <img src="img/clientes/hifglobal.png" alt="HIF Global">
-                <img src="img/clientes/martin-gonzalez.png" alt="Martín González">
-                <img src="img/clientes/cabrera-inciarte.png" alt="Cabrera Inciarte">
-                <img src="img/clientes/latu.png" alt="LATU">
-                <img src="img/clientes/1987.png" alt="1987">
-            </div>
-        </div>
-
-        <!-- Fila 2 → derecha (RTL) -->
-        <div class="marquee-wrap">
-            <div class="marquee-track marquee-track-rtl">
-                <img src="img/clientes/teyma.png" alt="Teyma">
-                <img src="img/clientes/1987.png" alt="1987">
-                <img src="img/clientes/latu.png" alt="LATU">
-                <img src="img/clientes/bekres.png" alt="Bekres">
-                <img src="img/clientes/cabrera-inciarte.png" alt="Cabrera Inciarte">
-                <img src="img/clientes/sigmaplus.png" alt="Sigma Plus">
-                <img src="img/clientes/gomez-platero.png" alt="Gomez Platero">
-                <img src="img/clientes/hifglobal.png" alt="HIF Global">
-                <img src="img/clientes/martin-gonzalez.png" alt="Martín González">
-                <!-- duplicate -->
-                <img src="img/clientes/teyma.png" alt="Teyma">
-                <img src="img/clientes/1987.png" alt="1987">
-                <img src="img/clientes/latu.png" alt="LATU">
-                <img src="img/clientes/bekres.png" alt="Bekres">
-                <img src="img/clientes/cabrera-inciarte.png" alt="Cabrera Inciarte">
-                <img src="img/clientes/sigmaplus.png" alt="Sigma Plus">
-                <img src="img/clientes/gomez-platero.png" alt="Gomez Platero">
-                <img src="img/clientes/hifglobal.png" alt="HIF Global">
-                <img src="img/clientes/martin-gonzalez.png" alt="Martín González">
-            </div>
-        </div>
-
-        <!-- Fila 3 → izquierda (velocidad diferente) -->
-        <div class="marquee-wrap">
-            <div class="marquee-track" style="animation-duration:52s">
-                <img src="img/clientes/cabrera-inciarte.png" alt="Cabrera Inciarte">
-                <img src="img/clientes/martin-gonzalez.png" alt="Martín González">
-                <img src="img/clientes/sigmaplus.png" alt="Sigma Plus">
-                <img src="img/clientes/teyma.png" alt="Teyma">
-                <img src="img/clientes/1987.png" alt="1987">
-                <img src="img/clientes/gomez-platero.png" alt="Gomez Platero">
-                <img src="img/clientes/bekres.png" alt="Bekres">
-                <img src="img/clientes/latu.png" alt="LATU">
-                <img src="img/clientes/hifglobal.png" alt="HIF Global">
-                <!-- duplicate -->
-                <img src="img/clientes/cabrera-inciarte.png" alt="Cabrera Inciarte">
-                <img src="img/clientes/martin-gonzalez.png" alt="Martín González">
-                <img src="img/clientes/sigmaplus.png" alt="Sigma Plus">
-                <img src="img/clientes/teyma.png" alt="Teyma">
-                <img src="img/clientes/1987.png" alt="1987">
-                <img src="img/clientes/gomez-platero.png" alt="Gomez Platero">
-                <img src="img/clientes/bekres.png" alt="Bekres">
-                <img src="img/clientes/latu.png" alt="LATU">
-                <img src="img/clientes/hifglobal.png" alt="HIF Global">
-            </div>
-        </div>
-        <div class="scroll-hint" onclick="window.snapGoTo(2)">
-            <div class="scroll-line"></div>
-            <span class="scroll-label">Scroll</span>
-        </div>
-    </section>
-
-    <!-- ── S3 WHY + STATS ── -->
+    <!-- ── S2 WHY + STATS + LOGOS ── -->
     <section class="section" id="s-why">
         <div class="mosaic-grid" id="mosaicGrid">
             <img class="mosaic-tile" src="img/parpadeo/01-colinas de maladonado.webp" alt="">
@@ -1069,47 +1117,43 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="mosaic-overlay"></div>
         <div class="why-inner">
             <div class="why-left">
-<h2 class="why-heading anim" style="transition-delay:0.1s" id="why-heading">Tu proyecto necesita vender<br>antes de que <em>exista.</em></h2>
-                <p class="why-desc anim" style="transition-delay:0.2s" id="why-desc">Los desarrolladores inmobiliarios necesitan atraer inversores, pre-vender unidades y generar expectativa — antes de poner el primer ladrillo. El problema es que nadie puede ver, sentir ni querer algo que todavía no existe.</p>
+                <p class="section-tag anim" id="why-tag">Por qué nosotros</p>
+                <h2 class="why-heading anim" style="transition-delay:0.1s" id="why-heading">Tu proyecto necesita<br>vender antes de que <em>exista.</em></h2>
+                <p class="why-desc anim" style="transition-delay:0.2s" id="why-desc">Si tenés planos pero todavía no podés mostrarle nada a los compradores, ese es el problema que resolvemos. Hacemos visible y deseable tu proyecto antes de que exista — para que puedas vender, conseguir inversión y generar expectativa desde el día uno.</p>
+                <div class="why-cta-row anim" style="transition-delay:0.3s">
+                    <a href="#" onclick="window.snapGoTo(7);return false;" class="btn-gold">Hablemos de tu proyecto</a>
+                </div>
+            </div>
+            <div class="why-right">
                 <div class="why-items">
-                    <div class="why-item anim" style="transition-delay:0.25s">
+                    <div class="why-item anim" style="transition-delay:0.15s">
                         <span class="why-num">01</span>
                         <div class="why-item-body">
                             <h4 id="why-i1-h">Lo hacemos visible</h4>
                             <p id="why-i1-p">Renders fotorrealistas, animaciones y tours antes de que la obra empiece.</p>
                         </div>
                     </div>
-                    <div class="why-item anim" style="transition-delay:0.35s">
+                    <div class="why-item anim" style="transition-delay:0.25s">
                         <span class="why-num">02</span>
                         <div class="why-item-body">
                             <h4 id="why-i2-h">Lo hacemos deseable</h4>
                             <p id="why-i2-p">Identidad de marca y sistema visual completo para diferenciarte.</p>
                         </div>
                     </div>
-                    <div class="why-item anim" style="transition-delay:0.45s">
+                    <div class="why-item anim" style="transition-delay:0.35s">
                         <span class="why-num">03</span>
                         <div class="why-item-body">
                             <h4 id="why-i3-h">Lo hacemos vendible</h4>
                             <p id="why-i3-p">Showroom virtual, visor 3D y contenido para cerrar ventas antes y mejor.</p>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="why-right anim" style="transition-delay:0.15s">
-                <div class="reveal-wrap" id="revealWrapIdx">
-                    <div class="reveal-after">
-                        <img src="img/reveal-render.webp" alt="Render">
-                    </div>
-                    <div class="reveal-before" id="revealBeforeIdx">
-                        <img src="img/reveal-sketch.webp" alt="Sketch">
-                    </div>
-                    <div class="reveal-handle" id="revealHandleIdx">
-                        <div class="reveal-handle-btn">
-                            <svg viewBox="0 0 20 20"><path d="M7 4l-4 6 4 6M13 4l4 6-4 6"/></svg>
+                    <div class="why-item anim" style="transition-delay:0.45s">
+                        <span class="why-num">04</span>
+                        <div class="why-item-body">
+                            <h4 id="why-i4-h">Lo hacemos premium</h4>
+                            <p id="why-i4-p">Una identidad bien posicionada en redes y portales permite vender a mayor precio por m².</p>
                         </div>
                     </div>
-                    <span class="reveal-label left" id="reveal-label-left">Boceto</span>
-                    <span class="reveal-label right" id="reveal-label-right">Visión</span>
                 </div>
             </div>
         </div>
@@ -1136,11 +1180,45 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     </div>
                     <p class="stat-label" id="stat-label-3">Años de experiencia</p>
                 </div>
+                <div class="stat-item">
+                    <div class="stat-row">
+                        <span class="stat-num" data-target="500">0</span>
+                        <span class="stat-suffix">k+</span>
+                    </div>
+                    <p class="stat-label" id="stat-label-4">m² con mayor valor</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logos strip -->
+        <div class="why-logos-strip">
+            <p class="logos-label">Confían en nosotros</p>
+            <div class="marquee-wrap">
+                <div class="marquee-track">
+                    <img src="img/clientes/gomez-platero.png" alt="Gomez Platero">
+                    <img src="img/clientes/teyma.png" alt="Teyma">
+                    <img src="img/clientes/bekres.png" alt="Bekres">
+                    <img src="img/clientes/sigmaplus.png" alt="Sigma Plus">
+                    <img src="img/clientes/hifglobal.png" alt="HIF Global">
+                    <img src="img/clientes/martin-gonzalez.png" alt="Martín González">
+                    <img src="img/clientes/cabrera-inciarte.png" alt="Cabrera Inciarte">
+                    <img src="img/clientes/latu.png" alt="LATU">
+                    <img src="img/clientes/1987.png" alt="1987">
+                    <img src="img/clientes/gomez-platero.png" alt="Gomez Platero">
+                    <img src="img/clientes/teyma.png" alt="Teyma">
+                    <img src="img/clientes/bekres.png" alt="Bekres">
+                    <img src="img/clientes/sigmaplus.png" alt="Sigma Plus">
+                    <img src="img/clientes/hifglobal.png" alt="HIF Global">
+                    <img src="img/clientes/martin-gonzalez.png" alt="Martín González">
+                    <img src="img/clientes/cabrera-inciarte.png" alt="Cabrera Inciarte">
+                    <img src="img/clientes/latu.png" alt="LATU">
+                    <img src="img/clientes/1987.png" alt="1987">
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- ── S4 SERVICES ACCORDION ── -->
+    <!-- ── S3 SERVICES ACCORDION ── -->
     <section class="section" id="s-services">
         <div class="acc-wrap" id="accWrapHome">
             <div class="acc-item open" data-idx="0">
@@ -1198,65 +1276,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
     </section>
 
-    <!-- ── S5 PROJECTS ── -->
-    <section class="section" id="s-projects">
-        <div class="proj-header">
-            <h2 id="proj-heading">Proyectos destacados</h2>
-            <a href="projects.html" class="proj-view-all" id="proj-view-all">Ver todos los proyectos →</a>
-        </div>
-        <div class="proj-grid">
-            <a href="link-center.html" class="proj-card">
-                <div class="proj-card-bg" style="background-image:url('img/link-center.webp')"></div>
-                <div class="proj-card-overlay"></div>
-                <div class="proj-card-info">
-                    <div class="proj-card-name">Link Center</div>
-                    <div class="proj-card-client">Sigma Plus</div>
-                </div>
-            </a>
-            <a href="kiu-av-italia.html" class="proj-card">
-                <div class="proj-card-bg" style="background-image:url('img/kiu-av-italia.webp')"></div>
-                <div class="proj-card-overlay"></div>
-                <div class="proj-card-info">
-                    <div class="proj-card-name">KIU Av. Italia</div>
-                    <div class="proj-card-client">BEKRES</div>
-                </div>
-            </a>
-            <a href="kiu-8-octubre.html" class="proj-card">
-                <div class="proj-card-bg" style="background-image:url('img/kiu-8-octubre.webp')"></div>
-                <div class="proj-card-overlay"></div>
-                <div class="proj-card-info">
-                    <div class="proj-card-name">KIU 8 de Octubre</div>
-                    <div class="proj-card-client">BEKRES</div>
-                </div>
-            </a>
-            <a href="aero-met.html" class="proj-card">
-                <div class="proj-card-bg" style="background-image:url('img/aero-met-cover.webp')"></div>
-                <div class="proj-card-overlay"></div>
-                <div class="proj-card-info">
-                    <div class="proj-card-name">AeroMet &amp; MM</div>
-                    <div class="proj-card-client">AeroMet</div>
-                </div>
-            </a>
-            <a href="crc-fitness.html" class="proj-card">
-                <div class="proj-card-bg" style="background-image:url('img/crc-fitness.webp')"></div>
-                <div class="proj-card-overlay"></div>
-                <div class="proj-card-info">
-                    <div class="proj-card-name">CRC Fitness</div>
-                    <div class="proj-card-client">CRC</div>
-                </div>
-            </a>
-            <a href="cala-del-yacht.html" class="proj-card">
-                <div class="proj-card-bg" style="background-image:url('img/cala-del-yacht.webp')"></div>
-                <div class="proj-card-overlay"></div>
-                <div class="proj-card-info">
-                    <div class="proj-card-name">Cala del Yacht</div>
-                    <div class="proj-card-client">Martín González</div>
-                </div>
-            </a>
-        </div>
-    </section>
-
-    <!-- ── S7 PROCESS ── -->
+    <!-- ── S4 PROCESS ── -->
     <section class="section" id="s-process">
         <div class="process-inner">
             <p class="section-tag anim" id="proc-tag">Cómo trabajamos</p>
@@ -1296,7 +1316,110 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
     </section>
 
-    <!-- ── S8 FAQ ── -->
+    <!-- ── S5 PROJECTS ── -->
+    <section class="section" id="s-projects">
+        <div class="proj-header">
+            <h2 id="proj-heading">Proyectos destacados</h2>
+            <a href="projects.html" class="proj-view-all" id="proj-view-all">Ver todos los proyectos →</a>
+        </div>
+        <div class="proj-grid">
+            <a href="link-center.html" class="proj-card">
+                <div class="proj-card-bg" style="background-image:url('img/link-center.webp')"></div>
+                <div class="proj-card-overlay"></div>
+                <div class="proj-card-info">
+                    <div class="proj-card-name">Link Center</div>
+                    <div class="proj-card-client">Gomez Platero</div>
+                </div>
+            </a>
+            <a href="kiu-av-italia.html" class="proj-card">
+                <div class="proj-card-bg" style="background-image:url('img/kiu-av-italia.webp')"></div>
+                <div class="proj-card-overlay"></div>
+                <div class="proj-card-info">
+                    <div class="proj-card-name">KIU Av. Italia</div>
+                    <div class="proj-card-client">Martín González · Cabrera Inciarte</div>
+                </div>
+            </a>
+            <a href="kiu-8-octubre.html" class="proj-card">
+                <div class="proj-card-bg" style="background-image:url('img/kiu-8-octubre.webp')"></div>
+                <div class="proj-card-overlay"></div>
+                <div class="proj-card-info">
+                    <div class="proj-card-name">KIU 8 de Octubre</div>
+                    <div class="proj-card-client">Martín González · Cabrera Inciarte</div>
+                </div>
+            </a>
+            <a href="aero-met.html" class="proj-card">
+                <div class="proj-card-bg" style="background-image:url('img/aero-met-cover.webp')"></div>
+                <div class="proj-card-overlay"></div>
+                <div class="proj-card-info">
+                    <div class="proj-card-name">AeroMet &amp; MM</div>
+                    <div class="proj-card-client">Berkes · Teyma</div>
+                </div>
+            </a>
+            <a href="crc-fitness.html" class="proj-card">
+                <div class="proj-card-bg" style="background-image:url('img/crc-fitness.webp')"></div>
+                <div class="proj-card-overlay"></div>
+                <div class="proj-card-info">
+                    <div class="proj-card-name">CRC Fitness</div>
+                    <div class="proj-card-client">CRC · L34 Arquitectos</div>
+                </div>
+            </a>
+            <a href="cala-del-yacht.html" class="proj-card">
+                <div class="proj-card-bg" style="background-image:url('img/cala-del-yacht.webp')"></div>
+                <div class="proj-card-overlay"></div>
+                <div class="proj-card-info">
+                    <div class="proj-card-name">Cala del Yacht</div>
+                    <div class="proj-card-client">Gomez Platero</div>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- ── S6 PACKAGES ── -->
+    <section class="section" id="s-packages">
+        <div class="pkg-inner">
+            <p class="section-tag anim" id="pkg-tag">Por dónde empezar</p>
+            <h2 class="why-heading anim" style="transition-delay:0.08s" id="pkg-heading">Tres formas de<br>empezar con Imabox.</h2>
+            <div class="pkg-grid">
+                <div class="pkg-card anim" style="transition-delay:0.1s">
+                    <p class="pkg-label">01</p>
+                    <h3 class="pkg-name">Visualización</h3>
+                    <p class="pkg-desc">Para proyectos que necesitan imágenes de impacto para vender, sin el desarrollo completo de marca.</p>
+                    <ul class="pkg-list">
+                        <li>Renders fotorrealistas exteriores e interiores</li>
+                        <li>Animación o video cinematográfico</li>
+                        <li>Imágenes optimizadas para portales y redes</li>
+                    </ul>
+                    <a href="#" onclick="window.snapGoTo(7);return false;" class="btn-outline pkg-cta">Consultar →</a>
+                </div>
+                <div class="pkg-card pkg-card-mid anim" style="transition-delay:0.2s">
+                    <p class="pkg-label">02</p>
+                    <h3 class="pkg-name">Campaña</h3>
+                    <p class="pkg-desc">Identidad de marca + visualización completa + materiales listos para salir al mercado.</p>
+                    <ul class="pkg-list">
+                        <li>Marca del edificio (logo, paleta, tipografía)</li>
+                        <li>Renders + video + fotografía de obra</li>
+                        <li>Folletería y materiales de venta</li>
+                        <li>Contenido para redes y portales</li>
+                    </ul>
+                    <a href="#" onclick="window.snapGoTo(7);return false;" class="btn-gold pkg-cta">Consultar →</a>
+                </div>
+                <div class="pkg-card anim" style="transition-delay:0.3s">
+                    <p class="pkg-label">03</p>
+                    <h3 class="pkg-name">Ecosistema</h3>
+                    <p class="pkg-desc">Todo lo anterior más una plataforma digital interactiva para que los compradores exploren el proyecto a su ritmo.</p>
+                    <ul class="pkg-list">
+                        <li>Todo el paquete Lanzamiento</li>
+                        <li>Showroom virtual interactivo</li>
+                        <li>Visor 3D o tour 360°</li>
+                        <li>Masterplano con disponibilidad en tiempo real</li>
+                    </ul>
+                    <a href="#" onclick="window.snapGoTo(7);return false;" class="btn-outline pkg-cta">Consultar →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── S7 FAQ ── -->
     <section class="section" id="s-faq">
         <div class="faq-inner">
             <p class="section-tag anim" id="faq-tag">Preguntas frecuentes</p>
@@ -1494,7 +1617,7 @@ var snapSections;
     snapSections.forEach(function (s) { io.observe(s); });
 
     /* hash navigation — e.g. index.html#s-projects */
-    var hashMap = { '#s-hero':0,'#s-logos':1,'#s-why':2,'#s-services':3,'#s-projects':4,'#s-process':5,'#s-faq':6,'#s-contact':7 };
+    var hashMap = { '#s-hero':0,'#s-why':1,'#s-services':2,'#s-process':3,'#s-projects':4,'#s-packages':5,'#s-faq':6,'#s-contact':7 };
     if (location.hash && hashMap[location.hash] !== undefined) {
         setTimeout(function() { window.snapGoTo(hashMap[location.hash]); }, 100);
     }
@@ -1687,6 +1810,7 @@ var snapSections;
 
         step.addEventListener('mouseenter', function () {
             if (flipSrc) {
+                if (procVid) { procVid.pause(); procVid.style.display = 'none'; }
                 var imgs = flipSrc.split('|');
                 var idx = 0;
                 preview.style.backgroundImage = 'url(' + imgs[0] + ')';
@@ -1694,7 +1818,7 @@ var snapSections;
                 flipInterval = setInterval(function () {
                     idx = (idx + 1) % imgs.length;
                     preview.style.backgroundImage = 'url(' + imgs[idx] + ')';
-                }, 400);
+                }, 800);
             } else if (vidSrc) {
                 var vStart = parseFloat(step.dataset.previewVideoStart || 0);
                 var vEnd   = parseFloat(step.dataset.previewVideoEnd   || 3);
@@ -1705,15 +1829,27 @@ var snapSections;
                     procVid.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:50%;';
                     preview.appendChild(procVid);
                 }
+                procVid.style.display = '';
+                procVid.pause();
+                procVid.ontimeupdate = null;
                 procVid.src = vidSrc;
-                procVid.currentTime = vStart;
-                procVid.play();
-                procVid.ontimeupdate = function () {
-                    if (procVid.currentTime >= vEnd) { procVid.currentTime = vStart; procVid.play(); }
-                };
+                procVid.load();
+                procVid.addEventListener('canplay', function handler() {
+                    procVid.removeEventListener('canplay', handler);
+                    procVid.currentTime = vStart;
+                    var p = procVid.play();
+                    if (p) p.catch(function(){});
+                    procVid.ontimeupdate = function () {
+                        if (procVid.currentTime >= vEnd) {
+                            procVid.currentTime = vStart;
+                            var p2 = procVid.play();
+                            if (p2) p2.catch(function(){});
+                        }
+                    };
+                }, { once: true });
                 preview.classList.add('visible');
             } else if (src) {
-                if (procVid) { procVid.pause(); procVid.src = ''; }
+                if (procVid) { procVid.pause(); procVid.style.display = 'none'; }
                 preview.style.backgroundImage = 'url(' + src + ')';
                 preview.classList.add('visible');
             }
