@@ -913,18 +913,35 @@
                 grid-column: unset; grid-row: unset;
             }
             .step-toggle-icon {
-                width: 24px; height: 24px; flex-shrink: 0;
+                width: 28px; height: 28px; flex-shrink: 0;
                 display: flex; align-items: center; justify-content: center;
-                opacity: 0.4;
+                opacity: 0.45; border: 1px solid rgba(255,255,255,0.18);
+                border-radius: 50%;
+                transition: opacity 0.2s, border-color 0.2s, background 0.2s;
             }
             .step-toggle-icon svg {
-                width: 14px; height: 14px; stroke: currentColor;
+                width: 12px; height: 12px; stroke: currentColor;
                 fill: none; stroke-width: 1.8; stroke-linecap: round;
                 transition: transform 0.3s ease;
             }
-            .step-item.expanded .step-toggle-icon { opacity: 0.9; }
-            .step-item.expanded .step-toggle-icon svg { transform: rotate(45deg); }
+            .step-item:active .step-toggle-icon,
+            .step-item:focus .step-toggle-icon {
+                opacity: 1; border-color: var(--gold);
+                background: rgba(201,169,110,0.1);
+            }
+            .step-item.expanded .step-toggle-icon {
+                opacity: 1; border-color: var(--gold);
+                background: rgba(201,169,110,0.12);
+            }
+            .step-item.expanded .step-toggle-icon svg { transform: rotate(45deg); stroke: var(--gold); }
             .step-item.expanded .step-name { color: var(--gold); transition: color 0.2s; }
+            /* indicador tap visual en el paso */
+            .step-item::after {
+                content: ''; position: absolute; inset: 0;
+                background: rgba(255,255,255,0); border-radius: 2px;
+                transition: background 0.15s;
+            }
+            .step-item:active::after { background: rgba(255,255,255,0.03); }
             .step-desc {
                 width: 100%; max-height: 0; overflow: hidden;
                 padding-left: 52px; font-size: 0.9rem; line-height: 1.75;
@@ -977,13 +994,13 @@
             #s-packages .section-tag { margin-bottom: 12px; text-align: center; }
             #s-packages .why-heading { font-size: clamp(1.6rem, 2.8vw, 2.2rem); margin-bottom: 16px; text-align: center; }
             .pkg-grid { grid-template-columns: 1fr; margin-top: 20px; }
-            .pkg-card { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); padding: 18px 36px; gap: 10px; }
+            .pkg-card { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); padding: 18px 36px; gap: 10px; align-items: center; text-align: center; }
             .pkg-card:last-child { border-bottom: none; }
             .pkg-name { font-size: 1.25rem; }
             .pkg-desc { font-size: 0.86rem; }
-            .pkg-list { display: flex; }
+            .pkg-list { display: flex; align-items: flex-start; text-align: left; }
             .pkg-list li { font-size: 0.8rem; }
-            .pkg-cta { margin-top: 8px; }
+            .pkg-cta { margin-top: 8px; align-self: center; }
 
             /* FAQ — centrado, separado del navbar */
             #s-faq { align-items: center; justify-content: center; }
@@ -2077,17 +2094,19 @@ var snapSections;
 
     var steps = Array.from(document.querySelectorAll('#s-process .step-item'));
 
-    /* preview circle — posición fija top-right */
+    /* preview circle — se posiciona en la fila del step tocado */
+    var SIZE = 148;
     var preview = document.createElement('div');
     preview.style.cssText = [
         'position:fixed', 'pointer-events:none', 'z-index:500',
-        'width:200px', 'height:200px', 'border-radius:50%', 'overflow:hidden',
+        'width:' + SIZE + 'px', 'height:' + SIZE + 'px',
+        'border-radius:50%', 'overflow:hidden',
         'background-size:cover', 'background-position:center',
         'opacity:0', 'transform:scale(0.82)',
-        'transition:opacity 0.3s ease,transform 0.3s ease',
-        'box-shadow:0 20px 52px rgba(0,0,0,0.65)',
+        'transition:opacity 0.28s ease,transform 0.28s ease',
+        'box-shadow:0 16px 44px rgba(0,0,0,0.65)',
         'outline:2px solid #c9a96e', 'outline-offset:4px',
-        'top:14%', 'right:5%'
+        'right:32px', 'top:0'
     ].join(';');
     document.body.appendChild(preview);
 
@@ -2155,6 +2174,10 @@ var snapSections;
             steps.forEach(function (s) { s.classList.remove('expanded'); });
             if (!isOpen) {
                 step.classList.add('expanded');
+                /* posicionar círculo alineado al centro vertical del step */
+                var rect = step.getBoundingClientRect();
+                var centerY = rect.top + rect.height / 2;
+                preview.style.top = Math.max(8, centerY - SIZE / 2) + 'px';
                 showPreview(step);
             } else {
                 hidePreview();
