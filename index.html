@@ -877,25 +877,123 @@
             .faq-inner { padding: 80px 40px 40px; }
         }
 
+        /* ── Tablet compartido (601px–1100px): proceso accordion ── */
+        @media (min-width: 601px) and (max-width: 1100px) {
+            #s-process { align-items: stretch; justify-content: flex-start; }
+            .process-inner {
+                padding: 80px 64px 40px !important;
+                display: flex; flex-direction: column; height: 100%;
+            }
+            .process-inner .section-tag { text-align: left; }
+            .process-inner .why-heading {
+                text-align: left; max-width: 640px !important;
+                font-size: clamp(1.6rem, 2.8vw, 2.6rem) !important;
+            }
+            .process-steps {
+                flex: 1; display: flex; flex-direction: column;
+                margin-top: 28px !important; gap: 0 !important;
+                justify-content: space-between;
+            }
+            .step-item {
+                display: flex; flex-wrap: wrap; align-items: center;
+                padding: 16px 0; cursor: pointer; flex: 1;
+                border-top: 1px solid rgba(255,255,255,0.07);
+                position: relative; gap: 0;
+            }
+            .step-item:last-child { border-bottom: 1px solid rgba(255,255,255,0.07); }
+            .step-num-label {
+                width: 52px; margin-bottom: 0; font-size: 0.62rem;
+                flex-shrink: 0; align-self: center;
+                grid-column: unset; grid-row: unset;
+            }
+            .step-bar { display: none; }
+            .step-name {
+                flex: 1; font-size: clamp(1rem, 1.8vw, 1.35rem);
+                margin-bottom: 0; align-self: center;
+                grid-column: unset; grid-row: unset;
+            }
+            .step-toggle-icon {
+                width: 24px; height: 24px; flex-shrink: 0;
+                display: flex; align-items: center; justify-content: center;
+                opacity: 0.4;
+            }
+            .step-toggle-icon svg {
+                width: 14px; height: 14px; stroke: currentColor;
+                fill: none; stroke-width: 1.8; stroke-linecap: round;
+                transition: transform 0.3s ease;
+            }
+            .step-item.expanded .step-toggle-icon { opacity: 0.9; }
+            .step-item.expanded .step-toggle-icon svg { transform: rotate(45deg); }
+            .step-item.expanded .step-name { color: var(--gold); transition: color 0.2s; }
+            .step-desc {
+                width: 100%; max-height: 0; overflow: hidden;
+                padding-left: 52px; font-size: 0.9rem; line-height: 1.75;
+                transition: max-height 0.38s ease, padding 0.3s ease;
+                padding-bottom: 0;
+                grid-column: unset; grid-row: unset;
+            }
+            .step-item.expanded .step-desc { max-height: 120px; padding-bottom: 10px; }
+        }
+
         /* ── iPad portrait específico (601px–900px) ── */
         @media (min-width: 601px) and (max-width: 900px) {
-            .process-inner { padding: 96px 48px 40px !important; }
-            .process-steps { justify-content: flex-start !important; gap: 36px !important; margin-top: 32px !important; }
-            .step-item { flex: none !important; }
             .why-items { grid-template-columns: 1fr 1fr !important; gap: 22px 36px !important; }
             .why-item-body p { display: block !important; font-size: 0.84rem; }
         }
 
-        /* ── iPad landscape (901px–1100px) ── */
+        /* ── iPad landscape / iPad Pro portrait (901px–1100px) ── */
         @media (min-width: 901px) and (max-width: 1100px) {
-            .why-inner { padding: 0 48px; gap: 48px; }
-            .pkg-inner { padding: 0 48px; }
-            .pkg-card { padding: 32px 28px; }
+            /* Por qué nosotros — 1 columna, más grande */
+            #s-why { padding-top: 52px; }
+            .why-inner { grid-template-columns: 1fr; gap: 32px; padding: 24px 80px 0; flex: none; width: 100%; }
+            .why-heading { font-size: clamp(2rem, 3.8vw, 3rem); }
+            .why-desc { font-size: 1rem; max-width: 680px; }
+            .why-items { grid-template-columns: 1fr 1fr; gap: 24px 64px; }
+            .why-item-body h4 { font-size: 1.05rem; }
+            .why-item-body p { font-size: 0.92rem; display: block; }
+            .why-cta-row { display: flex; }
+
+            /* Servicios — accordion vertical igual que mobile */
+            #s-services { overflow: hidden; }
+            .acc-wrap { flex-direction: column; }
+            .acc-item { flex: 1; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
+            .acc-item.open { flex: 4; }
+            .acc-title-v { transform: translate(-50%, -50%); font-size: 0.72rem; letter-spacing: 0.14em; }
+            .acc-item.open .acc-title-v { opacity: 0; }
+            .acc-content { left: 40px; right: 40px; bottom: 36px; }
+            .acc-content h3 { font-size: 1.9rem; margin-bottom: 12px; }
+            .acc-content p { font-size: 0.9rem; max-width: 100%; }
+            .acc-overlay { background: linear-gradient(to top, rgba(0,0,0,0.8) 35%, transparent 100%); }
+
+            /* Proyectos — 2 columnas, más espacio del navbar */
+            .proj-header { padding: 56px 48px 24px; }
+            .proj-header h2 { font-size: clamp(1.6rem, 2.6vw, 2rem); }
+            .proj-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(3, 1fr); }
+
+            /* Planes — 1 columna ancho completo */
+            #s-packages { justify-content: center; align-items: center; overflow: hidden; }
+            .pkg-inner { padding: 0 60px; }
+            #s-packages .section-tag { margin-bottom: 12px; }
+            #s-packages .why-heading { font-size: clamp(1.6rem, 2.8vw, 2.2rem); margin-bottom: 16px; }
+            .pkg-grid { grid-template-columns: 1fr; margin-top: 20px; }
+            .pkg-card { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); padding: 20px 36px; gap: 10px; }
+            .pkg-card:last-child { border-bottom: none; }
             .pkg-name { font-size: 1.3rem; }
-            .pkg-desc { font-size: 0.82rem; }
-            .pkg-list li { font-size: 0.78rem; }
-            .contact-inner { padding: 0 48px; gap: 48px; }
-            .process-inner { padding: 0 48px; }
+            .pkg-desc { font-size: 0.86rem; }
+            .pkg-list { display: none; }
+
+            /* Contacto — apilado, más grande */
+            #s-contact { align-items: flex-start; justify-content: flex-start; overflow-y: auto; }
+            .contact-inner { grid-template-columns: 1fr; gap: 36px; padding: 80px 80px 40px; }
+            .contact-title { font-size: clamp(1.8rem, 3.2vw, 2.6rem); }
+            .contact-sub { font-size: 0.96rem; }
+            .contact-inner .section-tag { text-align: left; }
+
+            /* FAQ */
+            #s-faq { align-items: flex-start; justify-content: flex-start; overflow-y: auto; }
+            .faq-inner { padding: 80px 80px 40px; }
+            .faq-q { font-size: 1.05rem; }
+            .faq-a { font-size: 0.92rem; }
         }
 
         /* ── Móvil (600px y menos) ── */
@@ -1963,6 +2061,23 @@ var snapSections;
 
             ifrm.addEventListener('load', function () { black.style.opacity = '0'; });
             setTimeout(function () { window.location.href = href; }, 1900);
+        });
+    });
+})();
+
+/* ── Process accordion — tablet (601px–1100px) ── */
+(function () {
+    if (window.innerWidth < 601 || window.innerWidth > 1100) return;
+    var steps = Array.from(document.querySelectorAll('#s-process .step-item'));
+    steps.forEach(function (step) {
+        var icon = document.createElement('span');
+        icon.className = 'step-toggle-icon';
+        icon.innerHTML = '<svg viewBox="0 0 16 16"><line x1="8" y1="2" x2="8" y2="14"/><line x1="2" y1="8" x2="14" y2="8"/></svg>';
+        step.appendChild(icon);
+        step.addEventListener('click', function () {
+            var isOpen = step.classList.contains('expanded');
+            steps.forEach(function (s) { s.classList.remove('expanded'); });
+            if (!isOpen) step.classList.add('expanded');
         });
     });
 })();
