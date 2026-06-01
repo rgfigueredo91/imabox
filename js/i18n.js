@@ -55,7 +55,8 @@
     /* manual switcher — called from eng/esp links */
     window.setLang = function (l) {
         localStorage.setItem('ix-lang', l);
-        location.href = location.pathname + location.search + (l === 'en' ? '#eng' : '#esp');
+        location.hash = (l === 'en' ? 'eng' : 'esp');
+        location.reload();
     };
 
 })();
