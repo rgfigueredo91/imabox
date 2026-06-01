@@ -79,6 +79,9 @@
 .navbar.open .nav-toggle .nav-bar:nth-child(2) { opacity: 0 !important; width: 0 !important; }
 .navbar.open .nav-toggle .nav-bar:nth-child(3) { width: 24px; transform: translateY(-9px) rotate(-45deg); }
 
+/* ── Ocultar navbar en páginas de proyecto ── */
+body.no-navbar header { display: none !important; }
+
 /* ── OVERLAY ── */
 .nav-overlay {
     position: fixed;
