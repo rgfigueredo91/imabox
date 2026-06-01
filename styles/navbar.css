@@ -219,6 +219,7 @@ body.no-navbar header { display: none !important; }
     padding: 0;
 }
 .nav-lang a:hover { color: #c9a96e; }
+.nav-lang a.lang-active { color: #c9a96e; font-weight: 600; }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 1024px) {

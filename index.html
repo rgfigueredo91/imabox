@@ -1747,10 +1747,19 @@ var snapSections;
     }, { threshold: 0.5 });
     snapSections.forEach(function (s) { io.observe(s); });
 
-    /* hash navigation — e.g. index.html#s-projects */
-    var hashMap = { '#s-hero':0,'#s-why':1,'#s-services':2,'#s-process':3,'#s-projects':4,'#s-packages':5,'#s-faq':6,'#s-contact':7 };
-    if (location.hash && hashMap[location.hash] !== undefined) {
-        setTimeout(function() { window.snapGoTo(hashMap[location.hash]); }, 100);
+    /* restaurar sección tras cambiar idioma (no volver al hero) */
+    var savedSection = sessionStorage.getItem('ix-section');
+    if (savedSection !== null) {
+        sessionStorage.removeItem('ix-section');
+        var idx = parseInt(savedSection, 10);
+        snapCurrent = idx;
+        container.scrollTo({ top: idx * container.clientHeight, behavior: 'auto' });
+    } else {
+        /* hash navigation — e.g. index.html#s-projects */
+        var hashMap = { '#s-hero':0,'#s-why':1,'#s-services':2,'#s-process':3,'#s-projects':4,'#s-packages':5,'#s-faq':6,'#s-contact':7 };
+        if (location.hash && hashMap[location.hash] !== undefined) {
+            setTimeout(function() { window.snapGoTo(hashMap[location.hash]); }, 100);
+        }
     }
 })();
 
