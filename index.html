@@ -790,6 +790,20 @@
         }
         .pkg-cta { margin-top: 12px; align-self: flex-start; }
 
+        /* círculos flotantes con video al hover (solo desktop) */
+        #pkg-circles-layer { position: fixed; inset: 0; pointer-events: none; z-index: 600; }
+        .pkg-circle { position: fixed; }
+        .pkg-circle-inner {
+            width: 100%; height: 100%; border-radius: 50%; overflow: hidden;
+            outline: 2px solid var(--gold); outline-offset: 4px;
+            box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+            opacity: 0; transform: scale(0.7);
+            transition: opacity 0.32s cubic-bezier(0.22,1,0.36,1), transform 0.32s cubic-bezier(0.22,1,0.36,1);
+        }
+        .pkg-circle.visible .pkg-circle-inner { opacity: 1; transform: scale(1); }
+        .pkg-circle-inner video { width: 100%; height: 100%; object-fit: cover; display: block; }
+        @media (hover: none) { #pkg-circles-layer { display: none; } }
+
         /* ── iPad landscape (1024px y menos) ── */
         @media (max-width: 1100px) {
             .why-inner { padding: 0 48px; gap: 40px; }
@@ -1511,7 +1525,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <p class="section-tag anim" id="pkg-tag" data-en="Plans">Planes</p>
             <h2 class="why-heading anim" style="transition-delay:0.08s" id="pkg-heading" data-en="Three ways to&lt;br&gt;start with Imabox.">Tres formas de<br>empezar con Imabox.</h2>
             <div class="pkg-grid">
-                <div class="pkg-card anim" style="transition-delay:0.1s">
+                <div class="pkg-card anim" style="transition-delay:0.1s" data-pkg-videos="img/reveal-sketch.webp,img/reveal-render.webp|animations/acc-film.mp4">
                     <p class="pkg-label">01</p>
                     <h3 class="pkg-name" data-en="Visualization">Visualización</h3>
                     <p class="pkg-desc" data-en="Renders and video for projects that need visual impact.">Renders y video para proyectos que necesitan impacto visual.</p>
@@ -1522,7 +1536,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     </ul>
                     <a href="#" onclick="window.snapGoTo(7);return false;" class="btn-outline pkg-cta" data-en="Inquire →">Consultar →</a>
                 </div>
-                <div class="pkg-card pkg-card-mid anim" style="transition-delay:0.2s">
+                <div class="pkg-card pkg-card-mid anim" style="transition-delay:0.2s" data-pkg-videos="img/reveal-sketch.webp,img/reveal-render.webp|animations/acc-brand.mp4|animations/acc-film.mp4">
                     <p class="pkg-label">02</p>
                     <h3 class="pkg-name" data-en="Campaign">Campaña</h3>
                     <p class="pkg-desc" data-en="Brand + visualization + materials ready to launch.">Marca + visualización + materiales listos para lanzar.</p>
@@ -1534,7 +1548,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     </ul>
                     <a href="#" onclick="window.snapGoTo(7);return false;" class="btn-gold pkg-cta" data-en="Inquire →">Consultar →</a>
                 </div>
-                <div class="pkg-card anim" style="transition-delay:0.3s">
+                <div class="pkg-card anim" style="transition-delay:0.3s" data-pkg-videos="img/reveal-sketch.webp,img/reveal-render.webp|animations/acc-brand.mp4|animations/acc-film.mp4|animations/acc-interactive.mp4|animations/acc-3d.mp4">
                     <p class="pkg-label">03</p>
                     <h3 class="pkg-name" data-en="Ecosystem">Ecosistema</h3>
                     <p class="pkg-desc" data-en="All of the above plus virtual showroom and interactive platform.">Todo lo anterior más showroom virtual y plataforma interactiva.</p>
@@ -2213,6 +2227,115 @@ var snapSections;
             }
         });
     });
+})();
+
+/* ── Plans: círculos flotantes con video que siguen el mouse (solo desktop) ── */
+(function () {
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    var cards = document.querySelectorAll('#s-packages .pkg-card');
+    if (!cards.length) return;
+
+    var layer = document.createElement('div');
+    layer.id = 'pkg-circles-layer';
+    document.body.appendChild(layer);
+
+    var active = [];          // { el, baseX, baseY, depth, curX, curY }
+    var flips = [];           // intervals de flip de imágenes
+    var mx = 0, my = 0;       // posición actual del mouse
+    var refX = 0, refY = 0;   // punto de referencia (centro de la card)
+
+    function clear() {
+        flips.forEach(clearInterval); flips = [];
+        layer.innerHTML = ''; active = [];
+    }
+
+    document.addEventListener('mousemove', function (e) { mx = e.clientX; my = e.clientY; });
+
+    cards.forEach(function (card) {
+        var vids = (card.dataset.pkgVideos || '').split('|').filter(Boolean);
+        if (!vids.length) return;
+
+        card.addEventListener('mouseenter', function () {
+            clear();
+            var rect = card.getBoundingClientRect();
+            var n = vids.length;
+            var SIZE = n <= 2 ? 128 : (n === 3 ? 112 : 92);
+            var GAP = 14, ARC = 24;
+            var totalW = n * SIZE + (n - 1) * GAP;
+            var vw = window.innerWidth;
+            var centerX = rect.left + rect.width / 2;
+            refX = centerX; refY = rect.top + rect.height / 2;
+            var startX = centerX - totalW / 2;
+            startX = Math.max(16, Math.min(startX, vw - totalW - 16));
+            var baseY = rect.top - SIZE - 18;
+
+            vids.forEach(function (src, i) {
+                var factor = n > 1 ? (1 - Math.abs(2 * i / (n - 1) - 1)) : 0;
+                var bx = startX + i * (SIZE + GAP);
+                var by = baseY - factor * ARC;
+                var c = document.createElement('div');
+                c.className = 'pkg-circle';
+                c.style.width  = SIZE + 'px';
+                c.style.height = SIZE + 'px';
+                c.style.left   = bx + 'px';
+                c.style.top    = by + 'px';
+                var inner = document.createElement('div');
+                inner.className = 'pkg-circle-inner';
+                inner.style.transitionDelay = (i * 0.05) + 's';
+
+                if (src.indexOf('.mp4') !== -1) {
+                    /* video en loop */
+                    var v = document.createElement('video');
+                    v.src = src; v.muted = true; v.loop = true; v.playsInline = true; v.preload = 'auto';
+                    var p = v.play(); if (p) p.catch(function () {});
+                    inner.appendChild(v);
+                } else if (src.indexOf(',') !== -1) {
+                    /* flip de imágenes (igual que Concepto en Cómo trabajamos) */
+                    var imgs = src.split(',');
+                    var fi = 0;
+                    inner.style.backgroundSize = 'cover';
+                    inner.style.backgroundPosition = 'center';
+                    inner.style.backgroundImage = 'url(' + imgs[0] + ')';
+                    flips.push(setInterval(function () {
+                        fi = (fi + 1) % imgs.length;
+                        inner.style.backgroundImage = 'url(' + imgs[fi] + ')';
+                    }, 800));
+                } else {
+                    /* imagen estática */
+                    inner.style.backgroundSize = 'cover';
+                    inner.style.backgroundPosition = 'center';
+                    inner.style.backgroundImage = 'url(' + src + ')';
+                }
+
+                c.appendChild(inner);
+                layer.appendChild(c);
+                requestAnimationFrame(function () { c.classList.add('visible'); });
+                /* depth alterna para dar profundidad: 0.20–0.40 */
+                var depth = 0.20 + (i % 3) * 0.10;
+                active.push({ el: c, baseX: bx, baseY: by, depth: depth, curX: 0, curY: 0 });
+            });
+        });
+        card.addEventListener('mouseleave', clear);
+    });
+
+    (function tick() {
+        for (var i = 0; i < active.length; i++) {
+            var a = active[i];
+            var tx = (mx - refX) * a.depth;
+            var ty = (my - refY) * a.depth;
+            a.curX += (tx - a.curX) * 0.12;
+            a.curY += (ty - a.curY) * 0.12;
+            a.el.style.transform = 'translate(' + a.curX + 'px,' + a.curY + 'px)';
+        }
+        requestAnimationFrame(tick);
+    })();
+
+    var sec = document.getElementById('s-packages');
+    if (sec) {
+        new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) { if (!e.isIntersecting) clear(); });
+        }, { threshold: 0.3 }).observe(sec);
+    }
 })();
 
 /* ── Edge click handler ── */
