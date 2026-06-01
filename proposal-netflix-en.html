@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proposal — Architectural Video · Imabox</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#080808;
+    --panel:#0f0f0f;
+    --gold:#c9a96e;
+    --line:rgba(255,255,255,0.09);
+    --txt:#f2f2f2;
+    --muted:#9a9a9a;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{background:#202020;}
+  body{
+    font-family:'Poppins',Arial,sans-serif;
+    color:var(--txt);
+    line-height:1.55;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
+
+  /* Each .page = one full-bleed A4 sheet with its own dark padding (air) */
+  .page{
+    width:210mm;
+    height:297mm;
+    margin:24px auto;
+    background:var(--bg);
+    padding:20mm 20mm;
+    box-shadow:0 10px 40px rgba(0,0,0,.5);
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+  }
+
+  /* Header */
+  .head{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid var(--line);padding-bottom:20px;margin-bottom:30px;}
+  .logo{font-size:30px;font-weight:700;letter-spacing:-1px;}
+  .logo span{color:var(--gold);}
+  .head-right{text-align:right;font-size:11px;color:var(--muted);line-height:1.7;}
+  .doc-tag{display:inline-block;color:var(--gold);font-size:11px;letter-spacing:3px;text-transform:uppercase;margin-bottom:8px;}
+
+  h1{font-size:26px;font-weight:600;line-height:1.25;margin-bottom:6px;}
+  .subtitle{color:var(--muted);font-size:13px;margin-bottom:30px;}
+  .page-tag{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);}
+
+  /* Client / project meta */
+  .meta{display:grid;grid-template-columns:1fr 1fr;gap:14px 40px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:20px 24px;margin-bottom:30px;}
+  .meta .label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:3px;}
+  .meta .val{font-size:13px;color:var(--txt);}
+
+  h2{font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin:26px 0 14px;font-weight:600;}
+  h2:first-of-type{margin-top:0;}
+
+  p.intro{font-size:13px;color:#cfcfcf;margin-bottom:8px;line-height:1.6;}
+
+  /* Tables */
+  table{width:100%;border-collapse:collapse;font-size:12.5px;}
+  thead th{text-align:left;color:var(--muted);font-weight:500;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:0 0 10px;border-bottom:1px solid var(--line);}
+  thead th.num{text-align:right;}
+  tbody td{padding:11px 0;border-bottom:1px solid var(--line);vertical-align:top;}
+  tbody td.item{font-weight:600;width:30%;}
+  tbody td.detail{color:var(--muted);font-size:11.5px;}
+  tbody td.num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums;}
+  tr.total td{padding-top:16px;border-bottom:none;font-size:15px;font-weight:700;}
+  tr.total td.num{color:var(--gold);font-size:20px;}
+  .total-note{font-size:11px;color:var(--muted);font-weight:400;}
+
+  /* Terms */
+  .cond{display:grid;grid-template-columns:1fr 1fr;gap:13px 30px;margin-top:6px;}
+  .cond li{list-style:none;font-size:12px;color:#cfcfcf;padding-left:16px;position:relative;line-height:1.5;}
+  .cond li::before{content:'';position:absolute;left:0;top:8px;width:5px;height:5px;background:var(--gold);border-radius:50%;}
+  .cond li b{color:var(--txt);font-weight:600;}
+
+  /* Footer */
+  .foot{margin-top:auto;padding-top:18px;border-top:1px solid var(--line);display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted);}
+  .foot a{color:var(--gold);text-decoration:none;}
+
+  .validity{margin-top:22px;font-size:11px;color:var(--muted);font-style:italic;}
+
+  /* Print — full-bleed dark, one .page per sheet */
+  @media print{
+    html,body{background:var(--bg);}
+    .page{margin:0;box-shadow:none;width:210mm;height:297mm;page-break-after:always;break-after:page;}
+    .page:last-child{page-break-after:auto;break-after:auto;}
+    .no-print{display:none;}
+    @page{size:A4;margin:0;}
+  }
+  .no-print{position:fixed;top:16px;right:16px;z-index:50;}
+  .no-print button{background:var(--gold);color:#111;border:none;padding:11px 18px;border-radius:6px;font-family:'Poppins';font-weight:600;font-size:13px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.4);}
+</style>
+</head>
+<body>
+
+<div class="no-print">
+  <button onclick="window.print()">↓ Save as PDF</button>
+</div>
+
+<!-- PAGE 1 -->
+<div class="page">
+
+  <div class="head">
+    <div>
+      <div class="logo">imabox<span>.</span></div>
+    </div>
+    <div class="head-right">
+      hello@imabox.uy<br>
+      +598 98 325 902<br>
+      imabox.uy
+    </div>
+  </div>
+
+  <span class="doc-tag">Proposal</span>
+  <h1>Architectural video</h1>
+  <p class="subtitle">3D Animation · 60 seconds · 4K · Premium tier</p>
+
+  <div class="meta">
+    <div><div class="label">Client</div><div class="val">Netflix</div></div>
+    <div><div class="label">Project</div><div class="val">Los Gatos Building — California, USA</div></div>
+    <div><div class="label">Date</div><div class="val">06/01/2026</div></div>
+    <div><div class="label">Valid for</div><div class="val">30 days</div></div>
+  </div>
+
+  <h2>The concept</h2>
+  <p class="intro">A ~60-second video in which the current state of the site transforms before the viewer into the finished project. We start from the real footage of the location, <b>render the project frame by frame</b> matched to the exact perspective of the real camera (<i>camera matching</i>), <b>enhance that render with AI post-production</b> for hyper-realistic integration, and <b>blend it into the real footage</b> through generative transitions. The building is rendered faithfully to the plans —not improvised by AI—; AI elevates the realism and merges project and reality into a single living shot.</p>
+
+  <h2>Methodology</h2>
+  <table>
+    <tbody>
+      <tr><td class="item" style="width:34%">1 · Anchoring in reality</td><td class="detail">Key-frame extraction from the site video to lock perspective, lens and lighting for each segment.</td></tr>
+      <tr><td class="item">2 · Project render</td><td class="detail">The project rendered frame by frame, aligned to the real camera (camera matching), faithful to the plans.</td></tr>
+      <tr><td class="item">3 · AI post-production</td><td class="detail">Photorealistic integration of the render (shadows, reflections, atmosphere) and blending with the texture of the real footage.</td></tr>
+      <tr><td class="item">4 · Blend with reality</td><td class="detail">Generative transitions synthesizing the in-between frames: the existing site transforms into the project seamlessly.</td></tr>
+      <tr><td class="item" style="border-bottom:none">5 · Final finishing</td><td class="detail" style="border-bottom:none">Assembly, unified color grading, 4K upscaling, temporal coherence and sound design + music.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="foot">
+    <span>imabox<b style="color:var(--gold)">.</b> — Creative agency for real estate developers</span>
+    <span class="page-tag">Page 1 / 2</span>
+  </div>
+
+</div>
+
+<!-- PAGE 2 -->
+<div class="page">
+
+  <div class="head">
+    <div>
+      <div class="logo">imabox<span>.</span></div>
+    </div>
+    <div class="head-right">
+      Architectural video<br>
+      Los Gatos Building — Netflix
+    </div>
+  </div>
+
+  <h2 style="margin-top:0">Scope &amp; budget</h2>
+  <table>
+    <thead>
+      <tr><th>Item</th><th>Detail</th><th class="num">USD</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="item">Pre-production</td><td class="detail">Script, storyboard and definition of the camera move and transformation points</td><td class="num">$700</td></tr>
+      <tr><td class="item">Camera matching</td><td class="detail">Key-frame extraction and alignment of the virtual camera with the real footage</td><td class="num">$1,200</td></tr>
+      <tr><td class="item">Project render</td><td class="detail">The project rendered frame by frame, faithful to the 2D plans</td><td class="num">$2,200</td></tr>
+      <tr><td class="item">AI post-production</td><td class="detail">Photorealistic integration of the render and blending with the real footage texture</td><td class="num">$1,400</td></tr>
+      <tr><td class="item">AI blend &amp; transition</td><td class="detail">Generative transitions: synthesis of in-between frames from reality to project</td><td class="num">$1,900</td></tr>
+      <tr><td class="item">4K render &amp; coherence</td><td class="detail">~60 seconds, 4K upscaling and temporal coherence stabilization</td><td class="num">$1,100</td></tr>
+      <tr><td class="item">Final finishing</td><td class="detail">Unified color grading, sound design and licensed music</td><td class="num">$1,200</td></tr>
+      <tr class="total"><td>Total <span class="total-note">· 2 revision rounds included</span></td><td></td><td class="num">$9,700</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Terms</h2>
+  <ul class="cond">
+    <li><b>Confidentiality:</b> all project materials are kept strictly confidential; we are available to sign an NDA. Once the client has publicly released the video, Imabox reserves the right to use it for portfolio and promotional purposes.</li>
+    <li><b>Ownership:</b> the final video and its usage rights transfer to the client upon full payment.</li>
+    <li><b>Payment:</b> to be agreed between the parties.</li>
+    <li><b>Timeline:</b> 4 weeks from delivery of the 2D plans and site video/photos.</li>
+    <li><b>Revisions:</b> 2 rounds included; scope changes quoted separately.</li>
+    <li><b>Deliverable &amp; currency:</b> one horizontal 4K master (MP4 + ProRes), priced in USD.</li>
+  </ul>
+
+  <p class="validity">This proposal is valid for 30 days from the date of issue. Amounts do not include taxes applicable per jurisdiction.</p>
+
+  <div class="foot">
+    <span><a href="https://imabox.uy">imabox.uy</a> · hello@imabox.uy</span>
+    <span class="page-tag">Page 2 / 2</span>
+  </div>
+
+</div>
+
+</body>
+</html>

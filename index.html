@@ -291,8 +291,11 @@
             flex: 1; align-content: center;
         }
         .why-items {
-            display: grid; grid-template-columns: 1fr 1fr;
-            gap: 28px 40px;
+            position: relative;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .why-stats {
             width: 100%; position: relative; z-index: 2;
@@ -332,6 +335,32 @@
             font-family: 'Poppins', sans-serif;
             font-size: 0.84rem; font-weight: 300;
             color: rgba(255,255,255,0.56); line-height: 1.75;
+        }
+        /* Spotlight: one item at a time, centered, cycling */
+        .why-items .why-item {
+            position: absolute; inset: 0;
+            flex-direction: column !important;
+            align-items: center !important; justify-content: center;
+            text-align: center; gap: 12px !important;
+            opacity: 0; transform: translateY(18px) scale(0.94);
+            transition: opacity 0.85s ease, transform 0.85s ease;
+            pointer-events: none;
+        }
+        .why-items .why-item.why-active {
+            opacity: 1; transform: translateY(0) scale(1);
+        }
+        .why-items .why-num {
+            font-size: 0.92rem; letter-spacing: 0.32em;
+            opacity: 0.9; margin: 0 0 6px 0;
+        }
+        .why-items .why-item-body { max-width: 480px; }
+        .why-items .why-item-body h4 {
+            font-size: clamp(1.5rem, 2.6vw, 2.1rem); font-weight: 200;
+            letter-spacing: -0.01em; color: #fff; margin-bottom: 16px;
+        }
+        .why-items .why-item-body p {
+            display: block; font-size: 1.02rem; line-height: 1.7;
+            color: rgba(255,255,255,0.6);
         }
 
         /* ──────────────────────────────────────────
@@ -562,6 +591,38 @@
             font-family: 'Poppins', sans-serif;
             font-size: 0.82rem; font-weight: 300;
             color: rgba(255,255,255,0.55); line-height: 1.75;
+        }
+        /* ── Línea de progreso 01→05 (solo desktop) ── */
+        @media (min-width: 1101px) {
+            #s-process { position: relative; }
+            .process-steps .step-item {
+                opacity: 0.4;
+                transition: opacity 0.6s ease;
+                transition-delay: 0s !important;
+            }
+            .process-steps .step-item.step-on { opacity: 1; }
+            .step-num-label, .step-name { transition: color 0.5s ease, opacity 0.5s ease; }
+            .process-steps .step-item.step-on .step-num-label { opacity: 1; }
+            .process-steps .step-item.step-current .step-name { color: var(--gold); }
+            .step-bar { position: relative; overflow: hidden; }
+            .step-bar::after {
+                content: ''; position: absolute; left: 0; top: 0;
+                width: 0; height: 100%; background: var(--gold);
+                transition: width 0.7s ease;
+            }
+            .process-steps .step-item.step-on .step-bar::after { width: 100%; }
+            /* círculo demo centrado abajo */
+            #proc-demo {
+                position: absolute; bottom: 6%; left: 50%;
+                transform: translateX(-50%) scale(0.9);
+                width: 190px; height: 190px; border-radius: 50%;
+                background-size: cover; background-position: center;
+                border: 1px solid rgba(201,169,110,0.45);
+                box-shadow: 0 20px 55px rgba(0,0,0,0.55);
+                opacity: 0; overflow: hidden; z-index: 3; pointer-events: none;
+                transition: opacity 0.6s ease, transform 0.6s ease;
+            }
+            #proc-demo.visible { opacity: 1; transform: translateX(-50%) scale(1); }
         }
 
         /* ──────────────────────────────────────────
@@ -983,6 +1044,12 @@
         @media (min-width: 601px) and (max-width: 900px) {
             .why-items { grid-template-columns: 1fr 1fr !important; gap: 22px 36px !important; }
             .why-item-body p { display: block !important; font-size: 0.84rem; }
+            /* Redes en 2 columnas, arriba del formulario */
+            .contact-links {
+                display: grid; grid-template-columns: 1fr 1fr;
+                gap: 12px 40px; justify-items: start;
+                width: max-content; max-width: 100%; margin: 0 auto;
+            }
         }
 
         /* ── iPad Pro portrait (901px–1100px) ── */
@@ -990,8 +1057,12 @@
             /* Por qué nosotros — equidistante, separado del navbar */
             #s-why { padding-top: 72px; justify-content: space-evenly; }
             .why-inner { grid-template-columns: 1fr; gap: 28px; padding: 0 80px; flex: none; width: 100%; }
+            /* Centrar título, texto y botón en iPad Pro */
+            .why-left { text-align: center; }
+            #s-why .section-tag, .why-heading, .why-desc { text-align: center; }
             .why-heading { font-size: clamp(2rem, 3.8vw, 3rem); }
-            .why-desc { font-size: 1rem; max-width: 680px; }
+            .why-desc { font-size: 1rem; max-width: 680px; margin-left: auto; margin-right: auto; }
+            .why-cta-row { display: flex; justify-content: center; }
             .why-items { grid-template-columns: 1fr 1fr; gap: 24px 64px; }
             .why-item-body h4 { font-size: 1.05rem; }
             .why-item-body p { font-size: 0.92rem; display: block; }
@@ -1043,7 +1114,12 @@
             .contact-inner .section-tag { text-align: center; }
             .contact-title { font-size: clamp(1.8rem, 3.2vw, 2.6rem); text-align: center; }
             .contact-sub { font-size: 0.96rem; text-align: center; }
-            .contact-links { align-items: center; }
+            /* Redes en 2 columnas, arriba del formulario */
+            .contact-links {
+                display: grid; grid-template-columns: 1fr 1fr;
+                gap: 12px 44px; justify-items: start;
+                width: max-content; max-width: 100%; margin: 0 auto;
+            }
         }
 
         /* ── Móvil (600px y menos) ── */
@@ -1062,10 +1138,13 @@
             .why-inner { padding: 0 20px; gap: 20px; }
             .why-heading { font-size: clamp(1.3rem, 5.5vw, 1.7rem) !important; margin-bottom: 10px; }
             .why-desc { display: none; }
-            .why-items { grid-template-columns: 1fr 1fr; gap: 14px 18px; }
-            .why-item-body p { display: none; }
-            .why-item-body h4 { font-size: 0.82rem; margin-bottom: 0; }
-            .why-num { font-size: 0.52rem; }
+            /* Spotlight compacto en mobile (un item a la vez, centrado) */
+            .why-items { min-height: 150px; }
+            .why-items .why-item { gap: 8px !important; }
+            .why-items .why-num { font-size: 0.6rem; letter-spacing: 0.28em; margin: 0 0 2px 0; }
+            .why-items .why-item-body { max-width: 300px; }
+            .why-items .why-item-body h4 { font-size: 1.15rem !important; margin-bottom: 8px; }
+            .why-items .why-item-body p { display: block; font-size: 0.8rem; line-height: 1.5; }
             .why-cta-row { margin-top: 14px; display: flex; justify-content: center; }
             /* Equidistancia: why-inner no crece, space-between distribuye los 3 bloques */
             .why-inner { flex: none; width: 100%; }
@@ -1101,8 +1180,12 @@
             .step-item { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0; border-top: none !important; border-bottom: none !important; flex: none; }
             .step-item:last-child { border-bottom: none !important; }
             .step-num-label { grid-column: unset; grid-row: unset; align-self: unset; margin-bottom: 4px; font-size: 0.56rem; }
-            .step-name { grid-column: unset; grid-row: unset; font-size: 0.9rem; margin-bottom: 2px; }
-            .step-desc { grid-column: unset; grid-row: unset; font-size: 0.72rem; line-height: 1.5; }
+            .step-name { grid-column: unset; grid-row: unset; font-size: 0.9rem; margin-bottom: 2px; transition: color 0.3s ease; }
+            .step-desc { grid-column: unset; grid-row: unset; font-size: 0.72rem; line-height: 1.5; transition: opacity 0.3s ease; }
+            /* paso activo durante el auto-play (mobile) */
+            .step-item { opacity: 0.5; transition: opacity 0.4s ease, transform 0.4s ease; }
+            .step-item.step-current { opacity: 1; transform: scale(1.04); }
+            .step-item.step-current .step-name { color: var(--gold); }
 
             /* Contacto mobile — compacto para que entre el form completo */
             #s-contact { align-items: center; justify-content: center; overflow-y: auto; }
@@ -1284,28 +1367,28 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
             <div class="why-right">
                 <div class="why-items">
-                    <div class="why-item anim" style="transition-delay:0.15s">
+                    <div class="why-item why-active">
                         <span class="why-num">01</span>
                         <div class="why-item-body">
                             <h4 id="why-i1-h" data-en="We make it visible">Lo hacemos visible</h4>
                             <p id="why-i1-p" data-en="Photorealistic renders, animations and tours before construction begins.">Renders fotorrealistas, animaciones y tours antes de que la obra empiece.</p>
                         </div>
                     </div>
-                    <div class="why-item anim" style="transition-delay:0.25s">
+                    <div class="why-item">
                         <span class="why-num">02</span>
                         <div class="why-item-body">
                             <h4 id="why-i2-h" data-en="We make it desirable">Lo hacemos deseable</h4>
                             <p id="why-i2-p" data-en="Complete visual identity system to set your project apart.">Identidad de marca y sistema visual completo para diferenciarte.</p>
                         </div>
                     </div>
-                    <div class="why-item anim" style="transition-delay:0.35s">
+                    <div class="why-item">
                         <span class="why-num">03</span>
                         <div class="why-item-body">
                             <h4 id="why-i3-h" data-en="We make it sellable">Lo hacemos vendible</h4>
                             <p id="why-i3-p" data-en="Virtual showroom, 3D viewer and content to close sales sooner and better.">Showroom virtual, visor 3D y contenido para cerrar ventas antes y mejor.</p>
                         </div>
                     </div>
-                    <div class="why-item anim" style="transition-delay:0.45s">
+                    <div class="why-item">
                         <span class="why-num">04</span>
                         <div class="why-item-body">
                             <h4 id="why-i4-h" data-en="We make it premium">Lo hacemos premium</h4>
@@ -1440,31 +1523,31 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <p class="section-tag anim" id="proc-tag" data-en="How we work">Cómo trabajamos</p>
             <h2 class="why-heading anim" style="transition-delay:0.1s; max-width:600px" id="proc-heading" data-en="You don&#39;t need a finished project&lt;br&gt;to get started.">No necesitás un proyecto<br>terminado para empezar.</h2>
             <div class="process-steps">
-                <div class="step-item anim" style="transition-delay:0.1s" data-preview-flip="img/reveal-sketch.webp|img/reveal-render.webp">
+                <div class="step-item" data-preview-flip="img/reveal-sketch.webp|img/reveal-render.webp">
                     <p class="step-num-label">01</p>
                     <div class="step-bar"></div>
                     <h4 class="step-name" id="step1-name" data-en="Concept">Concepto</h4>
                     <p class="step-desc" id="step1-desc" data-en="We understand the project: location, program, market. We define what it should communicate and to whom.">Entendemos el proyecto: ubicación, programa, mercado. Definimos qué quiere comunicar y a quién.</p>
                 </div>
-                <div class="step-item anim" style="transition-delay:0.18s" data-preview-video="animations/acc-brand.mp4" data-preview-video-start="4" data-preview-video-end="7">
+                <div class="step-item" data-preview-video="animations/acc-brand.mp4" data-preview-video-start="4" data-preview-video-end="7">
                     <p class="step-num-label">02</p>
                     <div class="step-bar"></div>
                     <h4 class="step-name" id="step2-name" data-en="Identity">Identidad</h4>
                     <p class="step-desc" id="step2-desc" data-en="We develop the building&#39;s brand: name, logo, palette, typography. The visual DNA of everything.">Desarrollamos la marca del edificio: nombre, logo, paleta, tipografía. El ADN visual de todo.</p>
                 </div>
-                <div class="step-item anim" style="transition-delay:0.26s" data-preview-video="animations/acc-3d.mp4" data-preview-video-start="0" data-preview-video-end="6">
+                <div class="step-item" data-preview-video="animations/acc-3d.mp4" data-preview-video-start="0" data-preview-video-end="6">
                     <p class="step-num-label">03</p>
                     <div class="step-bar"></div>
                     <h4 class="step-name" id="step3-name" data-en="Visualization">Visualización</h4>
                     <p class="step-desc" id="step3-desc" data-en="Images, videos and cinematics. The visuals that make the project real before it exists.">Imágenes, videos y cinematografías. Los visuales que hacen real el proyecto antes de que exista.</p>
                 </div>
-                <div class="step-item anim" style="transition-delay:0.34s" data-preview-video="animations/acc-interactive.mp4" data-preview-video-start="0" data-preview-video-end="6">
+                <div class="step-item" data-preview-video="animations/acc-interactive.mp4" data-preview-video-start="0" data-preview-video-end="6">
                     <p class="step-num-label">04</p>
                     <div class="step-bar"></div>
                     <h4 class="step-name" id="step4-name" data-en="Tools">Herramientas</h4>
                     <p class="step-desc" id="step4-desc" data-en="Virtual showroom, 360 tour and sales materials. The complete digital ecosystem of the project.">Showroom virtual, tour 360 y materiales de venta. El ecosistema digital completo del proyecto.</p>
                 </div>
-                <div class="step-item anim" style="transition-delay:0.42s" data-preview-video="animations/acc-brand.mp4" data-preview-video-start="0" data-preview-video-end="3">
+                <div class="step-item" data-preview-video="animations/acc-brand.mp4" data-preview-video-start="0" data-preview-video-end="3">
                     <p class="step-num-label">05</p>
                     <div class="step-bar"></div>
                     <h4 class="step-name" id="step5-name" data-en="Launch">Lanzamiento</h4>
@@ -1835,6 +1918,29 @@ var snapSections;
     document.querySelectorAll('.anim').forEach(function (el) { io.observe(el); });
 })();
 
+/* ── "Por qué nosotros" — spotlight cycling (01→02→03→04) ── */
+(function () {
+    var items = Array.prototype.slice.call(document.querySelectorAll('.why-items .why-item'));
+    if (items.length < 2) return;
+    var i = 0, started = false;
+    function show(n) {
+        items.forEach(function (it, k) { it.classList.toggle('why-active', k === n); });
+    }
+    function step() { show(i); i = (i + 1) % items.length; }
+    function start() {
+        if (started) return; started = true;
+        i = 0; step();                 // show 01 first
+        setInterval(step, 3000);       // ~2.15s visible + 0.85s fade
+    }
+    var container = document.querySelector('.why-items');
+    if ('IntersectionObserver' in window && container) {
+        var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) { if (e.isIntersecting) start(); });
+        }, { threshold: 0.3 });
+        io.observe(container);
+    } else { start(); }
+})();
+
 /* ── Services accordion ── */
 (function () {
     var wrap = document.getElementById('accWrapHome');
@@ -2044,6 +2150,102 @@ var snapSections;
     });
 })();
 
+/* ── "Cómo trabajamos" — línea de progreso 01→05 + círculo demo (desktop) ── */
+(function () {
+    if (window.innerWidth <= 1100) return;
+    var section = document.getElementById('s-process');
+    if (!section) return;
+    var steps = Array.prototype.slice.call(section.querySelectorAll('.step-item'));
+    if (!steps.length) return;
+
+    var demo = document.createElement('div');
+    demo.id = 'proc-demo';
+    section.appendChild(demo);
+
+    var demoVid = null, flipTimer = null, timers = [], running = false, paused = false;
+    var STEP_MS = 1700, PAUSE = 2800;
+
+    function clearMedia() {
+        if (flipTimer) { clearInterval(flipTimer); flipTimer = null; }
+        if (demoVid) { demoVid.pause(); demoVid.style.display = 'none'; }
+        demo.style.backgroundImage = 'none';
+    }
+    function showMedia(step) {
+        clearMedia();
+        var flipSrc = step.dataset.previewFlip, vidSrc = step.dataset.previewVideo;
+        if (flipSrc) {
+            var imgs = flipSrc.split('|'), idx = 0;
+            demo.style.backgroundImage = 'url(' + imgs[0] + ')';
+            flipTimer = setInterval(function () {
+                idx = (idx + 1) % imgs.length;
+                demo.style.backgroundImage = 'url(' + imgs[idx] + ')';
+            }, 800);
+        } else if (vidSrc) {
+            var vStart = parseFloat(step.dataset.previewVideoStart || 0);
+            var vEnd = parseFloat(step.dataset.previewVideoEnd || 3);
+            if (!demoVid) {
+                demoVid = document.createElement('video');
+                demoVid.muted = true; demoVid.playsInline = true; demoVid.loop = false;
+                demoVid.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;';
+                demo.appendChild(demoVid);
+            }
+            demoVid.style.display = '';
+            demoVid.src = vidSrc; demoVid.load();
+            demoVid.addEventListener('canplay', function h() {
+                demoVid.removeEventListener('canplay', h);
+                demoVid.currentTime = vStart;
+                var p = demoVid.play(); if (p) p.catch(function () {});
+                demoVid.ontimeupdate = function () {
+                    if (demoVid.currentTime >= vEnd) {
+                        demoVid.currentTime = vStart;
+                        var p2 = demoVid.play(); if (p2) p2.catch(function () {});
+                    }
+                };
+            }, { once: true });
+        }
+    }
+    function clearTimers() { timers.forEach(clearTimeout); timers = []; }
+
+    function runOnce() {
+        steps.forEach(function (s) { s.classList.remove('step-on', 'step-current'); });
+        demo.classList.remove('visible');
+        steps.forEach(function (s, i) {
+            timers.push(setTimeout(function () {
+                s.classList.add('step-on');
+                steps.forEach(function (o) { o.classList.remove('step-current'); });
+                s.classList.add('step-current');
+                showMedia(s);
+                demo.classList.add('visible');
+            }, i * STEP_MS));
+        });
+        timers.push(setTimeout(function () { if (running && !paused) runOnce(); },
+                                steps.length * STEP_MS + PAUSE));
+    }
+
+    steps.forEach(function (s) {
+        s.addEventListener('mouseenter', function () {
+            paused = true; clearTimers(); clearMedia();
+            demo.classList.remove('visible');
+        });
+        s.addEventListener('mouseleave', function () {
+            if (running) { paused = false; runOnce(); }
+        });
+    });
+
+    var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+            if (e.isIntersecting) {
+                if (!running) { running = true; paused = false; runOnce(); }
+            } else {
+                running = false; clearTimers(); clearMedia();
+                demo.classList.remove('visible');
+                steps.forEach(function (s) { s.classList.remove('step-current'); });
+            }
+        });
+    }, { threshold: 0.4 });
+    io.observe(section);
+})();
+
 /* ── Reveal slider (Why section) ── */
 (function () {
     var wrap   = document.getElementById('revealWrapIdx');
@@ -2147,14 +2349,15 @@ var snapSections;
     });
 })();
 
-/* ── Process accordion + preview circular — tablet (601px–1100px) ── */
+/* ── Process: auto-play 01→05 + preview circular — tablet + mobile (≤1100px) ── */
 (function () {
-    if (window.innerWidth < 601 || window.innerWidth > 1100) return;
+    if (window.innerWidth > 1100) return;
 
     var steps = Array.from(document.querySelectorAll('#s-process .step-item'));
 
     /* preview circle — posición fija, centrado abajo */
-    var SIZE = 220;
+    var SIZE = window.innerWidth <= 600 ? 100 : 220;
+    var isMobile = window.innerWidth <= 600;
     var preview = document.createElement('div');
     preview.style.cssText = [
         'position:fixed', 'pointer-events:none', 'z-index:500',
@@ -2167,7 +2370,30 @@ var snapSections;
         'outline:2px solid #c9a96e', 'outline-offset:5px',
         'left:50%', 'bottom:16%'
     ].join(';');
-    document.body.appendChild(preview);
+    /* mobile: el círculo va DENTRO de la sección (posición estable ante el snap),
+       ubicado debajo del paso activo y bajando con él */
+    if (isMobile) {
+        var procSec0 = document.getElementById('s-process');
+        if (procSec0) {
+            procSec0.style.position = 'relative';
+            procSec0.appendChild(preview);
+        } else {
+            document.body.appendChild(preview);
+        }
+        preview.style.position = 'absolute';
+        preview.style.bottom = 'auto';
+        preview.style.left = '50%';
+        preview.style.zIndex = '6';
+        preview.style.transition = 'top 0.55s cubic-bezier(.4,0,.2,1), opacity 0.3s ease, transform 0.3s ease';
+        preview.style.outlineOffset = '3px';
+    } else {
+        document.body.appendChild(preview);
+    }
+    function positionPreview(step) {
+        if (!isMobile) return;
+        preview.style.top = (step.offsetTop + step.offsetHeight + 6) + 'px';
+    }
+    if (isMobile && steps[0]) positionPreview(steps[0]);
 
     var tabVid = null;
     var tabFlip = null;
@@ -2178,6 +2404,7 @@ var snapSections;
     }
 
     function showPreview(step) {
+        positionPreview(step);
         var flipSrc = step.dataset.previewFlip;
         var vidSrc  = step.dataset.previewVideo;
 
@@ -2225,34 +2452,62 @@ var snapSections;
         if (tabVid) { tabVid.pause(); }
     }
 
-    /* apagar círculo y resetear accordion al salir de la sección */
+    /* ── Auto-play: enciende 01→05 con su preview, en bucle ── */
+    var autoTimers = [], autoRunning = false, resumeTimer = null;
+    var STEP_MS = 1900, PAUSE = 2600;
+
+    function lightStep(step) {
+        steps.forEach(function (s) { s.classList.remove('expanded', 'step-current'); });
+        step.classList.add('expanded', 'step-current');
+        showPreview(step);
+    }
+    function clearAutoTimers() { autoTimers.forEach(clearTimeout); autoTimers = []; }
+    function runOnce() {
+        clearAutoTimers();
+        steps.forEach(function (s, i) {
+            autoTimers.push(setTimeout(function () { lightStep(s); }, i * STEP_MS));
+        });
+        autoTimers.push(setTimeout(function () { if (autoRunning) runOnce(); },
+                                   steps.length * STEP_MS + PAUSE));
+    }
+    function startAuto() { if (autoRunning) return; autoRunning = true; runOnce(); }
+    function stopAuto() { autoRunning = false; clearAutoTimers(); }
+
+    /* arrancar/parar según visibilidad de la sección */
     var procSection = document.getElementById('s-process');
     if (procSection) {
         new IntersectionObserver(function (entries) {
             entries.forEach(function (entry) {
-                if (!entry.isIntersecting) {
-                    hidePreview();
-                    steps.forEach(function (s) { s.classList.remove('expanded'); });
+                if (entry.isIntersecting) {
+                    startAuto();
+                } else {
+                    stopAuto(); hidePreview();
+                    steps.forEach(function (s) { s.classList.remove('expanded', 'step-current'); });
                 }
             });
         }, { threshold: 0.3 }).observe(procSection);
     }
 
+    /* tap del usuario: pausa el auto, muestra ese paso, y reanuda a los 5s */
     steps.forEach(function (step) {
-        var icon = document.createElement('span');
-        icon.className = 'step-toggle-icon';
-        icon.innerHTML = '<svg viewBox="0 0 16 16"><line x1="8" y1="2" x2="8" y2="14"/><line x1="2" y1="8" x2="14" y2="8"/></svg>';
-        step.appendChild(icon);
-
+        if (window.innerWidth >= 601) {
+            var icon = document.createElement('span');
+            icon.className = 'step-toggle-icon';
+            icon.innerHTML = '<svg viewBox="0 0 16 16"><line x1="8" y1="2" x2="8" y2="14"/><line x1="2" y1="8" x2="14" y2="8"/></svg>';
+            step.appendChild(icon);
+        }
         step.addEventListener('click', function () {
+            stopAuto();
+            if (resumeTimer) clearTimeout(resumeTimer);
             var isOpen = step.classList.contains('expanded');
-            steps.forEach(function (s) { s.classList.remove('expanded'); });
+            steps.forEach(function (s) { s.classList.remove('expanded', 'step-current'); });
             if (!isOpen) {
-                step.classList.add('expanded');
+                step.classList.add('expanded', 'step-current');
                 showPreview(step);
             } else {
                 hidePreview();
             }
+            resumeTimer = setTimeout(startAuto, 5000);
         });
     });
 })();
