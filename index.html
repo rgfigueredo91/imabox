@@ -639,14 +639,16 @@
         /* form */
         .contact-form { display: flex; flex-direction: column; gap: 14px; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
         .form-group label {
             font-family: 'aktiv-grotesk', sans-serif;
             font-size: 0.58rem; letter-spacing: 0.22em; text-transform: uppercase;
             color: rgba(255,255,255,0.48);
         }
         .form-group input,
-        .form-group select {
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
             background: rgba(255,255,255,0.04);
             border: 1px solid rgba(255,255,255,0.1);
             color: rgba(255,255,255,0.8);
@@ -655,9 +657,12 @@
             transition: border-color 0.2s;
             appearance: none; -webkit-appearance: none;
         }
-        .form-group input::placeholder { color: rgba(255,255,255,0.32); }
+        .form-group textarea { resize: vertical; min-height: 64px; line-height: 1.6; }
+        .form-group input::placeholder,
+        .form-group textarea::placeholder { color: rgba(255,255,255,0.32); }
         .form-group input:focus,
-        .form-group select:focus { border-color: rgba(201,169,110,0.45); }
+        .form-group select:focus,
+        .form-group textarea:focus { border-color: rgba(201,169,110,0.45); }
         .form-group select option { background: #111; }
         .form-actions {
             display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
@@ -1099,18 +1104,27 @@
             .step-name { grid-column: unset; grid-row: unset; font-size: 0.9rem; margin-bottom: 2px; }
             .step-desc { grid-column: unset; grid-row: unset; font-size: 0.72rem; line-height: 1.5; }
 
-            /* Contacto mobile — centrado */
+            /* Contacto mobile — compacto para que entre el form completo */
             #s-contact { align-items: center; justify-content: center; overflow-y: auto; }
-            .contact-inner { padding: 24px 22px 24px; gap: 18px; width: 100%; text-align: center; }
-            .contact-title { font-size: clamp(1.3rem, 5.5vw, 1.8rem); margin-bottom: 8px; }
-            .contact-sub { font-size: 0.84rem; margin-bottom: 16px; line-height: 1.7; }
-            .contact-links { display: flex; flex-direction: row; gap: 20px; margin-bottom: 4px; }
+            .contact-inner { display: flex; flex-direction: column; align-items: center; padding: 20px 22px; gap: 10px; width: 100%; text-align: center; }
+            .contact-left { width: 100%; }
+            .contact-form { width: 100%; max-width: 400px; }
+            .contact-tag { margin-bottom: 4px; }
+            .contact-title { font-size: clamp(1.15rem, 5vw, 1.5rem); margin-bottom: 0; line-height: 1.2; }
+            .contact-sub { display: none; }
+            .contact-links { display: flex; flex-direction: row; justify-content: center; gap: 18px; margin: 0; }
             .contact-links a:nth-child(1),
             .contact-links a:nth-child(2) { display: none; }
-            .contact-form { gap: 10px; }
-            .form-group input, .form-group select { padding: 9px 12px; font-size: 0.8rem; }
-            .form-actions { margin-top: 4px; gap: 12px; justify-content: center; }
+            .contact-links .contact-link { font-size: 0.78rem; }
+            .contact-form { gap: 7px; }
+            .contact-form .form-row { gap: 7px; }
+            .form-group { gap: 3px; }
+            .form-group label { font-size: 0.52rem; text-align: center; }
+            .form-group input, .form-group select, .form-group textarea { padding: 7px 11px; font-size: 0.78rem; text-align: center; }
+            .form-group textarea { min-height: 44px; }
+            .form-actions { margin-top: 2px; gap: 10px; justify-content: center; }
             .form-or { display: none; }
+            .btn-submit, .btn-book-call { padding: 10px 22px; font-size: 0.6rem; }
 
             /* Proyectos */
             .proj-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1140,8 +1154,8 @@
             .hero-ctas { flex-direction: column; align-items: center; gap: 12px; }
             .hero-sub { font-size: 0.88rem; }
 
-            /* Form */
-            .form-row { grid-template-columns: 1fr; }
+            /* Form — 2 columnas para ahorrar alto (nombre|empresa, email|teléfono) */
+            .form-row { grid-template-columns: 1fr 1fr; gap: 7px; }
 
             /* Accordion */
             .acc-content h3 { font-size: 1.3rem; }
@@ -1636,6 +1650,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         <input type="text" id="cf-company" name="company" placeholder="Desarrolladora / Estudio" data-en-ph="Developer / Studio">
                     </div>
                 </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="cf-email" id="cf-label-email" data-en="Email">Email</label>
+                        <input type="email" id="cf-email" name="email" placeholder="tu@email.com" data-en-ph="you@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cf-phone" id="cf-label-phone" data-en="Phone">Teléfono</label>
+                        <input type="tel" id="cf-phone" name="phone" placeholder="+598 9X XXX XXX" data-en-ph="+598 9X XXX XXX">
+                    </div>
+                </div>
                 <div class="form-group">
                     <label for="cf-type" id="cf-label-type" data-en="Project type">Tipo de proyecto</label>
                     <select id="cf-type" name="project_type" data-en-opts='["Select an option","Residential building","Tourist development","Office / Commercial space","Housing / Urbanization","Other"]'>
@@ -1656,6 +1680,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         <option value="proyecto">Proyecto aprobado</option>
                         <option value="construccion">En construcción</option>
                     </select>
+                </div>
+                <div class="form-group">
+                    <label for="cf-message" id="cf-label-message" data-en="Message">Mensaje</label>
+                    <textarea id="cf-message" name="message" rows="3" placeholder="Contanos brevemente sobre tu proyecto" data-en-ph="Tell us briefly about your project"></textarea>
                 </div>
                 <div class="form-actions">
                     <button type="submit" class="btn-submit" id="cf-submit" data-en="Send inquiry">Enviar consulta</button>
