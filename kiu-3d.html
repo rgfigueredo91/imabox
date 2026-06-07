@@ -122,13 +122,45 @@
     /* ── TOOLTIP (hover unidad) ──────────────────────────── */
     #unit-tooltip {
         position: fixed; z-index: 25; pointer-events: none;
-        padding: 6px 12px; border-radius: 6px;
-        background: rgba(8,8,8,0.92); border: 1px solid rgba(255,255,255,0.12);
-        font-size: 0.7rem; font-weight: 300; letter-spacing: 0.06em;
+        padding: 10px 14px; border-radius: 10px; min-width: 138px;
+        background: rgba(10,9,8,0.95); border: 1px solid rgba(212,178,106,0.32);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.55); backdrop-filter: blur(6px);
         color: #fff; opacity: 0; transition: opacity 0.12s ease;
-        white-space: nowrap; transform: translate(-50%, -140%);
+        white-space: nowrap; transform: translate(-50%, -122%);
     }
     #unit-tooltip.show { opacity: 1; }
+    .ut-name { font-size: 0.82rem; font-weight: 400; letter-spacing: 0.04em; }
+    .ut-specs { font-size: 0.64rem; font-weight: 300; letter-spacing: 0.04em;
+        color: rgba(255,255,255,0.6); margin-top: 4px; }
+    .ut-badge { display: inline-block; margin-top: 8px; padding: 2px 9px; border-radius: 20px;
+        font-size: 0.54rem; font-weight: 400; letter-spacing: 0.1em; text-transform: uppercase; }
+    .ut-badge.disponible { background: rgba(110,200,140,0.16); color: #7fd49b; }
+    .ut-badge.reservado  { background: rgba(230,190,90,0.16);  color: #e6c45a; }
+    .ut-badge.vendido    { background: rgba(220,110,110,0.16); color: #dc6e6e; }
+
+    /* ── Brújula / Norte ─────────────────────────────────── */
+    #compass {
+        position: fixed; bottom: 96px; left: 30px; z-index: 16;
+        width: 60px; height: 60px; border-radius: 50%;
+        background: rgba(8,8,8,0.82); backdrop-filter: blur(8px);
+        border: 1px solid rgba(255,255,255,0.12);
+        box-shadow: 0 4px 18px rgba(0,0,0,0.4);
+    }
+    .compass-dial { position: absolute; inset: 0; will-change: transform; }
+    .compass-dial span {
+        position: absolute; left: 50%; transform: translateX(-50%);
+        font-size: 0.5rem; font-weight: 500; letter-spacing: 0.04em; color: rgba(255,255,255,0.55);
+    }
+    .compass-dial .cp-n { top: 5px; color: var(--gold-text); }
+    .compass-dial .cp-s { bottom: 5px; }
+    .compass-dial .cp-e { top: 50%; left: auto; right: 6px; transform: translateY(-50%); }
+    .compass-dial .cp-o { top: 50%; left: 6px; transform: translateY(-50%); }
+    .compass-dial .cp-needle {
+        position: absolute; top: 11px; left: 50%; transform: translateX(-50%);
+        width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent;
+        border-bottom: 17px solid var(--gold);
+    }
+    @media (max-width: 768px) { #compass { width: 50px; height: 50px; bottom: 84px; left: 14px; } }
 
     /* ── UNIT INFO PANEL ─────────────────────────────────── */
     #unit-panel {
@@ -620,7 +652,7 @@
     body.tour-mode #ai-fab, body.tour-mode #btn-volver, body.tour-mode #top-tools,
     body.tour-mode #labels-layer, body.tour-mode #btn-tour,
     body.tour-mode #avail-legend, body.tour-mode #unit-tooltip,
-    body.tour-mode #btn-cam, body.tour-mode #cam-panel {
+    body.tour-mode #btn-cam, body.tour-mode #cam-panel, body.tour-mode #compass {
         opacity: 0 !important; pointer-events: none !important;
     }
     /* En el tour el plano SÍ se muestra (durante el paso de la unidad), pero no interactivo */
@@ -935,6 +967,14 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
         <span>Compartir</span>
     </button>
+</div>
+
+<!-- Brújula / orientación Norte -->
+<div id="compass" title="Orientación (Norte)">
+    <div class="compass-dial" id="compass-dial">
+        <span class="cp-n">N</span><span class="cp-e">E</span><span class="cp-s">S</span><span class="cp-o">O</span>
+        <div class="cp-needle"></div>
+    </div>
 </div>
 
 <!-- Etiquetas flotantes sobre las unidades -->
@@ -2525,7 +2565,15 @@ function updateHover() {
             highlightFloor(f, HL_FLOOR);
         }
         canvas.style.cursor = f ? 'pointer' : 'default';
-        tooltip.classList.remove('show');
+        if (f) {
+            const nU = f.units.length;
+            const avail = f.units.filter(u => (TIPOLOGIAS[u.name] || TIPOLOGIAS._default).estado === 'Disponible').length;
+            tooltip.innerHTML = `<div class="ut-name">${f.name.replace(/_/g,' ')}</div>` +
+                `<div class="ut-specs">${nU} ${nU === 1 ? 'tipología' : 'tipologías'}${avail ? ` · ${avail} disp.` : ''}</div>`;
+            tooltip.style.left = _mouse.x + 'px';
+            tooltip.style.top  = _mouse.y + 'px';
+            tooltip.classList.add('show');
+        } else tooltip.classList.remove('show');
     } else if (_state === 'floor') {
         const mesh = hits.length ? hits[0].object : null;
         const u = mesh ? unitOfMesh(mesh, _activeFloor) : null;
@@ -2537,7 +2585,10 @@ function updateHover() {
         canvas.style.cursor = u ? 'pointer' : 'default';
         if (u) {
             const d = TIPOLOGIAS[u.name] || TIPOLOGIAS._default;
-            tooltip.textContent = `${u.name.replace(/_/g,' ')} · ${d.tipo}`;
+            const est = (d.estado || '').toLowerCase();
+            tooltip.innerHTML = `<div class="ut-name">${u.name.replace(/_/g,' ')}</div>` +
+                `<div class="ut-specs">${d.tipo} · ${d.area}${d.banos ? (' · ' + d.banos + ' baños') : ''}</div>` +
+                (d.estado ? `<span class="ut-badge ${est}">${d.estado}</span>` : '');
             tooltip.style.left = _mouse.x + 'px';
             tooltip.style.top  = _mouse.y + 'px';
             tooltip.classList.add('show');
@@ -2917,12 +2968,50 @@ async function setupPostFX() {
 }
 setupPostFX();
 
+/* ── Brújula / Norte ──────────────────────────────────────────────
+   Calibrá NORTH_OFFSET_DEG si el norte real del proyecto no coincide
+   con -Z del modelo (sumá/restá grados hasta que la N apunte bien). */
+const NORTH_OFFSET_DEG = 0;
+const _compassDial = document.getElementById('compass-dial');
+function updateCompass() {
+    if (!_compassDial) return;
+    const dx = camera.position.x - controls.target.x;
+    const dz = camera.position.z - controls.target.z;
+    const az = Math.atan2(dx, dz) * 180 / Math.PI;   // azimut de la cámara
+    _compassDial.style.transform = `rotate(${(-az + NORTH_OFFSET_DEG).toFixed(1)}deg)`;
+}
+
+/* ── Sonido de click (minimalista, generado por Web Audio) ────────── */
+let _audioCtx = null;
+function playClick() {
+    try {
+        if (!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (_audioCtx.state === 'suspended') _audioCtx.resume();
+        const t = _audioCtx.currentTime;
+        const o = _audioCtx.createOscillator();
+        const g = _audioCtx.createGain();
+        o.type = 'sine';
+        o.frequency.setValueAtTime(1350, t);
+        o.frequency.exponentialRampToValueAtTime(720, t + 0.045);
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.exponentialRampToValueAtTime(0.12, t + 0.004);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + 0.06);
+        o.connect(g); g.connect(_audioCtx.destination);
+        o.start(t); o.stop(t + 0.07);
+    } catch (e) {}
+}
+document.addEventListener('click', e => {
+    if (e.target.closest('button, .gp-floor-btn, .mood-btn, .tool-btn, .lc-item, .ts-dot, .plan-toggle button'))
+        playClick();
+}, true);
+
 function animate() {
     requestAnimationFrame(animate);
     controls.update();
     updateHover();          // resaltado recalculado en cada cuadro
     updateHotspot();        // pulso del hotspot 360
     updateLabels();         // posición de las etiquetas flotantes
+    updateCompass();        // orientación de la brújula
     if (_realismOn && _composerReady && _composer) _composer.render();
     else renderer.render(scene, camera);
 }
