@@ -1,0 +1,28 @@
+AVANCE DE OBRA — KIU Av. Italia
+================================
+
+Acá van las fotos de obra que se muestran en el viewer (botón "Avance de obra").
+
+CÓMO AGREGAR FOTOS
+------------------
+1) Subí las imágenes a esta carpeta. Recomendado: una subcarpeta por mes, ej:
+      3d/obra/2026-06/01.jpg
+      3d/obra/2026-06/02.jpg
+      3d/obra/2026-05/01.jpg
+   (formato .jpg o .webp, idealmente ~1600px de ancho para que carguen rápido)
+
+2) Abrí kiu-3d.html y buscá el bloque  const OBRA = [ ... ]  (cerca de GALERIA).
+   Agregá una etapa por fecha, la MÁS RECIENTE primero:
+
+   const OBRA = [
+     { fecha: 'Junio 2026', nota: 'Hormigonado piso 5',
+       fotos: ['3d/obra/2026-06/01.jpg', '3d/obra/2026-06/02.jpg'] },
+     { fecha: 'Mayo 2026', nota: 'Estructura piso 4',
+       fotos: ['3d/obra/2026-05/01.jpg'] },
+   ];
+
+   - "fecha": el título de la etapa (texto libre).
+   - "nota": opcional, una línea descriptiva.
+   - "fotos": lista de rutas a las imágenes.
+
+3) Listo. Si OBRA queda vacío, la sección muestra "Próximamente".

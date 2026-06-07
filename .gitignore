@@ -1,0 +1,6 @@
+# Backups locales (no versionar)
+_backups/
+
+# Config y skills locales de Claude Code
+.claude/settings.local.json
+.claude/skills/
