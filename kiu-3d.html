@@ -618,10 +618,19 @@
     /* Mientras el tour corre, ocultamos toda la UI normal */
     body.tour-mode #gp-panel, body.tour-mode #unit-panel, body.tour-mode #light-bar,
     body.tour-mode #ai-fab, body.tour-mode #btn-volver, body.tour-mode #top-tools,
-    body.tour-mode #labels-layer, body.tour-mode #btn-tour, body.tour-mode #plan-card,
+    body.tour-mode #labels-layer, body.tour-mode #btn-tour,
     body.tour-mode #avail-legend, body.tour-mode #unit-tooltip,
     body.tour-mode #btn-cam, body.tour-mode #cam-panel {
         opacity: 0 !important; pointer-events: none !important;
+    }
+    /* En el tour el plano SÍ se muestra (durante el paso de la unidad), pero no interactivo */
+    body.tour-mode #plan-card { pointer-events: none; z-index: 90; }
+    body.tour-mode #plan-card .plan-toggle { display: none; }
+    body.tour-mode #plan-card .plan-expand { display: none; }
+    /* Fade cinemático entre pasos del tour */
+    #tour-fade {
+        position: fixed; inset: 0; z-index: 95; background: #0a0a0a;
+        opacity: 0; pointer-events: none;
     }
 
     /* ── AJUSTE DE CÁMARA ────────────────────────────────── */
@@ -966,6 +975,7 @@
     <p class="cam-hint">Bajá el FOV (lente más larga) y subí «Verticales» para enderezar las líneas del edificio sin inclinar la cámara. Apagá la órbita para capturar una vista fija con la IA.</p>
 </div>
 
+<div id="tour-fade"></div>
 <div id="tour-overlay">
     <div id="tour-photo"><img id="tour-photo-img" alt=""></div>
     <div id="tour-vignette"></div>
@@ -1325,7 +1335,13 @@ const GALERIA = {
    ];
 */
 const OBRA = [
-    // ← Agregá acá tus etapas con las fotos reales.
+    { fecha: 'Junio 2026', nota: 'Avance de obra',
+      fotos: [
+          '3d/obra/obra-01.webp',
+          '3d/obra/obra-02.webp',
+          '3d/obra/obra-03.webp',
+          '3d/obra/obra-04.webp',
+      ] },
 ];
 
 /* ── Contacto + disponibilidad ───────────────────────────────────
@@ -1834,6 +1850,15 @@ let _camAnim = null;
 // Si mostrara el lado equivocado, invertí los signos de x/z en ambas.
 const OVERVIEW_VIEW_DIR = new THREE.Vector3(-0.45, 0.45, -1).normalize();
 const UNIT_VIEW_DIR     = new THREE.Vector3(-0.3,  0.40, -1).normalize();
+// Ángulos variados para el modo presentación (más dinámico, menos aburrido)
+const TOUR_CAM = [
+    new THREE.Vector3(-0.55, 0.35, -1),
+    new THREE.Vector3( 0.60, 0.42, -1),
+    new THREE.Vector3(-0.30, 0.58, -0.7),
+    new THREE.Vector3( 0.35, 0.30, -1),
+    new THREE.Vector3(-0.95, 0.45, -0.4),
+    new THREE.Vector3( 0.85, 0.35, -0.55),
+].map(v => v.normalize());
 function frameBox(box, opts = {}) {
     const size   = box.getSize(new THREE.Vector3());
     const center = box.getCenter(new THREE.Vector3());
@@ -1842,7 +1867,7 @@ function frameBox(box, opts = {}) {
     const dist = fitDist * (opts.pad || 1.6);
     const dir = (opts.dir || OVERVIEW_VIEW_DIR);
     const targetPos = center.clone().addScaledVector(dir, dist);
-    animateCamera(targetPos, center, opts.dur || 700);
+    animateCamera(targetPos, center, opts.dur || 580);
 }
 function animateCamera(toPos, toTarget, dur) {
     const fromPos = camera.position.clone();
@@ -3148,35 +3173,40 @@ function ensureOverview(){ if (_state !== 'overview') backToOverview(); }
 function buildStoryboard() {
     const S = [];
     // Intro + muestra de ambientes (en vista general, con órbita automática)
-    S.push({ eyebrow: PROJECT_NAME, title: 'Recorrido del proyecto', sub: 'Una mirada inmersiva al edificio', dur: 6500,
+    S.push({ eyebrow: PROJECT_NAME, title: 'Recorrido del proyecto', sub: 'Una mirada inmersiva al edificio', dur: 3400,
              enter() { ensureOverview(); moodTo('dia'); } });
-    S.push({ eyebrow: 'Ambiente', title: 'Al atardecer', sub: 'La fachada con luz cálida', dur: 5000,
+    S.push({ eyebrow: 'Ambiente', title: 'Al atardecer', sub: 'La fachada con luz cálida', dur: 2600,
              enter() { ensureOverview(); moodTo('atardecer'); } });
-    S.push({ eyebrow: 'Ambiente', title: 'De noche', sub: 'Las unidades cobran vida', dur: 5000,
+    S.push({ eyebrow: 'Ambiente', title: 'De noche', sub: 'Las unidades cobran vida', dur: 2600,
              enter() { ensureOverview(); moodTo('noche'); } });
 
     // Piso por piso, tipología por tipología
+    let _ci = 0;                                   // índice para rotar ángulos de cámara
+    const nextDir = () => TOUR_CAM[_ci++ % TOUR_CAM.length];
+    const padJit  = () => 1 + (((_ci) % 3) - 1) * 0.08;   // leve dolly (acerca/aleja)
     const ordered = [...floors].sort((a, b) => a.index - b.index);
     ordered.forEach(f => {
         const nU = f.units.length;
         S.push({ eyebrow: 'Nivel', title: f.name.replace(/_/g, ' '),
-                 sub: nU + (nU === 1 ? ' tipología' : ' tipologías'), dur: 4200,
+                 sub: nU + (nU === 1 ? ' tipología' : ' tipologías'), dur: 2200,
+                 camDir: nextDir(), camPad: 1.05 * padJit(), camBox: () => boxOf(f.group),
                  enter() { moodTo('dia'); selectFloor(f); } });
         f.units.forEach(u => {
             const d = TIPOLOGIAS[u.name] || TIPOLOGIAS._default;
             const dorm = d.dorm === 0 ? 'Monoambiente' : d.dorm + (d.dorm === 1 ? ' dormitorio' : ' dormitorios');
             S.push({ eyebrow: d.tipo, title: u.name.replace(/_/g, ' '),
-                     sub: `${d.area} · ${dorm} · ${d.banos} baños`, dur: 5000,
+                     sub: `${d.area} · ${dorm} · ${d.banos} baños`, dur: 2800,
+                     camDir: nextDir(), camPad: 1.45 * padJit(), camBox: () => boxOf(u.node),
                      enter() { if (_activeFloor !== f) selectFloor(f); selectUnit(u); } });
             const imgs = GALERIA[u.name] || GALERIA._default || [];
             if (imgs.length) S.push({ eyebrow: d.tipo + ' · Interiores', title: 'Espacios para vivir',
-                     sub: u.name.replace(/_/g, ' '), photos: imgs, dur: Math.max(5000, imgs.length * 2800),
+                     sub: u.name.replace(/_/g, ' '), photos: imgs, dur: Math.max(2600, imgs.length * 1500),
                      enter() { if (_activeFloor !== f) selectFloor(f); if (_activeUnit !== u) selectUnit(u); } });
         });
     });
 
     // Cierre
-    S.push({ eyebrow: PROJECT_NAME, title: 'Te esperamos', sub: 'Consultá disponibilidad y agendá tu visita', dur: 6000,
+    S.push({ eyebrow: PROJECT_NAME, title: 'Te esperamos', sub: 'Consultá disponibilidad y agendá tu visita', dur: 3600,
              enter() { ensureOverview(); moodTo('dia'); } });
     return S;
 }
@@ -3212,18 +3242,40 @@ function updateStepDots() {
     document.querySelectorAll('#tour-steps .ts-dot').forEach((d, i) => d.classList.toggle('on', i === _tour.idx));
 }
 
+const _tourFade = document.getElementById('tour-fade');
+let _fadeT = null;
+function fadeFlash(cb) {
+    _tour.transitioning = true;
+    _tourFade.style.transition = 'opacity 0.16s ease';
+    _tourFade.style.opacity = '1';
+    if (_fadeT) clearTimeout(_fadeT);
+    _fadeT = setTimeout(() => {
+        try { cb(); } catch (e) { console.warn('[tour]', e); }
+        _tourFade.style.transition = 'opacity 0.45s ease';
+        _tourFade.style.opacity = '0';
+        _tour.transitioning = false;
+        _tour.last = performance.now();
+    }, 170);
+}
+function applyStep(st) {
+    setCaption(st);
+    if (st.photos && st.photos.length) { _tour.photoIdx = 0; showTourPhoto(st.photos[0]); }
+    else hideTourPhoto();
+    try { st.enter && st.enter(); } catch (e) { console.warn('[tour] paso', e); }
+    // variedad de cámara: deriva lenta hacia un ángulo distinto durante el paso
+    if (st.camDir && st.camBox) {
+        try { frameBox(st.camBox(), { dir: st.camDir, pad: st.camPad, dur: Math.max(900, st.dur * 0.92) }); }
+        catch (e) {}
+    }
+}
 function gotoStep(i) {
     const n = _tour.steps.length; if (!n) return;
     _tour.idx = ((i % n) + n) % n;
     const st = _tour.steps[_tour.idx];
     _tour.elapsed = 0; _tour.dur = st.dur; _tour.photoIdx = -1;
     document.getElementById('tour-progress-fill').style.width = '0%';
-    setCaption(st);
-    if (st.photos && st.photos.length) { _tour.photoIdx = 0; showTourPhoto(st.photos[0]); }
-    else hideTourPhoto();
-    try { st.enter && st.enter(); } catch (e) { console.warn('[tour] paso', e); }
     updateStepDots();
-    _tour.last = performance.now();
+    fadeFlash(() => applyStep(st));
 }
 
 function setPlaying(p) {
@@ -3235,7 +3287,7 @@ function setPlaying(p) {
 function tourTick(now) {
     if (!_tour.on) return;
     const dt = now - _tour.last; _tour.last = now;
-    if (_tour.playing) {
+    if (_tour.playing && !_tour.transitioning) {
         _tour.elapsed += dt;
         const st = _tour.steps[_tour.idx];
         const frac = Math.min(1, _tour.elapsed / _tour.dur);
