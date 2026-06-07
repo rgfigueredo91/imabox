@@ -814,13 +814,13 @@
         }
         .pkg-grid {
             display: grid; grid-template-columns: repeat(3, 1fr);
-            margin-top: 52px;
+            margin-top: 30px;
             border: 1px solid rgba(255,255,255,0.07);
         }
         .pkg-card {
-            padding: 44px 40px;
+            padding: 30px 36px;
             border-right: 1px solid rgba(255,255,255,0.07);
-            display: flex; flex-direction: column; gap: 16px;
+            display: flex; flex-direction: column; gap: 12px;
         }
         .pkg-card:last-child { border-right: none; }
         .pkg-card-mid { background: rgba(201,169,110,0.04); }
@@ -855,6 +855,30 @@
         }
         .pkg-cta { margin-top: 12px; align-self: flex-start; }
 
+        /* ── Franja Plataforma 3D (debajo de los 3 planes) ── */
+        .pkg-platform {
+            margin-top: 18px; display: flex; align-items: center; gap: 28px;
+            padding: 16px 28px; border: 1px solid var(--gold-border);
+            background: var(--gold-dim); border-radius: 8px;
+        }
+        .pkg-platform .pp-left { flex: 1; }
+        .pp-tag {
+            display: block; font-family: 'aktiv-grotesk', sans-serif;
+            font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase;
+            color: var(--gold); margin-bottom: 5px;
+        }
+        .pp-desc {
+            font-family: 'Poppins', sans-serif; font-size: 0.8rem; font-weight: 300;
+            line-height: 1.55; color: rgba(255,255,255,0.62); max-width: 790px;
+        }
+        .pkg-platform .pp-cta { margin: 0; align-self: center; flex-shrink: 0; }
+        @media (max-width: 900px) { .pkg-platform { gap: 16px; padding: 13px 18px; } }
+        @media (max-width: 600px) {
+            .pkg-platform { flex-direction: column; align-items: flex-start; gap: 8px; padding: 12px 16px; margin-top: 12px; }
+            .pp-desc { font-size: 0.72rem; -webkit-line-clamp: 2; display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; }
+            .pkg-platform .pp-cta { align-self: center; }
+        }
+
         /* círculos flotantes con video al hover (solo desktop) */
         #pkg-circles-layer { position: fixed; inset: 0; pointer-events: none; z-index: 600; }
         .pkg-circle { position: fixed; }
@@ -879,9 +903,9 @@
 
         /* ── iPad portrait + tablet (900px y menos) ── */
         @media (max-width: 900px) {
-            /* Packages — tablet portrait: 1 columna compacta, todo en pantalla */
+            /* Packages — tablet portrait: 1 columna compacta, sin solaparse con el navbar */
             #s-packages { align-items: center; justify-content: center; overflow: hidden; }
-            .pkg-inner { padding: 0 40px; }
+            .pkg-inner { padding: 88px 40px 28px; }
             #s-packages .section-tag { margin-bottom: 12px; }
             #s-packages .why-heading { font-size: clamp(1.3rem, 3vw, 1.8rem); margin-bottom: 16px; }
             .pkg-grid { grid-template-columns: 1fr; margin-top: 20px; }
@@ -1188,36 +1212,37 @@
 
             /* Contacto mobile — compacto para que entre el form completo */
             #s-contact { align-items: center; justify-content: center; overflow-y: auto; }
-            .contact-inner { display: flex; flex-direction: column; align-items: center; padding: 20px 22px; gap: 10px; width: 100%; text-align: center; }
+            .contact-inner { display: flex; flex-direction: column; align-items: center; padding: 56px 22px 24px; gap: 16px; width: 100%; text-align: center; }
             .contact-left { width: 100%; }
             .contact-form { width: 100%; max-width: 400px; }
-            .contact-tag { margin-bottom: 4px; }
-            .contact-title { font-size: clamp(1.15rem, 5vw, 1.5rem); margin-bottom: 0; line-height: 1.2; }
+            .contact-tag { margin-bottom: 6px; }
+            #contact-tag { display: none; }
+            .contact-title { font-size: clamp(1.2rem, 5.5vw, 1.6rem); margin-bottom: 0; line-height: 1.25; }
             .contact-sub { display: none; }
-            .contact-links { display: flex; flex-direction: row; justify-content: center; gap: 18px; margin: 0; }
+            .contact-links { display: flex; flex-direction: row; justify-content: center; gap: 22px; margin: 16px 0 0; }
             .contact-links a:nth-child(1),
             .contact-links a:nth-child(2) { display: none; }
-            .contact-links .contact-link { font-size: 0.78rem; }
-            .contact-form { gap: 7px; }
-            .contact-form .form-row { gap: 7px; }
-            .form-group { gap: 3px; }
-            .form-group label { font-size: 0.52rem; text-align: center; }
-            .form-group input, .form-group select, .form-group textarea { padding: 7px 11px; font-size: 0.78rem; text-align: center; }
-            .form-group textarea { min-height: 44px; }
-            .form-actions { margin-top: 2px; gap: 10px; justify-content: center; }
+            .contact-links .contact-link { font-size: 0.8rem; }
+            .contact-form { gap: 11px; }
+            .contact-form .form-row { gap: 10px; }
+            .form-group { gap: 5px; }
+            .form-group label { font-size: 0.53rem; text-align: center; }
+            .form-group input, .form-group select, .form-group textarea { padding: 10px 12px; font-size: 0.8rem; text-align: center; }
+            .form-group textarea { min-height: 58px; }
+            .form-actions { margin-top: 6px; gap: 12px; justify-content: center; }
             .form-or { display: none; }
-            .btn-submit, .btn-book-call { padding: 10px 22px; font-size: 0.6rem; }
+            .btn-submit, .btn-book-call { padding: 12px 24px; font-size: 0.62rem; }
 
             /* Proyectos */
             .proj-grid { grid-template-columns: repeat(2, 1fr); }
             .proj-header { padding: 84px 20px 14px; }
 
-            /* Packages — mobile: centrado vertical y horizontal */
-            #s-packages { justify-content: center; overflow: hidden; align-items: center; }
-            .pkg-inner { padding: 24px 20px 24px; text-align: center; width: 100%; }
-            #s-packages .section-tag { margin-bottom: 10px; text-align: center; }
-            #s-packages .why-heading { font-size: 1.15rem !important; margin-bottom: 12px; line-height: 1.2; text-align: center; }
-            .pkg-grid { margin-top: 14px; }
+            /* Packages — mobile: alineado arriba, sin solaparse con el navbar */
+            #s-packages { justify-content: flex-start; align-items: center; overflow-y: auto; }
+            .pkg-inner { padding: 72px 20px 40px; text-align: center; width: 100%; }
+            #s-packages .section-tag { display: none; }
+            #s-packages .why-heading { font-size: 1.1rem !important; margin-bottom: 8px; line-height: 1.2; text-align: center; }
+            .pkg-grid { margin-top: 10px; }
             .pkg-card { padding: 11px 16px; gap: 5px; align-items: center; text-align: center; }
             .pkg-list { display: none; }
             .pkg-name { font-size: 0.95rem; }
@@ -1614,14 +1639,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <section class="section" id="s-packages">
         <div class="pkg-inner">
             <p class="section-tag anim" id="pkg-tag" data-en="Plans">Planes</p>
-            <h2 class="why-heading anim" style="transition-delay:0.08s" id="pkg-heading" data-en="Three ways to&lt;br&gt;start with Imabox.">Tres formas de<br>empezar con Imabox.</h2>
+            <h2 class="why-heading anim" style="transition-delay:0.08s" id="pkg-heading" data-en="Marketing for your building,&lt;br&gt;your way.">El marketing de tu edificio,<br>a tu medida.</h2>
             <div class="pkg-grid">
-                <div class="pkg-card anim" style="transition-delay:0.1s" data-pkg-videos="img/reveal-sketch.webp,img/reveal-render.webp|animations/acc-film.mp4">
+                <div class="pkg-card anim" style="transition-delay:0.1s" data-pkg-videos="img/reveal-sketch.webp,img/reveal-render.webp">
                     <p class="pkg-label">01</p>
                     <h3 class="pkg-name" data-en="Visualization">Visualización</h3>
-                    <p class="pkg-desc" data-en="Renders and video for projects that need visual impact.">Renders y video para proyectos que necesitan impacto visual.</p>
+                    <p class="pkg-desc" data-en="Images and video for projects that need visual impact.">Imágenes y video para proyectos que necesitan impacto visual.</p>
                     <ul class="pkg-list">
-                        <li data-en="Photorealistic exterior and interior renders">Renders fotorrealistas exteriores e interiores</li>
+                        <li data-en="Photorealistic exterior and interior images">Imágenes fotorrealistas exteriores e interiores</li>
                         <li data-en="Animation or cinematic video">Animación o video cinematográfico</li>
                         <li data-en="Images optimized for portals and social media">Imágenes optimizadas para portales y redes</li>
                     </ul>
@@ -1629,29 +1654,36 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 </div>
                 <div class="pkg-card pkg-card-mid anim" style="transition-delay:0.2s" data-pkg-videos="img/reveal-sketch.webp,img/reveal-render.webp|animations/acc-brand.mp4|animations/acc-film.mp4">
                     <p class="pkg-label">02</p>
-                    <h3 class="pkg-name" data-en="Campaign">Campaña</h3>
-                    <p class="pkg-desc" data-en="Brand + visualization + materials ready to launch.">Marca + visualización + materiales listos para lanzar.</p>
+                    <h3 class="pkg-name" data-en="Brand &amp; Campaign">Marca &amp; Campaña</h3>
+                    <p class="pkg-desc" data-en="Building brand + visualization + materials ready to launch.">Marca del edificio + visualización + materiales listos para lanzar.</p>
                     <ul class="pkg-list">
                         <li data-en="Building brand (logo, palette, typography)">Marca del edificio (logo, paleta, tipografía)</li>
-                        <li data-en="Renders + video + construction photography">Renders + video + fotografía de obra</li>
-                        <li data-en="Brochures and sales materials">Folletería y materiales de venta</li>
+                        <li data-en="Images + video + construction photography">Imágenes + video + fotografía de obra</li>
+                        <li data-en="Brochure and sales materials">Brochure y folletería de venta</li>
                         <li data-en="Content for social media and portals">Contenido para redes y portales</li>
                     </ul>
                     <a href="#" onclick="window.snapGoTo(7);return false;" class="btn-gold pkg-cta" data-en="Inquire →">Consultar →</a>
                 </div>
                 <div class="pkg-card anim" style="transition-delay:0.3s" data-pkg-videos="img/reveal-sketch.webp,img/reveal-render.webp|animations/acc-brand.mp4|animations/acc-film.mp4|animations/acc-interactive.mp4|animations/acc-3d.mp4">
                     <p class="pkg-label">03</p>
-                    <h3 class="pkg-name" data-en="Ecosystem">Ecosistema</h3>
-                    <p class="pkg-desc" data-en="All of the above plus virtual showroom and interactive platform.">Todo lo anterior más showroom virtual y plataforma interactiva.</p>
+                    <h3 class="pkg-name" data-en="Full Marketing">Marketing Integral</h3>
+                    <p class="pkg-desc" data-en="We handle the full marketing of the project.">Nos encargamos de todo el marketing del proyecto.</p>
                     <ul class="pkg-list">
-                        <li data-en="Everything in the Campaign plan">Todo el paquete Campaña</li>
-                        <li data-en="Interactive virtual showroom">Showroom virtual interactivo</li>
-                        <li data-en="3D viewer or 360° tour">Visor 3D o tour 360°</li>
-                        <li data-en="Masterplan with real-time availability">Masterplan con disponibilidad en tiempo real</li>
-                        <li data-en="Marketing for social media + web design">Marketing aplicado a redes + diseño web</li>
+                        <li data-en="Everything in the Brand &amp; Campaign plan">Todo lo del plan Marca &amp; Campaña</li>
+                        <li data-en="Strategy and social media management">Estrategia y gestión de redes</li>
+                        <li data-en="Paid media and digital campaigns">Pauta y campañas digitales</li>
+                        <li data-en="Web design / landing + virtual showroom">Diseño web / landing + showroom virtual</li>
+                        <li data-en="Support during construction and the whole sale">Acompañamiento durante la obra y toda la venta</li>
                     </ul>
                     <a href="#" onclick="window.snapGoTo(7);return false;" class="btn-outline pkg-cta" data-en="Inquire →">Consultar →</a>
                 </div>
+            </div>
+            <div class="pkg-platform anim" style="transition-delay:0.36s" data-pkg-videos="animations/acc-3d.mp4">
+                <div class="pp-left">
+                    <span class="pp-tag" data-en="+ 3D Platform">+ Plataforma 3D</span>
+                    <p class="pp-desc" data-en="Interactive 3D of the building with AI image generation. We keep it maintained; your team can access it to generate their own images.">3D interactivo del edificio con generación de imágenes por IA. La mantenemos nosotros; tu equipo puede acceder para generar sus propias imágenes.</p>
+                </div>
+                <a href="#" onclick="window.snapGoTo(7);return false;" class="btn-outline pkg-cta pp-cta" data-en="Inquire →">Consultar →</a>
             </div>
         </div>
     </section>
@@ -2509,7 +2541,7 @@ var snapSections;
 /* ── Plans: círculos flotantes con video que siguen el mouse (solo desktop) ── */
 (function () {
     if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-    var cards = document.querySelectorAll('#s-packages .pkg-card');
+    var cards = document.querySelectorAll('#s-packages [data-pkg-videos]');
     if (!cards.length) return;
 
     var layer = document.createElement('div');
@@ -2536,7 +2568,7 @@ var snapSections;
             clear();
             var rect = card.getBoundingClientRect();
             var n = vids.length;
-            var SIZE = n <= 2 ? 128 : (n === 3 ? 112 : 92);
+            var SIZE = n === 1 ? 210 : (n <= 2 ? 128 : (n === 3 ? 112 : 92));
             var GAP = 14, ARC = 24;
             var totalW = n * SIZE + (n - 1) * GAP;
             var vw = window.innerWidth;
