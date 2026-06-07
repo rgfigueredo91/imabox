@@ -1,0 +1,3004 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Viewer | Edificio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+        width: 100%; height: 100%;
+        background: #0a0a0a;
+        font-family: 'Poppins', sans-serif;
+        overflow: hidden;
+        color: #fff;
+    }
+    #gp-canvas { position: fixed; inset: 0; display: block; }
+
+    /* ── BRAND ───────────────────────────────────────────── */
+    .gp-brand { position: fixed; top: 28px; left: 32px; z-index: 10; pointer-events: none; }
+    .gp-brand-name {
+        display: block; font-size: 0.72rem; font-weight: 300;
+        letter-spacing: 0.38em; text-transform: uppercase;
+        color: rgba(255,255,255,0.88);
+    }
+    .gp-brand-project {
+        display: block; font-size: 0.5rem; font-weight: 200;
+        letter-spacing: 0.32em; text-transform: uppercase;
+        color: rgba(255,255,255,0.32); margin-top: 5px;
+    }
+
+    /* ── RIGHT PANEL ─────────────────────────────────────── */
+    .gp-panel {
+        position: fixed; top: 0; right: 0;
+        width: 230px; height: 100%;
+        background: rgba(8,8,8,0.94);
+        border-left: 1px solid rgba(255,255,255,0.07);
+        z-index: 10; display: flex; flex-direction: column;
+        padding: 32px 0 28px; overflow-y: auto;
+    }
+    .gp-panel-title {
+        font-size: 0.6rem; font-weight: 300; letter-spacing: 0.28em;
+        text-transform: uppercase; color: rgba(255,255,255,0.4);
+        padding: 0 26px; margin-bottom: 18px;
+    }
+    .gp-floor-list { display: flex; flex-direction: column; padding: 0 16px; gap: 4px; }
+    .gp-floor-btn {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 11px 14px; border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 6px; background: rgba(255,255,255,0.02);
+        color: rgba(255,255,255,0.7); font-family: inherit; font-size: 0.8rem;
+        font-weight: 300; letter-spacing: 0.04em; cursor: pointer;
+        transition: all 0.18s ease;
+    }
+    .gp-floor-btn:hover { background: rgba(255,255,255,0.06); color: #fff; border-color: rgba(255,255,255,0.18); }
+    .gp-floor-btn.active { background: rgba(255,255,255,0.1); color: #fff; border-color: rgba(255,255,255,0.35); }
+    .gp-floor-btn .units-count { font-size: 0.62rem; color: rgba(255,255,255,0.35); font-weight: 200; }
+
+    .gp-hint {
+        margin-top: auto; padding: 20px 26px 0;
+        font-size: 0.6rem; font-weight: 200; line-height: 1.7;
+        letter-spacing: 0.04em; color: rgba(255,255,255,0.3);
+    }
+
+    /* ── BACK BUTTON ─────────────────────────────────────── */
+    #btn-volver {
+        position: fixed; top: 28px; left: 50%; transform: translateX(-50%);
+        z-index: 20; display: none; align-items: center; gap: 8px;
+        padding: 9px 18px; border: 1px solid rgba(255,255,255,0.14);
+        border-radius: 30px; background: rgba(8,8,8,0.8);
+        backdrop-filter: blur(8px); color: rgba(255,255,255,0.85);
+        font-family: inherit; font-size: 0.68rem; font-weight: 300;
+        letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer;
+        transition: all 0.18s ease;
+    }
+    #btn-volver:hover { background: rgba(255,255,255,0.08); color: #fff; }
+    #btn-volver.show { display: flex; }
+
+    /* ── TOOLTIP (hover unidad) ──────────────────────────── */
+    #unit-tooltip {
+        position: fixed; z-index: 25; pointer-events: none;
+        padding: 6px 12px; border-radius: 6px;
+        background: rgba(8,8,8,0.92); border: 1px solid rgba(255,255,255,0.12);
+        font-size: 0.7rem; font-weight: 300; letter-spacing: 0.06em;
+        color: #fff; opacity: 0; transition: opacity 0.12s ease;
+        white-space: nowrap; transform: translate(-50%, -140%);
+    }
+    #unit-tooltip.show { opacity: 1; }
+
+    /* ── UNIT INFO PANEL ─────────────────────────────────── */
+    #unit-panel {
+        position: fixed; top: 0; left: 0; z-index: 30;
+        width: 340px; height: 100%;
+        background: rgba(8,8,8,0.97);
+        border-right: 1px solid rgba(255,255,255,0.08);
+        padding: 56px 38px 38px; transform: translateX(-105%);
+        transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+        display: flex; flex-direction: column;
+    }
+    #unit-panel.show { transform: translateX(0); }
+    #unit-close {
+        position: absolute; top: 26px; right: 30px;
+        width: 30px; height: 30px; border-radius: 50%;
+        border: 1px solid rgba(255,255,255,0.14); background: none;
+        color: rgba(255,255,255,0.6); font-size: 1rem; cursor: pointer;
+        display: flex; align-items: center; justify-content: center;
+        transition: all 0.18s ease;
+    }
+    #unit-close:hover { background: rgba(255,255,255,0.08); color: #fff; }
+    #unit-panel .up-eyebrow {
+        font-size: 0.58rem; font-weight: 300; letter-spacing: 0.3em;
+        text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 10px;
+    }
+    #unit-panel .up-title {
+        font-size: 1.6rem; font-weight: 200; letter-spacing: 0.02em; margin-bottom: 6px;
+    }
+    #unit-panel .up-estado {
+        display: inline-block; margin-bottom: 26px; padding: 4px 12px;
+        border-radius: 20px; font-size: 0.6rem; font-weight: 300;
+        letter-spacing: 0.12em; text-transform: uppercase;
+    }
+    .up-estado.disponible { background: rgba(110,200,140,0.16); color: #7fd49b; }
+    .up-estado.reservado  { background: rgba(230,190,90,0.16);  color: #e6c45a; }
+    .up-estado.vendido    { background: rgba(220,110,110,0.16); color: #dc6e6e; }
+    #unit-panel .up-specs { display: flex; flex-direction: column; gap: 0; }
+    .up-spec {
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 13px 0; border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .up-spec .k { font-size: 0.72rem; font-weight: 200; letter-spacing: 0.05em; color: rgba(255,255,255,0.45); }
+    .up-spec .v { font-size: 0.85rem; font-weight: 300; }
+    #unit-panel .up-desc {
+        margin-top: 24px; font-size: 0.75rem; font-weight: 200;
+        line-height: 1.8; color: rgba(255,255,255,0.6);
+    }
+    /* Botón "Imágenes del apartamento" */
+    #up-gallery-btn {
+        margin-top: 26px; display: flex; align-items: center; gap: 10px;
+        width: 100%; padding: 13px 16px; border-radius: 9px; cursor: pointer;
+        background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.85);
+        border: 1px solid rgba(255,255,255,0.14);
+        font-family: inherit; font-size: 0.74rem; font-weight: 300;
+        letter-spacing: 0.04em; transition: all 0.18s ease;
+    }
+    #up-gallery-btn:hover { background: rgba(255,255,255,0.12); color: #fff; border-color: rgba(255,255,255,0.3); }
+    #up-gallery-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+    #up-gallery-btn.empty { display: none; }
+
+    /* ── GALERÍA (modal grid + lightbox) ─────────────────── */
+    #gallery-modal {
+        position: fixed; inset: 0; z-index: 60; display: flex;
+        flex-direction: column; background: rgba(8,8,8,0.96); backdrop-filter: blur(6px);
+        opacity: 0; visibility: hidden; pointer-events: none;
+        transition: opacity 0.28s ease, visibility 0.28s ease;
+    }
+    #gallery-modal.show { opacity: 1; visibility: visible; pointer-events: auto; }
+    .gallery-bar {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 20px 32px; border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .gallery-title {
+        font-size: 0.62rem; font-weight: 300; letter-spacing: 0.22em;
+        text-transform: uppercase; color: rgba(255,255,255,0.6);
+    }
+    #gallery-close, .gl-close {
+        width: 38px; height: 38px; border-radius: 50%; cursor: pointer;
+        border: 1px solid rgba(255,255,255,0.18); background: rgba(255,255,255,0.04);
+        color: rgba(255,255,255,0.7); font-size: 1.2rem;
+        display: flex; align-items: center; justify-content: center; transition: all 0.18s ease;
+    }
+    #gallery-close:hover, .gl-close:hover { background: rgba(255,255,255,0.12); color: #fff; }
+    .gallery-grid {
+        flex: 1; overflow-y: auto; padding: 26px 32px;
+        display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 16px; align-content: start;
+    }
+    .gallery-grid img {
+        width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 10px;
+        cursor: zoom-in; background: #111; display: block;
+        border: 1px solid rgba(255,255,255,0.06);
+        transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .gallery-grid img:hover { transform: translateY(-3px); border-color: rgba(255,255,255,0.28); }
+    /* lightbox */
+    #gallery-lightbox {
+        position: fixed; inset: 0; z-index: 70; display: flex;
+        align-items: center; justify-content: center; background: rgba(0,0,0,0.95);
+        opacity: 0; visibility: hidden; pointer-events: none;
+        transition: opacity 0.26s ease, visibility 0.26s ease;
+    }
+    #gallery-lightbox.show { opacity: 1; visibility: visible; pointer-events: auto; }
+    #gallery-lightbox img { max-width: 88vw; max-height: 88vh; object-fit: contain;
+        border-radius: 8px; box-shadow: 0 12px 60px rgba(0,0,0,0.7);
+        transform: scale(0.94); transition: transform 0.26s cubic-bezier(0.2,0.8,0.2,1); }
+    #gallery-lightbox.show img { transform: scale(1); }
+    .gl-nav {
+        position: absolute; top: 50%; transform: translateY(-50%);
+        width: 50px; height: 50px; border-radius: 50%; cursor: pointer;
+        border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.45);
+        color: #fff; font-size: 1.7rem; line-height: 0;
+        display: flex; align-items: center; justify-content: center; transition: all 0.18s ease;
+    }
+    .gl-nav:hover { background: rgba(255,255,255,0.16); }
+    .gl-prev { left: 24px; } .gl-next { right: 24px; }
+    .gl-close { position: absolute; top: 24px; right: 28px; }
+    .gl-counter {
+        position: absolute; bottom: 26px; left: 50%; transform: translateX(-50%);
+        font-size: 0.72rem; letter-spacing: 0.1em; color: rgba(255,255,255,0.65);
+    }
+    @media (max-width: 768px) {
+        .gl-prev { left: 10px; } .gl-next { right: 10px; }
+        .gallery-grid { padding: 16px; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+    }
+
+    /* ── PLAN CARD (plano 2D / 3D de la unidad) ──────────── */
+    #plan-card {
+        position: fixed; right: 22px; bottom: 22px; z-index: 25;
+        width: 300px; border-radius: 14px; overflow: hidden;
+        background: rgba(8,8,8,0.86); backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.1);
+        box-shadow: 0 8px 34px rgba(0,0,0,0.5);
+        opacity: 0; transform: translateY(14px); pointer-events: none;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    #plan-card.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    .plan-head {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .plan-head .plan-title {
+        font-size: 0.6rem; font-weight: 300; letter-spacing: 0.16em;
+        text-transform: uppercase; color: rgba(255,255,255,0.5);
+    }
+    .plan-toggle { display: flex; gap: 3px; }
+    .plan-toggle button {
+        background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.6);
+        border: 1px solid rgba(255,255,255,0.12); border-radius: 5px;
+        padding: 3px 9px; font-family: inherit; font-size: 0.62rem;
+        font-weight: 400; cursor: pointer; transition: all 0.18s ease;
+    }
+    .plan-toggle button:hover { color: #fff; background: rgba(255,255,255,0.12); }
+    .plan-toggle button.active { background: #fff; color: #111; border-color: #fff; }
+    .plan-img-wrap {
+        position: relative; background: #fff; cursor: zoom-in;
+        aspect-ratio: 16 / 9; overflow: hidden;
+    }
+    .plan-img-wrap img {
+        width: 100%; height: 100%; object-fit: contain; display: block;
+    }
+    .plan-expand {
+        position: absolute; right: 8px; bottom: 8px;
+        background: rgba(8,8,8,0.7); color: #fff; border-radius: 5px;
+        padding: 3px 7px; font-size: 0.58rem; letter-spacing: 0.05em;
+        pointer-events: none;
+    }
+    /* lightbox del plano */
+    #plan-lightbox {
+        position: fixed; inset: 0; z-index: 120; display: flex;
+        align-items: center; justify-content: center;
+        background: rgba(0,0,0,0.92); cursor: zoom-out;
+        opacity: 0; visibility: hidden; pointer-events: none;
+        transition: opacity 0.26s ease, visibility 0.26s ease;
+    }
+    #plan-lightbox.show { opacity: 1; visibility: visible; pointer-events: auto; }
+    #plan-lightbox img { max-width: 92vw; max-height: 92vh; object-fit: contain;
+        border-radius: 8px; box-shadow: 0 10px 60px rgba(0,0,0,0.6);
+        transform: scale(0.94); transition: transform 0.26s cubic-bezier(0.2,0.8,0.2,1); }
+    #plan-lightbox.show img { transform: scale(1); }
+    #plan-lightbox .plan-lb-close {
+        position: absolute; top: 24px; right: 28px; width: 38px; height: 38px;
+        border-radius: 50%; border: 1px solid rgba(255,255,255,0.3);
+        background: rgba(0,0,0,0.5); color: #fff; font-size: 1.3rem; cursor: pointer;
+        display: flex; align-items: center; justify-content: center;
+    }
+    @media (max-width: 768px) {
+        #plan-card { width: 200px; right: 12px; bottom: 86px; }
+    }
+
+    /* ── Botón Consultar / Agendar (WhatsApp) ────────────── */
+    #up-contact-btn {
+        margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 9px;
+        width: 100%; padding: 13px 16px; border-radius: 9px; cursor: pointer;
+        background: #25d366; color: #08220f; border: none;
+        font-family: inherit; font-size: 0.76rem; font-weight: 500; letter-spacing: 0.02em;
+        transition: filter 0.18s ease;
+    }
+    #up-contact-btn:hover { filter: brightness(1.08); }
+    #up-contact-btn svg { width: 17px; height: 17px; flex-shrink: 0; }
+
+    /* ── Toolbar superior derecha (Compartir) ────────────── */
+    #top-tools { position: fixed; top: 24px; right: 250px; z-index: 22; display: none; gap: 8px; }
+    #top-tools.show { display: flex; }
+    .tool-btn {
+        display: flex; align-items: center; gap: 7px; cursor: pointer;
+        padding: 8px 14px; border-radius: 30px;
+        background: rgba(8,8,8,0.8); backdrop-filter: blur(8px);
+        border: 1px solid rgba(255,255,255,0.14); color: rgba(255,255,255,0.8);
+        font-family: inherit; font-size: 0.68rem; font-weight: 300; letter-spacing: 0.04em;
+        transition: all 0.18s ease;
+    }
+    .tool-btn:hover { background: rgba(255,255,255,0.1); color: #fff; border-color: rgba(255,255,255,0.3); }
+    .tool-btn svg { width: 15px; height: 15px; }
+    @media (max-width: 768px) { #top-tools { right: 184px; top: 16px; } .tool-btn span { display: none; } }
+
+    /* ── Toast ───────────────────────────────────────────── */
+    #toast {
+        position: fixed; bottom: 92px; left: 50%; z-index: 80;
+        transform: translateX(-50%) translateY(10px);
+        background: rgba(20,20,22,0.96); color: #fff; border: 1px solid rgba(255,255,255,0.14);
+        padding: 11px 20px; border-radius: 10px; font-size: 0.74rem; font-weight: 300;
+        opacity: 0; pointer-events: none; transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ── Etiquetas flotantes sobre las unidades ──────────── */
+    #labels-layer { position: fixed; inset: 0; z-index: 12; pointer-events: none; display: none; }
+    .unit-label {
+        position: absolute; transform: translate(-50%, -130%);
+        display: flex; align-items: center; gap: 7px; white-space: nowrap;
+        padding: 6px 11px; border-radius: 20px; cursor: pointer; pointer-events: auto;
+        background: rgba(8,8,8,0.82); backdrop-filter: blur(6px);
+        border: 1px solid rgba(255,255,255,0.16); color: rgba(255,255,255,0.92);
+        font-size: 0.66rem; font-weight: 300; letter-spacing: 0.02em;
+        box-shadow: 0 3px 16px rgba(0,0,0,0.4); transition: background 0.15s, border-color 0.15s;
+    }
+    .unit-label:hover { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.4); }
+    .unit-label b { font-weight: 500; }
+    /* puntos de estado (etiquetas, lista, leyenda) */
+    .ul-dot, .st-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; display: inline-block; }
+    .ul-dot.disponible, .st-dot.disponible { background: #35d07f; }
+    .ul-dot.reservado,  .st-dot.reservado  { background: #e6b33a; }
+    .ul-dot.vendido,    .st-dot.vendido    { background: #dc5b5b; }
+
+    /* ── Leyenda de disponibilidad ───────────────────────── */
+    #avail-legend {
+        position: fixed; bottom: 96px; left: 50%; transform: translateX(-50%);
+        z-index: 16; display: none; gap: 16px; align-items: center;
+        padding: 8px 16px; border-radius: 10px;
+        background: rgba(8,8,8,0.82); backdrop-filter: blur(8px);
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+    #avail-legend.show { display: flex; }
+    #avail-legend .lg { display: flex; align-items: center; gap: 6px;
+        font-size: 0.6rem; font-weight: 300; letter-spacing: 0.06em; color: rgba(255,255,255,0.75); }
+
+    /* ── LIGHT CONTROLS (abajo centro) ────────────────────── */
+    #light-bar {
+        position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%);
+        z-index: 15; display: flex; align-items: center; gap: 22px;
+        padding: 12px 22px; border-radius: 14px;
+        background: rgba(8,8,8,0.82); backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.08);
+    }
+    .lc-item { display: flex; flex-direction: column; gap: 6px; }
+    .lc-item label {
+        font-size: 0.54rem; font-weight: 300; letter-spacing: 0.18em;
+        text-transform: uppercase; color: rgba(255,255,255,0.45);
+        display: flex; justify-content: space-between; gap: 14px;
+    }
+    .lc-item label .val { color: rgba(255,255,255,0.8); font-weight: 400; }
+    .lc-item input[type=range] {
+        -webkit-appearance: none; appearance: none;
+        width: 120px; height: 3px; border-radius: 3px;
+        background: rgba(255,255,255,0.18); outline: none; cursor: pointer;
+    }
+    .lc-item input[type=range]::-webkit-slider-thumb {
+        -webkit-appearance: none; appearance: none;
+        width: 13px; height: 13px; border-radius: 50%;
+        background: #fff; cursor: pointer;
+    }
+    .lc-item input[type=range]::-moz-range-thumb {
+        width: 13px; height: 13px; border: none; border-radius: 50%; background: #fff; cursor: pointer;
+    }
+    .lc-item select {
+        appearance: none; -webkit-appearance: none;
+        background: rgba(255,255,255,0.06); color: #fff;
+        border: 1px solid rgba(255,255,255,0.14); border-radius: 6px;
+        padding: 5px 24px 5px 10px; font-family: inherit; font-size: 0.7rem;
+        font-weight: 300; cursor: pointer; outline: none;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'><path d='M2 3l3 3 3-3' stroke='white' stroke-width='1.2' fill='none' opacity='0.6'/></svg>");
+        background-repeat: no-repeat; background-position: right 8px center;
+    }
+    .lc-item select option { background: #141414; color: #fff; }
+    /* ── Botones de ambiente (moods) ─────────────────────── */
+    #mood-bar { display: flex; gap: 4px; }
+    .mood-btn {
+        background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.6);
+        border: 1px solid rgba(255,255,255,0.12); border-radius: 6px;
+        padding: 5px 9px; font-family: inherit; font-size: 0.66rem;
+        font-weight: 300; letter-spacing: 0.02em; cursor: pointer;
+        transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .mood-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+    .mood-btn.active {
+        background: #fff; color: #111; border-color: #fff; font-weight: 400;
+    }
+    .lc-divider { width: 1px; height: 34px; background: rgba(255,255,255,0.1); }
+    @media (max-width: 768px) {
+        #light-bar { gap: 12px; padding: 10px 14px; bottom: 12px; }
+        .lc-item input[type=range] { width: 78px; }
+    }
+
+    /* ── MODO PRESENTACIÓN ───────────────────────────────── */
+    #btn-tour {
+        position: fixed; top: 28px; left: 28px; z-index: 22;
+        display: flex; align-items: center; gap: 9px;
+        padding: 10px 18px 10px 15px; border-radius: 30px;
+        background: rgba(8,8,8,0.82); backdrop-filter: blur(8px);
+        border: 1px solid rgba(212,178,106,0.45);
+        color: rgba(212,178,106,0.95); cursor: pointer;
+        font-family: inherit; font-size: 0.66rem; font-weight: 400;
+        letter-spacing: 0.16em; text-transform: uppercase;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+        transition: all 0.2s ease;
+    }
+    #btn-tour:hover { background: rgba(212,178,106,0.14); color: #f0d8a0;
+        border-color: rgba(212,178,106,0.8); transform: translateY(-1px); }
+    #btn-tour svg { width: 15px; height: 15px; fill: currentColor; stroke: none; }
+
+    #tour-overlay {
+        position: fixed; inset: 0; z-index: 90; pointer-events: none;
+        opacity: 0; visibility: hidden; transition: opacity 0.5s ease, visibility 0.5s;
+    }
+    #tour-overlay.on { opacity: 1; visibility: visible; }
+
+    /* Capa de fotos a pantalla completa (galerías) */
+    #tour-photo {
+        position: absolute; inset: 0; background: #060606;
+        opacity: 0; visibility: hidden; transition: opacity 0.6s ease, visibility 0.6s;
+    }
+    #tour-photo.on { opacity: 1; visibility: visible; }
+    #tour-photo-img {
+        width: 100%; height: 100%; object-fit: cover;
+        animation: tourZoom 9s ease-out both;
+    }
+    @keyframes tourZoom { from { transform: scale(1.0); } to { transform: scale(1.09); } }
+
+    /* Degradado para legibilidad del texto */
+    #tour-vignette {
+        position: absolute; inset: 0; pointer-events: none;
+        background: linear-gradient(0deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0) 32%),
+                    linear-gradient(180deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0) 22%);
+    }
+
+    #tour-caption {
+        position: absolute; left: 48px; bottom: 96px; max-width: 60%;
+        text-shadow: 0 2px 24px rgba(0,0,0,0.7);
+    }
+    #tour-caption .tc-eyebrow {
+        font-size: 0.64rem; font-weight: 400; letter-spacing: 0.32em;
+        text-transform: uppercase; color: rgba(212,178,106,0.95); margin-bottom: 12px;
+    }
+    #tour-caption .tc-title {
+        font-size: 2.6rem; font-weight: 200; letter-spacing: 0.01em;
+        line-height: 1.05; color: #fff;
+    }
+    #tour-caption .tc-sub {
+        margin-top: 12px; font-size: 0.86rem; font-weight: 300;
+        letter-spacing: 0.04em; color: rgba(255,255,255,0.82);
+    }
+    /* animación de entrada del texto en cada paso */
+    #tour-caption.anim .tc-eyebrow { animation: tcIn 0.6s 0.05s ease both; }
+    #tour-caption.anim .tc-title   { animation: tcIn 0.6s 0.14s ease both; }
+    #tour-caption.anim .tc-sub     { animation: tcIn 0.6s 0.24s ease both; }
+    @keyframes tcIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+    #tour-progress {
+        position: absolute; left: 0; top: 0; width: 100%; height: 3px;
+        background: rgba(255,255,255,0.12);
+    }
+    #tour-progress-fill {
+        height: 100%; width: 0%;
+        background: linear-gradient(90deg, rgba(212,178,106,0.9), #f0d8a0);
+    }
+
+    #tour-controls {
+        position: absolute; right: 40px; bottom: 90px;
+        display: flex; align-items: center; gap: 10px; pointer-events: auto;
+    }
+    .tour-c {
+        min-width: 42px; height: 42px; padding: 0 14px; border-radius: 30px;
+        display: flex; align-items: center; justify-content: center;
+        background: rgba(8,8,8,0.78); backdrop-filter: blur(8px);
+        border: 1px solid rgba(255,255,255,0.16); color: rgba(255,255,255,0.85);
+        font-family: inherit; font-size: 1rem; cursor: pointer; transition: all 0.16s ease;
+    }
+    .tour-c:hover { background: rgba(255,255,255,0.12); color: #fff; }
+    .tour-c.tour-exit {
+        font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase;
+        border-color: rgba(212,178,106,0.5); color: rgba(212,178,106,0.95);
+    }
+    .tour-c.tour-exit:hover { background: rgba(212,178,106,0.16); color: #f0d8a0; }
+
+    /* Pasos (puntos) arriba-derecha */
+    #tour-steps {
+        position: absolute; top: 22px; right: 40px; display: flex; gap: 6px;
+        max-width: 46%; flex-wrap: wrap; justify-content: flex-end; pointer-events: auto;
+    }
+    #tour-steps .ts-dot {
+        width: 7px; height: 7px; border-radius: 50%; cursor: pointer;
+        background: rgba(255,255,255,0.25); transition: background 0.2s, transform 0.2s;
+    }
+    #tour-steps .ts-dot:hover { background: rgba(255,255,255,0.55); }
+    #tour-steps .ts-dot.on { background: #f0d8a0; transform: scale(1.35); }
+
+    /* Mientras el tour corre, ocultamos toda la UI normal */
+    body.tour-mode #gp-panel, body.tour-mode #unit-panel, body.tour-mode #light-bar,
+    body.tour-mode #ai-fab, body.tour-mode #btn-volver, body.tour-mode #top-tools,
+    body.tour-mode #labels-layer, body.tour-mode #btn-tour, body.tour-mode #plan-card,
+    body.tour-mode #avail-legend, body.tour-mode #unit-tooltip,
+    body.tour-mode #btn-cam, body.tour-mode #cam-panel {
+        opacity: 0 !important; pointer-events: none !important;
+    }
+
+    /* ── AJUSTE DE CÁMARA ────────────────────────────────── */
+    #btn-cam {
+        position: fixed; top: 82px; left: 28px; z-index: 22;
+        display: flex; align-items: center; justify-content: center;
+        width: 42px; height: 42px; border-radius: 50%;
+        background: rgba(8,8,8,0.8); backdrop-filter: blur(8px);
+        border: 1px solid rgba(255,255,255,0.14); color: rgba(255,255,255,0.8);
+        cursor: pointer; transition: all 0.18s ease;
+    }
+    #btn-cam:hover { background: rgba(20,20,20,0.92); color: #fff; border-color: rgba(255,255,255,0.5); }
+    #btn-cam.active { background: rgba(20,20,20,0.92); color: #f0d8a0; border-color: #f0d8a0; }
+    #btn-cam svg { width: 18px; height: 18px; }
+    #cam-panel {
+        position: fixed; top: 134px; left: 28px; z-index: 22;
+        width: 222px; padding: 16px; border-radius: 12px;
+        background: rgba(8,8,8,0.88); backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.1);
+        display: none; flex-direction: column; gap: 14px;
+    }
+    #cam-panel.show { display: flex; }
+    #cam-panel .lc-item input[type=range] { width: 100%; }
+    .cam-title {
+        font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase;
+        color: rgba(255,255,255,0.55);
+        display: flex; justify-content: space-between; align-items: center;
+    }
+    #cam-close { background: none; border: none; color: rgba(255,255,255,0.5);
+        font-size: 1.1rem; cursor: pointer; line-height: 1; padding: 0; }
+    #cam-close:hover { color: #fff; }
+    .cam-reset {
+        background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.7);
+        border: 1px solid rgba(255,255,255,0.14); border-radius: 6px;
+        padding: 6px; font-family: inherit; font-size: 0.66rem; cursor: pointer;
+        transition: all 0.18s ease;
+    }
+    .cam-reset:hover { background: rgba(255,255,255,0.12); color: #fff; }
+    .cam-toggle {
+        display: flex; justify-content: space-between; align-items: center;
+        cursor: pointer; padding: 7px 10px; border-radius: 6px;
+        background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12);
+        font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase;
+        color: rgba(255,255,255,0.55); transition: all 0.18s ease;
+    }
+    .cam-toggle:hover { background: rgba(255,255,255,0.1); color: #fff; }
+    .cam-toggle .val { font-size: 0.62rem; letter-spacing: 0.06em; }
+    .cam-toggle.off .val { color: #f0d8a0; }
+    .cam-hint { font-size: 0.58rem; line-height: 1.4; color: rgba(255,255,255,0.35); margin: 0; }
+    @media (max-width: 768px) { #btn-cam { top: 64px; left: 16px; } #cam-panel { left: 16px; top: 116px; } }
+
+    @media (max-width: 768px) {
+        #btn-tour span { display: none; }
+        #btn-tour { padding: 10px; }
+        #tour-caption { left: 22px; right: 22px; bottom: 84px; max-width: none; }
+        #tour-caption .tc-title { font-size: 1.7rem; }
+        #tour-controls { right: 50%; transform: translateX(50%); bottom: 26px; }
+    }
+
+    /* ── LOADER ──────────────────────────────────────────── */
+    #loader {
+        position: fixed; inset: 0; z-index: 100;
+        background: #0a0a0a; display: flex; flex-direction: column;
+        align-items: center; justify-content: center; gap: 22px;
+        transition: opacity 0.6s ease;
+    }
+    #loader.hide { opacity: 0; pointer-events: none; }
+    .loader-label { font-size: 0.62rem; font-weight: 300; letter-spacing: 0.34em; text-transform: uppercase; color: rgba(255,255,255,0.5); }
+    .loader-bar { width: 180px; height: 1px; background: rgba(255,255,255,0.1); overflow: hidden; }
+    .loader-fill { height: 100%; width: 0%; background: rgba(255,255,255,0.8); transition: width 0.2s ease; }
+
+    /* ── IA RENDER (varita mágica) ───────────────────────── */
+    #ai-fab {
+        position: fixed; bottom: 28px; left: 32px; z-index: 30;
+        width: 52px; height: 52px; border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        background: rgba(8,8,8,0.82); backdrop-filter: blur(8px);
+        border: 1px solid rgba(212,178,106,0.45);
+        color: rgba(212,178,106,0.9); cursor: pointer;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+        transition: all 0.2s ease;
+    }
+    #ai-fab:hover { background: rgba(212,178,106,0.14); color: #f0d8a0;
+        border-color: rgba(212,178,106,0.8); transform: translateY(-2px); }
+    #ai-fab.active { background: rgba(212,178,106,0.22); color: #fff;
+        border-color: rgba(212,178,106,0.9); }
+    #ai-fab svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.6; }
+
+    .gp-ai-panel {
+        position: fixed; top: 0; left: 0; width: 264px; height: 100%;
+        background: rgba(8,8,8,0.95); border-right: 1px solid rgba(255,255,255,0.07);
+        z-index: 40; display: flex; flex-direction: column;
+        padding: 32px 0 28px; overflow-y: auto;
+        transform: translateX(-100%);
+        transition: transform 0.32s cubic-bezier(.4,0,.2,1);
+    }
+    .gp-ai-panel.on { transform: translateX(0); }
+    .gp-ai-panel::-webkit-scrollbar { width: 2px; }
+    .gp-ai-panel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); }
+    #ai-close {
+        position: absolute; top: 26px; right: 22px;
+        width: 30px; height: 30px; border-radius: 50%;
+        border: 1px solid rgba(255,255,255,0.14); background: none;
+        color: rgba(255,255,255,0.6); font-size: 1rem; cursor: pointer;
+        display: flex; align-items: center; justify-content: center;
+        transition: all 0.18s ease; z-index: 1;
+    }
+    #ai-close:hover { background: rgba(255,255,255,0.08); color: #fff; }
+    .gp-ai-section { padding: 0 22px; }
+    .gp-ai-title {
+        font-size: 0.6rem; font-weight: 300; letter-spacing: 0.28em;
+        text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 14px;
+    }
+    .gp-ai-status {
+        font-size: 0.44rem; letter-spacing: 0.28em; color: rgba(255,255,255,0.22);
+        text-transform: uppercase; margin-bottom: 14px; min-height: 1.1em;
+    }
+    .gp-ai-prompt {
+        width: 100%; background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.75);
+        font-family: inherit; font-size: 0.52rem; letter-spacing: 0.04em;
+        padding: 8px 10px; outline: none; resize: none; line-height: 1.65;
+        min-height: 62px; margin-bottom: 12px;
+    }
+    .gp-ai-prompt:focus { border-color: rgba(255,255,255,0.28); }
+    .gp-ai-prompt::placeholder { color: rgba(255,255,255,0.15); }
+    .gp-api-input {
+        width: 100%; background: transparent; border: 1px solid rgba(255,255,255,0.07);
+        color: rgba(255,255,255,0.22); font-family: monospace; font-size: 0.42rem;
+        padding: 6px 8px; outline: none; margin-bottom: 10px;
+    }
+    .gp-api-input:focus { border-color: rgba(255,255,255,0.18); color: rgba(255,255,255,0.5); }
+    .gp-api-input option { background: #111; color: rgba(255,255,255,0.8); }
+    .gp-ai-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+    .gp-ai-label { font-size: 0.5rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+    .gp-ai-val { font-size: 0.5rem; color: rgba(255,255,255,0.7); }
+    .gp-ai-slider { width: 100%; margin-bottom: 16px; accent-color: #d4b26a; }
+    .gp-ai-toggle {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 9px 12px; border: 1px solid rgba(255,255,255,0.08);
+        margin-bottom: 14px; cursor: pointer; user-select: none;
+    }
+    .gp-ai-toggle .dot { width: 30px; height: 16px; border-radius: 10px;
+        background: rgba(255,255,255,0.12); position: relative; transition: background 0.2s; }
+    .gp-ai-toggle .dot::after { content:''; position:absolute; top:2px; left:2px;
+        width:12px; height:12px; border-radius:50%; background:#888; transition: all 0.2s; }
+    .gp-ai-toggle.active .dot { background: rgba(212,178,106,0.6); }
+    .gp-ai-toggle.active .dot::after { left:16px; background:#fff; }
+    .gp-ai-btn {
+        width: 100%; padding: 11px; background: rgba(212,178,106,0.14);
+        border: 1px solid rgba(212,178,106,0.4); color: #f0d8a0;
+        font-family: inherit; font-size: 0.6rem; letter-spacing: 0.16em;
+        text-transform: uppercase; cursor: pointer; transition: all 0.18s ease;
+    }
+    .gp-ai-btn:hover { background: rgba(212,178,106,0.24); color: #fff; }
+    .gp-ai-img-wrap { padding: 18px 20px 0; }
+    #ai-img { width: 100%; display: block; border: 1px solid rgba(255,255,255,0.07);
+        opacity: 0; transition: opacity 0.5s ease; cursor: zoom-in; }
+    #ai-img.visible { opacity: 1; }
+
+    /* Galería de renders guardados */
+    .gp-ai-gallery { display: flex; flex-wrap: wrap; gap: 6px; padding: 14px 20px 0; }
+    .gp-ai-gallery:empty { display: none; }
+    .ai-thumb {
+        position: relative; width: calc(33.33% - 4px); aspect-ratio: 1 / 1;
+        border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden;
+        cursor: pointer; opacity: 0.65; transition: opacity 0.18s, border-color 0.18s;
+    }
+    .ai-thumb:hover { opacity: 1; }
+    .ai-thumb.active { opacity: 1; border-color: #f0d8a0; }
+    .ai-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .ai-thumb-del {
+        position: absolute; top: 2px; right: 2px; width: 17px; height: 17px;
+        border-radius: 50%; border: none; background: rgba(0,0,0,0.6); color: #fff;
+        font-size: 0.72rem; line-height: 1; cursor: pointer; display: none; padding: 0;
+    }
+    .ai-thumb:hover .ai-thumb-del { display: block; }
+    .ai-thumb-del:hover { background: #dc5b5b; }
+
+    #gp-ai-loading {
+        position: fixed; inset: 0; z-index: 22;
+        backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+        background: rgba(0,0,0,0.18); display: flex; align-items: center; justify-content: center;
+        opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+    }
+    #gp-ai-loading.on { opacity: 1; pointer-events: auto; }
+    .gp-spinner { width: 36px; height: 36px;
+        border: 1.5px solid rgba(255,255,255,0.12); border-top-color: rgba(212,178,106,0.85);
+        border-radius: 50%; animation: gp-spin 0.8s linear infinite; }
+    @keyframes gp-spin { to { transform: rotate(360deg); } }
+
+    #gp-ai-overlay { position: fixed; inset: 0; z-index: 5;
+        opacity: 0; transition: opacity 0.45s ease; pointer-events: none; }
+    #gp-ai-overlay img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    #gp-ai-overlay.visible { opacity: 1; }
+
+    .gp-ai-nav { position: fixed; top: 50%; transform: translateY(-50%); z-index: 9;
+        background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.1);
+        color: rgba(255,255,255,0.7); width: 36px; height: 64px;
+        display: flex; align-items: center; justify-content: center; cursor: pointer;
+        opacity: 0; pointer-events: none; transition: opacity 0.25s, background 0.15s; }
+    .gp-ai-nav:hover { background: rgba(0,0,0,0.6); color: #fff; }
+    .gp-ai-nav.visible { opacity: 1; pointer-events: auto; }
+    #gp-ai-nav-prev { left: 0; border-radius: 0 3px 3px 0; }
+    #gp-ai-nav-next { right: 0; border-radius: 3px 0 0 3px; }
+    #gp-ai-nav-count { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+        z-index: 9; font-size: 0.44rem; letter-spacing: 0.3em; color: rgba(255,255,255,0.45);
+        text-transform: uppercase; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
+    #gp-ai-nav-count.visible { opacity: 1; }
+
+    .gp-lightbox { position: fixed; inset: 0; z-index: 500; background: rgba(0,0,0,0.92);
+        display: flex; align-items: center; justify-content: center;
+        opacity: 0; pointer-events: none; transition: opacity 0.2s ease; cursor: zoom-out; }
+    .gp-lightbox.on { opacity: 1; pointer-events: all; }
+    .gp-lightbox img { max-width: 90vw; max-height: 90vh; display: block;
+        border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 0 80px rgba(0,0,0,0.8); }
+    #lightbox-download {
+        position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); z-index: 501;
+        display: flex; align-items: center; gap: 8px; cursor: pointer;
+        padding: 10px 20px; border-radius: 30px;
+        background: rgba(20,20,20,0.92); border: 1px solid rgba(255,255,255,0.2);
+        color: #fff; font-family: inherit; font-size: 0.72rem; letter-spacing: 0.04em;
+        transition: all 0.18s ease;
+    }
+    #lightbox-download:hover { background: #f0d8a0; color: #111; border-color: #f0d8a0; }
+    #lightbox-download svg { width: 15px; height: 15px; }
+
+    /* ── 360 / FADE ──────────────────────────────────────── */
+    #fade-black {
+        position: fixed; inset: 0; z-index: 600; background: #000;
+        opacity: 0; pointer-events: none; transition: opacity 0.38s ease;
+        display: none;
+    }
+    #pano-360 {
+        position: fixed; inset: 0; z-index: 550; display: none;
+        background: #000;
+    }
+    #pano-360 iframe { width: 100%; height: 100%; border: 0; display: block; }
+    #pano-360-close {
+        position: fixed; top: 22px; right: 24px; z-index: 560;
+        width: 40px; height: 40px; border-radius: 50%;
+        display: none; align-items: center; justify-content: center;
+        background: rgba(0,0,0,0.45); border: 1px solid rgba(255,255,255,0.18);
+        color: rgba(255,255,255,0.85); font-size: 1.2rem; cursor: pointer;
+        backdrop-filter: blur(8px); transition: all 0.18s ease;
+    }
+    #pano-360-close:hover { background: rgba(255,255,255,0.14); color: #fff; }
+
+    @media (max-width: 768px) {
+        .gp-panel { width: 170px; }
+        #unit-panel { width: 86vw; }
+        .gp-ai-panel { width: 84vw; }
+        #ai-fab { bottom: 20px; left: 20px; width: 46px; height: 46px; }
+    }
+</style>
+</head>
+<body>
+
+<canvas id="gp-canvas"></canvas>
+
+<!-- Brand -->
+<div class="gp-brand">
+    <span class="gp-brand-name">Edificio</span>
+    <span class="gp-brand-project">Viewer interactivo</span>
+</div>
+
+<!-- Back button -->
+<button id="btn-volver">← Volver</button>
+
+<!-- Toolbar superior (compartir) -->
+<div id="top-tools">
+    <button class="tool-btn" id="btn-share" title="Copiar link de esta vista">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
+        <span>Compartir</span>
+    </button>
+</div>
+
+<!-- Etiquetas flotantes sobre las unidades -->
+<div id="labels-layer"></div>
+
+<!-- Leyenda de disponibilidad -->
+<div id="avail-legend">
+    <span class="lg"><span class="st-dot disponible"></span>Disponible</span>
+    <span class="lg"><span class="st-dot reservado"></span>Reservado</span>
+    <span class="lg"><span class="st-dot vendido"></span>Vendido</span>
+</div>
+
+<!-- ── MODO PRESENTACIÓN ───────────────────────────────── -->
+<button id="btn-tour" title="Recorrido guiado automático">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+    <span>Modo presentación</span>
+</button>
+
+<!-- ── AJUSTE DE CÁMARA ─────────────────────────────────── -->
+<button id="btn-cam" title="Ajuste de cámara (lente y verticales)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+</button>
+<div id="cam-panel">
+    <div class="cam-title">Cámara <button id="cam-close" title="Cerrar">×</button></div>
+    <div class="lc-item">
+        <label>Lente · FOV <span class="val" id="cam-fov-v">45°</span></label>
+        <input type="range" id="cam-fov" min="18" max="70" step="1" value="45">
+    </div>
+    <div class="lc-item">
+        <label>Verticales · encuadre <span class="val" id="cam-shift-v">0</span></label>
+        <input type="range" id="cam-shift" min="-50" max="50" step="1" value="0">
+    </div>
+    <div class="cam-toggle" id="cam-orbit" title="Detener la órbita automática para capturar una vista fija (IA)">
+        <span>Órbita automática</span>
+        <span class="val" id="cam-orbit-v">ON</span>
+    </div>
+    <button class="cam-reset" id="cam-reset">Restablecer</button>
+    <p class="cam-hint">Bajá el FOV (lente más larga) y subí «Verticales» para enderezar las líneas del edificio sin inclinar la cámara. Apagá la órbita para capturar una vista fija con la IA.</p>
+</div>
+
+<div id="tour-overlay">
+    <div id="tour-photo"><img id="tour-photo-img" alt=""></div>
+    <div id="tour-vignette"></div>
+    <div id="tour-caption">
+        <div class="tc-eyebrow" id="tour-eyebrow"></div>
+        <div class="tc-title"   id="tour-title"></div>
+        <div class="tc-sub"     id="tour-sub"></div>
+    </div>
+    <div id="tour-progress"><div id="tour-progress-fill"></div></div>
+    <div id="tour-controls">
+        <button class="tour-c" id="tour-prev" title="Anterior">‹</button>
+        <button class="tour-c" id="tour-play" title="Pausar">❚❚</button>
+        <button class="tour-c" id="tour-next" title="Siguiente">›</button>
+        <button class="tour-c tour-exit" id="tour-exit" title="Salir del recorrido">Salir</button>
+    </div>
+    <div id="tour-steps"></div>
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<!-- Tooltip -->
+<div id="unit-tooltip"></div>
+
+<!-- Right panel: floor list -->
+<div class="gp-panel" id="gp-panel">
+    <div class="gp-panel-title" id="panel-title">Pisos</div>
+    <div class="gp-floor-list" id="floor-list"></div>
+    <div class="gp-floor-list" id="unit-list" style="display:none; margin-top:14px;"></div>
+    <div class="gp-hint" id="panel-hint">Click en un piso para aislarlo y ver sus tipologías.</div>
+</div>
+
+<!-- Unit info panel -->
+<div id="unit-panel">
+    <button id="unit-close">×</button>
+    <div class="up-eyebrow" id="up-eyebrow">Tipología</div>
+    <div class="up-title" id="up-title">—</div>
+    <span class="up-estado disponible" id="up-estado">Disponible</span>
+    <div class="up-specs" id="up-specs"></div>
+    <div class="up-desc" id="up-desc"></div>
+    <button id="up-gallery-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span>Imágenes del apartamento</span>
+    </button>
+    <button id="up-contact-btn">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-2.9.8.8-2.8-.2-.3A8 8 0 1 1 12 20zm4.4-6c-.2-.1-1.4-.7-1.6-.8s-.4-.1-.5.1l-.7.9c-.1.2-.3.2-.5.1a6.5 6.5 0 0 1-3.2-2.8c-.1-.2 0-.4.1-.5l.4-.5c.1-.2.1-.3 0-.5l-.7-1.7c-.2-.5-.4-.4-.5-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.7 11.7 0 0 0 4.5 4 5 5 0 0 0 3 .6 2.6 2.6 0 0 0 1.7-1.2 2.1 2.1 0 0 0 .1-1.2c0-.1-.2-.2-.4-.3z"/></svg>
+        <span>Consultar / Agendar visita</span>
+    </button>
+</div>
+
+<!-- Plan card (plano 2D / 3D de la unidad seleccionada) -->
+<div id="plan-card">
+    <div class="plan-head">
+        <span class="plan-title" id="plan-title">Plano</span>
+        <div class="plan-toggle">
+            <button data-view="d2" class="active">2D</button>
+            <button data-view="d3">3D</button>
+        </div>
+    </div>
+    <div class="plan-img-wrap" id="plan-img-wrap">
+        <img id="plan-img" src="" alt="Plano de la unidad">
+        <span class="plan-expand">⤢ Ampliar</span>
+    </div>
+</div>
+<div id="plan-lightbox">
+    <button class="plan-lb-close" id="plan-lb-close">×</button>
+    <img id="plan-lb-img" src="" alt="Plano ampliado">
+</div>
+
+<!-- Galería de imágenes interiores de la unidad -->
+<div id="gallery-modal">
+    <div class="gallery-bar">
+        <span class="gallery-title" id="gallery-title">Imágenes del apartamento</span>
+        <button id="gallery-close">×</button>
+    </div>
+    <div class="gallery-grid" id="gallery-grid"></div>
+</div>
+<div id="gallery-lightbox">
+    <button class="gl-nav gl-prev" id="gallery-prev">‹</button>
+    <img id="gallery-lb-img" src="" alt="">
+    <button class="gl-nav gl-next" id="gallery-next">›</button>
+    <button class="gl-close" id="gallery-lb-close">×</button>
+    <span class="gl-counter" id="gallery-counter"></span>
+</div>
+
+<!-- Light controls -->
+<div id="light-bar">
+    <div class="lc-item">
+        <label>Ambiente</label>
+        <div id="mood-bar">
+            <button class="mood-btn active" data-mood="dia">Mediodía</button>
+            <button class="mood-btn" data-mood="nublado">Nublado</button>
+            <button class="mood-btn" data-mood="atardecer">Atardecer</button>
+            <button class="mood-btn" data-mood="noche">Nocturno</button>
+        </div>
+    </div>
+    <div class="lc-divider"></div>
+    <div class="lc-item">
+        <label>Rotar cielo <span class="val" id="lc-rot-v">0°</span></label>
+        <input type="range" id="lc-rot" min="0" max="360" value="0">
+    </div>
+    <div class="lc-item">
+        <label>Exposición <span class="val" id="lc-exp-v">1.05</span></label>
+        <input type="range" id="lc-exp" min="0.05" max="2" step="0.05" value="1.05">
+    </div>
+    <div class="lc-item" style="cursor:pointer; display:none" id="lc-disp" title="Colorear unidades por estado de venta">
+        <label>Disponibilidad</label>
+        <span class="val" id="lc-disp-v">OFF</span>
+    </div>
+</div>
+
+<!-- Loader -->
+<div id="loader">
+    <div class="loader-label">Cargando</div>
+    <div class="loader-bar"><div class="loader-fill" id="loader-fill"></div></div>
+</div>
+
+<!-- ── IA RENDER ───────────────────────────────────────── -->
+<!-- Varita mágica: botón siempre accesible -->
+<button id="ai-fab" title="Render con IA">
+    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M15 4V2M15 16v-2M8 9h2M20 9h2M17.8 11.8L19 13M17.8 6.2L19 5M15 9h0M12.2 6.2L11 5"/>
+        <path d="M3 21l9-9"/><path d="M12.5 7.5l4 4"/>
+    </svg>
+</button>
+
+<!-- Panel de IA Render (se desliza desde la izquierda) -->
+<div class="gp-ai-panel" id="gp-ai-panel">
+    <button id="ai-close">×</button>
+    <div class="gp-ai-section">
+        <div class="gp-ai-title">IA · Render</div>
+        <div class="gp-ai-status" id="ai-status">listo</div>
+        <select class="gp-api-input" id="ai-quality" style="color:rgba(255,255,255,0.5);cursor:pointer;margin-bottom:12px">
+            <option value="nano">Nano Banana Pro 1K (rápido)</option>
+            <option value="nano2k">Nano Banana Pro 2K</option>
+            <option value="nano4k">Nano Banana Pro 4K</option>
+            <option value="fast">FLUX Dev (28 pasos, ~5s)</option>
+            <option value="quality">FLUX Dev HD (50 pasos, ~10s)</option>
+            <option value="pro">FLUX General (~8s)</option>
+        </select>
+        <textarea class="gp-ai-prompt" id="ai-prompt" placeholder="hyperrealistic real-estate sales render of a modern residential building, professional architectural photography, warm golden hour sunlight, clear blue sky, lush landscaping and street trees, people walking, parked cars, clean glass and concrete facade, realistic materials and reflections, ultra detailed, high resolution, photorealistic, marketing visualization"></textarea>
+        <div class="gp-ai-row">
+            <span class="gp-ai-label">Intensidad</span>
+            <span class="gp-ai-val" id="ai-str-val">75%</span>
+        </div>
+        <input type="range" class="gp-ai-slider" id="ai-strength" min="30" max="95" value="75">
+        <div class="gp-ai-toggle active" id="ai-overlay-layer">
+            <span class="gp-ai-label">Overlay sobre 3D</span>
+            <div class="dot"></div>
+        </div>
+        <button class="gp-ai-btn" id="ai-generate-btn">Generar</button>
+        <input type="password" class="gp-api-input" id="ai-key" placeholder="API key (fal.ai)" style="margin-top:10px">
+    </div>
+    <div class="gp-ai-img-wrap">
+        <img id="ai-img" alt="">
+    </div>
+    <div class="gp-ai-gallery" id="ai-gallery"></div>
+</div>
+
+<div id="gp-ai-overlay"><img id="overlay-img" alt=""></div>
+<div class="gp-ai-nav" id="gp-ai-nav-prev">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+</div>
+<div class="gp-ai-nav" id="gp-ai-nav-next">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+</div>
+<div id="gp-ai-nav-count"></div>
+<div id="gp-ai-loading"><div class="gp-spinner"></div></div>
+<div class="gp-lightbox" id="gp-lightbox">
+    <img id="lightbox-img" alt="">
+    <button id="lightbox-download" title="Descargar imagen">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Descargar
+    </button>
+</div>
+
+<!-- Visor 360 (se abre desde el hotspot de la unidad) -->
+<div id="pano-360">
+    <iframe id="pano-360-frame" src="" allowfullscreen></iframe>
+</div>
+<div id="pano-360-close">&#x2715;</div>
+<div id="fade-black"></div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.163.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.163.0/examples/jsm/",
+    "three/examples/jsm/": "https://unpkg.com/three@0.163.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader }    from 'three/addons/loaders/GLTFLoader.js';
+import { OBJLoader }     from 'three/addons/loaders/OBJLoader.js';
+import { MTLLoader }     from 'three/addons/loaders/MTLLoader.js';
+import { Sky }           from 'three/addons/objects/Sky.js';
+import { RGBELoader }     from 'three/addons/loaders/RGBELoader.js';
+
+/* ══════════════════════════════════════════════════════════════════
+   CONFIG
+   ─────────────────────────────────────────────────────────────────
+   Cuando tengas el modelo, poné su ruta en MODEL_URL.
+   Si MODEL_URL es null se genera un edificio placeholder de demo
+   que sigue EXACTAMENTE la misma convención de nombres que tu modelo
+   real debe usar (ver guía de exportación):
+
+     - Cada PISO  = un objeto/grupo nombrado  Piso_01, Piso_02, ...
+     - Cada UNIDAD = un mesh nombrado          Piso_01_A, Piso_01_B, ...
+     - El ENTORNO  = objeto cuyo nombre contiene "Entorno" (siempre visible)
+   ══════════════════════════════════════════════════════════════════ */
+const MODEL_URL = '3d/kiu/kiu.glb';     // null = edificio placeholder de demo
+const MODEL_MTL = null;                 // ej: '3d/edificio/edificio.mtl' (solo si es .obj)
+const SHOW_ENTORNO = true;              // mostrar el contexto/entorno (true) u ocultarlo (false)
+const SHOW_EDGES   = true;              // dibujar bordes negros sobre la geometría
+const EDGE_ANGLE   = 32;                // grados: solo bordes con quiebre mayor a esto
+const SKY_REFLECTIONS = false;          // aplicar el cielo como reflejo+luz (levanta los negros a gris)
+const GROUND_PLANE  = true;             // piso blanco grande que tapa el "suelo" oscuro del HDRI
+const GROUND_COLOR  = 0xf2f1ec;         // color del piso (blanco hueso); recibe las sombras
+
+/* ── Visor 360 por tipología ─────────────────────────────────────
+   Clave = nombre del mesh de la unidad → URL del recorrido 360.
+   _default se usa para cualquier unidad sin entrada propia. */
+const PANO_360 = {
+    _default:    'https://imabox.uy/360/KIU.html',
+    // 'Piso_01_A': 'https://imabox.uy/360/KIU.html',
+};
+
+/* ── REALISMO (Camino B) ─────────────────────────────────────────
+   Mejoras de fotorrealismo de bajo riesgo: luz/reflejos del cielo
+   (environment), postprocesado (AO + bloom sutil + SMAA) y órbita
+   automática con amortiguación. Todo se puede apagar en vivo con el
+   toggle "Realismo" de la barra inferior. Si algún módulo de CDN
+   falla, el viewer sigue funcionando con el render normal. */
+const REALISM         = true;     // activar mejoras de realismo
+const ENV_INTENSITY   = 0.45;     // cuánta luz/reflejo del cielo reciben los materiales
+const AUTO_ORBIT      = true;     // órbita automática lenta en la vista general
+const AUTO_ORBIT_SPEED = 0.5;     // velocidad de la órbita automática
+const USE_BLOOM       = false;    // glow (apagado: con cielos diurnos quema la imagen)
+const BLOOM_STRENGTH  = 0.12;     // intensidad del glow si se activa
+const BLOOM_THRESHOLD = 0.9;      // solo brillan las zonas muy claras (vidrio/metal)
+const USE_AO          = true;     // oclusión ambiental N8AO (módulo externo, opcional)
+
+/* ── Cielos HDRI + preset de luz por cada uno ────────────────────
+   Cada cielo aporta su propia luz/reflejos (PMREM), así que las luces
+   de relleno (ambient/hemi) y la exposición se ajustan por cielo para
+   que no se "queme". Editá estos valores a gusto. */
+const DEFAULT_SKY = '3d/sky/dia.hdr';
+const SKY_PRESETS = {
+    // url:                  { exposure, sun(int), ambient, hemi, env, elev, azim }
+    //   elev/azim = posición del sol que MATCHEA el sol visible del HDRI
+    //   (para que la sombra apunte igual que el sol del cielo)
+    '3d/sky/dia.hdr':       { exposure: 0.25, sun: 6.0,  ambient: 0.015, hemi: 0.02, env: 0.12, elev: 38, azim: 180 },
+    '3d/sky/nublado.hdr':   { exposure: 0.10, sun: 0.35, ambient: 0.20, hemi: 0.20, env: 0.8,  elev: 60, azim: 180 },
+    '3d/sky/atardecer.hdr': { exposure: 0.20, sun: 3.2,  ambient: 0.03, hemi: 0.04, env: 0.30, elev: 8,  azim: 180 },
+    '3d/sky/noche.hdr':     { exposure: 2.6,  sun: 0.15, ambient: 0.10, hemi: 0.10, env: 1.2, elev: 25, azim: 180 },
+};
+
+/* ── Ambientes (moods) ───────────────────────────────────────────
+   Cada botón de la barra elige un cielo HDRI y enciende/apaga las
+   luces interiores (ventanas iluminadas) para el efecto día/noche.
+   interior = 0..1 → fuerza del brillo cálido en los vidrios. */
+const MOODS = {
+    dia:       { sky: '3d/sky/dia.hdr',       interior: 0    },
+    nublado:   { sky: '3d/sky/nublado.hdr',   interior: 0    },
+    atardecer: { sky: '3d/sky/atardecer.hdr', interior: 0 },
+    noche:     { sky: '3d/sky/noche.hdr',     interior: 0 },
+};
+const INTERIOR_COLOR = 0xffca7a;   // cálido tipo luz interior encendida
+
+// Patrones para reconocer pisos / unidades / entorno por nombre de objeto
+const _LV = 'piso|floor|nivel|level|planta';
+const RE_FLOOR     = new RegExp('^(?:' + _LV + ')[ _\\-]?(\\d+)', 'i');           // Piso_01...
+const RE_UNIT      = new RegExp('^(?:' + _LV + ')[ _\\-]?(\\d+)[ _\\-]+(.+)$', 'i'); // Piso_01_A → idx, id
+const RE_FLOORONLY = new RegExp('^(?:' + _LV + ')[ _\\-]?(\\d+)\\s*$', 'i');       // exactamente Piso_01
+const RE_ENTORNO   = /(entorno|context|site|terreno|ground|surround)/i;
+
+/* ── Datos de tipologías ─────────────────────────────────────────
+   Clave = nombre del mesh de la unidad. Editá esto con tus datos. */
+const TIPOLOGIAS = {
+    _default: { tipo: '2 Dorm', area: '— m²', dorm: 2, banos: 2, estado: 'Disponible',
+                desc: 'Unidad con living-comedor integrado, cocina equipada y balcón.' },
+    // ejemplos:
+    'Piso_01_A': { tipo: 'Monoambiente', area: '42 m²',  dorm: 0, banos: 1, estado: 'Vendido',    desc: 'Monoambiente optimizado con balcón a la calle.' },
+    'Piso_03_B': { tipo: '3 Dorm',       area: '118 m²', dorm: 3, banos: 2, estado: 'Reservado',  desc: 'Tipología de esquina con doble orientación y gran balcón terraza.' },
+};
+
+/* ── Planos por unidad (2D técnico + 3D amueblado) ───────────────
+   Clave = nombre del mesh de la unidad. _default se usa si no hay
+   uno específico. Agregá un par d2/d3 por cada tipología real. */
+const PLANOS = {
+    _default: { d2: '3d/planos/unidad-2d.jpg', d3: '3d/planos/unidad-3d.png' },
+};
+
+/* ── Galería de imágenes interiores por unidad ───────────────────
+   Clave = nombre del mesh de la unidad. _default = renders del apto.
+   Agregá un array propio por tipología cuando tengas sus imágenes. */
+const GALERIA = {
+    _default: [
+        '3d/galeria/living-comedor-1.jpg',
+        '3d/galeria/living-comedor-2.jpg',
+        '3d/galeria/living.jpg',
+        '3d/galeria/dormitorio-1.jpg',
+        '3d/galeria/dormitorio-2.jpg',
+    ],
+};
+
+/* ── Contacto + disponibilidad ───────────────────────────────────
+   WHATSAPP_PHONE: número real con código de país, sin + ni espacios
+   (ej. Uruguay 598). PROJECT_NAME aparece en el mensaje precargado. */
+const WHATSAPP_PHONE = '59899000000';     // ← REEMPLAZAR por el número real
+const PROJECT_NAME   = 'KIU Av Italia';
+const ESTADO_COLORS  = { disponible: 0x35d07f, reservado: 0xe6b33a, vendido: 0xdc5b5b };
+const AVAIL_STRENGTH = 0.30;              // fuerza del tinte de estado en 3D
+
+/* ══════════════════════════════════════════════════════════════════
+   RENDERER / SCENE / CAMERA / CONTROLS
+   ══════════════════════════════════════════════════════════════════ */
+const canvas   = document.getElementById('gp-canvas');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled   = true;
+renderer.shadowMap.type      = THREE.PCFSoftShadowMap;
+renderer.toneMapping         = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0a0a0a);
+
+const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100000);
+camera.position.set(80, 80, 120);
+
+/* ── Ajuste fino de cámara (lente + corrección de verticales) ─────
+   _camFov: campo visual; _camShiftPct: desplazamiento vertical de lente
+   (lens shift, en % de la altura) para enderezar verticales sin inclinar.
+   Persisten en localStorage. Se aplican vía applyCameraAdjust(). */
+const CAM_LS_KEY = 'kiu_cam_adjust';
+let _camFov = 45, _camShiftPct = 0, _autoOrbitUser = true;
+try {
+    const _cs = JSON.parse(localStorage.getItem(CAM_LS_KEY) || 'null');
+    if (_cs) {
+        _camFov = +_cs.fov || 45;
+        _camShiftPct = +_cs.shift || 0;
+        if (_cs.orbit === false) _autoOrbitUser = false;
+    }
+} catch (e) {}
+function saveCamPrefs() {
+    try { localStorage.setItem(CAM_LS_KEY, JSON.stringify({ fov: _camFov, shift: _camShiftPct, orbit: _autoOrbitUser })); } catch (e) {}
+}
+function applyCameraAdjust(save) {
+    camera.fov = _camFov;
+    const w = window.innerWidth, h = window.innerHeight;
+    if (Math.abs(_camShiftPct) > 0.01)
+        camera.setViewOffset(w, h, 0, (_camShiftPct / 100) * h, w, h);
+    else
+        camera.clearViewOffset();
+    camera.updateProjectionMatrix();
+    if (save) saveCamPrefs();
+}
+
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping  = true;
+controls.dampingFactor  = 0.06;
+controls.rotateSpeed    = 0.6;
+controls.minDistance    = 2;
+controls.maxDistance    = 6000;
+controls.maxPolarAngle  = Math.PI * 0.495;   // no pasar por debajo del piso
+controls.autoRotate      = false;            // se activa solo en la vista general (realismo)
+controls.autoRotateSpeed = AUTO_ORBIT_SPEED;
+let _autoRotateOn = false;
+
+/* ── Estado de realismo + órbita automática ──────────────────────── */
+let _realismOn = REALISM;
+let _orbitIdle = null;
+// Reanuda la órbita automática solo en overview y con realismo activo
+function startAutoOrbit() {
+    if (_autoOrbitUser && _realismOn && AUTO_ORBIT && _state === 'overview' && !_panoOpen) controls.autoRotate = true;
+}
+function stopAutoOrbit() { controls.autoRotate = false; }
+// Pausar mientras el usuario interactúa; reanudar tras unos segundos quieto
+controls.addEventListener('start', () => { stopAutoOrbit(); if (_orbitIdle) clearTimeout(_orbitIdle); });
+controls.addEventListener('end',   () => { if (_orbitIdle) clearTimeout(_orbitIdle); _orbitIdle = setTimeout(startAutoOrbit, 3500); });
+
+/* ── LIGHTS ──────────────────────────────────────────────────────── */
+const ambient = new THREE.AmbientLight(0xffffff, 0.9);
+scene.add(ambient);
+const hemi = new THREE.HemisphereLight(0xbcd4ff, 0x4a4640, 0.4);
+scene.add(hemi);
+const sun = new THREE.DirectionalLight(0xfff4e0, 1.9);
+sun.position.set(120, 200, 90);
+sun.castShadow = true;
+sun.shadow.mapSize.set(4096, 4096);   // más resolución → sombra proyectada nítida
+sun.shadow.bias = -0.0002;
+scene.add(sun);
+
+/* ── CIELO (HDRI procedural) + environment para reflejos ─────────── */
+const _skySunDir = new THREE.Vector3();
+const SKY = { turbidity: 8, rayleigh: 1.6, mie: 0.005, mieG: 0.8, elevation: 55, azimuth: 180 };
+let _sky = null, _sunDist = 500;
+let _skyRotDeg = 0;        // rotación del cielo (HDRI + sol/sombra juntos)
+function _applySkyUniforms(u) {
+    u['turbidity'].value = SKY.turbidity;
+    u['rayleigh'].value = SKY.rayleigh;
+    u['mieCoefficient'].value = SKY.mie;
+    u['mieDirectionalG'].value = SKY.mieG;
+    u['sunPosition'].value.copy(_skySunDir);
+}
+// Rota el cielo HDRI y reposiciona la luz de sombra para que coincidan.
+// El sol no se controla a mano: su altura/dirección base salen del preset
+// de cada HDRI; "Rotar cielo" gira el fondo + el environment + la sombra.
+function updateSun() {
+    const az  = SKY.azimuth + _skyRotDeg;
+    const phi = THREE.MathUtils.degToRad(90 - SKY.elevation);
+    const theta = THREE.MathUtils.degToRad(az);
+    _skySunDir.setFromSphericalCoords(1, phi, theta);
+    if (_sky) _sky.material.uniforms['sunPosition'].value.copy(_skySunDir);
+    // El sol orbita alrededor del centro del edificio (target de la sombra)
+    sun.position.copy(_skySunDir).multiplyScalar(_sunDist).add(sun.target.position);
+    // Girar el HDRI (fondo + luz/reflejos) en sincronía con la sombra
+    const r = THREE.MathUtils.degToRad(_skyRotDeg);
+    if (scene.backgroundRotation)  scene.backgroundRotation.set(0, r, 0);
+    if (scene.environmentRotation) scene.environmentRotation.set(0, r, 0);
+}
+// Genera un environment PMREM a partir del cielo procedural actual → da
+// luz ambiente y reflejos suaves a los materiales (clave del realismo).
+let _pmrem = null, _envTex = null;
+function refreshEnvironment() {
+    if (!(REALISM || SKY_REFLECTIONS)) return;
+    if (!_pmrem) _pmrem = new THREE.PMREMGenerator(renderer);
+    const envScene = new THREE.Scene();
+    const skyEnv = new Sky();
+    skyEnv.scale.setScalar(100000);
+    _applySkyUniforms(skyEnv.material.uniforms);
+    envScene.add(skyEnv);
+    if (_envTex) _envTex.dispose();
+    _envTex = _pmrem.fromScene(envScene).texture;
+    if (_realismOn) scene.environment = _envTex;
+}
+
+function buildProceduralSky() {
+    if (!_sky) { _sky = new Sky(); _sky.scale.setScalar(100000); }
+    updateSun();
+    _applySkyUniforms(_sky.material.uniforms);
+    scene.add(_sky);
+    refreshEnvironment();
+}
+
+// Ajusta exposición y luces de relleno según el cielo (evita el "quemado")
+function applySkyPreset(url) {
+    const p = SKY_PRESETS[url];
+    if (!p) return;
+    renderer.toneMappingExposure = p.exposure;
+    sun.intensity     = p.sun;
+    ambient.intensity = p.ambient;
+    hemi.intensity    = p.hemi;
+    SKY.elevation = p.elev;
+    SKY.azimuth   = p.azim;
+    if ('environmentIntensity' in scene) scene.environmentIntensity = p.env;
+    updateSun();                // reposiciona la sombra según el preset
+    // reflejar la exposición en su slider
+    const expo = document.getElementById('lc-exp'), expV = document.getElementById('lc-exp-v');
+    if (expo) { expo.value = p.exposure; expV.textContent = p.exposure.toFixed(2); }
+}
+
+// HDRI con nubes como fondo + (con realismo) también ilumina/refleja
+const _hdrCache = {};
+function setHdriSky(url) {
+    applySkyPreset(url);
+    const apply = (tex) => {
+        tex.mapping = THREE.EquirectangularReflectionMapping;
+        if (_sky) scene.remove(_sky);     // sacar el cielo procedural
+        scene.background = tex;
+        // Realismo: la luz/reflejos toman el color del cielo (PMREM del HDRI)
+        if (SKY_REFLECTIONS || REALISM) {
+            if (!_pmrem) _pmrem = new THREE.PMREMGenerator(renderer);
+            if (_envTex) _envTex.dispose();
+            _envTex = _pmrem.fromEquirectangular(tex).texture;
+            if (_realismOn || SKY_REFLECTIONS) scene.environment = _envTex;
+        }
+    };
+    if (_hdrCache[url]) { apply(_hdrCache[url]); return; }
+    new RGBELoader().load(url, tex => { _hdrCache[url] = tex; apply(tex); });
+}
+
+// Volver al cielo procedural (despejado, controlado por los sliders)
+function setProceduralSky() {
+    scene.background = new THREE.Color(0x0a0a0a);
+    buildProceduralSky();
+}
+
+// Aplica un ambiente completo: cielo HDRI + luces interiores + UI activa
+let _currentMood = 'dia';
+function applyMood(id) {
+    const m = MOODS[id]; if (!m) return;
+    _currentMood = id;
+    setHdriSky(m.sky);
+    setInteriorLights(m.interior);
+    if (_availOn) setAvailability(true);   // recalcular tinte de estado para la nueva exposición
+    document.querySelectorAll('.mood-btn').forEach(b =>
+        b.classList.toggle('active', b.dataset.mood === id));
+}
+
+// Cielo inicial = HDRI por defecto (ya no hay cielo procedural en la UI)
+setHdriSky(DEFAULT_SKY);
+
+/* ══════════════════════════════════════════════════════════════════
+   STATE
+   ══════════════════════════════════════════════════════════════════ */
+let buildingRoot = null;     // grupo raíz del edificio
+let floors = [];             // [{ name, index, group, units:[{name, mesh}], meshes:[] }]
+let envObjects = [];         // objetos de entorno (siempre visibles)
+let _state = 'overview';     // 'overview' | 'floor' | 'unit'
+let _activeFloor = null;
+let _activeUnit  = null;
+let _hoveredFloor = null;
+let _hoveredUnit  = null;
+
+const HL_FLOOR = new THREE.Color(0x3a78ff);   // tinte hover de piso
+const HL_UNIT  = new THREE.Color(0xffd34a);   // tinte hover/selección de unidad
+
+/* ══════════════════════════════════════════════════════════════════
+   MATERIAL HELPERS — guardamos emisivo original para hacer highlight
+   ══════════════════════════════════════════════════════════════════ */
+// ¿Es un material "negro de relleno" (export sin materiales)?
+// Solo por nombre: si el GLB trae materiales reales, no tocamos nada.
+function isFallbackMat(m) {
+    return !!m && /fallback/i.test(m.name || '');
+}
+
+// Dibuja bordes negros sobre una malla (líneas en quiebres > EDGE_ANGLE)
+const _edgeMat = new THREE.LineBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.55 });
+function addEdges(mesh) {
+    if (!SHOW_EDGES || !mesh.geometry) return;
+    const eg = new THREE.EdgesGeometry(mesh.geometry, EDGE_ANGLE);
+    const line = new THREE.LineSegments(eg, _edgeMat);
+    line.userData.isEdge = true;
+    line.raycast = () => {};        // que no interfiera con la selección
+    mesh.add(line);                 // hijo → sigue la transformación de la malla
+}
+function prepMesh(mesh) {
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+    const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+    if (mats.some(isFallbackMat)) {
+        // GLB sin materiales: gris neutro de relleno
+        mesh.material = new THREE.MeshStandardMaterial({
+            color: 0xb9b6ad, roughness: 0.78, metalness: 0.04, side: THREE.DoubleSide,
+        });
+    } else {
+        // Clonar el material por malla para que ghost/highlight no afecte
+        // a otras mallas que comparten el mismo material.
+        mesh.material = Array.isArray(mesh.material)
+            ? mesh.material.map(m => m ? m.clone() : m)
+            : mesh.material.clone();
+    }
+    // Vidrio: el GLB lo trae OPACO (alpha 1, sin transmisión). Lo detectamos
+    // por nombre y lo convertimos en vidrio real (transparente + reflejos).
+    if (GLASS_TRANSMISSION) {
+        const conv = (m) => (m && GLASS_RE.test(m.name || '')) ? makeGlass(m) : m;
+        if (Array.isArray(mesh.material)) mesh.material = mesh.material.map(conv);
+        else mesh.material = conv(mesh.material);
+    }
+    // Muros blanco y negro: comparten el mismo bitmap, así que se les fija
+    // un color base (blanco / grafito) con la textura mezclada al 30%.
+    const tint = (m) => {
+        if (!m) return;
+        if (DARK_WALL_RE.test(m.name || ''))  applyTintedWall(m, DARK_WALL_COLOR,  DARK_WALL_MAP_MIX);
+        else if (WHITE_WALL_RE.test(m.name || '')) applyTintedWall(m, WHITE_WALL_COLOR, WHITE_WALL_MAP_MIX);
+    };
+    if (Array.isArray(mesh.material)) mesh.material.forEach(tint);
+    else tint(mesh.material);
+    const finalMats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+    finalMats.forEach(m => {
+        if (!m) return;
+        if (!m.userData.isGlass) m.side = THREE.DoubleSide;
+        if (m.emissive) {
+            m.userData.origEmissive = m.emissive.clone();
+            m.userData.baseEmissive = m.emissive.clone();         // estado al que vuelve el hover
+            m.userData.baseEmissiveIntensity = m.emissiveIntensity;
+        }
+        m.userData.baseOpacity     = m.opacity;
+        m.userData.baseTransparent = m.transparent;
+    });
+}
+
+/* ── Vidrio realista (transmisión + reflejos del cielo) ──────────── */
+const GLASS_TRANSMISSION = true;
+const GLASS_RE = /vidrio|glass|cristal|window|ventana/i;
+const _glassMats = [];          // ventanas → se encienden en atardecer/noche
+function makeGlass(orig) {
+    const g = new THREE.MeshPhysicalMaterial({
+        // tinte claro fijo: el color del vidrio en el GLB no es confiable
+        // (cambia entre exports), un celeste suave da vidrio creíble
+        // Vidrio por OPACIDAD (sin transmisión) → lo de atrás se ve NÍTIDO
+        color:        new THREE.Color(0xd6d8d7),   // casi incoloro = vidrio común neutro
+        metalness:    0,
+        roughness:    0.0,          // pulido → reflejo filoso del cielo
+        transparent:  true,
+        opacity:      0.42,         // 0 invisible · 1 opaco (más alto = más reflejo, menos se ve a través)
+        side:         THREE.FrontSide,
+        // Reflejo del cielo (HDRI) por Fresnel = clave del realismo en fachada
+        envMapIntensity:   1.8,
+        specularIntensity: 1.0,
+        reflectivity:      0.6,     // F0: cuánto refleja de frente
+        clearcoat:         0.35,    // capa especular extra → brillo "limpio" de vidrio
+        clearcoatRoughness:0.0,
+    });
+    g.name = orig ? orig.name : 'Vidrio';
+    g.userData.isGlass = true;
+    _glassMats.push(g);
+    return g;
+}
+
+/* ── Luces interiores: enciende las ventanas (emisivo cálido) ──────
+   amount 0 = apagadas · 1 = noche. Guarda el valor como "baseEmissive"
+   para que el hover/selección lo respete al limpiar el resaltado. */
+let _interiorAmount = 0;
+function setInteriorLights(amount) {
+    _interiorAmount = amount;
+    const warm = new THREE.Color(INTERIOR_COLOR);
+    // El emisivo lo multiplica la exposición del tone mapping → en el nocturno
+    // (exposición alta porque el HDRI es oscuro) brillaría mucho más. Dividimos
+    // por la exposición para que las ventanas se vean igual en cualquier cielo.
+    const exp = Math.min(Math.max(renderer.toneMappingExposure || 1, 0.04), 4);
+    _glassMats.forEach(m => {
+        if (!m || !m.emissive) return;
+        if (amount > 0) {
+            m.userData.baseEmissive = warm.clone();
+            m.userData.baseEmissiveIntensity = (amount * 0.28) / exp;
+        } else {
+            m.userData.baseEmissive = (m.userData.origEmissive || new THREE.Color(0,0,0)).clone();
+            m.userData.baseEmissiveIntensity = 1;
+        }
+        // aplicar de inmediato si la malla no está resaltada ahora mismo
+        m.emissive.copy(m.userData.baseEmissive);
+        m.emissiveIntensity = m.userData.baseEmissiveIntensity;
+    });
+}
+
+/* ── Muros blanco/negro: color base fijo + textura al 30% ────────── */
+const DARK_WALL_RE       = /black_matte|paint_black|muro.?negro/i;
+const DARK_WALL_COLOR    = 0x38383c;   // negro no tan negro (grafito medio)
+const DARK_WALL_MAP_MIX  = 0.30;       // cuánto se nota la textura (0..1)
+const WHITE_WALL_RE      = /^blanco|white|wall_paint_white/i;
+const WHITE_WALL_COLOR   = 0xdcdad3;   // off-white realista (no blanco puro)
+const WHITE_WALL_MAP_MIX = 0.0;        // 0 = sin textura, color plano
+// Identificar material al clickear (consola): poné true para diagnosticar
+const MAT_DEBUG = false;
+function applyTintedWall(m, color, mix) {
+    if (!m || m.userData.isTintedWall) return;
+    if (m.color) m.color.set(color);
+    if (mix <= 0.001) {
+        m.map = null;           // sin textura → color plano (100% confiable)
+    } else if (m.map) {
+        const f = mix.toFixed(2);
+        m.onBeforeCompile = (sh) => {
+            sh.fragmentShader = sh.fragmentShader.replace(
+                'diffuseColor *= sampledDiffuseColor;',
+                'diffuseColor.rgb *= mix( vec3(1.0), sampledDiffuseColor.rgb, ' + f + ' );'
+            );
+        };
+        // sin esto three reutiliza el shader de otro material y la mezcla no se aplica
+        m.customProgramCacheKey = () => 'tintwall_' + f;
+    }
+    m.userData.isTintedWall = true;
+    m.needsUpdate = true;
+}
+
+// "Fantasma": deja la malla tenue en vez de ocultarla (conserva muros vecinos)
+function setGhost(mesh, on) {
+    const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+    mats.forEach(m => {
+        if (!m) return;
+        if (on) { m.transparent = true; m.opacity = 0.06; m.depthWrite = false; }
+        else {
+            m.transparent = m.userData.baseTransparent ?? false;
+            m.opacity     = m.userData.baseOpacity ?? 1;
+            m.depthWrite  = true;
+        }
+    });
+}
+// strength = intensidad EFECTIVA buscada; se divide por la exposición para
+// que el tinte de hover se vea igual de fuerte con cualquier cielo.
+function setHighlight(mesh, color, strength) {
+    const exp = Math.min(Math.max(renderer.toneMappingExposure || 1, 0.04), 2);
+    const k = strength / exp;
+    const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+    mats.forEach(m => {
+        if (!m || !m.emissive) return;
+        if (color) { m.emissive.copy(color); m.emissiveIntensity = k; }
+        else {
+            // volver al emisivo base (respeta las ventanas encendidas del mood)
+            const be = m.userData.baseEmissive || m.userData.origEmissive;
+            if (be) { m.emissive.copy(be); m.emissiveIntensity = m.userData.baseEmissiveIntensity ?? 1; }
+        }
+    });
+}
+function highlightFloor(floor, color) {
+    if (!floor) return;
+    floor.meshes.forEach(mesh => setHighlight(mesh, color, 0.55));
+}
+function highlightUnit(unit, color) {
+    if (!unit) return;
+    unit.meshes.forEach(mesh => setHighlight(mesh, color, 0.65));
+}
+function ghostUnit(unit, on) {
+    if (!unit) return;
+    unit.meshes.forEach(mesh => setGhost(mesh, on));
+}
+function setUnitVisible(unit, vis) {
+    if (unit) unit.node.visible = vis;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   PARSE MODEL — encuentra pisos, unidades y entorno por nombre
+   ══════════════════════════════════════════════════════════════════ */
+function parseBuilding(root) {
+    floors = [];
+    envObjects = [];
+    const floorMap = {};
+
+    root.traverse(o => {
+        if (o.name && RE_ENTORNO.test(o.name)) { envObjects.push(o); }
+    });
+    const inEnv = (o) => envObjects.some(e => o === e || isDescendant(o, e));
+
+    // ── Encontrar los NODOS de unidad (Piso_NN_X) ────────────────────
+    //   Una unidad = un nodo nombrado "Piso_01_A". Puede contener varias
+    //   mallas (Three.js parte la geometría en una malla por material);
+    //   TODAS esas mallas son la misma unidad clickeable.
+    //   Al encontrar una unidad NO bajamos más: todo su subárbol es de ella.
+    (function walk(node) {
+        if (node.name && !inEnv(node)) {
+            const m = node.name.match(RE_UNIT);
+            if (m) {
+                const idx = parseInt(m[1], 10);
+                const meshes = [];
+                node.traverse(c => { if (c.isMesh) meshes.push(c); });
+                if (meshes.length) {
+                    const f = floorMap[idx] || (floorMap[idx] = {
+                        index: idx, name: 'Piso_' + String(idx).padStart(2, '0'),
+                        group: null, units: [], meshes: [],
+                    });
+                    f.units.push({ name: node.name, node, meshes });
+                    f.meshes.push(...meshes);
+                    return;   // no descender dentro de la unidad
+                }
+            }
+        }
+        node.children.forEach(walk);
+    })(root);
+
+    // ── Asignar/crear el grupo contenedor de cada piso ───────────────
+    Object.values(floorMap).forEach(f => {
+        // ¿existe un nodo llamado exactamente "Piso_NN"? úsalo como grupo
+        let grp = null;
+        root.traverse(o => {
+            if (grp || o.isMesh || !o.name) return;
+            const mm = o.name.match(RE_FLOORONLY);
+            if (mm && parseInt(mm[1], 10) === f.index) grp = o;
+        });
+        if (!grp) {   // OBJ/estructura plana: crear grupo y meter las unidades
+            grp = new THREE.Group();
+            grp.name = f.name;
+            root.add(grp);
+            f.units.forEach(u => grp.attach(u.node));
+        } else {
+            f.name = grp.name;
+        }
+        f.group = grp;
+    });
+
+    floors = Object.values(floorMap).sort((a, b) => a.index - b.index);
+}
+function isDescendant(node, ancestor) {
+    let p = node.parent;
+    while (p) { if (p === ancestor) return true; p = p.parent; }
+    return false;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   CENTER + FIT CAMERA
+   ══════════════════════════════════════════════════════════════════ */
+function centerGroup(group) {
+    group.updateMatrixWorld(true);
+    const box = new THREE.Box3().setFromObject(group);
+    const center = box.getCenter(new THREE.Vector3());
+    const minY = box.min.y;
+    group.position.set(-center.x, -minY, -center.z);   // base apoyada en y=0
+    group.updateMatrixWorld(true);
+    return box.getSize(new THREE.Vector3());
+}
+
+function boxOf(obj) {
+    return new THREE.Box3().setFromObject(obj);
+}
+// Caja que abarca solo el edificio (todos los pisos), sin el entorno
+function buildingBox() {
+    const box = new THREE.Box3();
+    if (floors.length) floors.forEach(f => box.union(boxOf(f.group)));
+    else if (buildingRoot) box.setFromObject(buildingRoot);
+    return box;
+}
+
+let _camAnim = null;
+// Dirección de cámara. TODAS las vistas miran desde el MISMO lado (la cara con
+// balcón/vidrio) para que al salir de una tipología la cámara solo se aleje
+// hacia atrás (sin girar al otro lado) y el edificio aparezca de ese lado.
+// La vista general es un poco más oblicua; la de unidad, más de frente.
+// Si mostrara el lado equivocado, invertí los signos de x/z en ambas.
+const OVERVIEW_VIEW_DIR = new THREE.Vector3(-0.45, 0.45, -1).normalize();
+const UNIT_VIEW_DIR     = new THREE.Vector3(-0.3,  0.40, -1).normalize();
+function frameBox(box, opts = {}) {
+    const size   = box.getSize(new THREE.Vector3());
+    const center = box.getCenter(new THREE.Vector3());
+    const maxDim = Math.max(size.x, size.y, size.z);
+    const fitDist = (maxDim * 0.5) / Math.tan((camera.fov * Math.PI / 180) / 2);
+    const dist = fitDist * (opts.pad || 1.6);
+    const dir = (opts.dir || OVERVIEW_VIEW_DIR);
+    const targetPos = center.clone().addScaledVector(dir, dist);
+    animateCamera(targetPos, center, opts.dur || 700);
+}
+function animateCamera(toPos, toTarget, dur) {
+    const fromPos = camera.position.clone();
+    const fromTgt = controls.target.clone();
+    const t0 = performance.now();
+    if (_camAnim) cancelAnimationFrame(_camAnim);
+    function step() {
+        const t = Math.min((performance.now() - t0) / dur, 1);
+        const e = t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t+2, 2)/2;  // easeInOutQuad
+        camera.position.lerpVectors(fromPos, toPos, e);
+        controls.target.lerpVectors(fromTgt, toTarget, e);
+        controls.update();
+        if (t < 1) _camAnim = requestAnimationFrame(step);
+    }
+    step();
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   HOTSPOT 360 — punto pulsante en el centro de la unidad activa
+   ══════════════════════════════════════════════════════════════════ */
+let _hotspot = null;          // THREE.Sprite
+let _hotspotCanvas = null;
+let _hotspotTex = null;
+let _hotspotUnit = null;      // unidad a la que pertenece el hotspot visible
+
+function _drawHotspot(p) {
+    const S = 128, C = 64, ctx = _hotspotCanvas.getContext('2d');
+    ctx.clearRect(0, 0, S, S);
+    // halo suave
+    const g = ctx.createRadialGradient(C, C, 2, C, C, 30);
+    g.addColorStop(0, 'rgba(255,255,255,0.30)');
+    g.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.beginPath(); ctx.arc(C, C, 30, 0, Math.PI * 2); ctx.fillStyle = g; ctx.fill();
+    // anillo que se expande y se desvanece
+    ctx.beginPath(); ctx.arc(C, C, 14 + p * 30, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(255,255,255,' + (0.75 * (1 - p)).toFixed(3) + ')';
+    ctx.lineWidth = 2.5; ctx.stroke();
+    // núcleo
+    ctx.beginPath(); ctx.arc(C, C, 9, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255,255,255,0.95)';
+    ctx.shadowColor = 'rgba(255,255,255,0.8)'; ctx.shadowBlur = 10;
+    ctx.fill(); ctx.shadowBlur = 0;
+}
+
+function ensureHotspot() {
+    if (_hotspot) return;
+    _hotspotCanvas = document.createElement('canvas');
+    _hotspotCanvas.width = _hotspotCanvas.height = 128;
+    _drawHotspot(0);
+    _hotspotTex = new THREE.CanvasTexture(_hotspotCanvas);
+    const mat = new THREE.SpriteMaterial({
+        map: _hotspotTex, transparent: true, depthTest: false, depthWrite: false
+    });
+    _hotspot = new THREE.Sprite(mat);
+    _hotspot.renderOrder = 9999;
+    _hotspot.visible = false;
+    _hotspot.userData.isHotspot = true;
+    scene.add(_hotspot);
+}
+
+function placeUnitHotspot(unit) {
+    ensureHotspot();
+    const box = boxOf(unit.node);
+    const center = box.getCenter(new THREE.Vector3());
+    const size   = box.getSize(new THREE.Vector3());
+    const s = Math.max(size.x, size.y, size.z) * 0.18;   // tamaño relativo a la unidad
+    _hotspot.position.copy(center);
+    _hotspot.scale.set(s, s, 1);
+    _hotspot.visible = true;
+    _hotspotUnit = unit;
+}
+
+function hideHotspot() {
+    if (_hotspot) _hotspot.visible = false;
+    _hotspotUnit = null;
+}
+
+// Animación del pulso — llamada en cada cuadro desde animate()
+const _hotT0 = performance.now();
+function updateHotspot() {
+    if (!_hotspot || !_hotspot.visible) return;
+    const p = ((performance.now() - _hotT0) % 2200) / 2200;
+    _drawHotspot(p);
+    _hotspotTex.needsUpdate = true;
+}
+
+/* ── Zoom de cámara hacia el hotspot + fade → abrir 360 ───────────── */
+let _panoOpen = false;
+function openPano360(unit) {
+    const url = PANO_360[unit.name] || PANO_360._default;
+    if (!url) return;
+    stopAutoOrbit();
+    controls.enabled = false;
+
+    const box    = boxOf(unit.node);
+    const center = box.getCenter(new THREE.Vector3());
+    const size   = box.getSize(new THREE.Vector3());
+    const maxDim = Math.max(size.x, size.y, size.z);
+    // posición final: muy cerca del centro, como entrando a la unidad
+    const dir    = new THREE.Vector3().subVectors(camera.position, center).normalize();
+    const endPos = center.clone().addScaledVector(dir, maxDim * 0.18);
+
+    const dur = 900;
+    animateCamera(endPos, center, dur);
+    setTimeout(() => {
+        const fade = document.getElementById('fade-black');
+        fade.style.display = 'block';
+        requestAnimationFrame(() => { fade.style.opacity = '1'; });
+        setTimeout(() => {
+            document.getElementById('pano-360-frame').src = url;
+            document.getElementById('pano-360').style.display = 'block';
+            document.getElementById('pano-360-close').style.display = 'flex';
+            _panoOpen = true;
+            fade.style.opacity = '0';
+            setTimeout(() => { fade.style.display = 'none'; }, 400);
+        }, 400);
+    }, dur);
+}
+
+function closePano360() {
+    if (!_panoOpen) return;
+    _panoOpen = false;
+    document.getElementById('pano-360').style.display = 'none';
+    document.getElementById('pano-360-close').style.display = 'none';
+    document.getElementById('pano-360-frame').src = '';   // descargar el iframe
+    controls.enabled = true;
+    // re-encuadrar la unidad activa para volver suave
+    if (_activeUnit) frameBox(boxOf(_activeUnit.node), { pad: 2.0, dir: UNIT_VIEW_DIR });
+}
+
+document.getElementById('pano-360-close').addEventListener('click', closePano360);
+window.addEventListener('keydown', e => { if (e.key === 'Escape' && _panoOpen) closePano360(); });
+
+/* ══════════════════════════════════════════════════════════════════
+   FLOOR / UNIT SELECTION
+   ══════════════════════════════════════════════════════════════════ */
+function selectFloor(floor) {
+    if (!floor) return;
+    _state = 'floor';
+    _activeFloor = floor;
+    _activeUnit  = null;
+    _autoRotateOn = false;
+    controls.autoRotate = false;
+    hideHotspot();
+    hidePlanCard();
+    closeUnitPanel();
+
+    // Ocultar los otros pisos y el entorno; restaurar las unidades del piso
+    floors.forEach(f => { f.group.visible = (f === floor); });
+    envObjects.forEach(e => { e.visible = false; });
+    floor.units.forEach(u => { setUnitVisible(u, true); ghostUnit(u, false); highlightUnit(u, null); });
+    highlightFloor(_hoveredFloor, null);
+    _hoveredFloor = null;
+    _hoveredUnit  = null;
+
+    frameBox(boxOf(floor.group), { pad: 1.0, dir: UNIT_VIEW_DIR });
+    buildLabels(floor);               // etiquetas flotantes de las unidades
+    updateFloorButtons();
+    showUnitList(floor);              // mostrar las tipologías en el panel derecho
+    document.getElementById('btn-volver').classList.add('show');
+    document.getElementById('panel-hint').textContent = 'Click en una tipología para aislarla.';
+}
+
+// Aislar una tipología: apaga las demás del piso y encuadra solo esa
+function selectUnit(unit) {
+    if (!unit || !_activeFloor) return;
+    _state = 'unit';
+    _activeUnit = unit;
+    _autoRotateOn = false;
+    controls.autoRotate = false;
+
+    // Aislar de verdad: solo la elegida visible, las demás ocultas
+    _activeFloor.units.forEach(u => { setUnitVisible(u, u === unit); ghostUnit(u, false); });
+    highlightUnit(_hoveredUnit, null);
+    _hoveredUnit = null;
+    highlightUnit(unit, null);
+
+    frameBox(boxOf(unit.node), { pad: 1.45, dir: UNIT_VIEW_DIR });
+    placeUnitHotspot(unit);           // hotspot 360 en el centro de la unidad
+    showPlanCard(unit);               // plano 2D/3D de la tipología
+    document.getElementById('top-tools').classList.add('show');   // botón compartir solo en unidad
+    openUnitPanel(unit);
+    updateUnitButtons();
+    document.getElementById('btn-volver').classList.add('show');
+    document.getElementById('panel-hint').textContent = 'Tipología aislada. Click en el punto central para ver el 360.';
+}
+
+// Volver un paso: unit → floor → overview
+function goBack() {
+    if (_state === 'unit') {
+        const f = _activeFloor;
+        _activeFloor = null;          // forzar re-encuadre del piso
+        selectFloor(f);
+        return;
+    }
+    if (_state === 'floor') { backToOverview(); return; }
+}
+
+function backToOverview() {
+    _state = 'overview';
+    _activeFloor = null;
+    _activeUnit  = null;
+    hideHotspot();
+    hidePlanCard();
+    closeUnitPanel();
+    clearLabels();
+    envObjects.forEach(e => { e.visible = SHOW_ENTORNO; });
+    floors.forEach(f => {
+        f.group.visible = true;
+        f.units.forEach(u => { setUnitVisible(u, true); ghostUnit(u, false); });
+        highlightFloor(f, null);
+    });
+    frameBox(buildingBox(), { pad: 0.9 });
+    startAutoOrbit();                // reanudar órbita automática en la vista general
+    updateFloorButtons();
+    hideUnitList();                  // volver a la lista de pisos
+    document.getElementById('btn-volver').classList.remove('show');
+    document.getElementById('panel-hint').textContent = 'Click en un piso para aislarlo y ver sus tipologías.';
+}
+
+function openUnitPanel(unit) {
+    const data = TIPOLOGIAS[unit.name] || TIPOLOGIAS._default;
+    document.getElementById('up-title').textContent = unit.name.replace(/_/g, ' ');
+    document.getElementById('up-eyebrow').textContent = data.tipo;
+    const est = document.getElementById('up-estado');
+    est.textContent = data.estado;
+    est.className = 'up-estado ' + data.estado.toLowerCase();
+    const specs = document.getElementById('up-specs');
+    specs.innerHTML = '';
+    const rows = [
+        ['Superficie', data.area],
+        ['Dormitorios', data.dorm === 0 ? 'Monoambiente' : data.dorm],
+        ['Baños', data.banos],
+        ['Tipología', data.tipo],
+    ];
+    rows.forEach(([k, v]) => {
+        const row = document.createElement('div');
+        row.className = 'up-spec';
+        row.innerHTML = `<span class="k">${k}</span><span class="v">${v}</span>`;
+        specs.appendChild(row);
+    });
+    document.getElementById('up-desc').textContent = data.desc || '';
+    // Galería de la unidad: prepara la lista y muestra/oculta el botón
+    _galleryImgs = GALERIA[unit.name] || GALERIA._default || [];
+    document.getElementById('up-gallery-btn').classList.toggle('empty', _galleryImgs.length === 0);
+    document.getElementById('unit-panel').classList.add('show');
+}
+function closeUnitPanel() {
+    document.getElementById('unit-panel').classList.remove('show');
+    document.getElementById('top-tools').classList.remove('show');   // ocultar compartir
+    closeGallery();
+}
+
+/* ── Plan card: plano 2D / 3D de la unidad activa ─────────────────── */
+let _planData = null, _planView = 'd2';
+function showPlanCard(unit) {
+    _planData = PLANOS[unit.name] || PLANOS._default;
+    _planView = 'd2';
+    setPlanView('d2');
+    document.getElementById('plan-title').textContent =
+        unit.name.replace(/^.*?\d+[ _\-]+/, 'Unidad ') + ' · Plano';
+    document.getElementById('plan-card').classList.add('show');
+}
+function hidePlanCard() {
+    document.getElementById('plan-card').classList.remove('show');
+    document.getElementById('plan-lightbox').classList.remove('show');
+}
+function setPlanView(view) {
+    if (!_planData) return;
+    _planView = view;
+    document.getElementById('plan-img').src = _planData[view];
+    document.querySelectorAll('.plan-toggle button').forEach(b =>
+        b.classList.toggle('active', b.dataset.view === view));
+}
+(function wirePlanCard() {
+    document.querySelectorAll('.plan-toggle button').forEach(b =>
+        b.addEventListener('click', () => setPlanView(b.dataset.view)));
+    const lb = document.getElementById('plan-lightbox');
+    document.getElementById('plan-img-wrap').addEventListener('click', () => {
+        if (!_planData) return;
+        document.getElementById('plan-lb-img').src = _planData[_planView];
+        lb.classList.add('show');
+    });
+    const close = () => lb.classList.remove('show');
+    document.getElementById('plan-lb-close').addEventListener('click', e => { e.stopPropagation(); close(); });
+    lb.addEventListener('click', close);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+})();
+
+/* ── Galería de imágenes interiores de la unidad ─────────────────── */
+let _galleryImgs = [], _glIdx = 0;
+function openGallery() {
+    if (!_galleryImgs.length) return;
+    const grid = document.getElementById('gallery-grid');
+    grid.innerHTML = '';
+    _galleryImgs.forEach((src, i) => {
+        const img = document.createElement('img');
+        img.src = src; img.loading = 'lazy'; img.alt = 'Imagen interior';
+        img.addEventListener('click', () => openGalleryLightbox(i));
+        grid.appendChild(img);
+    });
+    document.getElementById('gallery-modal').classList.add('show');
+}
+function closeGallery() {
+    document.getElementById('gallery-modal').classList.remove('show');
+    document.getElementById('gallery-lightbox').classList.remove('show');
+}
+function openGalleryLightbox(i) {
+    _glIdx = (i + _galleryImgs.length) % _galleryImgs.length;
+    document.getElementById('gallery-lb-img').src = _galleryImgs[_glIdx];
+    document.getElementById('gallery-counter').textContent = `${_glIdx + 1} / ${_galleryImgs.length}`;
+    document.getElementById('gallery-lightbox').classList.add('show');
+}
+function glStep(d) { openGalleryLightbox(_glIdx + d); }
+(function wireGallery() {
+    document.getElementById('up-gallery-btn').addEventListener('click', openGallery);
+    document.getElementById('gallery-close').addEventListener('click', closeGallery);
+    const lbx = document.getElementById('gallery-lightbox');
+    document.getElementById('gallery-prev').addEventListener('click', e => { e.stopPropagation(); glStep(-1); });
+    document.getElementById('gallery-next').addEventListener('click', e => { e.stopPropagation(); glStep(1); });
+    document.getElementById('gallery-lb-close').addEventListener('click', e => { e.stopPropagation(); lbx.classList.remove('show'); });
+    lbx.addEventListener('click', e => { if (e.target === lbx) lbx.classList.remove('show'); });
+    document.addEventListener('keydown', e => {
+        if (!lbx.classList.contains('show')) return;
+        if (e.key === 'Escape') lbx.classList.remove('show');
+        else if (e.key === 'ArrowLeft')  glStep(-1);
+        else if (e.key === 'ArrowRight') glStep(1);
+    });
+})();
+
+/* ══════════════════════════════════════════════════════════════════
+   DISPONIBILIDAD · ETIQUETAS · COMPARTIR · CONTACTO
+   ══════════════════════════════════════════════════════════════════ */
+function estadoOf(unitName) {
+    const d = TIPOLOGIAS[unitName] || TIPOLOGIAS._default;
+    return (d.estado || '').toLowerCase();
+}
+
+/* ── Disponibilidad por color (tinte de estado en 3D) ─────────────── */
+let _availOn = false;
+// Copia el emisivo "base" (estado / ventana / original) a las mallas que no
+// estén resaltadas ahora mismo. El hover lo respeta porque setHighlight
+// vuelve a baseEmissive al limpiar.
+function reapplyBaseEmissive() {
+    floors.forEach(f => f.meshes.forEach(m => {
+        const mats = Array.isArray(m.material) ? m.material : [m.material];
+        mats.forEach(mat => {
+            if (mat && mat.emissive && mat.userData.baseEmissive) {
+                mat.emissive.copy(mat.userData.baseEmissive);
+                mat.emissiveIntensity = mat.userData.baseEmissiveIntensity ?? 1;
+            }
+        });
+    }));
+}
+function setAvailability(on) {
+    _availOn = on;
+    const exp = Math.min(Math.max(renderer.toneMappingExposure || 1, 0.04), 4);
+    floors.forEach(f => f.units.forEach(u => {
+        const hex = on ? ESTADO_COLORS[estadoOf(u.name)] : null;
+        u.meshes.forEach(m => {
+            const mats = Array.isArray(m.material) ? m.material : [m.material];
+            mats.forEach(mat => {
+                if (!mat || !mat.emissive || mat.userData.isGlass) return;   // el vidrio = luz interior
+                if (hex != null) {
+                    mat.userData.baseEmissive = new THREE.Color(hex);
+                    mat.userData.baseEmissiveIntensity = AVAIL_STRENGTH / exp;
+                } else {
+                    mat.userData.baseEmissive = (mat.userData.origEmissive || new THREE.Color(0,0,0)).clone();
+                    mat.userData.baseEmissiveIntensity = 1;
+                }
+            });
+        });
+    }));
+    reapplyBaseEmissive();
+    document.getElementById('lc-disp-v').textContent = on ? 'ON' : 'OFF';
+    document.getElementById('avail-legend').classList.toggle('show', on);
+}
+
+/* ── Etiquetas flotantes sobre las unidades del piso activo ───────── */
+let _labelEls = [];
+function clearLabels() {
+    document.getElementById('labels-layer').innerHTML = '';
+    _labelEls = [];
+}
+function buildLabels(floor) {
+    clearLabels();
+    const layer = document.getElementById('labels-layer');
+    floor.units.forEach(u => {
+        const d  = TIPOLOGIAS[u.name] || TIPOLOGIAS._default;
+        const id = u.name.replace(/^.*?\d+[ _\-]+/, '');
+        const el = document.createElement('div');
+        el.className = 'unit-label';
+        el.innerHTML = `<span class="ul-dot ${estadoOf(u.name)}"></span><b>${id}</b> · ${d.tipo} · ${d.area}`;
+        el.addEventListener('click', () => selectUnit(u));
+        layer.appendChild(el);
+        _labelEls.push({ el, unit: u });
+    });
+}
+const _lblV = new THREE.Vector3();
+function updateLabels() {
+    const layer = document.getElementById('labels-layer');
+    if (_state !== 'floor' || !_labelEls.length) { layer.style.display = 'none'; return; }
+    layer.style.display = 'block';
+    const rect = canvas.getBoundingClientRect();
+    _labelEls.forEach(({ el, unit }) => {
+        const box = boxOf(unit.node);
+        _lblV.set((box.min.x + box.max.x) / 2, box.max.y, (box.min.z + box.max.z) / 2);
+        _lblV.project(camera);
+        if (_lblV.z > 1) { el.style.display = 'none'; return; }
+        el.style.display = 'flex';
+        el.style.left = (rect.left + (_lblV.x * 0.5 + 0.5) * rect.width)  + 'px';
+        el.style.top  = (rect.top  + (-_lblV.y * 0.5 + 0.5) * rect.height) + 'px';
+    });
+}
+
+/* ── Toast ────────────────────────────────────────────────────────── */
+let _toastT = null;
+function toast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    if (_toastT) clearTimeout(_toastT);
+    _toastT = setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+/* ── Compartir vista por link (mood + piso + unidad en el hash) ───── */
+function buildShareURL() {
+    const p = new URLSearchParams();
+    p.set('mood', _currentMood);
+    if (_activeFloor) p.set('floor', _activeFloor.index);
+    if (_activeUnit)  p.set('unit',  _activeUnit.name);
+    return location.origin + location.pathname + '#' + p.toString();
+}
+async function shareView() {
+    const url = buildShareURL();
+    try { await navigator.clipboard.writeText(url); toast('🔗 Link de esta vista copiado'); }
+    catch { window.prompt('Copiá el link de esta vista:', url); }
+}
+// Restaura el estado desde el hash al cargar (#mood=...&floor=...&unit=...)
+function applyShareFromHash() {
+    if (!location.hash || location.hash.length < 2) return;
+    const p = new URLSearchParams(location.hash.slice(1));
+    const mood = p.get('mood');
+    if (mood && MOODS[mood]) applyMood(mood);
+    const fi = p.get('floor'), un = p.get('unit');
+    if (fi == null) return;
+    const f = floors.find(x => String(x.index) === String(fi));
+    if (!f) return;
+    selectFloor(f);
+    if (un) { const u = f.units.find(x => x.name === un); if (u) setTimeout(() => selectUnit(u), 140); }
+}
+
+/* ── Consultar / Agendar visita por WhatsApp ──────────────────────── */
+function contactUnit() {
+    const u = _activeUnit; if (!u) return;
+    const d = TIPOLOGIAS[u.name] || TIPOLOGIAS._default;
+    const msg = `Hola, me interesa la unidad ${u.name.replace(/_/g,' ')} (${d.tipo}, ${d.area}) del proyecto ${PROJECT_NAME}.\n${buildShareURL()}`;
+    window.open(`https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+(function wireExtras() {
+    document.getElementById('btn-share').addEventListener('click', shareView);
+    document.getElementById('up-contact-btn').addEventListener('click', contactUnit);
+    const disp = document.getElementById('lc-disp');
+    if (disp) disp.addEventListener('click', () => setAvailability(!_availOn));
+})();
+
+/* ── Floor list UI ───────────────────────────────────────────────── */
+function buildFloorButtons() {
+    const list = document.getElementById('floor-list');
+    list.innerHTML = '';
+    [...floors].reverse().forEach(f => {     // de arriba hacia abajo
+        const btn = document.createElement('button');
+        btn.className = 'gp-floor-btn';
+        btn.dataset.idx = f.index;
+        btn.innerHTML = `<span>${f.name.replace(/_/g, ' ')}</span><span class="units-count">${f.units.length} u.</span>`;
+        btn.addEventListener('click', () => {
+            if (_state === 'floor' && _activeFloor === f) backToOverview();
+            else selectFloor(f);
+        });
+        btn.addEventListener('mouseenter', () => { if (_state === 'overview') { highlightFloor(_hoveredFloor, null); _hoveredFloor = f; highlightFloor(f, HL_FLOOR); } });
+        btn.addEventListener('mouseleave', () => { if (_state === 'overview' && _hoveredFloor === f) { highlightFloor(f, null); _hoveredFloor = null; } });
+        list.appendChild(btn);
+    });
+}
+function updateFloorButtons() {
+    document.querySelectorAll('.gp-floor-btn').forEach(btn => {
+        const active = _activeFloor && parseInt(btn.dataset.idx, 10) === _activeFloor.index;
+        btn.classList.toggle('active', active);
+    });
+}
+
+/* ── Lista de tipologías del piso activo ─────────────────────────── */
+function buildUnitButtons(floor) {
+    const list = document.getElementById('unit-list');
+    list.innerHTML = '';
+    floor.units.forEach(u => {
+        const data = TIPOLOGIAS[u.name] || TIPOLOGIAS._default;
+        const btn = document.createElement('button');
+        btn.className = 'gp-floor-btn';
+        btn.dataset.unit = u.name;
+        const label = u.name.replace(/^.*?\d+[ _\-]+/, '');  // mostrar solo el id (A, B, 101…)
+        btn.innerHTML = `<span><span class="st-dot ${(data.estado||'').toLowerCase()}" style="margin-right:8px"></span>${label}</span><span class="units-count">${data.tipo}</span>`;
+        btn.addEventListener('click', () => {
+            if (_state === 'unit' && _activeUnit === u) goBack();
+            else selectUnit(u);
+        });
+        btn.addEventListener('mouseenter', () => {
+            if (_state === 'floor') { highlightUnit(_hoveredUnit, null); _hoveredUnit = u; highlightUnit(u, HL_UNIT); }
+        });
+        btn.addEventListener('mouseleave', () => {
+            if (_state === 'floor' && _hoveredUnit === u) { highlightUnit(u, null); _hoveredUnit = null; }
+        });
+        list.appendChild(btn);
+    });
+}
+function updateUnitButtons() {
+    document.querySelectorAll('#unit-list .gp-floor-btn').forEach(btn => {
+        btn.classList.toggle('active', _activeUnit && btn.dataset.unit === _activeUnit.name);
+    });
+}
+function showUnitList(floor) {
+    buildUnitButtons(floor);
+    document.getElementById('unit-list').style.display = 'flex';
+    document.getElementById('floor-list').style.display = 'none';
+    document.getElementById('panel-title').textContent = floor.name.replace(/_/g, ' ') + ' · Tipologías';
+}
+function hideUnitList() {
+    document.getElementById('unit-list').style.display = 'none';
+    document.getElementById('floor-list').style.display = 'flex';
+    document.getElementById('panel-title').textContent = 'Pisos';
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   RAYCAST — hover + click en 3D
+   ══════════════════════════════════════════════════════════════════ */
+const raycaster = new THREE.Raycaster();
+const pointer   = new THREE.Vector2();
+let _downPos = null;
+
+function pickMeshes() {
+    if (_state === 'unit' && _activeUnit) return _activeUnit.meshes;
+    if (_state === 'floor' && _activeFloor) return _activeFloor.meshes.filter(m => m.visible);
+    return floors.flatMap(f => f.meshes);
+}
+function floorOfMesh(mesh) {
+    return floors.find(f => f.meshes.includes(mesh));
+}
+// una sub-malla (vidrio, muro, terraza...) pertenece a la unidad cuya lista la contiene
+function unitOfMesh(mesh, floor) {
+    return floor ? floor.units.find(u => u.meshes.includes(mesh)) : null;
+}
+
+let _mouse = { x: 0, y: 0, inside: false };
+
+function onPointerMove(e) {
+    _mouse.x = e.clientX; _mouse.y = e.clientY; _mouse.inside = true;
+    // NDC relativo al canvas REAL (no a la ventana) → selección exacta
+    const r = canvas.getBoundingClientRect();
+    pointer.x = ((e.clientX - r.left) / r.width)  * 2 - 1;
+    pointer.y = -((e.clientY - r.top) / r.height) * 2 + 1;
+}
+function onPointerLeave() { _mouse.inside = false; }
+
+// Se llama en CADA cuadro: el resaltado sigue al cursor aunque la cámara gire
+function updateHover() {
+    const tooltip = document.getElementById('unit-tooltip');
+    if (!floors.length || !_mouse.inside) { tooltip.classList.remove('show'); return; }
+    camera.updateMatrixWorld();
+    raycaster.setFromCamera(pointer, camera);
+    const hits = raycaster.intersectObjects(pickMeshes(), false);
+
+    if (_state === 'overview') {
+        const f = hits.length ? floorOfMesh(hits[0].object) : null;
+        if (f !== _hoveredFloor) {
+            highlightFloor(_hoveredFloor, null);
+            _hoveredFloor = f;
+            highlightFloor(f, HL_FLOOR);
+        }
+        canvas.style.cursor = f ? 'pointer' : 'default';
+        tooltip.classList.remove('show');
+    } else if (_state === 'floor') {
+        const mesh = hits.length ? hits[0].object : null;
+        const u = mesh ? unitOfMesh(mesh, _activeFloor) : null;
+        if (u !== _hoveredUnit) {
+            highlightUnit(_hoveredUnit, null);
+            _hoveredUnit = u;
+            highlightUnit(u, HL_UNIT);
+        }
+        canvas.style.cursor = u ? 'pointer' : 'default';
+        if (u) {
+            const d = TIPOLOGIAS[u.name] || TIPOLOGIAS._default;
+            tooltip.textContent = `${u.name.replace(/_/g,' ')} · ${d.tipo}`;
+            tooltip.style.left = _mouse.x + 'px';
+            tooltip.style.top  = _mouse.y + 'px';
+            tooltip.classList.add('show');
+        } else tooltip.classList.remove('show');
+    } else {
+        // estado 'unit': solo el hotspot 360 es interactivo
+        let onHot = false;
+        if (_hotspot && _hotspot.visible) {
+            onHot = raycaster.intersectObject(_hotspot, false).length > 0;
+        }
+        canvas.style.cursor = onHot ? 'pointer' : 'default';
+        if (onHot) {
+            tooltip.textContent = 'Ver recorrido 360°';
+            tooltip.style.left = _mouse.x + 'px';
+            tooltip.style.top  = _mouse.y + 'px';
+            tooltip.classList.add('show');
+        } else tooltip.classList.remove('show');
+    }
+}
+
+function onPointerDown(e) { _downPos = { x: e.clientX, y: e.clientY }; }
+function onPointerUp(e) {
+    if (!_downPos) return;
+    const moved = Math.hypot(e.clientX - _downPos.x, e.clientY - _downPos.y);
+    _downPos = null;
+    if (moved > 5) return;          // fue un drag, no un click
+    raycaster.setFromCamera(pointer, camera);
+    // Prioridad: el hotspot 360 de la unidad activa
+    if (_hotspot && _hotspot.visible && _hotspotUnit) {
+        if (raycaster.intersectObject(_hotspot, false).length) {
+            openPano360(_hotspotUnit);
+            return;
+        }
+    }
+    const hits = raycaster.intersectObjects(pickMeshes(), false);
+    if (!hits.length) return;
+    if (MAT_DEBUG) {
+        const mm = hits[0].object.material;
+        console.log('[material]', Array.isArray(mm) ? mm.map(x => x && x.name) : (mm && mm.name));
+    }
+    if (_state === 'overview') {
+        const f = floorOfMesh(hits[0].object);
+        if (f) selectFloor(f);
+    } else if (_state === 'floor') {
+        const u = unitOfMesh(hits[0].object, _activeFloor);
+        if (u) selectUnit(u);
+    }
+}
+
+canvas.addEventListener('pointermove',  onPointerMove);
+canvas.addEventListener('pointerleave', onPointerLeave);
+canvas.addEventListener('pointerdown',  onPointerDown);
+canvas.addEventListener('pointerup',    onPointerUp);
+document.getElementById('btn-volver').addEventListener('click', goBack);
+document.getElementById('unit-close').addEventListener('click', goBack);
+
+/* ── Controles de iluminación ────────────────────────────────────── */
+(function wireLightControls() {
+    const rot  = document.getElementById('lc-rot'),  rotV  = document.getElementById('lc-rot-v');
+    const expo = document.getElementById('lc-exp'),  expV  = document.getElementById('lc-exp-v');
+
+    // Rotar cielo: gira el HDRI (fondo + luz/reflejos) y la sombra a la vez
+    rot.addEventListener('input', () => { _skyRotDeg = +rot.value; rotV.textContent = rot.value + '°'; updateSun(); });
+    expo.addEventListener('input', () => { renderer.toneMappingExposure = +expo.value; expV.textContent = (+expo.value).toFixed(2); });
+
+    // Botones de ambiente: cielo + luces interiores en un click
+    document.querySelectorAll('.mood-btn').forEach(btn => {
+        btn.addEventListener('click', () => applyMood(btn.dataset.mood));
+    });
+
+    // Toggle de realismo en vivo (env light + postFX + órbita automática)
+    const rea = document.getElementById('lc-realismo');
+    if (rea) {
+        rea.style.display = REALISM ? '' : 'none';
+        rea.addEventListener('click', () => {
+            _realismOn = !_realismOn;
+            document.getElementById('lc-realismo-v').textContent = _realismOn ? 'ON' : 'OFF';
+            scene.environment = _realismOn ? _envTex : null;   // luz/reflejos del cielo
+            if (_realismOn) startAutoOrbit(); else stopAutoOrbit();
+        });
+    }
+})();
+
+/* ── Panel de ajuste fino de cámara ──────────────────────────────── */
+(function wireCameraPanel() {
+    const btn   = document.getElementById('btn-cam');
+    const panel = document.getElementById('cam-panel');
+    const close = document.getElementById('cam-close');
+    const fov   = document.getElementById('cam-fov'),   fovV   = document.getElementById('cam-fov-v');
+    const shift = document.getElementById('cam-shift'), shiftV = document.getElementById('cam-shift-v');
+    const reset = document.getElementById('cam-reset');
+    const orbit = document.getElementById('cam-orbit'), orbitV = document.getElementById('cam-orbit-v');
+
+    // Reflejar el estado cargado de localStorage en la UI
+    fov.value   = _camFov;      fovV.textContent   = _camFov + '°';
+    shift.value = _camShiftPct; shiftV.textContent = _camShiftPct;
+    function syncOrbitUI() {
+        orbitV.textContent = _autoOrbitUser ? 'ON' : 'OFF';
+        orbit.classList.toggle('off', !_autoOrbitUser);
+    }
+    syncOrbitUI();
+
+    orbit.addEventListener('click', () => {
+        _autoOrbitUser = !_autoOrbitUser;
+        syncOrbitUI();
+        if (_autoOrbitUser) startAutoOrbit(); else stopAutoOrbit();
+        saveCamPrefs();
+    });
+
+    btn.addEventListener('click', () => {
+        const open = panel.classList.toggle('show');
+        btn.classList.toggle('active', open);
+    });
+    close.addEventListener('click', () => { panel.classList.remove('show'); btn.classList.remove('active'); });
+
+    fov.addEventListener('input', () => {
+        _camFov = +fov.value; fovV.textContent = _camFov + '°';
+        applyCameraAdjust(true);
+    });
+    shift.addEventListener('input', () => {
+        _camShiftPct = +shift.value; shiftV.textContent = _camShiftPct;
+        applyCameraAdjust(true);
+    });
+    reset.addEventListener('click', () => {
+        _camFov = 45; _camShiftPct = 0;
+        fov.value = 45;  fovV.textContent   = '45°';
+        shift.value = 0; shiftV.textContent = '0';
+        applyCameraAdjust(true);
+    });
+})();
+
+/* ══════════════════════════════════════════════════════════════════
+   PLACEHOLDER BUILDING (cuando no hay modelo)
+   Genera la MISMA estructura de nombres que tu modelo real.
+   ══════════════════════════════════════════════════════════════════ */
+function buildPlaceholder() {
+    const root = new THREE.Group();
+    root.name = 'Edificio';
+    const N_FLOORS = 6, FH = 9, W = 40, D = 28;
+    const palette = [0x6f8fb0, 0x8a9bb5, 0x7d92a8, 0x9aa8bc];
+
+    for (let i = 1; i <= N_FLOORS; i++) {
+        const floor = new THREE.Group();
+        floor.name = 'Piso_' + String(i).padStart(2, '0');
+        floor.position.y = (i - 1) * FH;
+        // 4 unidades en grilla 2x2
+        const cells = [['A', -1, -1], ['B', 1, -1], ['C', -1, 1], ['D', 1, 1]];
+        cells.forEach(([letter, sx, sz], k) => {
+            const geo = new THREE.BoxGeometry(W/2 - 1.5, FH - 1.2, D/2 - 1.5);
+            const mat = new THREE.MeshStandardMaterial({
+                color: palette[k % palette.length], roughness: 0.7, metalness: 0.05,
+                transparent: true, opacity: 0.96,
+            });
+            const mesh = new THREE.Mesh(geo, mat);
+            mesh.name = floor.name + '_' + letter;
+            mesh.position.set(sx * (W/4), FH/2, sz * (D/4));
+            floor.add(mesh);
+        });
+        root.add(floor);
+    }
+
+    // Entorno: una base/plaza siempre visible
+    const env = new THREE.Group();
+    env.name = 'Entorno';
+    const ground = new THREE.Mesh(
+        new THREE.BoxGeometry(120, 2, 120),
+        new THREE.MeshStandardMaterial({ color: 0x1c1c1f, roughness: 1 })
+    );
+    ground.position.y = -1;
+    ground.receiveShadow = true;
+    env.add(ground);
+    root.add(env);
+
+    return root;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   LOAD PIPELINE
+   ══════════════════════════════════════════════════════════════════ */
+function onProgress(p) {
+    document.getElementById('loader-fill').style.width = Math.round(p * 100) + '%';
+}
+/* ── Piso blanco infinito: tapa el "suelo" oscuro del HDRI ─────────
+   Un plano grande a nivel de la base del edificio. Cubre toda la mitad
+   inferior del fondo (HDRI) cuando la cámara mira hacia abajo, y recibe
+   las sombras del sol (se ven muy bien sobre blanco). */
+let _groundPlane = null;
+function addGroundPlane(size) {
+    if (!GROUND_PLANE) return;
+    if (_groundPlane) { scene.remove(_groundPlane); _groundPlane.geometry.dispose(); }
+    const radius = Math.max(2000, (size ? Math.max(size.x, size.z) : 50) * 400);
+    const geo = new THREE.CircleGeometry(radius, 96);
+    const mat = new THREE.MeshStandardMaterial({
+        color: GROUND_COLOR, roughness: 1, metalness: 0,
+    });
+    mat.envMapIntensity = 0.35;
+    _groundPlane = new THREE.Mesh(geo, mat);
+    _groundPlane.rotation.x = -Math.PI / 2;      // horizontal, mirando hacia arriba
+    _groundPlane.position.y = -0.05;             // justo bajo la base (evita z-fighting)
+    _groundPlane.receiveShadow = true;
+    _groundPlane.renderOrder = -1;
+    scene.add(_groundPlane);
+}
+
+function finishLoad(root) {
+    buildingRoot = root;
+    root.traverse(o => { if (o.isMesh) prepMesh(o); });
+    scene.add(root);
+    const size = centerGroup(root);
+    parseBuilding(root);
+    addGroundPlane(size);             // piso blanco que tapa el suelo oscuro del HDRI
+    envObjects.forEach(e => { e.visible = SHOW_ENTORNO; });
+    // Entorno sin material en el GLB → placeholder neutro (arreglo real: asignarle material en Max)
+    envObjects.forEach(e => e.traverse(o => {
+        if (o.isMesh && (!o.material || !o.material.name)) {
+            o.material = new THREE.MeshStandardMaterial({ color: 0x8d8a82, roughness: 0.95, metalness: 0, side: THREE.DoubleSide });
+        }
+    }));
+    // Bordes negros sobre TODA la geometría (edificio + entorno)
+    const _allMeshes = [];
+    root.traverse(o => { if (o.isMesh && !o.userData.isEdge) _allMeshes.push(o); });
+    _allMeshes.forEach(addEdges);
+    // Realismo: los materiales reciben luz/reflejos del cielo de forma medida
+    if (REALISM) {
+        root.traverse(o => {
+            if (!o.isMesh) return;
+            const mats = Array.isArray(o.material) ? o.material : [o.material];
+            mats.forEach(m => {
+                if (m && 'envMapIntensity' in m && !m.userData.isGlass) m.envMapIntensity = ENV_INTENSITY;
+            });
+        });
+    }
+    setInteriorLights(MOODS[_currentMood].interior);   // ventanas según el ambiente actual
+    buildFloorButtons();
+    frameBox(buildingBox(), { pad: 0.9, dur: 1 });
+    startAutoOrbit();          // arrancar la órbita automática en la vista general
+    // posición del sol alineada con el sol del cielo + sombras al tamaño
+    const dim  = Math.max(size.x, size.y, size.z);
+    const bbox = buildingBox();
+    const bsz  = bbox.getSize(new THREE.Vector3());
+    const bctr = bbox.getCenter(new THREE.Vector3());
+    // La luz de sombra apunta al CENTRO del edificio (no al origen) y el
+    // frustum se ajusta a la esfera que lo envuelve → casi toda la resolución
+    // del shadow map cae sobre el edificio = sombras nítidas en la fachada.
+    sun.target.position.copy(bctr);
+    scene.add(sun.target);
+    _sunDist = dim * 3;
+    const radius = 0.5 * Math.hypot(bsz.x, bsz.y, bsz.z);
+    const r = radius * 1.25;                       // pequeño margen para la sombra al piso
+    sun.shadow.camera.left = sun.shadow.camera.bottom = -r;
+    sun.shadow.camera.right = sun.shadow.camera.top   =  r;
+    sun.shadow.camera.near = Math.max(0.1, _sunDist - radius * 1.6);
+    sun.shadow.camera.far  = _sunDist + radius * 2.0;
+    sun.shadow.bias        = -0.00012;
+    // normalBias mucho menor que antes → conserva las sombras de contacto de
+    // balcones, parasoles y retranqueos de ventana (antes se borraban).
+    sun.shadow.normalBias  = Math.max(bsz.x, bsz.z) * 0.0006;
+    updateSun();
+    sun.shadow.camera.updateProjectionMatrix();
+    setTimeout(() => document.getElementById('loader').classList.add('hide'), 300);
+    if (!floors.length) {
+        document.getElementById('panel-hint').textContent =
+            '⚠ No se detectaron pisos. Revisá que los objetos se llamen Piso_01, Piso_02, …';
+    }
+    applyShareFromHash();              // restaurar vista compartida (#mood/floor/unit) al final
+}
+
+function loadModel() {
+    if (!MODEL_URL) { finishLoad(buildPlaceholder()); return; }
+    onProgress(0.05);
+    if (MODEL_URL.toLowerCase().endsWith('.glb') || MODEL_URL.toLowerCase().endsWith('.gltf')) {
+        new GLTFLoader().load(MODEL_URL,
+            gltf => finishLoad(gltf.scene),
+            e => { if (e.total) onProgress(e.loaded / e.total); },
+            err => { console.error('Error cargando GLB:', err); finishLoad(buildPlaceholder()); }
+        );
+    } else {  // .obj (+ .mtl opcional)
+        const load = (mats) => {
+            const l = new OBJLoader();
+            if (mats) { mats.preload(); l.setMaterials(mats); }
+            l.load(MODEL_URL,
+                obj => finishLoad(obj),
+                e => { if (e.total) onProgress(e.loaded / e.total); },
+                err => { console.error('Error cargando OBJ:', err); finishLoad(buildPlaceholder()); }
+            );
+        };
+        if (MODEL_MTL) new MTLLoader().load(MODEL_MTL, load, undefined, () => load(null));
+        else load(null);
+    }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   RENDER LOOP + RESIZE
+   ══════════════════════════════════════════════════════════════════ */
+let _composer = null, _bloomPass = null, _aoPass = null, _composerReady = false;
+
+function resize() {
+    const w = window.innerWidth, h = window.innerHeight;
+    renderer.setSize(w, h);          // ajusta también el tamaño CSS del canvas
+    camera.aspect = w / h;
+    applyCameraAdjust(false);        // fov + lens shift (incluye updateProjectionMatrix)
+    if (_composer) _composer.setSize(w, h);
+    if (_bloomPass) _bloomPass.setSize(w, h);
+}
+window.addEventListener('resize', resize);
+resize();
+
+/* ══════════════════════════════════════════════════════════════════
+   POSTPROCESADO (AO + bloom sutil + SMAA) — Camino B
+   Carga async desde CDN. Si algo falla, se queda con el render normal
+   (el viewer nunca se rompe). Toggle "Realismo" en la barra inferior.
+   ══════════════════════════════════════════════════════════════════ */
+async function setupPostFX() {
+    if (!REALISM) return;
+    try {
+        const w = window.innerWidth, h = window.innerHeight;
+        const [{ EffectComposer }, { RenderPass }, { UnrealBloomPass }, { SMAAPass }, { OutputPass }] =
+            await Promise.all([
+                import('three/addons/postprocessing/EffectComposer.js'),
+                import('three/addons/postprocessing/RenderPass.js'),
+                import('three/addons/postprocessing/UnrealBloomPass.js'),
+                import('three/addons/postprocessing/SMAAPass.js'),
+                import('three/addons/postprocessing/OutputPass.js'),
+            ]);
+
+        const composer = new EffectComposer(renderer);
+        composer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        composer.setSize(w, h);
+        composer.addPass(new RenderPass(scene, camera));
+
+        // Oclusión ambiental N8AO (módulo externo opcional — si falla, se omite)
+        if (USE_AO) {
+            try {
+                const { N8AOPass } = await import('https://esm.sh/n8ao?external=three');
+                _aoPass = new N8AOPass(scene, camera, w, h);
+                _aoPass.configuration.aoRadius     = 3.0;
+                _aoPass.configuration.intensity    = 1.1;   // sutil: no apaga la imagen
+                _aoPass.configuration.aoSamples     = 16;
+                // el AO NO va al final del pipeline → que NO corrija gamma
+                // (lo hace OutputPass); si no, se aplica gamma doble = "lavado"
+                _aoPass.configuration.gammaCorrection = false;
+                _aoPass.configuration.denoiseSamples = 8;
+                composer.addPass(_aoPass);
+            } catch (e) { console.warn('[realismo] N8AO no disponible, sigo sin AO:', e); }
+        }
+
+        if (USE_BLOOM) {
+            _bloomPass = new UnrealBloomPass(new THREE.Vector2(w, h), BLOOM_STRENGTH, 0.4, BLOOM_THRESHOLD);
+            composer.addPass(_bloomPass);
+        }
+        composer.addPass(new SMAAPass(w, h));
+        composer.addPass(new OutputPass());
+
+        _composer = composer;
+        _composerReady = true;
+        console.log('[realismo] postprocesado activo' + (_aoPass ? ' (con AO)' : ' (sin AO)'));
+    } catch (e) {
+        console.warn('[realismo] postprocesado no disponible, uso render normal:', e);
+        _composerReady = false;
+    }
+}
+setupPostFX();
+
+function animate() {
+    requestAnimationFrame(animate);
+    controls.update();
+    updateHover();          // resaltado recalculado en cada cuadro
+    updateHotspot();        // pulso del hotspot 360
+    updateLabels();         // posición de las etiquetas flotantes
+    if (_realismOn && _composerReady && _composer) _composer.render();
+    else renderer.render(scene, camera);
+}
+animate();
+loadModel();
+
+/* ══════════════════════════════════════════════════════════════════
+   IA · RENDER (varita mágica)
+   Captura la vista 3D actual y la manda a fal.ai (image-to-image)
+   para devolver un render fotorrealista. La key se guarda en
+   localStorage. Reutiliza el mismo motor que 223-hectareas.
+   ══════════════════════════════════════════════════════════════════ */
+let aiPending   = false;
+let aiOverlayOn = true;
+const AI_LS_KEY = 'kiu_ai_renders';      // historial de renders (persistente)
+const AI_MAX    = 60;                     // tope de renders guardados
+function loadAiRenders() {
+    try { const a = JSON.parse(localStorage.getItem(AI_LS_KEY) || '[]'); if (Array.isArray(a)) return a; } catch (e) {}
+    return [];
+}
+function saveAiRenders() {
+    try { localStorage.setItem(AI_LS_KEY, JSON.stringify(aiHistory)); } catch (e) {}
+}
+const aiHistory = loadAiRenders();        // [{ url, prompt, ts, quality }]
+let   aiHistIdx = -1;
+
+// Recuperar API key guardada
+const _savedKey = localStorage.getItem('garzon_key_fal-ai');
+if (_savedKey) document.getElementById('ai-key').value = _savedKey;
+document.getElementById('ai-key').addEventListener('change', e =>
+    localStorage.setItem('garzon_key_fal-ai', e.target.value.trim())
+);
+document.getElementById('ai-strength').addEventListener('input', function () {
+    document.getElementById('ai-str-val').textContent = this.value + '%';
+});
+
+function setAiStatus(msg) { document.getElementById('ai-status').textContent = msg; }
+
+// Captura el canvas 3D actual a un dataURL JPEG (lado máx 768px)
+function captureThumb() {
+    if (_realismOn && _composerReady && _composer) _composer.render();
+    else renderer.render(scene, camera);
+    const MAX = 768;
+    const w = canvas.width, h = canvas.height;
+    const off = document.createElement('canvas');
+    if (w >= h) { off.width = MAX; off.height = Math.round(MAX * h / w); }
+    else        { off.height = MAX; off.width  = Math.round(MAX * w / h); }
+    off.getContext('2d').drawImage(canvas, 0, 0, off.width, off.height);
+    return off.toDataURL('image/jpeg', 0.85);
+}
+
+function updateNavUI() {
+    const count = aiHistory.length;
+    const show  = count > 1;
+    document.getElementById('gp-ai-nav-prev').classList.toggle('visible',  show && aiHistIdx > 0);
+    document.getElementById('gp-ai-nav-next').classList.toggle('visible',  show && aiHistIdx < count - 1);
+    const countEl = document.getElementById('gp-ai-nav-count');
+    countEl.classList.toggle('visible', show);
+    if (show) countEl.textContent = `${aiHistIdx + 1} · ${count}`;
+}
+
+function applyHistoryImg(idx) {
+    aiHistIdx = idx;
+    const item = aiHistory[idx];
+    if (!item) return;
+    const src = item.url;
+    const img = document.getElementById('ai-img');
+    img.classList.remove('visible');
+    img.onload = () => img.classList.add('visible');
+    img.src = src;
+    document.getElementById('lightbox-img').src = src;
+    document.getElementById('overlay-img').src  = src;
+    if (aiOverlayOn) document.getElementById('gp-ai-overlay').classList.add('visible');
+    updateNavUI();
+    highlightActiveThumb();
+}
+
+function showAiImg(url, meta) {
+    aiHistory.push({ url, prompt: (meta && meta.prompt) || '', ts: Date.now(), quality: (meta && meta.quality) || '' });
+    while (aiHistory.length > AI_MAX) aiHistory.shift();
+    saveAiRenders();
+    buildGallery();
+    applyHistoryImg(aiHistory.length - 1);
+}
+
+/* ── Galería de renders guardados (miniaturas) ───────────────────── */
+function highlightActiveThumb() {
+    document.querySelectorAll('#ai-gallery .ai-thumb').forEach((el, i) =>
+        el.classList.toggle('active', i === aiHistIdx));
+}
+function buildGallery() {
+    const g = document.getElementById('ai-gallery');
+    g.innerHTML = '';
+    aiHistory.forEach((item, i) => {
+        const t = document.createElement('div');
+        t.className = 'ai-thumb' + (i === aiHistIdx ? ' active' : '');
+        t.title = item.quality ? ('Render · ' + item.quality) : 'Render';
+        const im = document.createElement('img'); im.src = item.url; im.alt = '';
+        const del = document.createElement('button'); del.className = 'ai-thumb-del'; del.textContent = '×'; del.title = 'Eliminar';
+        im.addEventListener('click', () => applyHistoryImg(i));
+        del.addEventListener('click', (e) => { e.stopPropagation(); deleteRender(i); });
+        t.appendChild(im); t.appendChild(del);
+        g.appendChild(t);
+    });
+}
+function deleteRender(i) {
+    aiHistory.splice(i, 1);
+    if (aiHistIdx >= aiHistory.length) aiHistIdx = aiHistory.length - 1;
+    saveAiRenders();
+    buildGallery();
+    updateNavUI();
+}
+
+/* Descarga la imagen (fetch → blob, funciona con URLs de fal.ai) */
+async function downloadImage(src) {
+    if (!src) return;
+    try {
+        const r = await fetch(src);
+        const b = await r.blob();
+        const u = URL.createObjectURL(b);
+        const a = document.createElement('a');
+        a.href = u; a.download = `kiu-render-${Date.now()}.jpg`;
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(u), 4000);
+    } catch (e) {
+        window.open(src, '_blank');   // fallback si CORS bloquea el fetch
+    }
+}
+document.getElementById('lightbox-download').addEventListener('click', (e) => {
+    e.stopPropagation();
+    downloadImage(document.getElementById('lightbox-img').src);
+});
+buildGallery();   // pinta los renders ya guardados al iniciar
+
+document.getElementById('gp-ai-nav-prev').addEventListener('click', () => {
+    if (aiHistIdx > 0) applyHistoryImg(aiHistIdx - 1);
+});
+document.getElementById('gp-ai-nav-next').addEventListener('click', () => {
+    if (aiHistIdx < aiHistory.length - 1) applyHistoryImg(aiHistIdx + 1);
+});
+
+document.getElementById('ai-overlay-layer').addEventListener('click', () => {
+    aiOverlayOn = !aiOverlayOn;
+    document.getElementById('ai-overlay-layer').classList.toggle('active', aiOverlayOn);
+    if (!aiOverlayOn) document.getElementById('gp-ai-overlay').classList.remove('visible');
+    else if (document.getElementById('overlay-img').src)
+        document.getElementById('gp-ai-overlay').classList.add('visible');
+});
+
+// Al mover la cámara, ocultar el overlay para ver el 3D real
+controls.addEventListener('change', () => {
+    if (!aiPending) document.getElementById('gp-ai-overlay').classList.remove('visible');
+});
+
+// Lightbox (zoom de la imagen)
+document.getElementById('ai-img').addEventListener('click', () => {
+    if (document.getElementById('ai-img').src)
+        document.getElementById('gp-lightbox').classList.add('on');
+});
+document.getElementById('gp-lightbox').addEventListener('click', () =>
+    document.getElementById('gp-lightbox').classList.remove('on'));
+window.addEventListener('keydown', e => {
+    if (e.key === 'Escape') document.getElementById('gp-lightbox').classList.remove('on');
+});
+
+async function generateAI() {
+    if (aiPending) return;
+    const key      = document.getElementById('ai-key').value.trim();
+    const prompt   = document.getElementById('ai-prompt').value.trim()
+                     || 'hyperrealistic real-estate sales render of a modern residential building, professional architectural photography, warm golden hour sunlight, clear blue sky, lush landscaping and street trees, people walking, parked cars, clean glass and concrete facade, realistic materials and reflections, ultra detailed, high resolution, photorealistic, marketing visualization';
+    const strength = parseFloat(document.getElementById('ai-strength').value) / 100;
+    if (!key) { setAiStatus('ingresá la API key'); return; }
+
+    const quality = document.getElementById('ai-quality').value;
+    aiPending = true;
+    setAiStatus('generando…');
+    document.getElementById('gp-ai-loading').classList.add('on');
+    const t0    = Date.now();
+    const thumb = captureThumb();
+
+    try {
+        let res;
+        if (quality === 'nano' || quality === 'nano2k' || quality === 'nano4k') {
+            const resolution = quality === 'nano4k' ? '4K' : quality === 'nano2k' ? '2K' : '1K';
+            res = await fetch('https://fal.run/fal-ai/nano-banana-pro/edit', {
+                method: 'POST',
+                headers: { 'Authorization': `Key ${key}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt, image_urls: [thumb], num_images: 1, resolution, output_format: 'jpeg' })
+            });
+        } else {
+            const modelUrl = quality === 'pro'
+                ? 'https://fal.run/fal-ai/flux-general/image-to-image'
+                : 'https://fal.run/fal-ai/flux/dev/image-to-image';
+            const steps    = quality === 'quality' ? 50 : 28;
+            const guidance = quality === 'quality' ? 7.5 : 3.5;
+            res = await fetch(modelUrl, {
+                method: 'POST',
+                headers: { 'Authorization': `Key ${key}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    image_url: thumb, prompt, strength,
+                    num_inference_steps: steps, guidance_scale: guidance,
+                    seed: Math.floor(Math.random() * 999999)
+                })
+            });
+        }
+        if (!res.ok) { const t = await res.text(); throw new Error(`${res.status}: ${t.slice(0, 100)}`); }
+        const data = await res.json();
+        const url  = data.images?.[0]?.url;
+        if (!url) throw new Error('sin imagen en respuesta');
+        showAiImg(url, { prompt, quality });
+        setAiStatus(`listo · ${((Date.now() - t0) / 1000).toFixed(1)}s`);
+    } catch (e) {
+        setAiStatus('error · ' + e.message.slice(0, 55));
+        console.error('[fal.ai]', e);
+    } finally {
+        aiPending = false;
+        document.getElementById('gp-ai-loading').classList.remove('on');
+    }
+}
+
+document.getElementById('ai-generate-btn').addEventListener('click', generateAI);
+
+// Varita mágica → abre/cierra el panel
+const aiFab = document.getElementById('ai-fab');
+function setAiPanel(on) {
+    // El panel de IA está en z-index 40, por encima del panel del apto (30):
+    // lo tapa mientras está abierto y, al cerrarlo, la info del apto reaparece.
+    document.getElementById('gp-ai-panel').classList.toggle('on', on);
+    aiFab.classList.toggle('active', on);
+}
+aiFab.addEventListener('click', () =>
+    setAiPanel(!document.getElementById('gp-ai-panel').classList.contains('on')));
+document.getElementById('ai-close').addEventListener('click', () => setAiPanel(false));
+
+/* ══════════════════════════════════════════════════════════════════
+   MODO PRESENTACIÓN — recorrido guiado automático
+   Arma un "guion" (storyboard) dinámico a partir de los pisos/unidades
+   y lo recorre solo: overview con cambios de ambiente → cada piso →
+   cada tipología (info + slideshow de interiores). Reutiliza
+   selectFloor / selectUnit / backToOverview / applyMood. El usuario
+   puede pausar, saltar (‹ ›), ir a un paso (puntos) o salir (Esc).
+   ══════════════════════════════════════════════════════════════════ */
+const _tour = { on:false, steps:[], idx:0, playing:false, elapsed:0, dur:0, raf:0, last:0, photoIdx:-1 };
+
+function moodTo(id)     { if (_currentMood !== id) applyMood(id); }
+function ensureOverview(){ if (_state !== 'overview') backToOverview(); }
+
+function buildStoryboard() {
+    const S = [];
+    // Intro + muestra de ambientes (en vista general, con órbita automática)
+    S.push({ eyebrow: PROJECT_NAME, title: 'Recorrido del proyecto', sub: 'Una mirada inmersiva al edificio', dur: 6500,
+             enter() { ensureOverview(); moodTo('dia'); } });
+    S.push({ eyebrow: 'Ambiente', title: 'Al atardecer', sub: 'La fachada con luz cálida', dur: 5000,
+             enter() { ensureOverview(); moodTo('atardecer'); } });
+    S.push({ eyebrow: 'Ambiente', title: 'De noche', sub: 'Las unidades cobran vida', dur: 5000,
+             enter() { ensureOverview(); moodTo('noche'); } });
+
+    // Piso por piso, tipología por tipología
+    const ordered = [...floors].sort((a, b) => a.index - b.index);
+    ordered.forEach(f => {
+        const nU = f.units.length;
+        S.push({ eyebrow: 'Nivel', title: f.name.replace(/_/g, ' '),
+                 sub: nU + (nU === 1 ? ' tipología' : ' tipologías'), dur: 4200,
+                 enter() { moodTo('dia'); selectFloor(f); } });
+        f.units.forEach(u => {
+            const d = TIPOLOGIAS[u.name] || TIPOLOGIAS._default;
+            const dorm = d.dorm === 0 ? 'Monoambiente' : d.dorm + (d.dorm === 1 ? ' dormitorio' : ' dormitorios');
+            S.push({ eyebrow: d.tipo, title: u.name.replace(/_/g, ' '),
+                     sub: `${d.area} · ${dorm} · ${d.banos} baños`, dur: 5000,
+                     enter() { if (_activeFloor !== f) selectFloor(f); selectUnit(u); } });
+            const imgs = GALERIA[u.name] || GALERIA._default || [];
+            if (imgs.length) S.push({ eyebrow: d.tipo + ' · Interiores', title: 'Espacios para vivir',
+                     sub: u.name.replace(/_/g, ' '), photos: imgs, dur: Math.max(5000, imgs.length * 2800),
+                     enter() { if (_activeFloor !== f) selectFloor(f); if (_activeUnit !== u) selectUnit(u); } });
+        });
+    });
+
+    // Cierre
+    S.push({ eyebrow: PROJECT_NAME, title: 'Te esperamos', sub: 'Consultá disponibilidad y agendá tu visita', dur: 6000,
+             enter() { ensureOverview(); moodTo('dia'); } });
+    return S;
+}
+
+function setCaption(st) {
+    document.getElementById('tour-eyebrow').textContent = st.eyebrow || '';
+    document.getElementById('tour-title').textContent   = st.title   || '';
+    document.getElementById('tour-sub').textContent     = st.sub     || '';
+    const cap = document.getElementById('tour-caption');
+    cap.classList.remove('anim'); void cap.offsetWidth; cap.classList.add('anim');   // re-dispara la animación
+}
+
+function showTourPhoto(src) {
+    const layer = document.getElementById('tour-photo');
+    const img   = document.getElementById('tour-photo-img');
+    if (img.getAttribute('src') !== src) {
+        img.src = src;
+        img.style.animation = 'none'; void img.offsetWidth; img.style.animation = '';  // reinicia el zoom lento
+    }
+    layer.classList.add('on');
+}
+function hideTourPhoto() { document.getElementById('tour-photo').classList.remove('on'); }
+
+function buildStepDots() {
+    const wrap = document.getElementById('tour-steps'); wrap.innerHTML = '';
+    _tour.steps.forEach((s, i) => {
+        const d = document.createElement('div'); d.className = 'ts-dot'; d.title = s.title || '';
+        d.addEventListener('click', () => gotoStep(i));
+        wrap.appendChild(d);
+    });
+}
+function updateStepDots() {
+    document.querySelectorAll('#tour-steps .ts-dot').forEach((d, i) => d.classList.toggle('on', i === _tour.idx));
+}
+
+function gotoStep(i) {
+    const n = _tour.steps.length; if (!n) return;
+    _tour.idx = ((i % n) + n) % n;
+    const st = _tour.steps[_tour.idx];
+    _tour.elapsed = 0; _tour.dur = st.dur; _tour.photoIdx = -1;
+    document.getElementById('tour-progress-fill').style.width = '0%';
+    setCaption(st);
+    if (st.photos && st.photos.length) { _tour.photoIdx = 0; showTourPhoto(st.photos[0]); }
+    else hideTourPhoto();
+    try { st.enter && st.enter(); } catch (e) { console.warn('[tour] paso', e); }
+    updateStepDots();
+    _tour.last = performance.now();
+}
+
+function setPlaying(p) {
+    _tour.playing = p;
+    document.getElementById('tour-play').textContent = p ? '❚❚' : '►';
+    _tour.last = performance.now();
+}
+
+function tourTick(now) {
+    if (!_tour.on) return;
+    const dt = now - _tour.last; _tour.last = now;
+    if (_tour.playing) {
+        _tour.elapsed += dt;
+        const st = _tour.steps[_tour.idx];
+        const frac = Math.min(1, _tour.elapsed / _tour.dur);
+        document.getElementById('tour-progress-fill').style.width = (frac * 100).toFixed(1) + '%';
+        if (st.photos && st.photos.length) {                 // slideshow sincronizado al progreso
+            const pi = Math.min(st.photos.length - 1, Math.floor(frac * st.photos.length));
+            if (pi !== _tour.photoIdx) { _tour.photoIdx = pi; showTourPhoto(st.photos[pi]); }
+        }
+        if (_tour.elapsed >= _tour.dur) gotoStep(_tour.idx + 1);
+    }
+    _tour.raf = requestAnimationFrame(tourTick);
+}
+
+function startTour() {
+    if (_tour.on) return;
+    _tour.steps = buildStoryboard();
+    if (!_tour.steps.length) return;
+    _tour.on = true;
+    document.body.classList.add('tour-mode');
+    document.getElementById('tour-overlay').classList.add('on');
+    setAiPanel(false);
+    buildStepDots();
+    setPlaying(true);
+    gotoStep(0);
+    _tour.raf = requestAnimationFrame(tourTick);
+}
+
+function exitTour() {
+    if (!_tour.on) return;
+    _tour.on = false; _tour.playing = false;
+    cancelAnimationFrame(_tour.raf);
+    document.body.classList.remove('tour-mode');
+    document.getElementById('tour-overlay').classList.remove('on');
+    hideTourPhoto();
+    backToOverview();
+}
+
+document.getElementById('btn-tour').addEventListener('click', startTour);
+document.getElementById('tour-exit').addEventListener('click', exitTour);
+document.getElementById('tour-next').addEventListener('click', () => gotoStep(_tour.idx + 1));
+document.getElementById('tour-prev').addEventListener('click', () => gotoStep(_tour.idx - 1));
+document.getElementById('tour-play').addEventListener('click', () => setPlaying(!_tour.playing));
+document.addEventListener('keydown', e => {
+    if (!_tour.on) return;
+    if (e.key === 'Escape')          exitTour();
+    else if (e.key === 'ArrowRight') gotoStep(_tour.idx + 1);
+    else if (e.key === 'ArrowLeft')  gotoStep(_tour.idx - 1);
+    else if (e.key === ' ')        { e.preventDefault(); setPlaying(!_tour.playing); }
+});
+
+</script>
+</body>
+</html>
