@@ -1680,7 +1680,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
             <div class="pkg-platform anim" style="transition-delay:0.36s" data-pkg-videos="animations/acc-3d.mp4">
                 <div class="pp-left">
-                    <span class="pp-tag" data-en="+ 3D Platform">+ Plataforma 3D</span>
+                    <span class="pp-tag" data-en="04 · 3D Platform">04 · Plataforma 3D</span>
                     <p class="pp-desc" data-en="Interactive 3D of the building with AI image generation. We keep it maintained; your team can access it to generate their own images.">3D interactivo del edificio con generación de imágenes por IA. La mantenemos nosotros; tu equipo puede acceder para generar sus propias imágenes.</p>
                 </div>
                 <a href="#" onclick="window.snapGoTo(7);return false;" class="btn-outline pkg-cta pp-cta" data-en="Inquire →">Consultar →</a>
@@ -2568,7 +2568,8 @@ var snapSections;
             clear();
             var rect = card.getBoundingClientRect();
             var n = vids.length;
-            var SIZE = n === 1 ? 210 : (n <= 2 ? 128 : (n === 3 ? 112 : 92));
+            var isPlatform = card.classList.contains('pkg-platform');
+            var SIZE = isPlatform ? 200 : (n <= 2 ? 128 : (n === 3 ? 112 : 92));
             var GAP = 14, ARC = 24;
             var totalW = n * SIZE + (n - 1) * GAP;
             var vw = window.innerWidth;
