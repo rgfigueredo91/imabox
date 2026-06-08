@@ -891,6 +891,9 @@
         }
         .pkg-circle.visible .pkg-circle-inner { opacity: 1; transform: scale(1); }
         .pkg-circle-inner video { width: 100%; height: 100%; object-fit: cover; display: block; }
+        /* Plataforma 3D: video entero (contain) con bordes negros dentro del círculo */
+        .pkg-circle-contain .pkg-circle-inner { background: #000; }
+        .pkg-circle-contain .pkg-circle-inner video { object-fit: contain; }
         @media (hover: none) { #pkg-circles-layer { display: none; } }
 
         /* ── iPad landscape (1024px y menos) ── */
@@ -1678,7 +1681,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     <a href="#" onclick="window.snapGoTo(7);return false;" class="btn-outline pkg-cta" data-en="Inquire →">Consultar →</a>
                 </div>
             </div>
-            <div class="pkg-platform anim" style="transition-delay:0.36s" data-pkg-videos="animations/acc-3d.mp4">
+            <div class="pkg-platform anim" style="transition-delay:0.36s" data-pkg-videos="animations/acc-plataforma.mp4">
                 <div class="pp-left">
                     <span class="pp-tag" data-en="04 · 3D Platform">04 · Plataforma 3D</span>
                     <p class="pp-desc" data-en="Interactive 3D of the building with AI image generation. We keep it maintained; your team can access it to generate their own images.">3D interactivo del edificio con generación de imágenes por IA. La mantenemos nosotros; tu equipo puede acceder para generar sus propias imágenes.</p>
@@ -2569,7 +2572,7 @@ var snapSections;
             var rect = card.getBoundingClientRect();
             var n = vids.length;
             var isPlatform = card.classList.contains('pkg-platform');
-            var SIZE = isPlatform ? 200 : (n <= 2 ? 128 : (n === 3 ? 112 : 92));
+            var SIZE = isPlatform ? 400 : (n <= 2 ? 128 : (n === 3 ? 112 : 92));
             var GAP = 14, ARC = 24;
             var totalW = n * SIZE + (n - 1) * GAP;
             var vw = window.innerWidth;
@@ -2584,7 +2587,7 @@ var snapSections;
                 var bx = startX + i * (SIZE + GAP);
                 var by = baseY - factor * ARC;
                 var c = document.createElement('div');
-                c.className = 'pkg-circle';
+                c.className = isPlatform ? 'pkg-circle pkg-circle-contain' : 'pkg-circle';
                 c.style.width  = SIZE + 'px';
                 c.style.height = SIZE + 'px';
                 c.style.left   = bx + 'px';
