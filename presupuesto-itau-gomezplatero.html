@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Presupuesto — Modelo 3D Itaú · Imabox</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#080808;
+    --panel:#0f0f0f;
+    --gold:#c9a96e;
+    --line:rgba(255,255,255,0.09);
+    --txt:#f2f2f2;
+    --muted:#9a9a9a;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{background:#202020;}
+  body{
+    font-family:'Poppins',Arial,sans-serif;
+    color:var(--txt);
+    line-height:1.45;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
+
+  /* Hoja A4 — una sola página */
+  .page{
+    width:210mm;
+    height:297mm;
+    margin:24px auto;
+    background:var(--bg);
+    padding:14mm 18mm;
+    position:relative;
+    box-shadow:0 10px 40px rgba(0,0,0,.5);
+    overflow:hidden;
+  }
+
+  /* Encabezado */
+  .head{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:16px;}
+  .logo{font-size:26px;font-weight:700;letter-spacing:-1px;}
+  .logo span{color:var(--gold);}
+  .head-right{text-align:right;font-size:10.5px;color:var(--muted);line-height:1.6;}
+  .doc-tag{display:inline-block;color:var(--gold);font-size:10px;letter-spacing:3px;text-transform:uppercase;margin-bottom:6px;}
+
+  h1{font-size:22px;font-weight:600;line-height:1.2;margin-bottom:4px;}
+  .subtitle{color:var(--muted);font-size:12px;margin-bottom:14px;}
+
+  /* Meta cliente / proyecto */
+  .meta{display:grid;grid-template-columns:1fr 1fr;gap:8px 40px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:13px 20px;margin-bottom:14px;}
+  .meta .label{font-size:9.5px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:2px;}
+  .meta .val{font-size:12px;color:var(--txt);}
+
+  h2{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin:15px 0 7px;font-weight:600;}
+
+  p.intro{font-size:11px;color:#cfcfcf;margin-bottom:4px;line-height:1.45;}
+
+  /* Tablas */
+  table{width:100%;border-collapse:collapse;font-size:11px;}
+  thead th{text-align:left;color:var(--muted);font-weight:500;font-size:9.5px;letter-spacing:1.5px;text-transform:uppercase;padding:0 0 7px;border-bottom:1px solid var(--line);}
+  thead th.num{text-align:right;}
+  tbody td{padding:6px 0;border-bottom:1px solid var(--line);vertical-align:top;}
+  tbody td.item{font-weight:600;width:30%;}
+  tbody td.detail{color:var(--muted);font-size:10.5px;}
+  tbody td.num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums;}
+  tr.total td{padding-top:10px;border-bottom:none;font-size:14px;font-weight:700;}
+  tr.total td.num{color:var(--gold);font-size:19px;}
+  .total-note{font-size:10.5px;color:var(--muted);font-weight:400;}
+
+  /* Condiciones */
+  .cond{display:grid;grid-template-columns:1fr 1fr;gap:6px 30px;margin-top:4px;}
+  .cond li{list-style:none;font-size:11px;color:#cfcfcf;padding-left:15px;position:relative;line-height:1.4;}
+  .cond li::before{content:'';position:absolute;left:0;top:7px;width:5px;height:5px;background:var(--gold);border-radius:50%;}
+  .cond li b{color:var(--txt);font-weight:600;}
+
+  /* Footer */
+  .foot{position:absolute;bottom:12mm;left:18mm;right:18mm;border-top:1px solid var(--line);padding-top:11px;display:flex;justify-content:space-between;font-size:10px;color:var(--muted);}
+  .foot a{color:var(--gold);text-decoration:none;}
+
+  .validity{margin-top:12px;font-size:10px;color:var(--muted);font-style:italic;}
+
+  /* Print */
+  @media print{
+    html,body{background:#fff;}
+    .page{margin:0;box-shadow:none;width:auto;height:297mm;}
+    .no-print{display:none;}
+    @page{size:A4;margin:0;}
+  }
+  .no-print{position:fixed;top:16px;right:16px;z-index:50;}
+  .no-print button{background:var(--gold);color:#111;border:none;padding:11px 18px;border-radius:6px;font-family:'Poppins';font-weight:600;font-size:13px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.4);}
+</style>
+</head>
+<body>
+
+<div class="no-print">
+  <button onclick="window.print()">↓ Guardar como PDF</button>
+</div>
+
+<div class="page">
+
+  <div class="head">
+    <div>
+      <div class="logo">imabox<span>.</span></div>
+    </div>
+    <div class="head-right">
+      hello@imabox.uy<br>
+      +598 98 325 902<br>
+      imabox.uy
+    </div>
+  </div>
+
+  <span class="doc-tag">Presupuesto</span>
+  <h1>Modelo 3D — Edificio Itaú</h1>
+  <p class="subtitle">Modelado 3D · fiel a planos · formato editable</p>
+
+  <div class="meta">
+    <div><div class="label">Cliente</div><div class="val">Gómez Platero</div></div>
+    <div><div class="label">Proyecto</div><div class="val">Edificio Itaú — Modelo 3D</div></div>
+    <div><div class="label">Fecha</div><div class="val">09/06/2026</div></div>
+    <div><div class="label">Validez</div><div class="val">30 días</div></div>
+  </div>
+
+  <h2>El alcance</h2>
+  <p class="intro">Construcción del modelo tridimensional del edificio Itaú a partir de la documentación del proyecto. El modelo se levanta <b>fiel a los planos 2D</b>, con volumetría, fachadas y geometría precisas, listo para visualización y producción de imágenes. Se entrega en formato editable y optimizado para su reutilización posterior.</p>
+
+  <h2>Detalle de la propuesta</h2>
+  <table>
+    <thead>
+      <tr><th>Ítem</th><th>Detalle</th><th class="num">USD</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="item">Modelado 3D</td><td class="detail">Levantamiento completo de la volumetría y geometría del edificio fiel a los planos 2D entregados, optimizado y listo para visualización</td><td class="num">$300</td></tr>
+      <tr class="total"><td>Total <span class="total-note">· 2 rondas de revisión incluidas</span></td><td></td><td class="num">$300</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Condiciones</h2>
+  <ul class="cond">
+    <li><b>Insumos:</b> el modelado parte de los planos 2D y la documentación que provea el cliente.</li>
+    <li><b>Propiedad:</b> el modelo final y sus archivos editables se transfieren al cliente una vez completado el pago.</li>
+    <li><b>Pago:</b> a convenir entre las partes.</li>
+    <li><b>Plazo:</b> a coordinar según disponibilidad de los planos 2D.</li>
+    <li><b>Revisiones:</b> 2 rondas incluidas; cambios de alcance se cotizan aparte.</li>
+    <li><b>Entregable y moneda:</b> modelo 3D en formato editable, cotizado en USD.</li>
+  </ul>
+
+  <p class="validity">Este presupuesto tiene una validez de 30 días desde la fecha de emisión. Los valores no incluyen impuestos aplicables según jurisdicción.</p>
+
+  <div class="foot">
+    <span>imabox<b style="color:var(--gold)">.</b> — Agencia creativa para desarrolladores inmobiliarios</span>
+    <span><a href="https://imabox.uy">imabox.uy</a> · hello@imabox.uy</span>
+  </div>
+
+</div>
+
+</body>
+</html>

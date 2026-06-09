@@ -29,7 +29,10 @@
       "Bash(pdfinfo *)",
       "Bash(git *)",
       "Bash(curl -s \"https://estudiopmb.com/sencilla.html\")",
-      "WebFetch(domain:mapas.ide.uy)"
+      "WebFetch(domain:mapas.ide.uy)",
+      "WebFetch(domain:ui-ux-pro-max-skill.com)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)"
     ]
   }
 }

@@ -810,10 +810,10 @@
             display: flex; align-items: center; justify-content: center;
         }
         .pkg-inner {
-            max-width: 1100px; width: 100%; padding: 0 80px;
+            max-width: 1360px; width: 100%; padding: 0 48px;
         }
         .pkg-grid {
-            display: grid; grid-template-columns: repeat(3, 1fr);
+            display: grid; grid-template-columns: repeat(4, 1fr);
             margin-top: 30px;
             border: 1px solid rgba(255,255,255,0.07);
         }
@@ -855,29 +855,13 @@
         }
         .pkg-cta { margin-top: 12px; align-self: flex-start; }
 
-        /* ── Franja Plataforma 3D (debajo de los 3 planes) ── */
-        .pkg-platform {
-            margin-top: 18px; display: flex; align-items: center; gap: 28px;
-            padding: 16px 28px; border: 1px solid var(--gold-border);
-            background: var(--gold-dim); border-radius: 8px;
-        }
-        .pkg-platform .pp-left { flex: 1; }
-        .pp-tag {
-            display: block; font-family: 'aktiv-grotesk', sans-serif;
-            font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase;
-            color: var(--gold); margin-bottom: 5px;
-        }
-        .pp-desc {
-            font-family: 'Poppins', sans-serif; font-size: 0.8rem; font-weight: 300;
-            line-height: 1.55; color: rgba(255,255,255,0.62); max-width: 790px;
-        }
-        .pkg-platform .pp-cta { margin: 0; align-self: center; flex-shrink: 0; }
-        @media (max-width: 900px) { .pkg-platform { gap: 16px; padding: 13px 18px; } }
-        @media (max-width: 600px) {
-            .pkg-platform { flex-direction: column; align-items: flex-start; gap: 8px; padding: 12px 16px; margin-top: 12px; }
-            .pp-desc { font-size: 0.72rem; -webkit-line-clamp: 2; display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; }
-            .pkg-platform .pp-cta { align-self: center; }
-        }
+        /* ── 4ta carta — Plataforma 3D (dorado distinto) ── */
+        .pkg-card-platform { --gp: #e0a951; background: rgba(224,169,81,0.05); }
+        .pkg-card-platform .pkg-label { color: var(--gp); opacity: 0.85; }
+        .pkg-card-platform .pkg-name { color: var(--gp); }
+        .pkg-card-platform .pkg-list li::before { color: var(--gp); opacity: 0.75; }
+        .pkg-card-platform .pkg-cta { border-color: var(--gp); color: var(--gp); }
+        .pkg-card-platform .pkg-cta:hover { background: var(--gp); color: #050505; }
 
         /* círculos flotantes con video al hover (solo desktop) */
         #pkg-circles-layer { position: fixed; inset: 0; pointer-events: none; z-index: 600; }
@@ -1680,13 +1664,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     </ul>
                     <a href="#" onclick="window.snapGoTo(7);return false;" class="btn-outline pkg-cta" data-en="Inquire →">Consultar →</a>
                 </div>
-            </div>
-            <div class="pkg-platform anim" style="transition-delay:0.36s" data-pkg-videos="animations/acc-plataforma.mp4">
-                <div class="pp-left">
-                    <span class="pp-tag" data-en="04 · 3D Platform">04 · Plataforma 3D</span>
-                    <p class="pp-desc" data-en="Interactive 3D of the building with AI image generation. We keep it maintained; your team can access it to generate their own images.">3D interactivo del edificio con generación de imágenes por IA. La mantenemos nosotros; tu equipo puede acceder para generar sus propias imágenes.</p>
+                <div class="pkg-card pkg-platform pkg-card-platform anim" style="transition-delay:0.36s" data-pkg-videos="animations/acc-plataforma.mp4">
+                    <p class="pkg-label">04</p>
+                    <h3 class="pkg-name" data-en="3D Platform">Plataforma 3D</h3>
+                    <p class="pkg-desc" data-en="Interactive 3D of the building with AI image generation.">3D interactivo del edificio con generación de imágenes por IA.</p>
+                    <ul class="pkg-list">
+                        <li data-en="Interactive 3D of the building">3D interactivo del edificio</li>
+                        <li data-en="AI image generation">Generación de imágenes por IA</li>
+                        <li data-en="We keep it maintained and updated">La mantenemos y actualizamos nosotros</li>
+                        <li data-en="Access for your team to generate images">Acceso para tu equipo para generar imágenes</li>
+                    </ul>
+                    <a href="#" onclick="window.snapGoTo(7);return false;" class="btn-outline pkg-cta" data-en="Inquire →">Consultar →</a>
                 </div>
-                <a href="#" onclick="window.snapGoTo(7);return false;" class="btn-outline pkg-cta pp-cta" data-en="Inquire →">Consultar →</a>
             </div>
         </div>
     </section>
@@ -2572,7 +2561,7 @@ var snapSections;
             var rect = card.getBoundingClientRect();
             var n = vids.length;
             var isPlatform = card.classList.contains('pkg-platform');
-            var SIZE = isPlatform ? 400 : (n <= 2 ? 128 : (n === 3 ? 112 : 92));
+            var SIZE = isPlatform ? 210 : (n <= 2 ? 128 : (n === 3 ? 112 : 92));
             var GAP = 14, ARC = 24;
             var totalW = n * SIZE + (n - 1) * GAP;
             var vw = window.innerWidth;
