@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /private-pricing.html
 
 Sitemap: https://imabox.uy/sitemap.xml
