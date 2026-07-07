@@ -11,7 +11,7 @@ import re, os, html as H
 REPO = r'C:\Users\rgfig\Documents\GitHub\imabox'
 SITE = 'https://imabox.uy'
 
-EN_SET = ['index.html','projects.html','planes-plataforma.html','link-center.html',
+EN_SET = ['index.html','projects.html','link-center.html',
           'kiu-av-italia.html','kiu-8-octubre.html','aero-met.html','crc-fitness.html',
           'cala-del-yacht.html','colinas-de-maldonado.html','terrazas-de-polo.html',
           'parque-termal-ipora.html','la-guadalupe.html','jardines-de-areco.html',
