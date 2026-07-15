@@ -192,6 +192,8 @@
             .hes-gallery { grid-template-columns: 1fr; grid-auto-rows: 60vw; gap: 3px; }
             .gallery-section { padding: 4px; }
         }
+        /* el logo personal es más largo que "imabox." */
+        @media (max-width: 480px) { .nav-logo { font-size: 1.3rem; } }
     </style>
 
     <script type="application/ld+json">
@@ -219,7 +221,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- NAV -->
 <header>
     <nav class="navbar" id="navbar">
-        <a href="https://imabox.uy" class="nav-logo" id="link-font-index">imabox.</a>
+        <a href="/archivo/works.html" class="nav-logo">rodrigo figueredo.</a>
         <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
             <span class="nav-bar"></span>
             <span class="nav-bar"></span>
@@ -227,10 +229,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </button>
         <div class="nav-overlay">
             <ul class="nav-links">
-                <li><a href="projects.html">Projects</a></li>
-                <li><a href="/archivo/services.html">Services</a></li>
-                <li><a href="/archivo/about.html">About</a></li>
-                <li><a href="/archivo/contact.html">Contact</a></li>
+                <li><a href="/archivo/works.html" id="nav-works" style="color:#c9a96e;">Works</a></li>
+                <li><a href="/archivo/about.html" id="nav-about">About</a></li>
             </ul>
             <div class="nav-info">
                 <div class="nav-lang">
@@ -397,7 +397,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script src="js/yall.min.js"></script>
 <script src="js/navbar-hamburger.js"></script>
 <script src="js/circle.js"></script>
-<script src="js/translate.js"></script>
+<script src="js/translate-rgf.js"></script>
 <script src="js/videosgif.js"></script>
 
 <script>

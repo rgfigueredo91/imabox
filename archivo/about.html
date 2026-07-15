@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <base href="/">
     <!-- Google Tag Manager -->
@@ -18,12 +18,12 @@
     </script>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta charset="UTF-8" />
-    <title>About Imabox — Architects &amp; Creative Agency for Real Estate | Montevideo</title>
-    <meta name="description" content="Founded by architects in Montevideo in 2018. Imabox handles the complete visual identity of real estate projects — brand, 3D visualization, film and virtual showrooms from day zero." />
+    <title>About — Rodrigo Figueredo | Architect &amp; Senior 3D Artist</title>
+    <meta name="description" content="Rodrigo Figueredo — architect and senior 3D artist based in Montevideo. Concept imagery at Gómez Platero, co-founder of Imabox, building visualization tools with code and AI." />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="About — Imabox" />
-    <meta property="og:description" content="Creative agency for real estate projects. Total brand, from day zero." />
+    <meta property="og:title" content="About — Rodrigo Figueredo" />
+    <meta property="og:description" content="Architect, 3D artist — and the code in between." />
     <meta property="og:url" content="https://imabox.uy/archivo/about.html" />
     <meta property="og:image" content="https://imabox.uy/img/cover1index.webp" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -38,21 +38,24 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "LocalBusiness",
-      "name": "Imabox",
-      "url": "https://imabox.uy",
-      "logo": "https://imabox.uy/img/logo.webp",
-      "description": "Creative agency for real estate projects. Architecture and real estate — Montevideo, Uruguay.",
+      "@type": "Person",
+      "name": "Rodrigo Figueredo",
+      "jobTitle": "Architect & Senior 3D Artist",
+      "url": "https://imabox.uy/archivo/about.html",
+      "email": "rg.figueredo91@gmail.com",
       "address": { "@type": "PostalAddress", "addressLocality": "Montevideo", "addressCountry": "UY" },
-      "telephone": "+598-98-325-902",
-      "email": "hello@imabox.uy",
-      "sameAs": [
-        "https://www.instagram.com/imabox_uy",
-        "https://www.linkedin.com/company/imabox"
+      "alumniOf": "Universidad de la República",
+      "worksFor": [
+        { "@type": "Organization", "name": "Gómez Platero Arquitectura & Urbanismo" },
+        { "@type": "Organization", "name": "Imabox" }
       ]
     }
     </script>
     <link rel="stylesheet" href="styles/cursor.css" />
+    <style>
+        /* el logo personal es más largo que "imabox." */
+        @media (max-width: 480px) { .nav-logo { font-size: 1.3rem; } }
+    </style>
     <meta name="robots" content="noindex, nofollow" />
 </head>
 <body>
@@ -64,7 +67,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- NAV -->
 <header>
     <nav class="navbar" id="navbar">
-        <a href="https://imabox.uy" class="nav-logo" id="link-font-index">imabox.</a>
+        <a href="/archivo/works.html" class="nav-logo">rodrigo figueredo.</a>
         <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
             <span class="nav-bar"></span>
             <span class="nav-bar"></span>
@@ -72,10 +75,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </button>
         <div class="nav-overlay">
             <ul class="nav-links">
-                <li><a href="projects.html">Projects</a></li>
-                <li><a href="/archivo/services.html" id="link-font-Virtual">Services</a></li>
-                <li><a href="/archivo/about.html" id="link-font-about" style="color:#c9a96e;">About</a></li>
-                <li><a href="/archivo/contact.html" id="link-font-contact">Contact</a></li>
+                <li><a href="/archivo/works.html" id="nav-works">Works</a></li>
+                <li><a href="/archivo/about.html" id="nav-about" style="color:#c9a96e;">About</a></li>
             </ul>
             <div class="nav-info">
                 <div class="nav-lang">
@@ -103,31 +104,31 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="hero-video-inner">
 
         <div class="hero-left">
-            <div class="eyebrow" id="abt-hero-tag">About us</div>
+            <div class="eyebrow" id="abt-hero-tag">About me</div>
             <h1>
-                <span id="abt-hero-h1a">We are the creative agency behind</span><br>
-                <em id="abt-hero-h1b">your project's brand.</em>
+                <span id="abt-hero-h1a">Architect, 3D artist —</span><br>
+                <em id="abt-hero-h1b">and the code in between.</em>
             </h1>
         </div>
 
         <div class="hero-right">
             <div class="tab-nav">
-                <button class="tab-btn active" data-tab="0" id="tab-btn-0">Our story</button>
+                <button class="tab-btn active" data-tab="0" id="tab-btn-0">Who I am</button>
                 <button class="tab-btn" data-tab="1" id="tab-btn-1">The journey</button>
-                <button class="tab-btn" data-tab="2" id="tab-btn-2">What drives us</button>
+                <button class="tab-btn" data-tab="2" id="tab-btn-2">What drives me</button>
             </div>
             <div class="tab-panels">
                 <div class="tab-panel active" id="tab-panel-0">
-                    <span class="tab-tag">2018 — Montevideo</span>
-                    <p id="tab0-p">We graduated as architects and from day one we knew we wanted to do something different. Not build buildings — <strong>build the image that makes them desirable.</strong> In 2018 we founded Imabox, not as a visualization studio, but as a creative agency that takes full ownership of a project's entire image — from brand identity to launch day.</p>
+                    <span class="tab-tag">Montevideo, Uruguay</span>
+                    <p id="tab0-p">I'm Rodrigo Figueredo, architect and senior 3D artist. I studied architecture at Universidad de la República, and today I split my time between <strong>Gómez Platero</strong> — creating concept imagery in the 3D team for some of the region's largest projects — and <strong>Imabox</strong>, the creative agency I co-founded in 2018. Everything on the Works page came out of that practice.</p>
                 </div>
                 <div class="tab-panel" id="tab-panel-1">
                     <span class="tab-tag">China · Korea · Japan · Europe</span>
-                    <p id="tab1-p">Before founding Imabox we spent almost a year traveling the world. <strong>China, Korea, Japan, Italy, Switzerland, Germany, France, Colombia.</strong> Not as tourists — as architects with wide-open eyes. That gave our perspective something no studio teaches: real-world context.</p>
+                    <p id="tab1-p">In 2019 I spent almost a year traveling — <strong>China, Korea, Japan, Italy, Switzerland, Germany, France, Colombia.</strong> Not as a tourist: as an architect with wide-open eyes. Walking through buildings I had only known from books changed how I understand scale, light and cities — and that perspective is behind every image I make.</p>
                 </div>
                 <div class="tab-panel" id="tab-panel-2">
-                    <span class="tab-tag">Our philosophy</span>
-                    <p id="tab2-p">North-facing orientation doesn't sell an apartment. <strong>Morning sunlight streaming through the window as you have your coffee, does.</strong> With every image, every video, every cinemagraph, we build the experience of living something that doesn't yet exist — so whoever sees it desires it before the first brick is laid.</p>
+                    <span class="tab-tag">Craft + code</span>
+                    <p id="tab2-p">I've always lived between two worlds: the artistic and the technical. Today that means pairing visualization craft with <strong>code and AI</strong> — writing my own tools in JavaScript and Python, building 3D experiences for the web, and using generative models as one more brush. The video beside this text? <strong>I made it with AI.</strong></p>
                 </div>
             </div>
         </div>
@@ -137,7 +138,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- Right: vertical video panel -->
     <div class="hero-video-bg">
         <video autoplay muted loop playsinline preload="auto">
-            <source src="animations/about-bg.mp4" type="video/mp4">
+            <source src="animations/about-rodrigo.mp4" type="video/mp4">
         </video>
     </div>
 
@@ -160,39 +161,39 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="pillars-left">
 
             <div class="pillars-heading anim">
-                <div class="eyebrow" id="dif-eyebrow">Why we're different</div>
-                <h2 id="dif-h2">We're not just a<br>visualization studio.</h2>
+                <div class="eyebrow" id="dif-eyebrow">What I bring</div>
+                <h2 id="dif-h2">More than<br>a 3D artist.</h2>
             </div>
 
             <div class="pillar-item anim" style="transition-delay:0.1s">
                 <div class="pillar-num">01</div>
                 <div class="pillar-body">
-                    <h3 id="pillar1-h3">We are architects</h3>
-                    <p id="pillar1-p">Every image is a design decision. We understand scale, light, materiality — and when the project isn't fully defined yet, we complete it.</p>
+                    <h3 id="pillar1-h3">Architect first</h3>
+                    <p id="pillar1-p">Trained at Universidad de la República, with an award-winning competition record — including first prize for the "Gonchi" Rodríguez Cultural Center (2020). Every image is a design decision: scale, light, materiality.</p>
                 </div>
             </div>
 
             <div class="pillar-item anim" style="transition-delay:0.2s">
                 <div class="pillar-num">02</div>
                 <div class="pillar-body">
-                    <h3 id="pillar2-h3">From day zero</h3>
-                    <p id="pillar2-p">We work when the project is still an idea on paper. We help define the name, visual identity, positioning — all before construction begins.</p>
+                    <h3 id="pillar2-h3">Visualization &amp; film</h3>
+                    <p id="pillar2-p">Senior 3D artist in Gómez Platero's concept design department. 3ds Max, Corona and V-Ray for stills; After Effects and Premiere for film; Twinmotion and Unreal for real-time.</p>
                 </div>
             </div>
 
             <div class="pillar-item anim" style="transition-delay:0.3s">
                 <div class="pillar-num">03</div>
                 <div class="pillar-body">
-                    <h3 id="pillar3-h3">Everything visual, fully integrated</h3>
-                    <p id="pillar3-p">Brand, images, video, virtual showroom, social content. One team, one creative direction — so every piece tells the same story.</p>
+                    <h3 id="pillar3-h3">Code &amp; AI</h3>
+                    <p id="pillar3-p">I build the tools I work with: this site, a web-based 3D platform for real estate projects, Python pipelines. I develop with AI daily — from AI-assisted coding to generative image and video models.</p>
                 </div>
             </div>
 
             <!-- CTA -->
             <div class="pillars-cta anim" style="transition-delay:0.4s">
-                <a href="mailto:hello@imabox.uy" id="abt-btn-write" class="btn-primary">Write to us</a>
+                <a href="mailto:rg.figueredo91@gmail.com" id="abt-btn-write" class="btn-primary">Write to me</a>
                 <a href="https://wa.me/59898325902" target="_blank" class="cta-contact-link"><i class="fa fa-whatsapp"></i> WhatsApp</a>
-                <a href="mailto:hello@imabox.uy" class="cta-contact-link"><i class="fa fa-envelope-o"></i> hello@imabox.uy</a>
+                <a href="mailto:rg.figueredo91@gmail.com" class="cta-contact-link"><i class="fa fa-envelope-o"></i> rg.figueredo91@gmail.com</a>
             </div>
 
         </div>
@@ -202,9 +203,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <!-- FOOTER -->
 <footer>
-    <div class="logo">Imabox</div>
-    <p id="footer-p1">Creative agency · Architecture &amp; Real Estate — Montevideo, Uruguay</p>
-    <p id="footer-p2">© 2025 Imabox. All rights reserved.</p>
+    <div class="logo">Rodrigo Figueredo</div>
+    <p id="abt-footer-p1">Architect &amp; Senior 3D Artist — Montevideo, Uruguay</p>
+    <p id="abt-footer-p2">© 2026 Rodrigo Figueredo. All rights reserved.</p>
     <div class="footer-social">
         <a href="https://www.instagram.com/imabox_uy" target="_blank"><i class="fa fa-instagram"></i></a>
         <a href="https://www.linkedin.com/company/imabox" target="_blank"><i class="fa fa-linkedin"></i></a>
@@ -214,7 +215,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script src="js/navbar-hamburger.js"></script>
 <script src="js/about.js"></script>
 <script src="js/circle.js"></script>
-<script src="js/translate.js"></script>
-<script src="js/translate-about.js"></script>
+<script src="js/translate-rgf.js"></script>
 </body>
 </html>
