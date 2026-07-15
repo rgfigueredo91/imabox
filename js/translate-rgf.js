@@ -23,6 +23,10 @@ document.addEventListener("DOMContentLoaded", function () {
         tab2Tag:    "Oficio + código",
         tab2P:      "Siempre viví entre dos mundos: el artístico y el técnico. Hoy eso significa combinar el oficio de la visualización con <strong>código e inteligencia artificial</strong> — escribo mis propias herramientas en JavaScript y Python, construyo experiencias 3D para la web y uso modelos generativos como un pincel más. ¿El video al lado de este texto? <strong>Lo hice con IA.</strong>",
 
+        platCap0:   "Plataforma 3D en tiempo real",
+        platCap1:   "Experiencias interactivas",
+        platCap2:   "Visualización 3D",
+
         difEyebrow: "Lo que aporto",
         difH2:      "Más que<br>un artista 3D.",
         pillar1H3:  "Arquitecto primero",
@@ -63,6 +67,10 @@ document.addEventListener("DOMContentLoaded", function () {
         if (tag0) tag0.textContent = esp.tab0Tag;
         if (tag1) tag1.textContent = esp.tab1Tag;
         if (tag2) tag2.textContent = esp.tab2Tag;
+
+        t("plat-cap-0",    esp.platCap0);
+        t("plat-cap-1",    esp.platCap1);
+        t("plat-cap-2",    esp.platCap2);
 
         t("dif-eyebrow",   esp.difEyebrow);
         t("dif-h2",        esp.difH2);
