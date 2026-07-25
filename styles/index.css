@@ -6,9 +6,9 @@ html, body { height: 100%; background: #000; color: #fff; font-family: 'Poppins'
 * { scrollbar-width: none; }
 
 :root {
-    --gold: #c9a96e;
-    --gold-dim: rgba(201,169,110,0.12);
-    --gold-border: rgba(201,169,110,0.3);
+    --gold: #9dbba4;
+    --gold-dim: rgba(157,187,164,0.12);
+    --gold-border: rgba(157,187,164,0.3);
 }
 
 /* ── snap container ── */
@@ -474,7 +474,7 @@ video.acc-contain { object-fit: contain; background: #000; }
 @media (hover: hover) and (pointer: fine) {
     #s-process .step-item { cursor: crosshair; }
     #s-process .step-item:hover .step-name { color: var(--gold); transition: color 0.2s; }
-    #s-process .step-item:hover .step-bar { background: rgba(201,169,110,0.28); transition: background 0.3s; }
+    #s-process .step-item:hover .step-bar { background: rgba(157,187,164,0.28); transition: background 0.3s; }
 }
 
 /* ──────────────────────────────────────────
@@ -536,7 +536,7 @@ video.acc-contain { object-fit: contain; background: #000; }
         transform: translateX(-50%) scale(0.9);
         width: 190px; height: 190px; border-radius: 50%;
         background-size: cover; background-position: center;
-        border: 1px solid rgba(201,169,110,0.45);
+        border: 1px solid rgba(157,187,164,0.45);
         box-shadow: 0 20px 55px rgba(0,0,0,0.55);
         opacity: 0; overflow: hidden; z-index: 3; pointer-events: none;
         transition: opacity 0.6s ease, transform 0.6s ease;
@@ -642,7 +642,7 @@ video.acc-contain { object-fit: contain; background: #000; }
 .form-group textarea::placeholder { color: rgba(255,255,255,0.32); }
 .form-group input:focus,
 .form-group select:focus,
-.form-group textarea:focus { border-color: rgba(201,169,110,0.45); }
+.form-group textarea:focus { border-color: rgba(157,187,164,0.45); }
 .form-group select option { background: #111; }
 .form-actions {
     display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
@@ -663,8 +663,8 @@ video.acc-contain { object-fit: contain; background: #000; }
 }
 .btn-book-call {
     padding: 13px 28px;
-    border: 1px solid rgba(201,169,110,0.35);
-    color: rgba(201,169,110,0.8);
+    border: 1px solid rgba(157,187,164,0.35);
+    color: rgba(157,187,164,0.8);
     font-family: 'aktiv-grotesk', sans-serif;
     font-size: 0.66rem; letter-spacing: 0.18em; text-transform: uppercase;
     text-decoration: none; transition: background 0.2s, color 0.2s, border-color 0.2s;
@@ -688,7 +688,7 @@ video.acc-contain { object-fit: contain; background: #000; }
 }
 .loader-track {
     width: 140px; height: 1px;
-    background: rgba(201,169,110,0.2); overflow: hidden;
+    background: rgba(157,187,164,0.2); overflow: hidden;
 }
 .loader-bar { height: 100%; width: 0%; background: var(--gold); transition: width 0.35s ease; }
 
@@ -740,7 +740,7 @@ video.acc-contain { object-fit: contain; background: #000; }
     display: flex; flex-direction: column; gap: 12px;
 }
 .pkg-card:last-child { border-right: none; }
-.pkg-card-mid { background: rgba(201,169,110,0.04); }
+.pkg-card-mid { background: rgba(157,187,164,0.04); }
 .pkg-label {
     font-family: 'aktiv-grotesk', sans-serif;
     font-size: 0.56rem; letter-spacing: 0.22em;
@@ -773,7 +773,7 @@ video.acc-contain { object-fit: contain; background: #000; }
 .pkg-cta { margin-top: 12px; align-self: flex-start; }
 
 /* ── 4ta carta — Suscripción ── */
-.pkg-card-sub { background: rgba(201,169,110,0.03); }
+.pkg-card-sub { background: rgba(157,187,164,0.03); }
 .pkg-badge {
     display: inline-block; background: var(--gold); color: #000;
     font-family: 'aktiv-grotesk', sans-serif;
@@ -814,7 +814,7 @@ video.acc-contain { object-fit: contain; background: #000; }
 /* demo del visor en marco tipo navegador + features al lado */
 .plat-box {
     border: 1px solid var(--gold-border); border-radius: 4px; overflow: hidden;
-    background: linear-gradient(180deg, rgba(201,169,110,0.05), rgba(201,169,110,0.01));
+    background: linear-gradient(180deg, rgba(157,187,164,0.05), rgba(157,187,164,0.01));
 }
 .plat-demo-grid { display: grid; grid-template-columns: 1.35fr 1fr; align-items: stretch; }
 .plat-demo-frame {
@@ -835,8 +835,8 @@ video.acc-contain { object-fit: contain; background: #000; }
 }
 .plat-live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); animation: platPulse 2.2s ease-in-out infinite; }
 @keyframes platPulse {
-    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(201,169,110,0.45); }
-    50%      { opacity: 0.55; box-shadow: 0 0 0 5px rgba(201,169,110,0); }
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(157,187,164,0.45); }
+    50%      { opacity: 0.55; box-shadow: 0 0 0 5px rgba(157,187,164,0); }
 }
 @media (prefers-reduced-motion: reduce) { .plat-live-dot { animation: none; } }
 .plat-demo-frame video { flex: 1; width: 100%; min-height: 0; object-fit: contain; display: block; background: #000; }
@@ -966,8 +966,8 @@ video.acc-contain { object-fit: contain; background: #000; }
         justify-content: flex-start;
         transition: background 0.2s, padding-left 0.2s;
     }
-    .step-item:active { background: rgba(201,169,110,0.05); padding-left: 6px; }
-    .step-item.expanded { background: rgba(201,169,110,0.04); padding-left: 6px; }
+    .step-item:active { background: rgba(157,187,164,0.05); padding-left: 6px; }
+    .step-item.expanded { background: rgba(157,187,164,0.04); padding-left: 6px; }
     .step-item:last-child { border-bottom: 1px solid rgba(255,255,255,0.07); }
     .step-num-label {
         width: 52px; margin-bottom: 0; font-size: 0.62rem;
@@ -997,11 +997,11 @@ video.acc-contain { object-fit: contain; background: #000; }
     .step-item:active .step-toggle-icon,
     .step-item:focus .step-toggle-icon {
         opacity: 1; border-color: var(--gold);
-        background: rgba(201,169,110,0.1);
+        background: rgba(157,187,164,0.1);
     }
     .step-item.expanded .step-toggle-icon {
         opacity: 1; border-color: var(--gold);
-        background: rgba(201,169,110,0.12);
+        background: rgba(157,187,164,0.12);
     }
     .step-item.expanded .step-toggle-icon svg { transform: rotate(45deg); stroke: var(--gold); }
     .step-item.expanded .step-name { color: var(--gold); transition: color 0.2s; }
@@ -1246,4 +1246,111 @@ video.acc-contain { object-fit: contain; background: #000; }
 
     /* Accordion */
     .acc-content h3 { font-size: 1.3rem; }
+}
+
+/* ══════════════════════════════════════════
+   MOTION & MICRO-INTERACCIONES  (eucalipto)
+   Añadido al final: gana en cascada sobre las
+   reglas base. Respeta prefers-reduced-motion.
+══════════════════════════════════════════ */
+:root {
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --gold-glow: rgba(157,187,164,0.45);
+}
+
+/* Reveal: rack-focus (blur→nítido) en vez de simple fade */
+.anim {
+    filter: blur(7px);
+    transition: opacity 0.9s var(--ease-out),
+                transform 0.9s var(--ease-out),
+                filter 0.9s var(--ease-out);
+}
+.anim.visible { filter: blur(0); }
+
+/* Hero: entrada con foco */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(26px); filter: blur(10px); }
+    to   { opacity: 1; transform: translateY(0);    filter: blur(0); }
+}
+
+/* Botones sólidos: lift + glow + tracking (no un simple opacity) */
+.btn-gold, .btn-submit {
+    position: relative; will-change: transform;
+    transition: transform 0.55s var(--ease-out),
+                box-shadow 0.55s var(--ease-out),
+                letter-spacing 0.55s var(--ease-out);
+}
+.btn-gold:hover, .btn-submit:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 34px -10px var(--gold-glow);
+    letter-spacing: 0.22em;
+}
+
+/* Botón outline: relleno eucalipto que sube desde abajo */
+.btn-outline {
+    position: relative; overflow: hidden; z-index: 0;
+    transition: color 0.4s var(--ease-out), border-color 0.4s var(--ease-out);
+}
+.btn-outline::after {
+    content: ''; position: absolute; inset: 0;
+    background: var(--gold);
+    transform: translateY(101%);
+    transition: transform 0.5s var(--ease-out);
+    z-index: -1;
+}
+.btn-outline:hover { color: #000; border-color: var(--gold); }
+.btn-outline:hover::after { transform: translateY(0); }
+
+.btn-book-call {
+    transition: background 0.45s var(--ease-out),
+                color 0.45s var(--ease-out),
+                border-color 0.45s var(--ease-out);
+}
+
+/* Micro-interacciones solo con puntero fino */
+@media (hover: hover) and (pointer: fine) {
+    /* subrayado acento que se dibuja */
+    .proj-view-all, .contact-link { position: relative; }
+    .proj-view-all::after, .contact-link::after {
+        content: ''; position: absolute; left: 0; bottom: -3px;
+        width: 100%; height: 1px; background: var(--gold);
+        transform: scaleX(0); transform-origin: left;
+        transition: transform 0.45s var(--ease-out);
+    }
+    .proj-view-all:hover::after, .contact-link:hover::after { transform: scaleX(1); }
+
+    /* proj card: la info sube y se dibuja una línea de acento */
+    .proj-card-info { transition: transform 0.55s var(--ease-out); }
+    .proj-card:hover .proj-card-info { transform: translateY(-5px); }
+    .proj-card::after {
+        content: ''; position: absolute; left: 22px; bottom: 14px;
+        width: 0; height: 1px; background: var(--gold);
+        transition: width 0.55s var(--ease-out);
+        z-index: 3; pointer-events: none;
+    }
+    .proj-card:hover::after { width: 42px; }
+
+    /* faq: la pregunta se corre al pasar el mouse */
+    .faq-q { transition: color 0.25s ease, padding-left 0.4s var(--ease-out); }
+    .faq-q:hover { padding-left: 12px; }
+}
+
+/* Grano fílmico sutil — textura, anti-plano */
+.snap-container::before {
+    content: ''; position: fixed; inset: 0;
+    z-index: 40; pointer-events: none;
+    opacity: 0.06; mix-blend-mode: soft-light;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Accesibilidad: cortar movimiento */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.05ms !important;
+    }
+    .anim { filter: none !important; }
+    .snap-container::before { display: none; }
 }

@@ -531,7 +531,7 @@ var snapSections;
         'opacity:0', 'transform:translateX(-50%) scale(0.82)',
         'transition:opacity 0.3s ease,transform 0.3s ease',
         'box-shadow:0 20px 56px rgba(0,0,0,0.7)',
-        'outline:2px solid #c9a96e', 'outline-offset:5px',
+        'outline:2px solid #9dbba4', 'outline-offset:5px',
         'left:50%', 'bottom:16%'
     ].join(';');
     /* mobile: el círculo va DENTRO de la sección (posición estable ante el snap),

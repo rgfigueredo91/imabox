@@ -24,20 +24,20 @@ html, body { background: #0e0e0e; color: #fff; font-family: 'Poppins', sans-seri
     color: rgba(255,255,255,0.35); text-decoration: none;
     transition: color 0.2s; margin-bottom: 20px;
 }
-.back-link:hover { color: #c9a96e; }
+.back-link:hover { color: #9dbba4; }
 .project-eyebrow {
     font-family: 'aktiv-grotesk', sans-serif;
     font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase;
-    color: #c9a96e; margin-bottom: 10px;
+    color: #9dbba4; margin-bottom: 10px;
     display: flex; align-items: center; gap: 10px;
 }
-.project-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: #c9a96e; }
+.project-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: #9dbba4; }
 .project-header h1 {
     font-family: 'aktiv-grotesk', sans-serif;
     font-size: clamp(2rem, 5vw, 4rem);
     font-weight: 200; letter-spacing: -0.02em; line-height: 1; color: #fff;
 }
-.project-header h1 span { color: #c9a96e; }
+.project-header h1 span { color: #9dbba4; }
 .project-meta { display: flex; flex-direction: column; gap: 6px; text-align: right; }
 .meta-item {
     font-family: 'aktiv-grotesk', sans-serif;
@@ -69,11 +69,11 @@ html, body { background: #0e0e0e; color: #fff; font-family: 'Poppins', sans-seri
 .video-badge {
     position: absolute; bottom: 12px; left: 12px;
     display: flex; align-items: center; gap: 6px;
-    background: rgba(0,0,0,0.55); border: 1px solid rgba(201,169,110,0.4);
+    background: rgba(0,0,0,0.55); border: 1px solid rgba(157,187,164,0.4);
     padding: 5px 10px; z-index: 5; pointer-events: none; transition: opacity 0.3s;
 }
 .img.video-item:hover .video-badge { opacity: 0; }
-.video-badge i { color: #c9a96e; font-size: 0.7rem; }
+.video-badge i { color: #9dbba4; font-size: 0.7rem; }
 .video-badge span {
     font-family: 'aktiv-grotesk', sans-serif;
     font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.8);
@@ -93,17 +93,17 @@ html, body { background: #0e0e0e; color: #fff; font-family: 'Poppins', sans-seri
 .badge-360:hover .badge-360-inner { background: none; }
 .badge-360-sphere {
     width: 48px; height: 48px; border-radius: 50%;
-    border: 2px solid #c9a96e;
+    border: 2px solid #9dbba4;
     display: flex; align-items: center; justify-content: center;
-    color: #c9a96e; font-size: 1.1rem;
+    color: #9dbba4; font-size: 1.1rem;
     background: rgba(0,0,0,0.35);
     transition: background 0.3s, transform 0.3s;
 }
-.badge-360:hover .badge-360-sphere { background: rgba(201,169,110,0.2); transform: scale(1.1); }
+.badge-360:hover .badge-360-sphere { background: rgba(157,187,164,0.2); transform: scale(1.1); }
 .badge-360-label {
     font-family: 'aktiv-grotesk', sans-serif;
     font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
-    color: #c9a96e; text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+    color: #9dbba4; text-shadow: 0 1px 4px rgba(0,0,0,0.8);
 }
 
 /* ── FOOTER ── */
@@ -115,7 +115,7 @@ footer {
 footer .logo { font-family: 'aktiv-grotesk', sans-serif; font-size: 0.9rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.3); }
 footer p { font-size: 0.7rem; color: rgba(255,255,255,0.18); letter-spacing: 0.08em; }
 .footer-social { display: flex; gap: 18px; align-items: center; }
-.footer-social a { color: #c9a96e; font-size: 1.15rem; text-decoration: none; transition: opacity 0.2s; }
+.footer-social a { color: #9dbba4; font-size: 1.15rem; text-decoration: none; transition: opacity 0.2s; }
 .footer-social a:hover { opacity: 0.65; }
 
 /* ── RESPONSIVE ── */
