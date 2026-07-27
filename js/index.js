@@ -103,6 +103,16 @@ var snapSections;
         }
     }, { passive: true });
 
+    /* si cambia el alto/ancho de la ventana, las posiciones del snap quedan
+       desfasadas (secciones en 100dvh vs scrollTop calculado): se re-encuadra */
+    var resizeT = null;
+    window.addEventListener('resize', function () {
+        clearTimeout(resizeT);
+        resizeT = setTimeout(function () {
+            container.scrollTo({ top: snapCurrent * container.clientHeight, behavior: 'auto' });
+        }, 150);
+    });
+
     var io = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
             if (!entry.isIntersecting) return;
@@ -234,6 +244,25 @@ var snapSections;
         item.addEventListener('click',      function () { open(i); });
     });
     wrap.addEventListener('mouseleave', function () { open(0); });
+
+    /* al entrar la sección arranca el video del item abierto
+       (antes se quedaba en el primer frame hasta que pasabas el mouse) */
+    var srvSection = document.getElementById('s-services');
+    if (srvSection && 'IntersectionObserver' in window) {
+        new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+                if (e.isIntersecting) {
+                    var vid = wrap.querySelector('.acc-item.open .acc-video');
+                    if (vid) { var p = vid.play(); if (p) p.catch(function () {}); }
+                } else {
+                    items.forEach(function (it) {
+                        var v = it.querySelector('.acc-video');
+                        if (v) v.pause();
+                    });
+                }
+            });
+        }, { threshold: 0.4 }).observe(srvSection);
+    }
 })();
 
 /* ── Stats counters ── */
