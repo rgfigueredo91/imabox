@@ -672,25 +672,69 @@ video.acc-contain { object-fit: contain; background: #000; }
 .btn-book-call:hover { background: var(--gold); color: #000; border-color: var(--gold); }
 
 /* ──────────────────────────────────────────
-   PRELOADER
+   PRELOADER — pasada de render
+   El wordmark se resuelve de arriba hacia abajo: una copia
+   desenfocada de base, una nítida que va apareciendo detrás
+   de la línea de barrido. Al terminar, la pantalla sube como
+   una cortina y deja el hero.
 ────────────────────────────────────────── */
 #ix-loader {
-    position: fixed; inset: 0; z-index: 9000;
-    background: #0e0e0e;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center; gap: 18px;
-    transition: opacity 0.7s ease;
+    position: fixed; inset: 0; z-index: 10000;   /* por encima del FAB de WhatsApp */
+    background: #0a0a0a;
+    display: flex; align-items: center; justify-content: center;
+    clip-path: inset(0 0 0 0);
+    transition: clip-path 0.95s cubic-bezier(0.76, 0, 0.24, 1);
 }
-#ix-loader.out { opacity: 0; pointer-events: none; }
-.loader-brand {
+#ix-loader.out { clip-path: inset(0 0 100% 0); pointer-events: none; }
+
+/* marcas de registro en las esquinas (referencia de plano) */
+.loader-mark {
+    position: absolute; width: 15px; height: 15px;
+    border: 0 solid rgba(255,255,255,0.22);
+    transition: opacity 0.4s ease;
+}
+.loader-mark-tl { top: 26px;    left: 26px;  border-top-width: 1px;    border-left-width: 1px; }
+.loader-mark-tr { top: 26px;    right: 26px; border-top-width: 1px;    border-right-width: 1px; }
+.loader-mark-bl { bottom: 26px; left: 26px;  border-bottom-width: 1px; border-left-width: 1px; }
+.loader-mark-br { bottom: 26px; right: 26px; border-bottom-width: 1px; border-right-width: 1px; }
+
+.loader-stage {
+    position: relative;
+    transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.76, 0, 0.24, 1);
+}
+.loader-word {
+    display: block;
     font-family: 'Poppins', sans-serif;
-    font-size: clamp(2.4rem, 7vw, 4rem); font-weight: 300; color: #fff;
+    font-size: clamp(2.6rem, 9vw, 5.6rem);
+    font-weight: 300; line-height: 1; letter-spacing: -0.01em;
+    color: #fff; white-space: nowrap;
 }
-.loader-track {
-    width: 140px; height: 1px;
-    background: rgba(157,187,164,0.2); overflow: hidden;
+.loader-word-soft  { opacity: 0.16; filter: blur(11px); }
+.loader-word-sharp {
+    position: absolute; inset: 0;
+    clip-path: inset(0 0 100% 0);
+    transition: clip-path 0.45s var(--ease-out);
 }
-.loader-bar { height: 100%; width: 0%; background: var(--gold); transition: width 0.35s ease; }
+.loader-scan {
+    position: absolute; left: -10%; top: 0; width: 120%; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold) 18%, var(--gold) 82%, transparent);
+    box-shadow: 0 0 12px rgba(157,187,164,0.5);
+    transition: top 0.45s var(--ease-out), opacity 0.4s ease;
+}
+.loader-meta {
+    position: absolute; left: 56px; right: 56px; bottom: 28px;
+    display: flex; align-items: baseline; justify-content: space-between;
+    font-family: 'aktiv-grotesk', sans-serif;
+    font-size: 0.55rem; letter-spacing: 0.3em; text-transform: uppercase;
+    color: rgba(255,255,255,0.34);
+    transition: opacity 0.4s ease;
+}
+.loader-count { color: var(--gold); font-variant-numeric: tabular-nums; letter-spacing: 0.2em; }
+
+#ix-loader.out .loader-stage { opacity: 0; transform: translateY(-16px); }
+#ix-loader.out .loader-meta,
+#ix-loader.out .loader-mark,
+#ix-loader.out .loader-scan { opacity: 0; }
 
 /* WhatsApp FAB */
 .wsp-fab {
@@ -1342,6 +1386,103 @@ video.acc-contain { object-fit: contain; background: #000; }
     z-index: 40; pointer-events: none;
     opacity: 0.06; mix-blend-mode: soft-light;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ──────────────────────────────────────────
+   ÍNDICE DE SECCIONES — riel de progreso
+   Escala de dibujo: línea de nivel, marcas y numeración.
+   La etiqueta sólo aparece en la sección activa o al pasar el mouse.
+────────────────────────────────────────── */
+@keyframes railIn { to { opacity: 1; } }
+
+.ix-rail {
+    position: fixed; top: 50%; right: 38px;
+    transform: translateY(-50%);
+    z-index: 900;
+    transition: opacity 0.35s ease;
+}
+/* velo hacia el borde: mantiene legible la numeración sobre imágenes claras */
+.ix-rail::before {
+    content: ''; position: absolute; z-index: -1; pointer-events: none;
+    top: -90px; bottom: -90px; right: -38px; width: 280px;
+    background: radial-gradient(190px 220px at 100% 50%,
+                rgba(0,0,0,0.52) 0%, rgba(0,0,0,0.34) 48%, rgba(0,0,0,0) 100%);
+}
+/* el menú abierto tapa el riel */
+header:has(.navbar.open) ~ .ix-rail { opacity: 0; pointer-events: none; }
+
+.rail-datum {
+    position: absolute; right: 0; top: 3px; bottom: 3px; width: 1px;
+    background: rgba(255,255,255,0.14); overflow: hidden;
+    opacity: 0; animation: railIn 0.9s ease 1.2s forwards;
+}
+.rail-datum-fill {
+    display: block; width: 100%; height: 100%;
+    background: var(--gold);
+    transform: scaleY(0); transform-origin: top;
+    transition: transform 0.6s var(--ease-out);
+}
+.rail-list {
+    list-style: none; margin: 0; padding: 0; counter-reset: rail;
+    opacity: 0; animation: railIn 0.9s ease 1.35s forwards;
+}
+.rail-item {
+    position: relative;
+    display: flex; align-items: center; justify-content: flex-end; gap: 10px;
+    width: 100%; height: 28px; padding: 0 34px 0 0;
+    background: none; border: 0; cursor: pointer;
+    font-family: 'aktiv-grotesk', sans-serif;
+    color: rgba(255,255,255,0.5);
+    transition: color 0.35s var(--ease-out);
+}
+.rail-item::after {                       /* numeración 01 … 09 */
+    counter-increment: rail;
+    content: counter(rail, decimal-leading-zero);
+    font-size: 0.52rem; letter-spacing: 0.12em;
+    text-shadow: 0 1px 10px rgba(0,0,0,0.55);
+    transition: color 0.35s var(--ease-out);
+}
+.rail-label {
+    font-size: 0.52rem; letter-spacing: 0.24em; text-transform: uppercase;
+    white-space: nowrap;
+    opacity: 0; transform: translateX(6px);
+    text-shadow: 0 1px 10px rgba(0,0,0,0.55);
+    transition: opacity 0.4s var(--ease-out), transform 0.4s var(--ease-out), color 0.35s ease;
+}
+.rail-tick {
+    position: absolute; right: 0; top: 50%;
+    width: 11px; height: 1px; margin-top: -0.5px;
+    background: currentColor; opacity: 0.55;
+    transition: width 0.5s var(--ease-out), background 0.35s ease, opacity 0.35s ease;
+}
+
+.rail-item:hover, .rail-item:focus-visible { color: rgba(255,255,255,0.92); }
+.rail-item:hover .rail-label,
+.rail-item:focus-visible .rail-label { opacity: 0.7; transform: translateX(0); }
+.rail-item:hover .rail-tick,
+.rail-item:focus-visible .rail-tick { width: 20px; opacity: 1; }
+.rail-item:focus-visible { outline: 1px solid var(--gold); outline-offset: 3px; }
+
+.rail-item.is-active { color: #fff; }
+.rail-item.is-active::after { color: var(--gold); }
+.rail-item.is-active .rail-label { opacity: 1; transform: translateX(0); color: var(--gold); }
+.rail-item.is-active .rail-tick { width: 30px; background: var(--gold); opacity: 1; }
+
+/* barra de progreso fina — sustituye al riel en pantallas chicas */
+.ix-progress {
+    position: fixed; top: 0; left: 0; right: 0; height: 2px;
+    z-index: 900; display: none;
+    background: rgba(255,255,255,0.08);
+}
+.ix-progress-fill {
+    display: block; width: 100%; height: 100%;
+    background: var(--gold);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.5s var(--ease-out);
+}
+@media (max-width: 1024px) {
+    .ix-rail { display: none; }
+    .ix-progress { display: block; }
 }
 
 /* Accesibilidad: cortar movimiento */

@@ -1,26 +1,57 @@
 /* ══ Imabox — index.html ══ */
 
-/* ── Preloader ── */
+/* ── Preloader — el wordmark se resuelve de arriba hacia abajo ── */
 (function () {
     var loader = document.getElementById('ix-loader');
-    var bar    = document.getElementById('loader-bar');
-    var video  = document.getElementById('mainVideo');
-    var prog   = 0;
-    var ticker = setInterval(function () {
-        prog = Math.min(prog + Math.random() * 12, 88);
-        bar.style.width = prog + '%';
-    }, 180);
-    function hide() {
-        clearInterval(ticker);
-        bar.style.width = '100%';
-        setTimeout(function () {
-            loader.classList.add('out');
-            loader.addEventListener('transitionend', function () { loader.remove(); }, { once: true });
-        }, 300);
+    if (!loader) return;                 /* visita repetida: se sacó inline */
+    var sharp = document.getElementById('loaderSharp');
+    var scan  = document.getElementById('loaderScan');
+    var count = document.getElementById('loaderCount');
+    var video = document.getElementById('mainVideo');
+    var start = Date.now();
+    var MIN   = 900;                     /* que el momento de marca se lea */
+    var prog  = 0;
+    var done  = false;
+
+    function paint(p) {
+        prog = p;
+        var r = Math.round(p);
+        sharp.style.clipPath = 'inset(0 0 ' + (100 - p) + '% 0)';
+        scan.style.top = p + '%';
+        count.textContent = r < 100 ? ('0' + r).slice(-2) : '100';
     }
+
+    var ticker = setInterval(function () {
+        paint(Math.min(prog + Math.random() * 11, 88));
+    }, 170);
+
+    function hide() {
+        if (done) return;
+        done = true;
+        clearInterval(ticker);
+        setTimeout(function () {
+            paint(100);
+            try { sessionStorage.setItem('ix-loaded', '1'); } catch (e) {}
+            setTimeout(function () {
+                loader.classList.add('out');
+                var kill = function () {
+                    if (loader.parentNode) loader.parentNode.removeChild(loader);
+                };
+                loader.addEventListener('transitionend', function (e) {
+                    if (e.target === loader) kill();
+                });
+                setTimeout(kill, 1400);          /* red de seguridad */
+            }, 420);
+        }, Math.max(0, MIN - (Date.now() - start)));
+    }
+
+    paint(6);
     if (video) {
         video.addEventListener('canplay', hide, { once: true });
         video.addEventListener('error',   hide, { once: true });
+        if (video.readyState >= 3) hide();
+    } else {
+        hide();
     }
     setTimeout(hide, 6000);
 })();
@@ -38,6 +69,7 @@ var snapSections;
         index = Math.max(0, Math.min(snapSections.length - 1, index));
         if (index === snapCurrent) return;
         snapCurrent = index;
+        if (window.ixSetSection) window.ixSetSection(index);
         container.scrollTo({ top: snapCurrent * container.clientHeight, behavior: 'smooth' });
         snapLocked = true;
         setTimeout(function () { snapLocked = false; }, 900);
@@ -73,7 +105,11 @@ var snapSections;
 
     var io = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
-            if (entry.isIntersecting) snapCurrent = snapSections.indexOf(entry.target);
+            if (!entry.isIntersecting) return;
+            snapCurrent = snapSections.indexOf(entry.target);
+            /* durante un salto programado el riel ya marca el destino:
+               no lo hacemos parpadear con las secciones intermedias */
+            if (!snapLocked && window.ixSetSection) window.ixSetSection(snapCurrent);
         });
     }, { threshold: 0.5 });
     snapSections.forEach(function (s) { io.observe(s); });
@@ -92,6 +128,38 @@ var snapSections;
             setTimeout(function() { window.snapGoTo(hashMap[location.hash]); }, 100);
         }
     }
+})();
+
+/* ── Índice de secciones: marca la activa y llena la línea de nivel ── */
+(function () {
+    var rail = document.getElementById('ixRail');
+    if (!rail) return;
+    var fill  = document.getElementById('railFill');
+    var bar   = document.getElementById('ixProgressFill');
+    var items = Array.prototype.slice.call(rail.querySelectorAll('.rail-item'));
+    var last  = -1;
+
+    items.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            window.snapGoTo(parseInt(btn.getAttribute('data-go'), 10));
+        });
+    });
+
+    window.ixSetSection = function (i) {
+        if (i === last || !items[i]) return;
+        last = i;
+        items.forEach(function (btn, n) {
+            var on = (n === i);
+            btn.classList.toggle('is-active', on);
+            if (on) btn.setAttribute('aria-current', 'true');
+            else    btn.removeAttribute('aria-current');
+        });
+        var r = items.length > 1 ? i / (items.length - 1) : 0;
+        if (fill) fill.style.transform = 'scaleY(' + r + ')';
+        if (bar)  bar.style.transform  = 'scaleX(' + r + ')';
+    };
+
+    window.ixSetSection(typeof snapCurrent === 'number' ? snapCurrent : 0);
 })();
 
 /* ── Typewriter ── */

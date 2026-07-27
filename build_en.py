@@ -20,6 +20,7 @@ EN_SET = ['index.html','projects.html','link-center.html',
 ARIA = [
     ('aria-label="Grabación del visor 3D de la plataforma"', 'aria-label="Screen recording of the 3D platform viewer"'),
     ('aria-label="Ver recorrido 360°"', 'aria-label="Open 360° tour"'),
+    ('aria-label="Índice de secciones"', 'aria-label="Section index"'),
 ]
 
 def unesc(v):
@@ -103,6 +104,8 @@ def build(page):
 
     # 6. i18n.js fuera; index necesita las frases del typewriter
     if page == 'index.html':
+        # el typewriter arranca a los 2.2s: el texto inicial del <em> también va en inglés
+        doc = doc.replace('<em id="typer">Lo hacemos real.</em>', '<em id="typer">We make it real.</em>')
         doc = doc.replace('<script src="js/i18n.js"></script>',
                           "<script>window.IX_PHRASES = ['We make it real.', 'We make it visible.', 'We make it desirable.', 'We make it sellable.'];</script>")
     else:

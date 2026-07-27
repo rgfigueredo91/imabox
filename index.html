@@ -62,11 +62,23 @@
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K99Z94HL"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
-<!-- PRELOADER -->
-<div id="ix-loader">
-    <span class="loader-brand">imabox.</span>
-    <div class="loader-track"><div class="loader-bar" id="loader-bar"></div></div>
+<!-- PRELOADER — el wordmark "revela" de arriba hacia abajo, como un render resolviendo -->
+<div id="ix-loader" role="presentation">
+    <span class="loader-mark loader-mark-tl"></span>
+    <span class="loader-mark loader-mark-tr"></span>
+    <span class="loader-mark loader-mark-bl"></span>
+    <span class="loader-mark loader-mark-br"></span>
+    <div class="loader-stage">
+        <span class="loader-word loader-word-soft" aria-hidden="true">imabox.</span>
+        <span class="loader-word loader-word-sharp" id="loaderSharp">imabox.</span>
+        <span class="loader-scan" id="loaderScan"></span>
+    </div>
+    <div class="loader-meta">
+        <span class="loader-status" data-en="Rendering">Renderizando</span>
+        <span class="loader-count" id="loaderCount">00</span>
+    </div>
 </div>
+<script>try{if(sessionStorage.getItem('ix-loaded')){var l=document.getElementById('ix-loader');l.parentNode.removeChild(l);}}catch(e){}</script>
 
 <!-- NAV -->
 <header>
@@ -97,6 +109,23 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
     </nav>
 </header>
+
+<!-- ── ÍNDICE DE SECCIONES (progreso de scroll) ── -->
+<nav class="ix-rail" id="ixRail" aria-label="Índice de secciones">
+    <span class="rail-datum" aria-hidden="true"><span class="rail-datum-fill" id="railFill"></span></span>
+    <ol class="rail-list">
+        <li><button type="button" class="rail-item" data-go="0"><span class="rail-label" data-en="Home">Inicio</span><span class="rail-tick"></span></button></li>
+        <li><button type="button" class="rail-item" data-go="1"><span class="rail-label" data-en="Why us">Por qué</span><span class="rail-tick"></span></button></li>
+        <li><button type="button" class="rail-item" data-go="2"><span class="rail-label" data-en="Services">Servicios</span><span class="rail-tick"></span></button></li>
+        <li><button type="button" class="rail-item" data-go="3"><span class="rail-label" data-en="Process">Proceso</span><span class="rail-tick"></span></button></li>
+        <li><button type="button" class="rail-item" data-go="4"><span class="rail-label" data-en="Projects">Proyectos</span><span class="rail-tick"></span></button></li>
+        <li><button type="button" class="rail-item" data-go="5"><span class="rail-label" data-en="Plans">Planes</span><span class="rail-tick"></span></button></li>
+        <li><button type="button" class="rail-item" data-go="6"><span class="rail-label" data-en="Platform">Plataforma</span><span class="rail-tick"></span></button></li>
+        <li><button type="button" class="rail-item" data-go="7"><span class="rail-label" data-en="FAQs">FAQs</span><span class="rail-tick"></span></button></li>
+        <li><button type="button" class="rail-item" data-go="8"><span class="rail-label" data-en="Contact">Contacto</span><span class="rail-tick"></span></button></li>
+    </ol>
+</nav>
+<div class="ix-progress" aria-hidden="true"><span class="ix-progress-fill" id="ixProgressFill"></span></div>
 
 <!-- ── SNAP CONTAINER ── -->
 <div class="snap-container" id="snapContainer">

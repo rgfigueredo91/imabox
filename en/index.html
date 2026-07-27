@@ -63,11 +63,23 @@
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K99Z94HL"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
-<!-- PRELOADER -->
-<div id="ix-loader">
-    <span class="loader-brand">imabox.</span>
-    <div class="loader-track"><div class="loader-bar" id="loader-bar"></div></div>
+<!-- PRELOADER — el wordmark "revela" de arriba hacia abajo, como un render resolviendo -->
+<div id="ix-loader" role="presentation">
+    <span class="loader-mark loader-mark-tl"></span>
+    <span class="loader-mark loader-mark-tr"></span>
+    <span class="loader-mark loader-mark-bl"></span>
+    <span class="loader-mark loader-mark-br"></span>
+    <div class="loader-stage">
+        <span class="loader-word loader-word-soft" aria-hidden="true">imabox.</span>
+        <span class="loader-word loader-word-sharp" id="loaderSharp">imabox.</span>
+        <span class="loader-scan" id="loaderScan"></span>
+    </div>
+    <div class="loader-meta">
+        <span class="loader-status">Rendering</span>
+        <span class="loader-count" id="loaderCount">00</span>
+    </div>
 </div>
+<script>try{if(sessionStorage.getItem('ix-loaded')){var l=document.getElementById('ix-loader');l.parentNode.removeChild(l);}}catch(e){}</script>
 
 <!-- NAV -->
 <header>
@@ -99,6 +111,23 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </nav>
 </header>
 
+<!-- ── ÍNDICE DE SECCIONES (progreso de scroll) ── -->
+<nav class="ix-rail" id="ixRail" aria-label="Section index">
+    <span class="rail-datum" aria-hidden="true"><span class="rail-datum-fill" id="railFill"></span></span>
+    <ol class="rail-list">
+        <li><button type="button" class="rail-item" data-go="0"><span class="rail-label">Home</span><span class="rail-tick"></span></button></li>
+        <li><button type="button" class="rail-item" data-go="1"><span class="rail-label">Why us</span><span class="rail-tick"></span></button></li>
+        <li><button type="button" class="rail-item" data-go="2"><span class="rail-label">Services</span><span class="rail-tick"></span></button></li>
+        <li><button type="button" class="rail-item" data-go="3"><span class="rail-label">Process</span><span class="rail-tick"></span></button></li>
+        <li><button type="button" class="rail-item" data-go="4"><span class="rail-label">Projects</span><span class="rail-tick"></span></button></li>
+        <li><button type="button" class="rail-item" data-go="5"><span class="rail-label">Plans</span><span class="rail-tick"></span></button></li>
+        <li><button type="button" class="rail-item" data-go="6"><span class="rail-label">Platform</span><span class="rail-tick"></span></button></li>
+        <li><button type="button" class="rail-item" data-go="7"><span class="rail-label">FAQs</span><span class="rail-tick"></span></button></li>
+        <li><button type="button" class="rail-item" data-go="8"><span class="rail-label">Contact</span><span class="rail-tick"></span></button></li>
+    </ol>
+</nav>
+<div class="ix-progress" aria-hidden="true"><span class="ix-progress-fill" id="ixProgressFill"></span></div>
+
 <!-- ── SNAP CONTAINER ── -->
 <div class="snap-container" id="snapContainer">
 
@@ -110,7 +139,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="overlay"></div>
         <div class="hero-content">
             <p class="hero-pretag" id="hero-pretag">3D Visualization · Brand & Identity · Digital Content</p>
-            <h1 id="hero-h1"><span>Your project doesn't exist yet.</span><br><em id="typer">Lo hacemos real.</em><span id="typer-cursor"></span></h1>
+            <h1 id="hero-h1"><span>Your project doesn't exist yet.</span><br><em id="typer">We make it real.</em><span id="typer-cursor"></span></h1>
             <p class="hero-sub" id="hero-sub">We help real estate developers sell their projects before building them — 3D visualization, brand identity and complete digital content.</p>
             <div class="hero-ctas">
                 <a href="#" onclick="window.snapGoTo(8);return false;" class="btn-gold" id="hero-btn-cta">Let's talk about your project</a>
