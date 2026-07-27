@@ -323,91 +323,6 @@ var snapSections;
     });
 })();
 
-/* ── Process step preview ── */
-(function () {
-    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-
-    var preview = document.createElement('div');
-    preview.id = 'proc-preview';
-    document.body.appendChild(preview);
-
-    var mx = 0, my = 0, cx = -999, cy = -999;
-    var PW = 260, PH = 260, PAD = 20;
-
-    document.addEventListener('mousemove', function (e) { mx = e.clientX; my = e.clientY; });
-
-    (function tick() {
-        var tx = (mx + PW + 32 + PAD > window.innerWidth) ? mx - PW - 32 : mx + 32;
-        var ty = Math.max(PAD, Math.min(window.innerHeight - PH - PAD, my - PH / 2));
-        cx += (tx - cx) * 0.12;
-        cy += (ty - cy) * 0.12;
-        preview.style.left = cx + 'px';
-        preview.style.top  = cy + 'px';
-        requestAnimationFrame(tick);
-    })();
-
-    var procVid = null;
-    var flipInterval = null;
-
-    document.querySelectorAll('#s-process .step-item').forEach(function (step) {
-        var src      = step.dataset.preview;
-        var vidSrc   = step.dataset.previewVideo;
-        var flipSrc  = step.dataset.previewFlip;
-
-        step.addEventListener('mouseenter', function () {
-            if (flipSrc) {
-                if (procVid) { procVid.pause(); procVid.style.display = 'none'; }
-                var imgs = flipSrc.split('|');
-                var idx = 0;
-                preview.style.backgroundImage = 'url(' + imgs[0] + ')';
-                preview.classList.add('visible');
-                flipInterval = setInterval(function () {
-                    idx = (idx + 1) % imgs.length;
-                    preview.style.backgroundImage = 'url(' + imgs[idx] + ')';
-                }, 800);
-            } else if (vidSrc) {
-                var vStart = parseFloat(step.dataset.previewVideoStart || 0);
-                var vEnd   = parseFloat(step.dataset.previewVideoEnd   || 3);
-                preview.style.backgroundImage = 'none';
-                if (!procVid) {
-                    procVid = document.createElement('video');
-                    procVid.muted = true; procVid.playsInline = true; procVid.loop = false;
-                    procVid.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:50%;';
-                    preview.appendChild(procVid);
-                }
-                procVid.style.display = '';
-                procVid.pause();
-                procVid.ontimeupdate = null;
-                procVid.src = vidSrc;
-                procVid.load();
-                procVid.addEventListener('canplay', function handler() {
-                    procVid.removeEventListener('canplay', handler);
-                    procVid.currentTime = vStart;
-                    var p = procVid.play();
-                    if (p) p.catch(function(){});
-                    procVid.ontimeupdate = function () {
-                        if (procVid.currentTime >= vEnd) {
-                            procVid.currentTime = vStart;
-                            var p2 = procVid.play();
-                            if (p2) p2.catch(function(){});
-                        }
-                    };
-                }, { once: true });
-                preview.classList.add('visible');
-            } else if (src) {
-                if (procVid) { procVid.pause(); procVid.style.display = 'none'; }
-                preview.style.backgroundImage = 'url(' + src + ')';
-                preview.classList.add('visible');
-            }
-        });
-        step.addEventListener('mouseleave', function () {
-            preview.classList.remove('visible');
-            if (procVid) { procVid.pause(); }
-            if (flipInterval) { clearInterval(flipInterval); flipInterval = null; }
-        });
-    });
-})();
-
 /* ── "Cómo trabajamos" — línea de progreso 01→05 + círculo demo (desktop) ── */
 (function () {
     if (window.innerWidth <= 1100) return;
@@ -418,7 +333,16 @@ var snapSections;
 
     var demo = document.createElement('div');
     demo.id = 'proc-demo';
+    var cap = document.createElement('span');
+    cap.className = 'proc-demo-cap';
+    demo.appendChild(cap);
     section.appendChild(demo);
+
+    function setCap(step) {
+        var n = step.querySelector('.step-num-label');
+        var t = step.querySelector('.step-name');
+        cap.textContent = (n ? n.textContent.trim() + '  ' : '') + (t ? t.textContent.trim() : '');
+    }
 
     var demoVid = null, flipTimer = null, timers = [], running = false, paused = false;
     var STEP_MS = 1700, PAUSE = 2800;
@@ -473,6 +397,7 @@ var snapSections;
                 steps.forEach(function (o) { o.classList.remove('step-current'); });
                 s.classList.add('step-current');
                 showMedia(s);
+                setCap(s);
                 demo.classList.add('visible');
             }, i * STEP_MS));
         });
@@ -482,8 +407,13 @@ var snapSections;
 
     steps.forEach(function (s) {
         s.addEventListener('mouseenter', function () {
-            paused = true; clearTimers(); clearMedia();
-            demo.classList.remove('visible');
+            /* el hover manda sobre el ciclo automático, pero en el mismo marco */
+            paused = true; clearTimers();
+            steps.forEach(function (o) { o.classList.remove('step-current'); });
+            s.classList.add('step-on', 'step-current');
+            showMedia(s);
+            setCap(s);
+            demo.classList.add('visible');
         });
         s.addEventListener('mouseleave', function () {
             if (running) { paused = false; runOnce(); }
@@ -588,20 +518,13 @@ var snapSections;
     var steps = Array.from(document.querySelectorAll('#s-process .step-item'));
 
     /* preview circle — posición fija, centrado abajo */
-    var SIZE = window.innerWidth <= 600 ? 100 : 220;
     var isMobile = window.innerWidth <= 600;
     var preview = document.createElement('div');
-    preview.style.cssText = [
-        'position:fixed', 'pointer-events:none', 'z-index:500',
-        'width:' + SIZE + 'px', 'height:' + SIZE + 'px',
-        'border-radius:50%', 'overflow:hidden',
-        'background-size:cover', 'background-position:center',
-        'opacity:0', 'transform:translateX(-50%) scale(0.82)',
-        'transition:opacity 0.3s ease,transform 0.3s ease',
-        'box-shadow:0 20px 56px rgba(0,0,0,0.7)',
-        'outline:2px solid #9dbba4', 'outline-offset:5px',
-        'left:50%', 'bottom:16%'
-    ].join(';');
+    preview.id = 'proc-demo';
+    preview.className = 'proc-demo-floating';
+    var tabCap = document.createElement('span');
+    tabCap.className = 'proc-demo-cap';
+    preview.appendChild(tabCap);
     /* mobile: el círculo va DENTRO de la sección (posición estable ante el snap),
        ubicado debajo del paso activo y bajando con él */
     if (isMobile) {
@@ -617,7 +540,6 @@ var snapSections;
         preview.style.left = '50%';
         preview.style.zIndex = '6';
         preview.style.transition = 'top 0.55s cubic-bezier(.4,0,.2,1), opacity 0.3s ease, transform 0.3s ease';
-        preview.style.outlineOffset = '3px';
     } else {
         document.body.appendChild(preview);
     }
@@ -657,7 +579,7 @@ var snapSections;
             if (!tabVid) {
                 tabVid = document.createElement('video');
                 tabVid.muted = true; tabVid.playsInline = true; tabVid.loop = false;
-                tabVid.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:50%;';
+                tabVid.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;';
                 preview.appendChild(tabVid);
             }
             tabVid.style.display = '';
@@ -675,6 +597,9 @@ var snapSections;
                 };
             }, { once: true });
         }
+        var n = step.querySelector('.step-num-label');
+        var t = step.querySelector('.step-name');
+        tabCap.textContent = (n ? n.textContent.trim() + '  ' : '') + (t ? t.textContent.trim() : '');
         applyVisible(true);
     }
 
@@ -742,115 +667,6 @@ var snapSections;
             resumeTimer = setTimeout(startAuto, 5000);
         });
     });
-})();
-
-/* ── Plans: círculos flotantes con video que siguen el mouse (solo desktop) ── */
-(function () {
-    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-    var cards = document.querySelectorAll('#s-packages [data-pkg-videos]');
-    if (!cards.length) return;
-
-    var layer = document.createElement('div');
-    layer.id = 'pkg-circles-layer';
-    document.body.appendChild(layer);
-
-    var active = [];          // { el, baseX, baseY, depth, curX, curY }
-    var flips = [];           // intervals de flip de imágenes
-    var mx = 0, my = 0;       // posición actual del mouse
-    var refX = 0, refY = 0;   // punto de referencia (centro de la card)
-
-    function clear() {
-        flips.forEach(clearInterval); flips = [];
-        layer.innerHTML = ''; active = [];
-    }
-
-    document.addEventListener('mousemove', function (e) { mx = e.clientX; my = e.clientY; });
-
-    cards.forEach(function (card) {
-        var vids = (card.dataset.pkgVideos || '').split('|').filter(Boolean);
-        if (!vids.length) return;
-
-        card.addEventListener('mouseenter', function () {
-            clear();
-            var rect = card.getBoundingClientRect();
-            var n = vids.length;
-            var SIZE = n <= 2 ? 128 : (n === 3 ? 112 : 92);
-            var GAP = 14, ARC = 24;
-            var totalW = n * SIZE + (n - 1) * GAP;
-            var vw = window.innerWidth;
-            var centerX = rect.left + rect.width / 2;
-            refX = centerX; refY = rect.top + rect.height / 2;
-            var startX = centerX - totalW / 2;
-            startX = Math.max(16, Math.min(startX, vw - totalW - 16));
-            var baseY = rect.top - SIZE - 18;
-
-            vids.forEach(function (src, i) {
-                var factor = n > 1 ? (1 - Math.abs(2 * i / (n - 1) - 1)) : 0;
-                var bx = startX + i * (SIZE + GAP);
-                var by = baseY - factor * ARC;
-                var c = document.createElement('div');
-                c.className = 'pkg-circle';
-                c.style.width  = SIZE + 'px';
-                c.style.height = SIZE + 'px';
-                c.style.left   = bx + 'px';
-                c.style.top    = by + 'px';
-                var inner = document.createElement('div');
-                inner.className = 'pkg-circle-inner';
-                inner.style.transitionDelay = (i * 0.05) + 's';
-
-                if (src.indexOf('.mp4') !== -1) {
-                    /* video en loop */
-                    var v = document.createElement('video');
-                    v.src = src; v.muted = true; v.loop = true; v.playsInline = true; v.preload = 'auto';
-                    var p = v.play(); if (p) p.catch(function () {});
-                    inner.appendChild(v);
-                } else if (src.indexOf(',') !== -1) {
-                    /* flip de imágenes (igual que Concepto en Cómo trabajamos) */
-                    var imgs = src.split(',');
-                    var fi = 0;
-                    inner.style.backgroundSize = 'cover';
-                    inner.style.backgroundPosition = 'center';
-                    inner.style.backgroundImage = 'url(' + imgs[0] + ')';
-                    flips.push(setInterval(function () {
-                        fi = (fi + 1) % imgs.length;
-                        inner.style.backgroundImage = 'url(' + imgs[fi] + ')';
-                    }, 800));
-                } else {
-                    /* imagen estática */
-                    inner.style.backgroundSize = 'cover';
-                    inner.style.backgroundPosition = 'center';
-                    inner.style.backgroundImage = 'url(' + src + ')';
-                }
-
-                c.appendChild(inner);
-                layer.appendChild(c);
-                requestAnimationFrame(function () { c.classList.add('visible'); });
-                /* depth alterna para dar profundidad: 0.20–0.40 */
-                var depth = 0.20 + (i % 3) * 0.10;
-                active.push({ el: c, baseX: bx, baseY: by, depth: depth, curX: 0, curY: 0 });
-            });
-        });
-        card.addEventListener('mouseleave', clear);
-    });
-
-    (function tick() {
-        for (var i = 0; i < active.length; i++) {
-            var a = active[i];
-            var tx = (mx - refX) * a.depth;
-            var ty = (my - refY) * a.depth;
-            a.curX += (tx - a.curX) * 0.12;
-            a.curY += (ty - a.curY) * 0.12;
-            a.el.style.transform = 'translate(' + a.curX + 'px,' + a.curY + 'px)';
-        }
-        requestAnimationFrame(tick);
-    })();
-
-    var sec = document.getElementById('s-packages');
-    if (sec) {
-        new IntersectionObserver(function (entries) {
-            entries.forEach(function (e) { if (!e.isIntersecting) clear(); });
-        }, { threshold: 0.3 }).observe(sec);
-    }
 })();
 
 /* ── Plataforma 3D: el video del visor solo corre cuando la sección está en pantalla ── */
