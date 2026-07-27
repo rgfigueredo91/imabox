@@ -1389,6 +1389,22 @@ video.acc-contain { object-fit: contain; background: #000; }
 }
 
 /* ──────────────────────────────────────────
+   EYEBROW con línea de acento
+   Unifica el index con projects.html y las páginas de proyecto.
+   La línea es inline-block (no flex) para que siga el text-align
+   de cada breakpoint: si el eyebrow está centrado, se centra con él.
+────────────────────────────────────────── */
+.section-tag::before {
+    content: ''; display: inline-block; vertical-align: middle;
+    position: relative; top: -1px;
+    width: 24px; height: 1px; margin-right: 12px;
+    background: var(--gold); opacity: 0.55;
+}
+@media (max-width: 700px) {
+    .section-tag::before { width: 16px; margin-right: 9px; }
+}
+
+/* ──────────────────────────────────────────
    ÍNDICE DE SECCIONES — riel de progreso
    Escala de dibujo: línea de nivel, marcas y numeración.
    La etiqueta sólo aparece en la sección activa o al pasar el mouse.
