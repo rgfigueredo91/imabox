@@ -112,6 +112,7 @@
   .sec-head { margin-bottom: 34px; }
   .sec-head h2 { font-size: clamp(1.5rem, 2.6vw, 2rem); letter-spacing: -0.015em; margin-top: 12px; }
   .sec-head p { color: var(--ink-soft); max-width: 58ch; margin: 14px 0 0; line-height: 1.75; font-size: 0.96rem; }
+  .sec-head p b { color: var(--ink); font-weight: 400; }
 
   /* ── investment panels ── */
   .panels { display: flex; flex-direction: column; gap: 22px; }
@@ -294,6 +295,20 @@
   .step .opt { margin-top: 11px; padding: 10px 13px; border: 1px dashed var(--gold-line); border-radius: 5px; background: var(--gold-soft); color: var(--ink-soft); font-size: 0.85rem; line-height: 1.55; }
   .step .opt b { color: var(--gold); font-weight: 400; }
   .addon + .addon { margin-top: -20px; }
+  .total { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-top: 20px; padding: 22px 30px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); }
+  .total + .total { margin-top: 12px; }
+  .total .tot-lbl { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold); }
+  .total .tot-desc { margin: 9px 0 0; color: var(--ink-soft); font-size: 0.9rem; line-height: 1.7; max-width: 56ch; }
+  .total .tot-desc b { color: var(--ink); font-weight: 400; }
+  .total .tot-amount { flex-shrink: 0; text-align: right; }
+  .total .tot-amount .a { display: inline-block; font-family: var(--font-mono); font-size: 0.95rem; letter-spacing: 0.1em; color: var(--gold); border: 1px solid var(--gold-line); border-radius: 4px; padding: 11px 17px; white-space: nowrap; }
+  .total .tot-amount .u { display: block; margin-top: 8px; font-family: var(--font-mono); font-size: 0.56rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-faint); white-space: nowrap; }
+  .total .tot-amount .u s { text-decoration: line-through; }
+  .total.pack { border-color: var(--gold-line); background: linear-gradient(180deg, var(--gold-soft), transparent 70%), var(--surface); }
+  .total.pack .tot-amount .a { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+  @media (max-width: 640px) { .total { flex-direction: column; align-items: flex-start; gap: 16px; padding: 20px; } .total .tot-amount { text-align: left; } }
+  @media (max-width: 620px) { .total .tot-desc { font-size: 0.98rem; } .total .tot-lbl { font-size: 0.64rem; } }
+  @media print { .total { margin-top: 10px; padding: 13px 17px; gap: 14px; } .total + .total { margin-top: 8px; } .total .tot-lbl { font-size: 6.2pt; } .total .tot-desc { font-size: 8.4pt; line-height: 1.45; margin-top: 6px; max-width: none; } .total .tot-amount .a { font-size: 8.6pt; padding: 8px 13px; } .total .tot-amount .u { font-size: 5.6pt; margin-top: 6px; } .total { break-inside: avoid; } }
   .addon .it-desc { margin: 7px 0 0; color: var(--ink-soft); font-size: 0.9rem; line-height: 1.7; max-width: 62ch; }
   .addon .it-desc b { color: var(--ink); font-weight: 400; }
   @media (max-width: 620px) { .addon { margin: 2px 20px 22px; } .addon .it-name { font-size: 1.02rem; } .addon .it-desc { font-size: 0.96rem; } }
@@ -445,6 +460,29 @@
       </div>
 
     </div>
+
+    <div class="total">
+      <div>
+        <div class="tot-lbl">Lo que se presupuesta ahora</div>
+        <p class="tot-desc"><b>Banco de contenido + showroom virtual</b>, los dos de pago &uacute;nico. Es lo que se contrata para arrancar. Todo lo dem&aacute;s de esta p&aacute;gina &mdash;los opcionales del showroom, la identidad visual, la web y las redes&mdash; queda afuera de este precio y se suma solo si lo piden.</p>
+      </div>
+      <div class="tot-amount">
+        <span class="a">USD 3.500</span>
+        <span class="u">pago &uacute;nico</span>
+      </div>
+    </div>
+
+    <div class="total pack">
+      <div>
+        <div class="tot-lbl">Si lo toman completo</div>
+        <p class="tot-desc">Los dos bloques de arriba m&aacute;s las <b>6 vistas 360&deg;</b> y el <b>vuelo de dron</b>, tomados juntos: <b>10% de descuento</b> sobre el total.</p>
+      </div>
+      <div class="tot-amount">
+        <span class="a">USD 4.590</span>
+        <span class="u"><s>USD 5.100</s> &middot; 10% off</span>
+      </div>
+    </div>
+
   </section>
 
 
@@ -453,9 +491,9 @@
 
   <section>
     <div class="sec-head">
-      <p class="eyebrow">Adicional &middot; pago único</p>
+      <p class="eyebrow">Opcional &middot; fuera del presupuesto</p>
       <h2>Identidad visual y sistema gráfico</h2>
-      <p>Nos pidieron sumar la marca del estudio. La cotizamos aparte, como un pago único, con dos alcances a elección: uno con el núcleo de identidad y otro que además baja esa identidad a las piezas gráficas que un estudio de arquitectura usa todos los días.</p>
+      <p>Nos pidieron sumar la marca del estudio. <b>No entra en el presupuesto de arriba</b>: la cotizamos aparte, como un pago &uacute;nico, con dos alcances a elecci&oacute;n. Uno con el n&uacute;cleo de identidad y otro que adem&aacute;s baja esa identidad a las piezas gr&aacute;ficas que un estudio de arquitectura usa todos los d&iacute;as.</p>
     </div>
 
     <div class="panels">
