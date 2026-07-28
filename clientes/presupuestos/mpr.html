@@ -134,7 +134,7 @@
   .price .amount {
     display: inline-block;
     font-family: var(--font-mono); font-size: 0.74rem; letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--gold); border: 1px dashed var(--gold-line); border-radius: 4px;
+    color: var(--gold); border: 1px solid var(--gold-line); border-radius: 4px; background: var(--gold-soft);
     padding: 8px 14px; white-space: nowrap;
   }
   .price .unit { display: block; margin-top: 8px; font-family: var(--font-mono); font-size: 0.56rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-faint); }
@@ -162,11 +162,19 @@
   @media print { .mockups-block { margin-top: 16px; padding-top: 12px; break-inside: avoid; } .mockups-block .mk-lead { font-size: 8pt; } .mockups { grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; break-inside: avoid; } .mockups figcaption { font-size: 5.4pt; margin-top: 4px; } }
 
   .addon {
-    margin: 2px 30px 26px; padding: 16px 18px; border: 1px dashed var(--line); border-radius: 5px;
+    margin: 2px 30px 26px; padding: 16px 18px; border: 1px dashed var(--gold-line); border-radius: 5px;
     background: var(--surface-2);
   }
-  .addon .it-name { font-size: 0.94rem; }
+  .addon .it-name { font-size: 0.94rem; flex-wrap: wrap; gap: 8px 10px; }
   .tag-opt { font-family: var(--font-mono); font-size: 0.54rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-faint); border: 1px solid var(--line); border-radius: 3px; padding: 2px 7px; white-space: nowrap; }
+  .addon .tag-opt { color: var(--gold); border-color: var(--gold-line); background: var(--gold-soft); }
+  .tag-price {
+    margin-left: auto;
+    font-family: var(--font-mono); font-size: 0.74rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--gold); border: 1px solid var(--gold-line); border-radius: 4px; background: var(--gold-soft);
+    padding: 7px 13px; white-space: nowrap;
+  }
+  .tag-price.tbd { color: var(--ink-soft); border-style: dashed; border-color: var(--line); background: none; }
   .step .tag-opt { margin-left: 8px; color: var(--gold); border-color: var(--gold-line); }
 
   /* ── notes ── */
@@ -250,6 +258,7 @@
     .subspec li { font-size: 8pt; line-height: 1.4; padding-left: 14px; max-width: none; }
     .addon { margin: 0 17px 15px; padding: 12px 14px; }
     .addon .it-desc { font-size: 7.8pt; }
+    .tag-price { font-size: 7.6pt; padding: 5px 9px; }
 
     .notes { gap: 12px; }
     .note { padding: 15px 17px; border-radius: 4px; }
@@ -311,7 +320,7 @@
   @media print { .total { margin-top: 10px; padding: 13px 17px; gap: 14px; } .total + .total { margin-top: 8px; } .total .tot-lbl { font-size: 6.2pt; } .total .tot-desc { font-size: 8.4pt; line-height: 1.45; margin-top: 6px; max-width: none; } .total .tot-amount .a { font-size: 8.6pt; padding: 8px 13px; } .total .tot-amount .u { font-size: 5.6pt; margin-top: 6px; } .total { break-inside: avoid; } }
   .addon .it-desc { margin: 7px 0 0; color: var(--ink-soft); font-size: 0.9rem; line-height: 1.7; max-width: 62ch; }
   .addon .it-desc b { color: var(--ink); font-weight: 400; }
-  @media (max-width: 620px) { .addon { margin: 2px 20px 22px; } .addon .it-name { font-size: 1.02rem; } .addon .it-desc { font-size: 0.96rem; } }
+  @media (max-width: 620px) { .addon { margin: 2px 20px 22px; } .addon .it-name { font-size: 1.02rem; } .addon .it-desc { font-size: 0.96rem; } .tag-price { margin-left: 0; font-size: 0.8rem; } }
   .demo { margin: -12px 30px 22px; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: #000; }
   .demo video { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; background: #000; }
   .demo .cap { padding: 11px 14px; background: var(--surface); border-top: 1px solid var(--line); }
@@ -446,15 +455,15 @@
           <div class="cap"><b>Una demo, andando</b><span>No es un proyecto en producci&oacute;n: es una demo que armamos para mostrar c&oacute;mo funciona. Se entra por el edificio, se elige la unidad y se recorre por dentro.</span></div>
         </div>
         <div class="addon">
-          <div class="it-name">Vistas 360&deg; navegables <span class="tag-opt">Opcional &middot; USD 1.300</span></div>
+          <div class="it-name">Vistas 360&deg; navegables <span class="tag-opt">Opcional</span> <span class="tag-price">USD 1.300</span></div>
           <p class="it-desc"><b>Seis vistas 360&deg;</b> integradas al showroom: se entra a la panor&aacute;mica y se mira alrededor, como si se estuviera parado ah&iacute;. Ambientes de las tipolog&iacute;as, amenities o el entorno &mdash; las seis se definen con ustedes.</p>
         </div>
         <div class="addon">
-          <div class="it-name">Cr&eacute;ditos de IA para editar im&aacute;genes <span class="tag-opt">Opcional &middot; lo define MPR</span></div>
+          <div class="it-name">Cr&eacute;ditos de IA para editar im&aacute;genes <span class="tag-opt">Opcional</span> <span class="tag-price tbd">Lo define MPR</span></div>
           <p class="it-desc">Sobre cualquier imagen del showroom se puede pedir un cambio y verlo en el momento: otra terminaci&oacute;n, otra ambientaci&oacute;n, otra luz &mdash; sin volver a renderizar ni pedirnos nada. Funciona con cr&eacute;ditos: <b>el costo depende de cu&aacute;ntos quieran cargar</b>, y se recargan cuando hagan falta. Como referencia, cada imagen generada cuesta unos <b>USD 0,20</b>: con <b>USD 100</b> de cr&eacute;dito salen unas <b>500 im&aacute;genes</b>. Es un estimativo &mdash; el n&uacute;mero final depende del modelo que se elija y de la calidad que se le pida.</p>
         </div>
         <div class="addon">
-          <div class="it-name">Vuelo de dron <span class="tag-opt">Opcional &middot; USD 300</span></div>
+          <div class="it-name">Vuelo de dron <span class="tag-opt">Opcional</span> <span class="tag-price">USD 300</span></div>
           <p class="it-desc">Una jornada de vuelo para levantar el material fotogr&aacute;fico de las vistas 360&deg; y las a&eacute;reas del predio y su entorno, en caso de que hagan falta. Sirve tambi&eacute;n como insumo para el banco de contenido.</p>
         </div>
       </div>
