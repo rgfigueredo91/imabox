@@ -165,8 +165,10 @@
   .value .vrow:last-child { border-bottom: 0; }
   .value .vrow .vn { flex: 1; min-width: 0; }
   .value .vrow .vv { font-family: var(--font-mono); font-size: 0.76rem; letter-spacing: 0.08em; color: var(--ink-faint); white-space: nowrap; }
+  .value .vrow.tot { color: var(--ink); border-top: 1px solid var(--line); }
+  .value .vrow.tot .vv { color: var(--ink); }
   .value .vrow.sum { background: var(--acc-dim); color: var(--ink); }
-  .value .vrow.sum .vv { color: var(--acc); }
+  .value .vrow.sum .vv { color: var(--acc); font-size: 0.86rem; }
   .value .vrow .vv s { text-decoration: line-through; }
 
   /* &#9472;&#9472; planes mensuales &#9472;&#9472; */
@@ -543,7 +545,8 @@
       <div class="vrow"><span class="vn">Identidad visual</span><span class="vv">USD 675</span></div>
       <div class="vrow"><span class="vn">Showroom virtual interactivo</span><span class="vv">USD 2.000</span></div>
       <div class="vrow"><span class="vn">Web del proyecto</span><span class="vv">USD 650</span></div>
-      <div class="vrow sum"><span class="vn">Contratado por separado sumar&iacute;a</span><span class="vv"><s>USD 7.325</s> &rarr; USD 4.675</span></div>
+      <div class="vrow tot"><span class="vn">Contratado por separado sumar&iacute;a</span><span class="vv">USD 7.325</span></div>
+      <div class="vrow sum"><span class="vn">Contratando todo junto, con el acompa&ntilde;amiento mensual</span><span class="vv">USD 4.675 &middot; ahorran 2.650</span></div>
     </div>
 
     <div class="total pack">
