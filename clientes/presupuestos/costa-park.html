@@ -1,0 +1,654 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<title>Propuesta Imabox &mdash; Costa Park &middot; Grupo Diuiringuer</title>
+<style>
+  :root {
+    --bg:        #0a0a0b;
+    --surface:   rgba(255,255,255,0.022);
+    --ink:       rgba(255,255,255,0.93);
+    --ink-soft:  rgba(255,255,255,0.62);
+    --ink-faint: rgba(255,255,255,0.38);
+    --line:      rgba(255,255,255,0.09);
+    --line-soft: rgba(255,255,255,0.055);
+    --acc:       #9dbba4;
+    --acc-dim:   rgba(157,187,164,0.10);
+    --acc-line:  rgba(157,187,164,0.32);
+
+    --font-sans: 'Poppins', 'Helvetica Neue', 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
+    --font-mono: ui-monospace, 'SFMono-Regular', 'Cascadia Mono', Menlo, monospace;
+    --maxw: 900px;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-weight: 300;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* grano f&iacute;lmico sutil, como en el sitio */
+  body::after {
+    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 50;
+    opacity: 0.035; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 30px; }
+  h1, h2, h3 { font-weight: 200; margin: 0; text-wrap: balance; }
+  .eyebrow {
+    font-family: var(--font-mono); font-size: 0.62rem;
+    letter-spacing: 0.26em; text-transform: uppercase; color: var(--acc);
+  }
+  em { font-style: normal; color: var(--acc); }
+  b { font-weight: 400; color: var(--ink); }
+
+  /* &#9472;&#9472; topbar &#9472;&#9472; */
+  .topbar {
+    position: sticky; top: 0; z-index: 6;
+    border-bottom: 1px solid var(--line);
+    background: color-mix(in srgb, var(--bg) 86%, transparent);
+    backdrop-filter: blur(10px);
+  }
+  .topbar .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+  .logo { font-size: 1.05rem; font-weight: 400; letter-spacing: -0.01em; }
+  .logo b { color: var(--acc); font-weight: 400; }
+  .topbar .tag {
+    font-family: var(--font-mono); font-size: 0.57rem; letter-spacing: 0.24em;
+    text-transform: uppercase; color: var(--ink-faint);
+  }
+  @media (max-width: 520px) { .topbar .tag { display: none; } }
+
+  /* &#9472;&#9472; hero &#9472;&#9472; */
+  .hero { padding: 96px 0 46px; animation: rise 0.9s ease both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .hero { animation: none; } }
+  .hero h1 {
+    font-size: clamp(2.2rem, 5.6vw, 3.5rem); line-height: 1.06;
+    letter-spacing: -0.028em; margin: 22px 0 26px; max-width: 17ch;
+  }
+  .hero .lead {
+    font-size: clamp(0.99rem, 1.4vw, 1.09rem); line-height: 1.8;
+    color: var(--ink-soft); max-width: 62ch; margin: 0;
+  }
+  .meta {
+    display: flex; flex-wrap: wrap; gap: 10px 30px; margin-top: 38px;
+    padding-top: 22px; border-top: 1px solid var(--line);
+    font-family: var(--font-mono); font-size: 0.66rem; color: var(--ink-faint);
+  }
+  .meta b { color: var(--ink-soft); }
+
+  /* &#9472;&#9472; secciones &#9472;&#9472; */
+  section { padding: 54px 0; }
+  .sec-head { margin-bottom: 8px; }
+  .sec-head h2 { font-size: clamp(1.55rem, 2.7vw, 2.05rem); letter-spacing: -0.018em; margin-top: 12px; }
+  .sec-head p { color: var(--ink-soft); max-width: 60ch; margin: 15px 0 0; font-size: 0.96rem; line-height: 1.75; }
+
+  /* separador de bloque grande */
+  .divider { border-top: 1px solid var(--line); }
+
+  /* &#9472;&#9472; entregables: filas numeradas &#9472;&#9472; */
+  .rows { margin-top: 34px; border-top: 1px solid var(--line); }
+  .row { border-bottom: 1px solid var(--line); padding: 30px 0; }
+  .row-head { display: flex; align-items: flex-start; gap: 22px; }
+  .row .n {
+    font-family: var(--font-mono); font-size: 0.72rem; color: var(--acc);
+    padding-top: 7px; min-width: 26px; flex-shrink: 0;
+  }
+  .row-title { flex: 1; min-width: 0; }
+  .row-title h3 { font-size: 1.42rem; letter-spacing: -0.012em; }
+  .row-title .sub { margin: 9px 0 0; color: var(--ink-soft); font-size: 0.94rem; line-height: 1.7; max-width: 54ch; }
+  .row .amount {
+    flex-shrink: 0; text-align: right; padding-top: 4px;
+  }
+  .row .amount .a {
+    display: inline-block; font-family: var(--font-mono);
+    font-size: 0.76rem; letter-spacing: 0.12em; color: var(--acc);
+    border: 1px solid var(--acc-line); border-radius: 4px; background: var(--acc-dim);
+    padding: 8px 14px; white-space: nowrap;
+  }
+  .row .amount .a.plain { color: var(--ink-faint); border-color: var(--line); background: transparent; }
+  .row .amount .a.free { color: var(--bg); background: var(--acc); border-color: var(--acc); }
+  .row .amount .u {
+    display: block; margin-top: 8px; font-family: var(--font-mono);
+    font-size: 0.55rem; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--ink-faint); white-space: nowrap;
+  }
+  .row .amount .u s { text-decoration: line-through; }
+  .row.hl { background: linear-gradient(90deg, var(--acc-dim), transparent 62%); }
+
+  .spec { list-style: none; margin: 22px 0 0 48px; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+  .spec li { position: relative; padding-left: 19px; color: var(--ink-soft); font-size: 0.9rem; line-height: 1.65; max-width: 66ch; }
+  .spec li::before {
+    content: ''; position: absolute; left: 0; top: 0.62em;
+    width: 9px; height: 1px; background: var(--acc); opacity: 0.8;
+  }
+
+  /* nota lateral dentro de una fila */
+  .aside {
+    margin: 22px 0 0 48px; padding: 15px 18px;
+    border-left: 2px solid var(--acc-line); background: var(--surface);
+    border-radius: 0 5px 5px 0;
+    color: var(--ink-soft); font-size: 0.88rem; line-height: 1.65; max-width: 62ch;
+  }
+
+  /* opcional colgado de una fila */
+  .opt {
+    margin: 22px 0 0 48px; padding: 15px 18px;
+    border: 1px dashed var(--acc-line); border-radius: 5px; background: var(--surface);
+  }
+  .opt .opt-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 9px 12px; }
+  .opt .opt-name { font-size: 0.98rem; color: var(--ink); }
+  .opt .flag {
+    font-family: var(--font-mono); font-size: 0.53rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--acc); border: 1px solid var(--acc-line); border-radius: 3px;
+    background: var(--acc-dim); padding: 2px 7px;
+  }
+  .opt .price {
+    margin-left: auto; font-family: var(--font-mono); font-size: 0.74rem; letter-spacing: 0.1em;
+    color: var(--acc); border: 1px solid var(--acc-line); border-radius: 4px;
+    background: var(--acc-dim); padding: 6px 12px; white-space: nowrap;
+  }
+  .opt p { margin: 9px 0 0; color: var(--ink-soft); font-size: 0.89rem; line-height: 1.7; max-width: 62ch; }
+
+  /* &#9472;&#9472; tabla de valor &#9472;&#9472; */
+  .value { margin-top: 30px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); overflow: hidden; }
+  .value .vrow {
+    display: flex; align-items: baseline; gap: 18px;
+    padding: 13px 22px; border-bottom: 1px solid var(--line-soft);
+    font-size: 0.91rem; color: var(--ink-soft);
+  }
+  .value .vrow:last-child { border-bottom: 0; }
+  .value .vrow .vn { flex: 1; min-width: 0; }
+  .value .vrow .vv { font-family: var(--font-mono); font-size: 0.76rem; letter-spacing: 0.08em; color: var(--ink-faint); white-space: nowrap; }
+  .value .vrow.sum { background: var(--acc-dim); color: var(--ink); }
+  .value .vrow.sum .vv { color: var(--acc); }
+  .value .vrow .vv s { text-decoration: line-through; }
+
+  /* &#9472;&#9472; planes mensuales &#9472;&#9472; */
+  .plans { margin: 24px 0 0 48px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); overflow: hidden; }
+  .plans-scroll { overflow-x: auto; }
+  .plans table { width: 100%; border-collapse: collapse; font-size: 0.87rem; }
+  .plans th, .plans td { padding: 10px 14px; text-align: center; border-bottom: 1px solid var(--line-soft); color: var(--ink-soft); font-weight: 300; white-space: nowrap; }
+  .plans th:first-child, .plans td:first-child { text-align: left; white-space: normal; min-width: 15rem; }
+  .plans thead th {
+    font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--acc); font-weight: 400;
+  }
+  .plans thead th:first-child { color: var(--ink-faint); }
+  .plans tbody tr:last-child td { border-bottom: 0; }
+  .plans .yes { color: var(--acc); }
+  .plans .no { color: var(--ink-faint); }
+  .plans .num { color: var(--ink); font-family: var(--font-mono); font-size: 0.8rem; }
+  .plans tr.price td {
+    background: var(--acc-dim); color: var(--acc);
+    font-family: var(--font-mono); font-size: 0.82rem; letter-spacing: 0.06em; padding: 14px;
+  }
+  .plans tr.price td:first-child { font-family: var(--font-sans); font-size: 0.87rem; color: var(--ink); letter-spacing: 0; }
+
+  /* &#9472;&#9472; total &#9472;&#9472; */
+  .total {
+    display: flex; align-items: center; justify-content: space-between; gap: 26px;
+    margin-top: 26px; padding: 26px 30px;
+    border: 1px solid var(--line); border-radius: 6px; background: var(--surface);
+  }
+  .total + .total { margin-top: 13px; }
+  .total .tot-lbl { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--acc); }
+  .total p { margin: 10px 0 0; color: var(--ink-soft); font-size: 0.9rem; line-height: 1.7; max-width: 56ch; }
+  .total .a {
+    display: inline-block; font-family: var(--font-mono); font-size: 1rem; letter-spacing: 0.08em;
+    color: var(--acc); background: var(--acc-dim); border: 1px solid var(--acc-line);
+    border-radius: 4px; padding: 12px 18px; white-space: nowrap;
+  }
+  .total .u { display: block; margin-top: 9px; text-align: right; font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-faint); white-space: nowrap; }
+  .total .u s { text-decoration: line-through; }
+  .total.pack {
+    border-color: var(--acc-line);
+    background: linear-gradient(180deg, var(--acc-dim), transparent 72%), var(--surface);
+  }
+  .total.pack .a { color: var(--bg); background: var(--acc); border-color: var(--acc); }
+
+  /* &#9472;&#9472; proceso &#9472;&#9472; */
+  .steps { margin-top: 30px; border-top: 1px solid var(--line-soft); }
+  .step { display: flex; gap: 20px; align-items: baseline; padding: 19px 0; border-bottom: 1px solid var(--line-soft); }
+  .step .sn { font-family: var(--font-mono); font-size: 0.7rem; color: var(--acc); min-width: 26px; flex-shrink: 0; }
+  .step .st { color: var(--ink); font-size: 1rem; }
+  .step .st span { display: block; margin-top: 5px; color: var(--ink-soft); font-size: 0.89rem; line-height: 1.65; max-width: 62ch; }
+
+  /* &#9472;&#9472; tarjetas &#9472;&#9472; */
+  .later { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 30px; }
+  .card { border: 1px solid var(--line); border-radius: 6px; padding: 22px 22px 24px; background: var(--surface); }
+  .card .cl { font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-faint); }
+  .card h4 { margin: 12px 0 0; font-size: 1.06rem; font-weight: 200; letter-spacing: -0.01em; }
+  .card .cp { margin: 14px 0 0; font-family: var(--font-mono); font-size: 0.74rem; letter-spacing: 0.1em; color: var(--acc); }
+  .card p { margin: 12px 0 0; color: var(--ink-soft); font-size: 0.87rem; line-height: 1.65; }
+
+  /* &#9472;&#9472; notas &#9472;&#9472; */
+  .notes { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 30px; }
+  .note { border: 1px solid var(--line); border-radius: 6px; padding: 22px 24px; background: var(--surface); }
+  .note h4 { margin: 0 0 10px; font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--acc); font-weight: 400; }
+  .note p { margin: 0; color: var(--ink-soft); font-size: 0.89rem; line-height: 1.7; }
+
+  footer { border-top: 1px solid var(--line); padding: 30px 0 62px; }
+  footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center; justify-content: space-between; }
+  footer .site { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.1em; color: var(--ink-soft); }
+  footer .draft { font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-faint); }
+
+  /* &#9472;&#9472; responsive &#9472;&#9472; */
+  @media (max-width: 820px) { .later { grid-template-columns: 1fr; } }
+  @media (max-width: 640px) {
+    .wrap { padding: 0 20px; }
+    section { padding: 40px 0; }
+    .hero { padding: 60px 0 30px; }
+    .hero .lead { font-size: 1.02rem; line-height: 1.72; }
+    .sec-head p { font-size: 1rem; }
+    .row-head { flex-wrap: wrap; gap: 14px; }
+    .row .n { min-width: 22px; padding-top: 4px; }
+    .row .amount { width: 100%; text-align: left; padding-left: 44px; }
+    .row .amount .u { text-align: left; }
+    .row-title h3 { font-size: 1.28rem; }
+    .row-title .sub { font-size: 0.98rem; }
+    .spec, .aside, .opt, .plans { margin-left: 0; }
+    .spec li { font-size: 0.96rem; }
+    .opt .price { margin-left: 0; }
+    .value .vrow { flex-wrap: wrap; gap: 6px; padding: 12px 18px; }
+    .total { flex-direction: column; align-items: flex-start; padding: 22px; }
+    .total .u { text-align: left; }
+    .notes { grid-template-columns: 1fr; }
+    .step { gap: 14px; }
+  }
+
+  /* &#9472;&#9472; PRINT &middot; A4 &#9472;&#9472; */
+  @media print {
+    @page { size: A4 portrait; margin: 10mm 12mm; }
+    :root {
+      --bg:#0a0a0b; --surface:rgba(255,255,255,0.03);
+      --ink:rgba(255,255,255,0.96); --ink-soft:rgba(255,255,255,0.72); --ink-faint:rgba(255,255,255,0.55);
+      --line:rgba(255,255,255,0.18); --line-soft:rgba(255,255,255,0.12);
+      --acc:#a9c6b0; --acc-dim:rgba(157,187,164,0.14); --acc-line:rgba(157,187,164,0.44);
+    }
+    body {
+      background: var(--bg) !important;
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+      font-size: 9.6pt; line-height: 1.42;
+    }
+    body::after { display: none; }
+    .wrap { max-width: none; padding: 0; }
+    .topbar { position: static; backdrop-filter: none; }
+    .topbar .wrap { height: auto; padding: 0 0 8px; }
+
+    section { padding: 15px 0 0; }
+    .hero { padding: 14px 0 0; animation: none; }
+    .eyebrow { font-size: 6.4pt; }
+    .hero h1 { font-size: 20pt; margin: 10px 0 10px; max-width: none; }
+    .hero .lead { font-size: 9.6pt; line-height: 1.5; max-width: none; }
+    .meta { margin-top: 13px; padding-top: 10px; gap: 5px 22px; font-size: 7pt; }
+
+    .sec-head h2 { font-size: 14pt; margin-top: 6px; }
+    .sec-head p { font-size: 9pt; line-height: 1.45; margin-top: 8px; max-width: none; }
+
+    .rows { margin-top: 14px; }
+    .row { padding: 13px 0; break-inside: avoid; page-break-inside: avoid; }
+    .row-title h3 { font-size: 12.5pt; }
+    .row-title .sub { font-size: 8.6pt; line-height: 1.45; margin-top: 6px; max-width: none; }
+    .row .amount .a { font-size: 7.4pt; padding: 6px 11px; }
+    .row .amount .u { font-size: 5.4pt; margin-top: 6px; }
+    .spec { margin: 11px 0 0 44px; gap: 6px; }
+    .spec li { font-size: 8.2pt; line-height: 1.4; max-width: none; }
+    .aside, .opt { margin: 11px 0 0 44px; padding: 10px 13px; }
+    .aside { font-size: 8pt; line-height: 1.45; max-width: none; }
+    .opt p { font-size: 8pt; line-height: 1.45; margin-top: 6px; max-width: none; }
+    .opt .opt-name { font-size: 9pt; }
+    .opt .price { font-size: 7.4pt; padding: 5px 9px; }
+
+    .plans { margin: 11px 0 0 44px; break-inside: avoid; }
+    .plans table { font-size: 7.8pt; }
+    .plans th, .plans td { padding: 5px 9px; }
+    .plans .num, .plans tr.price td { font-size: 7.4pt; }
+    .plans thead th { font-size: 5.8pt; }
+    .plans tr.price td { padding: 8px 9px; }
+    .plans tr.price td:first-child { font-size: 7.8pt; }
+
+    .value { margin-top: 12px; break-inside: avoid; }
+    .value .vrow { padding: 8px 14px; font-size: 8.4pt; }
+    .value .vrow .vv { font-size: 7.4pt; }
+
+    .total { margin-top: 14px; padding: 14px 18px; gap: 16px; break-inside: avoid; }
+    .total + .total { margin-top: 9px; }
+    .total p { font-size: 8.6pt; line-height: 1.45; margin-top: 7px; max-width: none; }
+    .total .a { font-size: 9pt; padding: 9px 14px; }
+    .total .u { font-size: 5.4pt; margin-top: 7px; }
+
+    .steps { margin-top: 12px; }
+    .step { padding: 8px 0; break-inside: avoid; }
+    .step .st { font-size: 9pt; }
+    .step .st span { font-size: 8.2pt; line-height: 1.4; margin-top: 3px; max-width: none; }
+
+    .later { margin-top: 12px; gap: 10px; }
+    .card { padding: 13px 15px; break-inside: avoid; }
+    .card h4 { font-size: 9.6pt; margin-top: 8px; }
+    .card .cp { font-size: 7.4pt; margin-top: 9px; }
+    .card p { font-size: 7.8pt; line-height: 1.4; margin-top: 8px; }
+
+    .notes { margin-top: 12px; gap: 10px; }
+    .note { padding: 13px 15px; break-inside: avoid; }
+    .note h4 { font-size: 6.2pt; margin-bottom: 7px; }
+    .note p { font-size: 8.2pt; line-height: 1.45; }
+
+    footer { padding: 12px 0 0; }
+  }
+</style>
+
+<header class="topbar">
+  <div class="wrap">
+    <div class="logo">imabox<b>.</b></div>
+    <span class="tag">Propuesta de servicios</span>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="hero">
+    <p class="eyebrow">Preparado para Grupo Diuiringuer</p>
+    <h1>Costa Park: todo el marketing del proyecto, <em>en un solo lugar.</em></h1>
+    <p class="lead">Esta propuesta es nuestro plan <b>Marketing Integral</b>: el modelo 3D del edificio, el banco de im&aacute;genes y animaciones, la marca del proyecto con sus materiales de venta, la web y la gesti&oacute;n de redes y campa&ntilde;as.</p>
+    <div class="meta">
+      <span><b>Proyecto</b> &middot; Costa Park</span>
+      <span><b>Desarrolla</b> &middot; Grupo Diuiringuer</span>
+      <span><b>Plan</b> &middot; Marketing Integral</span>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">El alcance</p>
+      <h2>Qu&eacute; se produce</h2>
+      <p>Seis bloques. Los cinco primeros son de producci&oacute;n y entran en un pago &uacute;nico; el sexto es el acompa&ntilde;amiento mensual mientras dura la venta.</p>
+    </div>
+
+    <div class="rows">
+
+      <div class="row">
+        <div class="row-head">
+          <div class="n">01</div>
+          <div class="row-title">
+            <h3>Modelo 3D del edificio</h3>
+            <p class="sub">Se modela Costa Park desde los planos. Es la base t&eacute;cnica de la que sale despu&eacute;s cada imagen, cada animaci&oacute;n y el showroom.</p>
+          </div>
+          <div class="amount">
+            <span class="a">USD 300</span>
+            <span class="u">pago &uacute;nico</span>
+          </div>
+        </div>
+        <ul class="spec">
+          <li>Volumen completo del edificio &mdash; fachadas, aberturas, balcones, remates y terminaciones principales, seg&uacute;n los planos que aporta el desarrollador</li>
+          <li>Ambientaci&oacute;n de <b>las tipolog&iacute;as principales</b> por dentro, para mostrar las unidades y no solo el exterior</li>
+          <li>Iluminaci&oacute;n y materiales listos para renderizar en varios momentos del d&iacute;a</li>
+        </ul>
+      </div>
+
+      <div class="row">
+        <div class="row-head">
+          <div class="n">02</div>
+          <div class="row-title">
+            <h3>Banco de contenido</h3>
+          </div>
+          <div class="amount">
+            <span class="a">USD 3.700</span>
+            <span class="u">pago &uacute;nico</span>
+          </div>
+        </div>
+        <ul class="spec">
+          <li><b>7 im&aacute;genes renderizadas</b> &mdash; exteriores e interiores que salen del modelo 3D, as&iacute; que respetan las medidas, las escalas y las proporciones reales del edificio: es el proyecto, no una interpretaci&oacute;n. Los &aacute;ngulos se eligen con ustedes</li>
+          <li><b>20 a 25 im&aacute;genes generadas con IA a partir de esas siete</b> &mdash; no desde cero: variantes de ambientaci&oacute;n, mobiliario, clima y hora del d&iacute;a, y tambi&eacute;n <b>otros puntos de vista</b> del mismo espacio. Multiplica el banco sin volver a renderizar</li>
+          <li><b>Plantas realistas para el brochure</b> &mdash; se generan con IA a partir de <b>las plantas en PDF que entrega el cliente</b>: quedan amobladas, con materiales y sombras, al mismo nivel que el resto del banco. Se entienden de un vistazo y sirven tanto para el folleto como para los portales</li>
+          <li><b>1 animaci&oacute;n principal</b> de 1 minuto y medio a 2 minutos &mdash; la presentaci&oacute;n del proyecto, con recorridos de c&aacute;mara en el modelo</li>
+          <li><b>6 a 8 animaciones cortas</b> de 6 a 10 segundos &mdash; placas y transiciones para Instagram, y piezas de apoyo para web o carteler&iacute;a</li>
+          <li>Formato general <b>16:9</b>, con parte del contenido adaptado a <b>vertical</b> para reels y stories</li>
+        </ul>
+        <div class="opt">
+          <div class="opt-head">
+            <span class="opt-name">Vuelo de dron</span>
+            <span class="flag">Opcional</span>
+            <span class="price">USD 450</span>
+          </div>
+          <p>Una jornada de vuelo sobre el predio. Sirve para dos cosas: levantar el entorno real como referencia para el modelo, y sumar a&eacute;reas del terreno y su zona al banco de contenido.</p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="row-head">
+          <div class="n">03</div>
+          <div class="row-title">
+            <h3>Identidad visual del edificio</h3>
+            <p class="sub">La l&iacute;nea gr&aacute;fica propia de Costa Park, para un proyecto que todav&iacute;a no tiene manual de marca.</p>
+          </div>
+          <div class="amount">
+            <span class="a">USD 170</span>
+            <span class="u">pago &uacute;nico</span>
+          </div>
+        </div>
+        <ul class="spec">
+          <li><b>Isologotipo</b> &mdash; selecci&oacute;n tipogr&aacute;fica y paleta crom&aacute;tica principal</li>
+          <li><b>Paleta de colores</b> &mdash; tonos primarios y secundarios definidos para entornos digitales</li>
+          <li><b>Sistema tipogr&aacute;fico</b> &mdash; combinaci&oacute;n de fuentes para titulares y textos</li>
+          <li><b>Recursos gr&aacute;ficos</b> &mdash; elementos visuales, tramas y estilos para las plantillas de redes</li>
+        </ul>
+      </div>
+
+      <div class="row hl">
+        <div class="row-head">
+          <div class="n">04</div>
+          <div class="row-title">
+            <h3>Showroom virtual interactivo</h3>
+            <p class="sub">El edificio navegable desde un link: pisos, tipolog&iacute;as y unidades con su disponibilidad. Funciona igual en computadora y en celular, y se le manda a un interesado por WhatsApp.</p>
+          </div>
+          <div class="amount">
+            <span class="a free">Sin cargo</span>
+            <span class="u"><s>USD 2.000</s> &middot; con el plan completo</span>
+          </div>
+        </div>
+        <ul class="spec">
+          <li>Recorrido por el edificio con acceso a cada piso y a cada unidad, con su estado &mdash; disponible, reservada, vendida</li>
+          <li>Ficha por tipolog&iacute;a: metraje, planta, orientaci&oacute;n, vistas e im&aacute;genes del banco</li>
+          <li>El estado de las unidades lo actualizan ustedes; el showroom lo refleja en vivo</li>
+          <li>Formulario de contacto integrado: el interesado consulta por una unidad puntual y el dato les llega directo</li>
+          <li>Se comparte con un link, sin instalar nada</li>
+        </ul>
+        <div class="aside">El showroom va sin cargo <b>solo si se toma el plan completo</b>: la producci&oacute;n entera &mdash;bloques 01 a 05&mdash; m&aacute;s el acompa&ntilde;amiento mensual. Si se contrata suelto, o si se toman bloques por separado, es de <b>USD 2.000</b>. En cualquier caso se factura aparte el <b>hosting</b>, que es lo que cuesta mantenerlo online.</div>
+      </div>
+
+      <div class="row hl">
+        <div class="row-head">
+          <div class="n">05</div>
+          <div class="row-title">
+            <h3>Web del proyecto</h3>
+            <p class="sub">Una p&aacute;gina propia de Costa Park que ordena todo lo que llega por redes, anuncios o carteler&iacute;a.</p>
+          </div>
+          <div class="amount">
+            <span class="a free">Sin cargo</span>
+            <span class="u"><s>USD 650</s> &middot; con el plan completo</span>
+          </div>
+        </div>
+        <ul class="spec">
+          <li>Landing con el proyecto, las tipolog&iacute;as, la ubicaci&oacute;n y el material del banco</li>
+          <li>Entrada directa al showroom desde la misma p&aacute;gina</li>
+          <li>Formulario de contacto: cada consulta queda registrada con sus datos, no se pierde en un DM</li>
+          <li>Preparada para medir &mdash; se conecta con las campa&ntilde;as para saber de d&oacute;nde viene cada consulta</li>
+        </ul>
+        <div class="aside">Igual que el showroom, la web va sin cargo <b>solo si se toma el plan completo</b>. Contratada suelta es de <b>USD 650</b>, m&aacute;s el <b>hosting</b> y el dominio, que se facturan aparte en cualquier caso.</div>
+      </div>
+
+      <div class="row">
+        <div class="row-head">
+          <div class="n">06</div>
+          <div class="row-title">
+            <h3>Redes, pauta y acompa&ntilde;amiento</h3>
+            <p class="sub">La parte que no termina: publicar, pautar, medir y seguir produciendo mientras dura la venta. Tres planes mensuales, uno por proyecto.</p>
+          </div>
+          <div class="amount">
+            <span class="a">Desde USD 550 / mes</span>
+            <span class="u">m&iacute;n. 4 meses</span>
+          </div>
+        </div>
+
+        <div class="plans">
+          <div class="plans-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Entregable mensual</th>
+                  <th>B&aacute;sico</th>
+                  <th>Intermedio</th>
+                  <th>Completo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Planificaci&oacute;n de contenido mensual</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
+                <tr><td>Copywriting &mdash; textos y hashtags de cada posteo</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
+                <tr><td>Publicaciones en feed</td><td class="num">8</td><td class="num">12</td><td class="num">16</td></tr>
+                <tr><td>Reels / videos</td><td class="num">2</td><td class="num">4</td><td class="num">6</td></tr>
+                <tr><td>Historias</td><td class="num">4</td><td class="num">8</td><td class="num">12</td></tr>
+                <tr><td>Adaptaci&oacute;n de renders del banco</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
+                <tr><td>Dise&ntilde;o de carruseles</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
+                <tr><td>Atenci&oacute;n al cliente &mdash; comentarios y derivaci&oacute;n a WhatsApp</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
+                <tr><td>Reporte mensual de m&eacute;tricas con recomendaciones</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
+                <tr><td>Estrategia de marketing digital</td><td class="no">&mdash;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
+                <tr><td>Gesti&oacute;n de Meta Ads</td><td class="no">&mdash;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
+                <tr class="price"><td>Precio mensual</td><td>USD 550</td><td>USD 800</td><td>USD 1.000</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <ul class="spec">
+          <li><b>Estrategia de marketing digital</b> &mdash;planes Intermedio y Completo&mdash; incluye an&aacute;lisis del negocio y de la competencia local, definici&oacute;n de audiencias y plan de comunicaci&oacute;n mensual por objetivo</li>
+          <li><b>Gesti&oacute;n de Meta Ads</b> &mdash;planes Intermedio y Completo&mdash; creaci&oacute;n, configuraci&oacute;n y optimizaci&oacute;n de campa&ntilde;as, segmentaci&oacute;n geogr&aacute;fica y demogr&aacute;fica, monitoreo diario y piezas exclusivas para los anuncios</li>
+          <li>Todo el contenido sale del <b>banco ya producido</b>: la adaptaci&oacute;n de renders, los carruseles y las placas se arman sobre ese material, no se improvisa mes a mes</li>
+          <li>La gesti&oacute;n es sobre <b>Instagram</b>. Facebook, LinkedIn o TikTok se pueden sumar con presupuesto aparte</li>
+          <li>Un interlocutor fijo durante toda la relaci&oacute;n</li>
+        </ul>
+        <div class="aside">El <b>presupuesto de pauta</b> no est&aacute; incluido: se paga directo a Meta con la tarjeta del desarrollador. Lo que se cobra ac&aacute; es la gesti&oacute;n.</div>
+      </div>
+
+    </div>
+
+    <div class="value">
+      <div class="vrow"><span class="vn">Modelo 3D del edificio</span><span class="vv">USD 300</span></div>
+      <div class="vrow"><span class="vn">Banco de contenido &mdash; im&aacute;genes y animaciones</span><span class="vv">USD 3.700</span></div>
+      <div class="vrow"><span class="vn">Identidad visual del edificio</span><span class="vv">USD 170</span></div>
+      <div class="vrow"><span class="vn">Showroom virtual interactivo</span><span class="vv">USD 2.000</span></div>
+      <div class="vrow"><span class="vn">Web del proyecto</span><span class="vv">USD 650</span></div>
+      <div class="vrow sum"><span class="vn">Contratado por separado sumar&iacute;a</span><span class="vv"><s>USD 6.820</s> &rarr; USD 4.170</span></div>
+    </div>
+
+    <div class="total pack">
+      <div>
+        <div class="tot-lbl">Producci&oacute;n &middot; pago &uacute;nico</div>
+        <p>Bloques <b>01 a 05</b> completos, con el <b>showroom y la web sin cargo por tomar el plan entero</b>. Es lo que se contrata para arrancar y queda del proyecto, sin l&iacute;mite de tiempo ni de plataforma.</p>
+      </div>
+      <div>
+        <span class="a">USD 4.170</span>
+        <span class="u"><s>USD 6.820</s> &middot; pago &uacute;nico</span>
+      </div>
+    </div>
+
+    <div class="total">
+      <div>
+        <div class="tot-lbl">Acompa&ntilde;amiento &middot; mensual</div>
+        <p>Bloque <b>06</b>, a elecci&oacute;n: <b>B&aacute;sico USD 550</b>, <b>Intermedio USD 800</b> o <b>Completo USD 1.000</b> por mes. M&iacute;nimo de 4 meses y despu&eacute;s mes a mes, mientras dure la venta. No incluye el presupuesto de pauta.</p>
+      </div>
+      <div>
+        <span class="a">Desde USD 550 / mes</span>
+        <span class="u">m&iacute;n. 4 meses</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">C&oacute;mo se trabaja</p>
+      <h2>El orden de las cosas</h2>
+      <p>Cada etapa se aprueba antes de pasar a la siguiente, para no producir sobre algo que despu&eacute;s hay que rehacer.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="sn">01</div>
+        <div class="st">Insumos y arranque
+          <span>El desarrollador entrega planos, tipolog&iacute;as, precios y referencias de terminaciones. Definimos juntos qu&eacute; se muestra y qu&eacute; vistas son prioritarias.</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="sn">02</div>
+        <div class="st">Marca y modelado
+          <span>En paralelo: se levanta el edificio en 3D y se define la marca del proyecto.</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="sn">03</div>
+        <div class="st">Im&aacute;genes y animaciones
+          <span>Elegimos encuadres, luz y clima. Se aprueban las primeras im&aacute;genes para fijar el look y con eso sale el resto del banco, m&aacute;s la animaci&oacute;n principal y los cortos.</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="sn">04</div>
+        <div class="st">Web del proyecto y lanzamiento
+          <span>Con el banco cerrado se publica la p&aacute;gina de Costa Park, con el material nuevo y el formulario andando, y sobre ella sale la campa&ntilde;a: redes, pauta y portales apuntando a la web. Todo el material se entrega en alta y ordenado por uso.</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="sn">05</div>
+        <div class="st">Showroom
+          <span>Ya con el proyecto en la calle, se arma el showroom con la grilla de unidades y su disponibilidad. Se enlaza desde la web y desde las campa&ntilde;as que ya est&aacute;n corriendo.</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="sn">06</div>
+        <div class="st">Acompa&ntilde;amiento
+          <span>Mes a mes: contenido nuevo, optimizaci&oacute;n de campa&ntilde;as, actualizaci&oacute;n de disponibilidad en el showroom y reporte.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">Para tener claro</p>
+      <h2>Qu&eacute; queda fuera</h2>
+    </div>
+    <div class="notes">
+      <div class="note">
+        <h4>Material de base</h4>
+        <p>Los planos, las tipolog&iacute;as y las referencias de terminaciones los aporta el desarrollador. Sobre eso modelamos y producimos; no incluye relevamiento ni documentaci&oacute;n de arquitectura.</p>
+      </div>
+      <div class="note">
+        <h4>Presupuesto de pauta</h4>
+        <p>Lo que se invierte en Meta Ads o en portales lo pone el desarrollador y se paga directo a la plataforma con su tarjeta. Nosotros armamos, optimizamos y reportamos.</p>
+      </div>
+      <div class="note">
+        <h4>Otras plataformas</h4>
+        <p>La gesti&oacute;n mensual es sobre Instagram. Facebook, LinkedIn o TikTok se suman con presupuesto aparte. Tampoco incluye cobertura presencial de eventos ni de locales.</p>
+      </div>
+      <div class="note">
+        <h4>Hosting</h4>
+        <p>El showroom y la web quedan online con un costo mensual de servidor y dominio, que se factura aparte seg&uacute;n el consumo real.</p>
+      </div>
+      <div class="note">
+        <h4>Cambios de proyecto</h4>
+        <p>Si cambia el proyecto en s&iacute; &mdash;otra fachada, otra distribuci&oacute;n&mdash; despu&eacute;s de modelado, eso se cotiza aparte.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span class="site">imabox.uy</span>
+    <span class="draft">Propuesta de servicios &middot; Costa Park</span>
+  </div>
+</footer>
