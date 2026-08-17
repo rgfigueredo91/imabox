@@ -235,6 +235,79 @@
   footer a { color: var(--ink-faint); text-decoration: none; border-bottom: 1px solid var(--line); }
   footer a:hover { color: var(--acc); border-color: var(--acc-line); }
 
+  /* &#9472;&#9472; documento imprimible (PDF) &#9472;&#9472; */
+  #printable { display: none; }
+
+  @media print {
+    @page { size: A4 portrait; margin: 14mm 15mm; }
+
+    body > *:not(#printable) { display: none !important; }
+    body::after { display: none !important; }
+    body { background: #fff !important; }
+
+    #printable {
+      display: block;
+      color: #1a1c1e; background: #fff;
+      font-family: 'Poppins', 'Helvetica Neue', Arial, sans-serif;
+      font-weight: 300; font-size: 9.6pt; line-height: 1.5;
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+    #printable .p-top {
+      display: flex; align-items: baseline; justify-content: space-between;
+      border-bottom: 1.5pt solid #1a1c1e; padding-bottom: 7pt; margin-bottom: 20pt;
+    }
+    #printable .p-logo { font-size: 13pt; font-weight: 400; letter-spacing: -0.01em; }
+    #printable .p-logo b { color: #6f8f78; font-weight: 400; }
+    #printable .p-kind {
+      font-size: 6.6pt; letter-spacing: 0.22em; text-transform: uppercase; color: #6b7280;
+    }
+    #printable h1 {
+      font-size: 22pt; font-weight: 200; line-height: 1.1; letter-spacing: -0.02em;
+      margin: 0 0 10pt;
+    }
+    #printable .p-meta {
+      font-size: 8pt; color: #5b6167; margin: 0 0 4pt;
+      padding-bottom: 14pt; border-bottom: 0.6pt solid #d8dcd9;
+    }
+    #printable .p-meta b { font-weight: 400; color: #1a1c1e; }
+
+    #printable .p-sec { margin-top: 20pt; break-inside: avoid; page-break-inside: avoid; }
+    #printable .p-sec > h2 {
+      font-size: 7pt; font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase;
+      color: #6f8f78; margin: 0 0 9pt; padding-bottom: 4pt;
+      border-bottom: 0.6pt solid #9dbba4;
+    }
+    #printable .p-f { margin-bottom: 10pt; break-inside: avoid; page-break-inside: avoid; }
+    #printable .p-f .k {
+      font-size: 6.6pt; letter-spacing: 0.14em; text-transform: uppercase;
+      color: #6b7280; margin-bottom: 2pt;
+    }
+    #printable .p-f .v { font-size: 9.6pt; color: #1a1c1e; white-space: pre-wrap; }
+
+    #printable table.p-typos { width: 100%; border-collapse: collapse; margin-top: 4pt; }
+    #printable table.p-typos th {
+      font-size: 6.4pt; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase;
+      color: #5b6167; text-align: left; padding: 5pt 7pt;
+      background: #eef2ef; border-bottom: 0.6pt solid #9dbba4;
+    }
+    #printable table.p-typos td {
+      font-size: 8.4pt; padding: 6pt 7pt; vertical-align: top;
+      border-bottom: 0.5pt solid #e3e7e4;
+    }
+    #printable table.p-typos td.n { color: #6f8f78; width: 22pt; }
+
+    #printable .p-missing {
+      margin-top: 18pt; padding: 9pt 11pt; background: #f5f6f5;
+      border-left: 2pt solid #c9d3cb; font-size: 7.6pt; color: #5b6167;
+      break-inside: avoid; page-break-inside: avoid;
+    }
+    #printable .p-foot {
+      margin-top: 22pt; padding-top: 8pt; border-top: 0.6pt solid #d8dcd9;
+      font-size: 6.6pt; letter-spacing: 0.14em; text-transform: uppercase; color: #8b9199;
+      display: flex; justify-content: space-between;
+    }
+  }
+
   @media (max-width: 720px) {
     .wrap { padding: 0 22px; }
     .hero { padding: 62px 0 34px; }
@@ -615,7 +688,7 @@
         <button type="submit" class="btn-send" id="btnSend">Enviar el brief</button>
       </div>
       <div class="alt">
-        <button type="button" class="btn-ghost" id="btnDownload">Descargar una copia</button>
+        <button type="button" class="btn-ghost" id="btnDownload">Descargar mi copia en PDF</button>
         <button type="button" class="btn-ghost" id="btnClear">Borrar todo y empezar de nuevo</button>
       </div>
       <div class="status" id="status"></div>
@@ -629,7 +702,7 @@
   <h2>Gracias. Ya lo tenemos.</h2>
   <p>Lo revisamos y te escribimos en las pr&oacute;ximas horas con las dudas que queden. Si mientras tanto quer&eacute;s agregar material &mdash; planos, fotos, referencias &mdash;, mandalo por mail y lo sumamos al proyecto.</p>
   <div class="alt" style="justify-content:center; margin-top:34px">
-    <button type="button" class="btn-ghost" id="btnDownload2">Descargar mi copia</button>
+    <button type="button" class="btn-ghost" id="btnDownload2">Descargar mi copia en PDF</button>
   </div>
 </div>
 
@@ -692,6 +765,7 @@
   var STORAGE_KEY = 'imabox_brief_costapark_v1';
   var PROYECTO = 'La Costa Park';
 
+  var enviado  = false;
   var form     = document.getElementById('briefForm');
   var typoList = document.getElementById('typoList');
   var tpl      = document.getElementById('typoTpl');
@@ -847,15 +921,98 @@
     return out;
   }
 
+  /* ---------- documento imprimible (PDF) ---------- */
+
+  // el orden en que se arma el PDF; los campos vacíos no se imprimen
+  var SECCIONES = [
+    ['Contacto', ['Contacto — nombre', 'Contacto — rol', 'Contacto — email', 'Contacto — teléfono']],
+    ['Descripción general', ['Nombre del proyecto', 'Zona / barrio', 'Tipo de propiedad', 'Sistema constructivo', 'Concepto / diferencial', 'Amenities / espacios comunes', 'Descripción libre']],
+    ['Comprador objetivo', ['Motivo de compra', 'Perfil de comprador 1', 'Perfil de comprador 2', 'Perfil de comprador 3', 'Origen de los compradores']],
+    ['Propuesta de valor', ['Beneficio principal', 'Ventaja de ubicación', 'Diferencial frente a la zona']],
+    ['Objetivo y timing de venta', ['Unidades totales a vender', '¿Hay preventa?', 'Detalle de la preventa', 'Fecha de lanzamiento comercial', 'Fecha de inicio de obra', 'Fecha de entrega']],
+    ['Datos extra', ['Dirección exacta', 'Competencia directa', 'Diferencial frente a la competencia', 'Redes / web del proyecto', 'Redes / web del grupo', 'Forma de pago / financiación', 'Material disponible', 'Link al material', 'Casos de éxito anteriores']],
+    ['Qué se quiere transmitir', ['Qué transmitir', 'Otras cosas a transmitir', 'Qué NO transmitir', 'Referencias visuales', 'Comentarios finales']]
+  ];
+
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function buildPrintable() {
+    var d = readForm(), t = readTypos();
+    var h = '';
+
+    h += '<div class="p-top"><span class="p-logo">imabox<b>.</b></span>' +
+         '<span class="p-kind">Brief de proyecto</span></div>';
+    h += '<h1>' + esc(d['Nombre del proyecto'] || PROYECTO) + '</h1>';
+
+    var meta = [];
+    if (d['Contacto — nombre']) meta.push('<b>' + esc(d['Contacto — nombre']) + '</b>' + (d['Contacto — rol'] ? ' · ' + esc(d['Contacto — rol']) : ''));
+    if (d['Contacto — email']) meta.push(esc(d['Contacto — email']));
+    meta.push(new Date().toLocaleDateString('es-UY', { day: '2-digit', month: 'long', year: 'numeric' }));
+    h += '<p class="p-meta">' + meta.join(' &nbsp;·&nbsp; ') + '</p>';
+
+    var faltantes = [];
+
+    for (var s = 0; s < SECCIONES.length; s++) {
+      var titulo = SECCIONES[s][0], claves = SECCIONES[s][1], cuerpo = '';
+
+      for (var i = 0; i < claves.length; i++) {
+        var k = claves[i], v = d[k];
+        if (!v) { faltantes.push(k); continue; }
+        if (titulo === 'Contacto' && (k === 'Contacto — nombre' || k === 'Contacto — rol' || k === 'Contacto — email')) continue;
+        cuerpo += '<div class="p-f"><div class="k">' + esc(k) + '</div><div class="v">' + esc(v) + '</div></div>';
+      }
+
+      // las tipologías van como tabla dentro de su propia sección
+      if (titulo === 'Descripción general' && t.length) {
+        var filas = '';
+        for (var j = 0; j < t.length; j++) {
+          var x = t[j];
+          if (!(x.nombre || x.m2 || x.dormitorios || x.precio || x.caracteristicas)) continue;
+          filas += '<tr><td class="n">' + ('0' + (j + 1)).slice(-2) + '</td>' +
+                   '<td>' + esc(x.nombre || '—') + '</td>' +
+                   '<td>' + esc(x.cantidad || '—') + '</td>' +
+                   '<td>' + esc(x.m2 || '—') + '</td>' +
+                   '<td>' + esc(x.dormitorios || '—') + '</td>' +
+                   '<td>' + esc(x.precio || '—') + '</td>' +
+                   '<td>' + esc(x.caracteristicas || '—') + '</td></tr>';
+        }
+        if (filas) {
+          cuerpo += '</div><div class="p-sec"><h2>Tipologías de unidades</h2>' +
+            '<table class="p-typos"><thead><tr><th></th><th>Tipología</th><th>Unidades</th>' +
+            '<th>m²</th><th>Dorm / baños</th><th>Precio</th><th>Características</th>' +
+            '</tr></thead><tbody>' + filas + '</tbody></table>';
+        }
+      }
+
+      if (cuerpo) h += '<div class="p-sec"><h2>' + esc(titulo) + '</h2>' + cuerpo + '</div>';
+    }
+
+    if (faltantes.length) {
+      h += '<div class="p-missing"><b>Quedó sin completar:</b> ' + esc(faltantes.join(' · ')) + '</div>';
+    }
+
+    h += '<div class="p-foot"><span>Imabox · Visualización para desarrollos inmobiliarios</span>' +
+         '<span>imabox.uy</span></div>';
+
+    return h;
+  }
+
   function download() {
-    var blob = new Blob([toText()], { type: 'text/plain;charset=utf-8' });
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'brief-la-costa-park.txt';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+    var box = document.getElementById('printable');
+    if (!box) {
+      box = document.createElement('div');
+      box.id = 'printable';
+      document.body.appendChild(box);
+    }
+    box.innerHTML = buildPrintable();
+
+    var titulo = document.title;
+    document.title = 'Brief - ' + (readForm()['Nombre del proyecto'] || PROYECTO);
+    window.print();
+    setTimeout(function () { document.title = titulo; }, 500);
   }
 
   document.getElementById('btnDownload').addEventListener('click', download);
@@ -910,6 +1067,7 @@
         ' | precio: ' + (t.precio || '-') +
         ' | características: ' + (t.caracteristicas || '-');
     }).join('\n');
+    data['Tipologías JSON'] = JSON.stringify(readTypos());
     data['Enviado'] = new Date().toLocaleString('es-UY');
     data['Texto completo'] = toText();
 
@@ -929,18 +1087,28 @@
     var fd = new FormData();
     for (var k in data) { if (data.hasOwnProperty(k)) fd.append(k, data[k]); }
 
-    fetch(ENDPOINT, { method: 'POST', mode: 'no-cors', body: fd })
-      .then(function () {
-        try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+    // sin no-cors: así podemos leer la respuesta y saber si de verdad llegó
+    fetch(ENDPOINT, { method: 'POST', body: fd })
+      .then(function (r) {
+        return r.json().catch(function () { return null; });
+      })
+      .then(function (j) {
+        // si el servidor contesta que falló, no decimos que salió bien
+        if (j && j.ok === false) {
+          throw new Error(j.planillaError || j.mailError || 'el servidor no pudo guardarlo');
+        }
+        enviado = true;
         document.getElementById('formView').style.display = 'none';
         document.getElementById('doneView').classList.add('on');
         window.scrollTo(0, 0);
+        // el borrador NO se borra: si algo falló, los datos siguen acá
       })
-      .catch(function () {
+      .catch(function (err) {
         btnSend.disabled = false;
         btnSend.textContent = 'Enviar el brief';
-        showStatus('No pudimos enviarlo (puede ser la conexión). Prob&aacute; de nuevo, ' +
-          'o descarg&aacute; la copia y mandala a <b>' + MAIL_FALLBACK + '</b>.', true);
+        showStatus('No pudimos enviarlo (' + (err && err.message ? err.message : 'error de conexión') +
+          '). Lo que escribiste sigue guardado ac&aacute;, no se pierde. ' +
+          'Prob&aacute; de nuevo, o descarg&aacute; el PDF y mandalo a <b>' + MAIL_FALLBACK + '</b>.', true);
       });
   });
 
@@ -951,7 +1119,7 @@
   updateProgress();
 
   window.addEventListener('beforeunload', function (e) {
-    if (document.getElementById('doneView').classList.contains('on')) return;
+    if (enviado) return;
     var d = readForm(), algo = false;
     for (var k in d) { if (d.hasOwnProperty(k) && d[k] && k !== 'Nombre del proyecto') { algo = true; break; } }
     if (algo) { e.preventDefault(); e.returnValue = ''; }
