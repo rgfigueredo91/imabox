@@ -1,0 +1,960 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<title>Brief de proyecto &mdash; La Costa Park &middot; Imabox</title>
+<style>
+  :root {
+    --bg:        #0a0a0b;
+    --surface:   rgba(255,255,255,0.022);
+    --surface-2: rgba(255,255,255,0.038);
+    --ink:       rgba(255,255,255,0.93);
+    --ink-soft:  rgba(255,255,255,0.62);
+    --ink-faint: rgba(255,255,255,0.38);
+    --line:      rgba(255,255,255,0.09);
+    --line-soft: rgba(255,255,255,0.055);
+    --acc:       #9dbba4;
+    --acc-dim:   rgba(157,187,164,0.10);
+    --acc-line:  rgba(157,187,164,0.32);
+
+    --font-sans: 'Poppins', 'Helvetica Neue', 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
+    --font-mono: ui-monospace, 'SFMono-Regular', 'Cascadia Mono', Menlo, monospace;
+    --maxw: 900px;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-weight: 300;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* grano f&iacute;lmico sutil, como en el sitio */
+  body::after {
+    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 50;
+    opacity: 0.035; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 30px; }
+  h1, h2, h3 { font-weight: 200; margin: 0; text-wrap: balance; }
+  .eyebrow {
+    font-family: var(--font-mono); font-size: 0.62rem;
+    letter-spacing: 0.26em; text-transform: uppercase; color: var(--acc);
+    margin: 0;
+  }
+  em { font-style: normal; color: var(--acc); }
+  b { font-weight: 400; color: var(--ink); }
+
+  /* &#9472;&#9472; topbar + progreso &#9472;&#9472; */
+  .topbar {
+    position: sticky; top: 0; z-index: 6;
+    border-bottom: 1px solid var(--line);
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(10px);
+  }
+  .topbar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 18px; height: 60px; }
+  .logo { font-size: 1.05rem; font-weight: 400; letter-spacing: -0.01em; }
+  .logo b { color: var(--acc); font-weight: 400; }
+  .topbar .tag {
+    font-family: var(--font-mono); font-size: 0.57rem; letter-spacing: 0.24em;
+    text-transform: uppercase; color: var(--ink-faint);
+  }
+  @media (max-width: 640px) { .topbar .tag { display: none; } }
+  .progress { height: 2px; background: var(--line-soft); }
+  .progress i { display: block; height: 100%; width: 0; background: var(--acc); transition: width 0.35s ease; }
+
+  /* estado de autoguardado */
+  .saved {
+    font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--ink-faint); white-space: nowrap;
+    opacity: 0; transition: opacity 0.4s ease;
+  }
+  .saved.on { opacity: 1; }
+  .saved b { color: var(--acc); font-weight: 400; }
+
+  /* &#9472;&#9472; hero &#9472;&#9472; */
+  .hero { padding: 92px 0 44px; animation: rise 0.9s ease both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .hero { animation: none; } html { scroll-behavior: auto; } }
+  .hero h1 {
+    font-size: clamp(2.1rem, 5.4vw, 3.3rem); line-height: 1.07;
+    letter-spacing: -0.028em; margin: 22px 0 26px; max-width: 18ch;
+  }
+  .hero .lead {
+    font-size: clamp(0.99rem, 1.4vw, 1.09rem); line-height: 1.8;
+    color: var(--ink-soft); max-width: 62ch; margin: 0;
+  }
+  .meta {
+    display: flex; flex-wrap: wrap; gap: 10px 30px; margin-top: 36px;
+    padding-top: 22px; border-top: 1px solid var(--line);
+    font-family: var(--font-mono); font-size: 0.66rem; color: var(--ink-faint);
+  }
+  .meta b { color: var(--ink-soft); }
+
+  /* &#9472;&#9472; secciones &#9472;&#9472; */
+  section { padding: 46px 0; border-top: 1px solid var(--line); }
+  .sec-head { display: flex; align-items: flex-start; gap: 22px; }
+  .sec-head .n {
+    font-family: var(--font-mono); font-size: 0.72rem; color: var(--acc);
+    padding-top: 9px; min-width: 26px; flex-shrink: 0;
+  }
+  .sec-head h2 { font-size: clamp(1.45rem, 2.6vw, 1.95rem); letter-spacing: -0.018em; }
+  .sec-head .hint { color: var(--ink-soft); max-width: 62ch; margin: 12px 0 0; font-size: 0.93rem; line-height: 1.7; }
+
+  .fields { margin: 30px 0 0 48px; display: flex; flex-direction: column; gap: 22px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 22px; }
+
+  /* &#9472;&#9472; campos &#9472;&#9472; */
+  .f { display: flex; flex-direction: column; gap: 9px; min-width: 0; }
+  .f > label, .f > .lbl {
+    font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--ink-faint);
+  }
+  .f > label .req, .f > .lbl .req { color: var(--acc); }
+  .f .help { font-size: 0.82rem; color: var(--ink-faint); line-height: 1.55; margin: -2px 0 0; }
+
+  input[type=text], input[type=email], input[type=tel], input[type=url], input[type=number], select, textarea {
+    width: 100%; font-family: var(--font-sans); font-weight: 300; font-size: 0.95rem;
+    color: var(--ink); background: var(--surface); line-height: 1.6;
+    border: 1px solid var(--line); border-radius: 5px; padding: 12px 14px;
+    transition: border-color 0.2s ease, background 0.2s ease;
+    -webkit-appearance: none; appearance: none;
+  }
+  textarea { resize: vertical; min-height: 96px; }
+  textarea.tall { min-height: 140px; }
+  input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.22); }
+  input:hover, select:hover, textarea:hover { border-color: rgba(255,255,255,0.16); }
+  input:focus, select:focus, textarea:focus {
+    outline: none; border-color: var(--acc-line);
+    background: var(--surface-2); box-shadow: 0 0 0 3px var(--acc-dim);
+  }
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%239dbba4' stroke-width='1.2'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 14px center; padding-right: 38px;
+  }
+  select option { background: #141416; color: var(--ink); }
+
+  /* chips / checkboxes */
+  .chips { display: flex; flex-wrap: wrap; gap: 9px; }
+  .chip { position: relative; }
+  .chip input { position: absolute; opacity: 0; pointer-events: none; }
+  .chip span {
+    display: inline-block; cursor: pointer; user-select: none;
+    font-size: 0.85rem; color: var(--ink-soft);
+    border: 1px solid var(--line); border-radius: 40px; background: var(--surface);
+    padding: 7px 15px; transition: all 0.18s ease;
+  }
+  .chip span:hover { border-color: rgba(255,255,255,0.2); color: var(--ink); }
+  .chip input:checked + span { color: var(--acc); border-color: var(--acc-line); background: var(--acc-dim); }
+  .chip input:focus-visible + span { box-shadow: 0 0 0 3px var(--acc-dim); }
+
+  /* &#9472;&#9472; tipolog&iacute;as repetibles &#9472;&#9472; */
+  .typo {
+    border: 1px solid var(--line); border-radius: 6px; background: var(--surface);
+    padding: 22px; position: relative;
+  }
+  .typo + .typo { margin-top: 16px; }
+  .typo-head {
+    display: flex; align-items: center; justify-content: space-between; gap: 14px;
+    margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--line-soft);
+  }
+  .typo-head .t {
+    font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--acc);
+  }
+  .btn-x {
+    font-family: var(--font-mono); font-size: 0.56rem; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--ink-faint); background: transparent; border: 1px solid var(--line);
+    border-radius: 4px; padding: 6px 11px; cursor: pointer; transition: all 0.18s ease;
+  }
+  .btn-x:hover { color: var(--ink); border-color: rgba(255,255,255,0.24); }
+
+  .btn-add {
+    align-self: flex-start; margin-top: 4px;
+    font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--acc); background: var(--acc-dim); border: 1px dashed var(--acc-line);
+    border-radius: 5px; padding: 11px 18px; cursor: pointer; transition: all 0.18s ease;
+  }
+  .btn-add:hover { background: rgba(157,187,164,0.16); }
+
+  /* &#9472;&#9472; envi&oacute; &#9472;&#9472; */
+  .send { padding: 52px 0 0; border-top: 1px solid var(--line); }
+  .send-box {
+    display: flex; align-items: center; justify-content: space-between; gap: 26px;
+    padding: 28px 30px; border: 1px solid var(--acc-line); border-radius: 6px;
+    background: linear-gradient(180deg, var(--acc-dim), transparent 72%), var(--surface);
+  }
+  .send-box .t { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--acc); }
+  .send-box p { margin: 10px 0 0; color: var(--ink-soft); font-size: 0.9rem; line-height: 1.7; max-width: 48ch; }
+  .btn-send {
+    flex-shrink: 0; font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--bg); background: var(--acc);
+    border: 1px solid var(--acc); border-radius: 5px; padding: 16px 30px;
+    cursor: pointer; transition: all 0.2s ease; white-space: nowrap;
+  }
+  .btn-send:hover { filter: brightness(1.1); transform: translateY(-1px); }
+  .btn-send[disabled] { opacity: 0.5; cursor: default; transform: none; }
+
+  .alt {
+    display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px;
+  }
+  .btn-ghost {
+    font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--ink-faint); background: transparent; border: 1px solid var(--line);
+    border-radius: 5px; padding: 11px 16px; cursor: pointer; text-decoration: none;
+    transition: all 0.18s ease;
+  }
+  .btn-ghost:hover { color: var(--ink); border-color: rgba(255,255,255,0.24); }
+
+  .status {
+    margin-top: 18px; padding: 15px 18px; border-radius: 5px;
+    border-left: 2px solid var(--acc-line); background: var(--surface);
+    color: var(--ink-soft); font-size: 0.89rem; line-height: 1.65; display: none;
+  }
+  .status.on { display: block; }
+  .status.err { border-left-color: #c98b7a; }
+
+  /* pantalla de gracias */
+  .done { display: none; padding: 90px 0 60px; text-align: center; }
+  .done.on { display: block; animation: rise 0.7s ease both; }
+  .done h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); letter-spacing: -0.02em; margin: 20px 0 20px; }
+  .done p { color: var(--ink-soft); max-width: 52ch; margin: 0 auto; font-size: 0.98rem; line-height: 1.8; }
+
+  footer {
+    padding: 44px 0 60px; margin-top: 46px; border-top: 1px solid var(--line);
+    font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--ink-faint);
+    display: flex; flex-wrap: wrap; gap: 10px 24px; justify-content: space-between;
+  }
+  footer a { color: var(--ink-faint); text-decoration: none; border-bottom: 1px solid var(--line); }
+  footer a:hover { color: var(--acc); border-color: var(--acc-line); }
+
+  @media (max-width: 720px) {
+    .wrap { padding: 0 22px; }
+    .hero { padding: 62px 0 34px; }
+    .sec-head { gap: 14px; }
+    .sec-head .n { min-width: 20px; }
+    .fields { margin-left: 0; }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .send-box { flex-direction: column; align-items: flex-start; padding: 24px; }
+    .btn-send { width: 100%; }
+  }
+</style>
+
+<header class="topbar">
+  <div class="wrap">
+    <div class="logo">imabox<b>.</b></div>
+    <span class="tag">Brief de proyecto</span>
+    <span class="saved" id="savedFlag"><b>&#9679;</b> Guardado en este navegador</span>
+  </div>
+  <div class="progress"><i id="progressBar"></i></div>
+</header>
+
+<main class="wrap" id="formView">
+
+  <section class="hero" style="border-top:0">
+    <p class="eyebrow">Grupo Diuiringuer &middot; La Costa Park</p>
+    <h1>Contanos el proyecto <em>una sola vez.</em></h1>
+    <p class="lead">Con esta informaci&oacute;n armamos todo el material de venta: las im&aacute;genes, las animaciones, los textos y la comunicaci&oacute;n. Cuanto m&aacute;s concreto sea lo que escribas, menos vueltas damos despu&eacute;s. Si algo todav&iacute;a no est&aacute; definido, dejalo vac&iacute;o o escrib&iacute; &laquo;a definir&raquo;.</p>
+    <div class="meta">
+      <span><b>Toma</b> &middot; 10 a 15 minutos</span>
+      <span><b>Se guarda solo</b> &middot; pod&eacute;s cerrar y volver</span>
+      <span><b>Al final</b> &middot; un bot&oacute;n para enviarlo</span>
+    </div>
+  </section>
+
+  <form id="briefForm" novalidate>
+
+    <!-- 00 &middot; contacto -->
+    <section>
+      <div class="sec-head">
+        <div class="n">00</div>
+        <div>
+          <p class="eyebrow">Para saber con qui&eacute;n hablamos</p>
+          <h2>Tus datos</h2>
+        </div>
+      </div>
+      <div class="fields">
+        <div class="grid-3">
+          <div class="f">
+            <label for="c_nombre">Nombre y apellido <span class="req">*</span></label>
+            <input type="text" id="c_nombre" name="Contacto &mdash; nombre" required>
+          </div>
+          <div class="f">
+            <label for="c_rol">Rol en el proyecto</label>
+            <input type="text" id="c_rol" name="Contacto &mdash; rol" placeholder="Director, marketing, ventas&hellip;">
+          </div>
+          <div class="f">
+            <label for="c_email">Email <span class="req">*</span></label>
+            <input type="email" id="c_email" name="Contacto &mdash; email" required>
+          </div>
+        </div>
+        <div class="f">
+          <label for="c_tel">Tel&eacute;fono o WhatsApp</label>
+          <input type="tel" id="c_tel" name="Contacto &mdash; tel&eacute;fono">
+        </div>
+      </div>
+    </section>
+
+    <!-- 01 &middot; descripci&oacute;n general -->
+    <section>
+      <div class="sec-head">
+        <div class="n">01</div>
+        <div>
+          <p class="eyebrow">Lo b&aacute;sico</p>
+          <h2>Descripci&oacute;n general del proyecto</h2>
+          <p class="hint">Qu&eacute; es el proyecto, d&oacute;nde est&aacute; y qu&eacute; lo hace distinto.</p>
+        </div>
+      </div>
+      <div class="fields">
+        <div class="grid-2">
+          <div class="f">
+            <label for="p_nombre">Nombre del proyecto <span class="req">*</span></label>
+            <input type="text" id="p_nombre" name="Nombre del proyecto" value="La Costa Park" required>
+          </div>
+          <div class="f">
+            <label for="p_zona">Zona o barrio <span class="req">*</span></label>
+            <input type="text" id="p_zona" name="Zona / barrio" placeholder="Ej. Ciudad de la Costa, Solymar Norte" required>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="f">
+            <label for="p_tipo">Tipo de propiedad</label>
+            <select id="p_tipo" name="Tipo de propiedad">
+              <option value="">Eleg&iacute; una opci&oacute;n</option>
+              <option>Casas</option>
+              <option>Apartamentos</option>
+              <option>Lotes / terrenos</option>
+              <option>Locales comerciales / oficinas</option>
+              <option>Mixto (varios tipos)</option>
+              <option>Otro</option>
+            </select>
+          </div>
+          <div class="f">
+            <label for="p_sistema">Sistema constructivo</label>
+            <input type="text" id="p_sistema" name="Sistema constructivo" placeholder="Tradicional, steel frame, prefabricado&hellip;">
+          </div>
+        </div>
+        <div class="f">
+          <label for="p_concepto">Concepto o diferencial del proyecto <span class="req">*</span></label>
+          <p class="help">Dise&ntilde;o, ubicaci&oacute;n, amenities, sistema constructivo, escala&hellip; Lo que hace que este proyecto sea este y no otro.</p>
+          <textarea id="p_concepto" name="Concepto / diferencial" required></textarea>
+        </div>
+        <div class="f">
+          <label for="p_amenities">Amenities y espacios comunes</label>
+          <p class="help">Piscina, gimnasio, barbacoa, cancha, seguridad, cocheras, espacios verdes&hellip;</p>
+          <textarea id="p_amenities" name="Amenities / espacios comunes"></textarea>
+        </div>
+        <div class="f">
+          <label for="p_descripcion">Descripci&oacute;n en tus palabras</label>
+          <p class="help">Si te resulta m&aacute;s c&oacute;modo, contalo suelto: c&oacute;mo se lo explicar&iacute;as a alguien que no lo conoce.</p>
+          <textarea id="p_descripcion" name="Descripci&oacute;n libre" class="tall"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 &middot; tipolog&iacute;as -->
+    <section>
+      <div class="sec-head">
+        <div class="n">02</div>
+        <div>
+          <p class="eyebrow">El producto</p>
+          <h2>Tipolog&iacute;as de unidades</h2>
+          <p class="hint">Un bloque por tipolog&iacute;a. Si todas las unidades son iguales, con uno alcanza. Agreg&aacute; los que necesites.</p>
+        </div>
+      </div>
+      <div class="fields">
+        <div id="typoList"></div>
+        <button type="button" class="btn-add" id="addTypo">+ Agregar tipolog&iacute;a</button>
+      </div>
+    </section>
+
+    <!-- 03 &middot; comprador -->
+    <section>
+      <div class="sec-head">
+        <div class="n">03</div>
+        <div>
+          <p class="eyebrow">A qui&eacute;n le hablamos</p>
+          <h2>Comprador objetivo</h2>
+          <p class="hint">S&eacute; lo m&aacute;s espec&iacute;fico posible: perfil familiar, poder adquisitivo, de d&oacute;nde viene, por qu&eacute; compra.</p>
+        </div>
+      </div>
+      <div class="fields">
+        <div class="f">
+          <div class="lbl">Motivo de compra</div>
+          <div class="chips">
+            <label class="chip"><input type="checkbox" name="Motivo de compra" value="Primera vivienda"><span>Primera vivienda</span></label>
+            <label class="chip"><input type="checkbox" name="Motivo de compra" value="Inversi&oacute;n / renta"><span>Inversi&oacute;n / renta</span></label>
+            <label class="chip"><input type="checkbox" name="Motivo de compra" value="Mudanza / cambio de casa"><span>Mudanza / cambio de casa</span></label>
+            <label class="chip"><input type="checkbox" name="Motivo de compra" value="Segunda vivienda / veraneo"><span>Segunda vivienda / veraneo</span></label>
+            <label class="chip"><input type="checkbox" name="Motivo de compra" value="Retiro"><span>Retiro</span></label>
+          </div>
+        </div>
+        <div class="f">
+          <label for="cp_1">Perfil de comprador 1 <span class="req">*</span></label>
+          <p class="help">Ej. &laquo;Pareja de 30 a 40 a&ntilde;os con un hijo chico, hoy alquila en Montevideo, quiere casa propia con patio.&raquo;</p>
+          <textarea id="cp_1" name="Perfil de comprador 1" required></textarea>
+        </div>
+        <div class="f">
+          <label for="cp_2">Perfil de comprador 2</label>
+          <textarea id="cp_2" name="Perfil de comprador 2"></textarea>
+        </div>
+        <div class="f">
+          <label for="cp_3">Perfil de comprador 3</label>
+          <textarea id="cp_3" name="Perfil de comprador 3"></textarea>
+        </div>
+        <div class="f">
+          <label for="cp_donde">&iquest;De d&oacute;nde vienen estos compradores?</label>
+          <input type="text" id="cp_donde" name="Origen de los compradores" placeholder="Montevideo, la propia zona, extranjeros&hellip;">
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 &middot; propuesta de valor -->
+    <section>
+      <div class="sec-head">
+        <div class="n">04</div>
+        <div>
+          <p class="eyebrow">El argumento de venta</p>
+          <h2>Propuesta de valor</h2>
+          <p class="hint">Por qu&eacute; alguien comprar&iacute;a ac&aacute; y no en otro desarrollo parecido.</p>
+        </div>
+      </div>
+      <div class="fields">
+        <div class="f">
+          <label for="v_beneficio">Beneficio principal <span class="req">*</span></label>
+          <p class="help">Si el comprador se lleva una sola idea, &iquest;cu&aacute;l es?</p>
+          <textarea id="v_beneficio" name="Beneficio principal" required></textarea>
+        </div>
+        <div class="f">
+          <label for="v_ubicacion">Ventaja de la ubicaci&oacute;n</label>
+          <p class="help">Distancias reales sirven mucho: minutos al centro, a la rambla, a colegios, a la ruta.</p>
+          <textarea id="v_ubicacion" name="Ventaja de ubicaci&oacute;n"></textarea>
+        </div>
+        <div class="f">
+          <label for="v_diferencial">Diferencial concreto frente a otros proyectos de la zona</label>
+          <textarea id="v_diferencial" name="Diferencial frente a la zona"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 &middot; objetivo y timing -->
+    <section>
+      <div class="sec-head">
+        <div class="n">05</div>
+        <div>
+          <p class="eyebrow">N&uacute;meros y fechas</p>
+          <h2>Objetivo y timing de venta</h2>
+        </div>
+      </div>
+      <div class="fields">
+        <div class="grid-2">
+          <div class="f">
+            <label for="t_unidades">Cantidad total de unidades a vender</label>
+            <input type="text" id="t_unidades" name="Unidades totales a vender" placeholder="Ej. 24">
+          </div>
+          <div class="f">
+            <label for="t_preventa">&iquest;Hay preventa o descuento por lanzamiento?</label>
+            <select id="t_preventa" name="&iquest;Hay preventa?">
+              <option value="">Eleg&iacute; una opci&oacute;n</option>
+              <option>S&iacute;</option>
+              <option>No</option>
+              <option>A definir</option>
+            </select>
+          </div>
+        </div>
+        <div class="f">
+          <label for="t_preventa_det">Detalle de la preventa</label>
+          <p class="help">Qu&eacute; descuento, hasta cu&aacute;ndo, cu&aacute;ntas unidades entran.</p>
+          <textarea id="t_preventa_det" name="Detalle de la preventa"></textarea>
+        </div>
+        <div class="grid-3">
+          <div class="f">
+            <label for="t_lanzamiento">Fecha estimada de lanzamiento comercial</label>
+            <input type="text" id="t_lanzamiento" name="Fecha de lanzamiento comercial" placeholder="Mes / a&ntilde;o">
+          </div>
+          <div class="f">
+            <label for="t_obra">Fecha estimada de inicio de obra</label>
+            <input type="text" id="t_obra" name="Fecha de inicio de obra" placeholder="Mes / a&ntilde;o">
+          </div>
+          <div class="f">
+            <label for="t_entrega">Fecha estimada de entrega</label>
+            <input type="text" id="t_entrega" name="Fecha de entrega" placeholder="Mes / a&ntilde;o">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 &middot; datos extra -->
+    <section>
+      <div class="sec-head">
+        <div class="n">06</div>
+        <div>
+          <p class="eyebrow">Contexto</p>
+          <h2>Datos extra</h2>
+        </div>
+      </div>
+      <div class="fields">
+        <div class="f">
+          <label for="d_direccion">Direcci&oacute;n exacta del proyecto</label>
+          <p class="help">Calle y n&uacute;mero, padr&oacute;n o link de Google Maps. Nos sirve para el contexto real del entorno.</p>
+          <input type="text" id="d_direccion" name="Direcci&oacute;n exacta">
+        </div>
+        <div class="f">
+          <label for="d_competencia">Competencia directa</label>
+          <p class="help">Otros proyectos similares en la zona. Con los nombres alcanza.</p>
+          <textarea id="d_competencia" name="Competencia directa"></textarea>
+        </div>
+        <div class="f">
+          <label for="d_vs">Diferencial frente a esa competencia</label>
+          <textarea id="d_vs" name="Diferencial frente a la competencia"></textarea>
+        </div>
+        <div class="grid-2">
+          <div class="f">
+            <label for="d_redes">Redes sociales o web actuales del proyecto</label>
+            <input type="text" id="d_redes" name="Redes / web del proyecto" placeholder="@usuario, link&hellip;">
+          </div>
+          <div class="f">
+            <label for="d_redes_grupo">Redes o web de Grupo Diuiringuer</label>
+            <input type="text" id="d_redes_grupo" name="Redes / web del grupo">
+          </div>
+        </div>
+        <div class="f">
+          <label for="d_pago">Forma de pago y financiaci&oacute;n disponible</label>
+          <p class="help">Anticipo, cuotas, financiaci&oacute;n propia o bancaria, permuta, moneda.</p>
+          <textarea id="d_pago" name="Forma de pago / financiaci&oacute;n"></textarea>
+        </div>
+        <div class="f">
+          <div class="lbl">&iquest;Qu&eacute; material ya existe?</div>
+          <div class="chips">
+            <label class="chip"><input type="checkbox" name="Material disponible" value="Planos en PDF"><span>Planos en PDF</span></label>
+            <label class="chip"><input type="checkbox" name="Material disponible" value="Planos en CAD / DWG"><span>Planos en CAD / DWG</span></label>
+            <label class="chip"><input type="checkbox" name="Material disponible" value="Modelo 3D / BIM"><span>Modelo 3D o BIM</span></label>
+            <label class="chip"><input type="checkbox" name="Material disponible" value="Renders"><span>Renders</span></label>
+            <label class="chip"><input type="checkbox" name="Material disponible" value="Fotos del terreno"><span>Fotos del terreno</span></label>
+            <label class="chip"><input type="checkbox" name="Material disponible" value="Video / dron"><span>Video o dron</span></label>
+            <label class="chip"><input type="checkbox" name="Material disponible" value="Logo / marca"><span>Logo o marca</span></label>
+            <label class="chip"><input type="checkbox" name="Material disponible" value="Memoria descriptiva"><span>Memoria descriptiva</span></label>
+            <label class="chip"><input type="checkbox" name="Material disponible" value="Nada todav&iacute;a"><span>Nada todav&iacute;a</span></label>
+          </div>
+        </div>
+        <div class="f">
+          <label for="d_link">Link a la carpeta con ese material</label>
+          <p class="help">Drive, Dropbox, WeTransfer. Si preferís, mandalo por mail y dejalo vac&iacute;o.</p>
+          <input type="url" id="d_link" name="Link al material" placeholder="https://">
+        </div>
+        <div class="f">
+          <label for="d_casos">Casos de &eacute;xito de proyectos anteriores del grupo</label>
+          <p class="help">Proyectos ya entregados o vendidos que sirvan como respaldo.</p>
+          <textarea id="d_casos" name="Casos de &eacute;xito anteriores"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- 07 &middot; qu&eacute; se quiere transmitir -->
+    <section>
+      <div class="sec-head">
+        <div class="n">07</div>
+        <div>
+          <p class="eyebrow">El tono</p>
+          <h2>Qu&eacute; se quiere transmitir</h2>
+          <p class="hint">Esto define la luz, los colores, la gente que aparece en las im&aacute;genes y c&oacute;mo se escriben los textos.</p>
+        </div>
+      </div>
+      <div class="fields">
+        <div class="f">
+          <div class="lbl">Eleg&iacute; las que apliquen</div>
+          <div class="chips">
+            <label class="chip"><input type="checkbox" name="Qu&eacute; transmitir" value="Seguridad"><span>Seguridad</span></label>
+            <label class="chip"><input type="checkbox" name="Qu&eacute; transmitir" value="Barrio-jard&iacute;n"><span>Barrio-jard&iacute;n</span></label>
+            <label class="chip"><input type="checkbox" name="Qu&eacute; transmitir" value="Calidad de vida"><span>Calidad de vida</span></label>
+            <label class="chip"><input type="checkbox" name="Qu&eacute; transmitir" value="Cercan&iacute;a a la ciudad"><span>Cercan&iacute;a a la ciudad</span></label>
+            <label class="chip"><input type="checkbox" name="Qu&eacute; transmitir" value="Naturaleza"><span>Naturaleza</span></label>
+            <label class="chip"><input type="checkbox" name="Qu&eacute; transmitir" value="Vida en familia"><span>Vida en familia</span></label>
+            <label class="chip"><input type="checkbox" name="Qu&eacute; transmitir" value="Tranquilidad"><span>Tranquilidad</span></label>
+            <label class="chip"><input type="checkbox" name="Qu&eacute; transmitir" value="Exclusividad"><span>Exclusividad</span></label>
+            <label class="chip"><input type="checkbox" name="Qu&eacute; transmitir" value="Dise&ntilde;o / arquitectura"><span>Dise&ntilde;o / arquitectura</span></label>
+            <label class="chip"><input type="checkbox" name="Qu&eacute; transmitir" value="Inversi&oacute;n segura"><span>Inversi&oacute;n segura</span></label>
+            <label class="chip"><input type="checkbox" name="Qu&eacute; transmitir" value="Precio accesible"><span>Precio accesible</span></label>
+            <label class="chip"><input type="checkbox" name="Qu&eacute; transmitir" value="Comunidad / vecinos"><span>Comunidad / vecinos</span></label>
+          </div>
+        </div>
+        <div class="f">
+          <label for="q_otro">Algo m&aacute;s que quieran transmitir</label>
+          <textarea id="q_otro" name="Otras cosas a transmitir"></textarea>
+        </div>
+        <div class="f">
+          <label for="q_evitar">Qu&eacute; NO quieren transmitir</label>
+          <p class="help">Ej. &laquo;que parezca un complejo cerrado&raquo;, &laquo;que se vea de lujo&raquo;, &laquo;que parezca lejos de todo&raquo;.</p>
+          <textarea id="q_evitar" name="Qu&eacute; NO transmitir"></textarea>
+        </div>
+        <div class="f">
+          <label for="q_refs">Referencias visuales que les gusten</label>
+          <p class="help">Links de otros proyectos, cuentas de Instagram, im&aacute;genes de Pinterest. Un par alcanza.</p>
+          <textarea id="q_refs" name="Referencias visuales"></textarea>
+        </div>
+        <div class="f">
+          <label for="q_extra">Cualquier otra cosa que debamos saber</label>
+          <textarea id="q_extra" name="Comentarios finales"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <div class="send">
+      <div class="send-box">
+        <div>
+          <span class="t">&Uacute;ltimo paso</span>
+          <p>Revis&aacute; que est&eacute; todo y envialo. Nos llega al instante y te respondemos con las dudas que queden.</p>
+        </div>
+        <button type="submit" class="btn-send" id="btnSend">Enviar el brief</button>
+      </div>
+      <div class="alt">
+        <button type="button" class="btn-ghost" id="btnDownload">Descargar una copia</button>
+        <button type="button" class="btn-ghost" id="btnClear">Borrar todo y empezar de nuevo</button>
+      </div>
+      <div class="status" id="status"></div>
+    </div>
+
+  </form>
+</main>
+
+<div class="wrap done" id="doneView">
+  <p class="eyebrow">Brief recibido</p>
+  <h2>Gracias. Ya lo tenemos.</h2>
+  <p>Lo revisamos y te escribimos en las pr&oacute;ximas horas con las dudas que queden. Si mientras tanto quer&eacute;s agregar material &mdash; planos, fotos, referencias &mdash;, mandalo por mail y lo sumamos al proyecto.</p>
+  <div class="alt" style="justify-content:center; margin-top:34px">
+    <button type="button" class="btn-ghost" id="btnDownload2">Descargar mi copia</button>
+  </div>
+</div>
+
+<footer class="wrap">
+  <span>Imabox &middot; Visualizaci&oacute;n y contenido para desarrollos inmobiliarios</span>
+  <span><a href="https://imabox.uy">imabox.uy</a></span>
+</footer>
+
+<!-- plantilla de tipolog&iacute;a -->
+<template id="typoTpl">
+  <div class="typo">
+    <div class="typo-head">
+      <span class="t">Tipolog&iacute;a <em class="idx"></em></span>
+      <button type="button" class="btn-x remove">Quitar</button>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:22px">
+      <div class="grid-2">
+        <div class="f">
+          <label>Nombre de la tipolog&iacute;a</label>
+          <input type="text" data-k="nombre" placeholder="Ej. Casa 3 dormitorios">
+        </div>
+        <div class="f">
+          <label>Cantidad de unidades de este tipo</label>
+          <input type="text" data-k="cantidad" placeholder="Ej. 8">
+        </div>
+      </div>
+      <div class="grid-3">
+        <div class="f">
+          <label>Metros cuadrados</label>
+          <input type="text" data-k="m2" placeholder="Ej. 96 m&sup2; + 40 de jard&iacute;n">
+        </div>
+        <div class="f">
+          <label>Dormitorios / ba&ntilde;os</label>
+          <input type="text" data-k="dormitorios" placeholder="Ej. 3 dorm / 2 ba&ntilde;os">
+        </div>
+        <div class="f">
+          <label>Precio o rango de precio</label>
+          <input type="text" data-k="precio" placeholder="Ej. USD 145.000 a 160.000">
+        </div>
+      </div>
+      <div class="f">
+        <label>Caracter&iacute;sticas distintivas</label>
+        <input type="text" data-k="caracteristicas" placeholder="Terraza, jard&iacute;n, cochera, parrillero, planta baja&hellip;">
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ================================================================
+     CONFIGURACI&Oacute;N
+     Peg&aacute; ac&aacute; la URL de la app web de Google Apps Script.
+     Instrucciones completas en _apps-script.gs (misma carpeta).
+     ================================================================ */
+  var ENDPOINT = 'https://script.google.com/macros/s/AKfycbytnh2pD82xoLl0LAq-YVUx1I-s83TMLhNTxydHP7KxxgZDhU-MbQSu1AFqcf_HVpr_/exec';
+  var MAIL_FALLBACK = 'imabox.rendering@gmail.com';  // si el endpoint falla, se ofrece mandarlo por mail
+  var STORAGE_KEY = 'imabox_brief_costapark_v1';
+  var PROYECTO = 'La Costa Park';
+
+  var form     = document.getElementById('briefForm');
+  var typoList = document.getElementById('typoList');
+  var tpl      = document.getElementById('typoTpl');
+  var statusEl = document.getElementById('status');
+  var btnSend  = document.getElementById('btnSend');
+  var bar      = document.getElementById('progressBar');
+  var savedFlag= document.getElementById('savedFlag');
+
+  /* ---------- tipolog&iacute;as ---------- */
+  function renumber() {
+    var all = typoList.querySelectorAll('.typo');
+    for (var i = 0; i < all.length; i++) {
+      all[i].querySelector('.idx').textContent = ('0' + (i + 1)).slice(-2);
+      all[i].querySelector('.remove').style.display = all.length > 1 ? '' : 'none';
+    }
+  }
+
+  function addTypo(data) {
+    var node = tpl.content.cloneNode(true).querySelector('.typo');
+    if (data) {
+      var inputs = node.querySelectorAll('[data-k]');
+      for (var i = 0; i < inputs.length; i++) {
+        inputs[i].value = data[inputs[i].getAttribute('data-k')] || '';
+      }
+    }
+    node.querySelector('.remove').addEventListener('click', function () {
+      node.remove();
+      renumber();
+      save();
+      updateProgress();
+    });
+    typoList.appendChild(node);
+    renumber();
+    return node;
+  }
+
+  document.getElementById('addTypo').addEventListener('click', function () {
+    var n = addTypo();
+    n.querySelector('input').focus();
+    save();
+  });
+
+  function readTypos() {
+    var out = [];
+    var blocks = typoList.querySelectorAll('.typo');
+    for (var i = 0; i < blocks.length; i++) {
+      var o = {}, any = false;
+      var inputs = blocks[i].querySelectorAll('[data-k]');
+      for (var j = 0; j < inputs.length; j++) {
+        var v = inputs[j].value.trim();
+        o[inputs[j].getAttribute('data-k')] = v;
+        if (v) any = true;
+      }
+      if (any || blocks.length === 1) out.push(o);
+    }
+    return out;
+  }
+
+  /* ---------- lectura del formulario ---------- */
+  function readForm() {
+    var data = {};
+    var els = form.querySelectorAll('input[name], select[name], textarea[name]');
+    for (var i = 0; i < els.length; i++) {
+      var el = els[i];
+      if (el.type === 'checkbox') {
+        if (el.checked) data[el.name] = (data[el.name] ? data[el.name] + ', ' : '') + el.value;
+        else if (!(el.name in data)) data[el.name] = '';
+      } else {
+        data[el.name] = el.value.trim();
+      }
+    }
+    return data;
+  }
+
+  /* ---------- autoguardado ---------- */
+  var saveTimer = null, flagTimer = null;
+
+  function save() {
+    try {
+      var payload = { fields: readForm(), typos: readTypos(), ts: Date.now() };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+      savedFlag.classList.add('on');
+      clearTimeout(flagTimer);
+      flagTimer = setTimeout(function () { savedFlag.classList.remove('on'); }, 2200);
+    } catch (e) { /* modo privado: seguimos sin guardar */ }
+  }
+
+  function restore() {
+    var raw;
+    try { raw = localStorage.getItem(STORAGE_KEY); } catch (e) { return false; }
+    if (!raw) return false;
+    var d;
+    try { d = JSON.parse(raw); } catch (e) { return false; }
+
+    var els = form.querySelectorAll('input[name], select[name], textarea[name]');
+    for (var i = 0; i < els.length; i++) {
+      var el = els[i], v = d.fields ? d.fields[el.name] : undefined;
+      if (v === undefined) continue;
+      if (el.type === 'checkbox') el.checked = (', ' + v + ', ').indexOf(', ' + el.value + ', ') !== -1;
+      else el.value = v;
+    }
+    if (d.typos && d.typos.length) {
+      for (var k = 0; k < d.typos.length; k++) addTypo(d.typos[k]);
+      return true;
+    }
+    return true;
+  }
+
+  form.addEventListener('input', function () {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(save, 500);
+    updateProgress();
+  });
+  form.addEventListener('change', function () { save(); updateProgress(); });
+
+  /* ---------- progreso ---------- */
+  function updateProgress() {
+    var els = form.querySelectorAll('input[name], select[name], textarea[name], [data-k]');
+    var total = 0, done = 0, seen = {};
+    for (var i = 0; i < els.length; i++) {
+      var el = els[i];
+      if (el.type === 'checkbox') {
+        if (seen[el.name]) continue;
+        seen[el.name] = 1;
+        total++;
+        if (form.querySelector('input[name="' + el.name.replace(/"/g, '\\"') + '"]:checked')) done++;
+      } else {
+        total++;
+        if (el.value.trim()) done++;
+      }
+    }
+    bar.style.width = total ? Math.round((done / total) * 100) + '%' : '0%';
+  }
+
+  /* ---------- texto plano para la copia / el mail ---------- */
+  function toText() {
+    var d = readForm(), t = readTypos();
+    var out = 'BRIEF DE PROYECTO — ' + PROYECTO + '\n';
+    out += 'Enviado: ' + new Date().toLocaleString('es-UY') + '\n\n';
+    for (var k in d) {
+      if (!d.hasOwnProperty(k)) continue;
+      out += k + ':\n' + (d[k] || '—') + '\n\n';
+    }
+    out += 'TIPOLOGÍAS\n';
+    for (var i = 0; i < t.length; i++) {
+      out += '\n  ' + ('0' + (i + 1)).slice(-2) + ' — ' + (t[i].nombre || 'sin nombre') + '\n';
+      out += '  Unidades: ' + (t[i].cantidad || '—') + '\n';
+      out += '  M2: ' + (t[i].m2 || '—') + '\n';
+      out += '  Dorm/baños: ' + (t[i].dormitorios || '—') + '\n';
+      out += '  Precio: ' + (t[i].precio || '—') + '\n';
+      out += '  Características: ' + (t[i].caracteristicas || '—') + '\n';
+    }
+    return out;
+  }
+
+  function download() {
+    var blob = new Blob([toText()], { type: 'text/plain;charset=utf-8' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'brief-la-costa-park.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+  }
+
+  document.getElementById('btnDownload').addEventListener('click', download);
+  document.getElementById('btnDownload2').addEventListener('click', download);
+
+  document.getElementById('btnClear').addEventListener('click', function () {
+    if (!window.confirm('Se borra todo lo que escribiste en este navegador. ¿Seguro?')) return;
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+    location.reload();
+  });
+
+  /* ---------- envío ---------- */
+  function showStatus(msg, isErr) {
+    statusEl.innerHTML = msg;
+    statusEl.className = 'status on' + (isErr ? ' err' : '');
+  }
+
+  function mailtoLink() {
+    return 'mailto:' + MAIL_FALLBACK +
+      '?subject=' + encodeURIComponent('Brief — ' + PROYECTO) +
+      '&body=' + encodeURIComponent(toText().slice(0, 1800));
+  }
+
+  form.addEventListener('submit', function (ev) {
+    ev.preventDefault();
+
+    var faltan = [];
+    var req = form.querySelectorAll('[required]');
+    for (var i = 0; i < req.length; i++) {
+      if (!req[i].value.trim()) {
+        var box = req[i].closest('.f');
+        var lab = box ? box.querySelector('label') : null;
+        faltan.push(lab ? lab.textContent.replace('*', '').trim() : req[i].name);
+      }
+    }
+    if (faltan.length) {
+      showStatus('Falta completar: <b>' + faltan.join('</b>, <b>') + '</b>.', true);
+      var first = form.querySelector('[required]');
+      for (var j = 0; j < req.length; j++) { if (!req[j].value.trim()) { first = req[j]; break; } }
+      first.focus();
+      first.scrollIntoView({ block: 'center' });
+      return;
+    }
+
+    var data = readForm();
+    data['Proyecto'] = data['Nombre del proyecto'] || PROYECTO;
+    data['Tipologías'] = readTypos().map(function (t, i) {
+      return ('0' + (i + 1)).slice(-2) + ') ' + (t.nombre || 'sin nombre') +
+        ' | unidades: ' + (t.cantidad || '-') +
+        ' | m2: ' + (t.m2 || '-') +
+        ' | dorm/baños: ' + (t.dormitorios || '-') +
+        ' | precio: ' + (t.precio || '-') +
+        ' | características: ' + (t.caracteristicas || '-');
+    }).join('\n');
+    data['Enviado'] = new Date().toLocaleString('es-UY');
+    data['Texto completo'] = toText();
+
+    btnSend.disabled = true;
+    btnSend.textContent = 'Enviando…';
+    showStatus('Enviando el brief…');
+
+    if (!ENDPOINT) {
+      btnSend.disabled = false;
+      btnSend.textContent = 'Enviar el brief';
+      showStatus('El envío automático todavía no está configurado. ' +
+        'Descarg&aacute; la copia y mandala por mail a <b>' + MAIL_FALLBACK + '</b>, ' +
+        'o <a href="' + mailtoLink() + '" style="color:var(--acc)">abrí el mail ya redactado</a>.', true);
+      return;
+    }
+
+    var fd = new FormData();
+    for (var k in data) { if (data.hasOwnProperty(k)) fd.append(k, data[k]); }
+
+    fetch(ENDPOINT, { method: 'POST', mode: 'no-cors', body: fd })
+      .then(function () {
+        try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+        document.getElementById('formView').style.display = 'none';
+        document.getElementById('doneView').classList.add('on');
+        window.scrollTo(0, 0);
+      })
+      .catch(function () {
+        btnSend.disabled = false;
+        btnSend.textContent = 'Enviar el brief';
+        showStatus('No pudimos enviarlo (puede ser la conexión). Prob&aacute; de nuevo, ' +
+          'o descarg&aacute; la copia y mandala a <b>' + MAIL_FALLBACK + '</b>.', true);
+      });
+  });
+
+  /* ---------- arranque ---------- */
+  if (!restore()) addTypo();
+  if (!typoList.querySelector('.typo')) addTypo();
+  renumber();
+  updateProgress();
+
+  window.addEventListener('beforeunload', function (e) {
+    if (document.getElementById('doneView').classList.contains('on')) return;
+    var d = readForm(), algo = false;
+    for (var k in d) { if (d.hasOwnProperty(k) && d[k] && k !== 'Nombre del proyecto') { algo = true; break; } }
+    if (algo) { e.preventDefault(); e.returnValue = ''; }
+  });
+})();
+</script>
