@@ -1,0 +1,581 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Botero &mdash; Recorrido virtual | Imabox</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="shortcut icon" type="image/png" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://use.typekit.net/oov2wcw.css">
+<style>
+/* Estetica tomada de styles/index.css del sitio: acento eucalipto,
+   aktiv-grotesk en versalitas con mucho tracking para toda la UI,
+   Poppins liviana para la marca, y botones rectos (nada redondeado). */
+:root{
+  --euca:#9dbba4;
+  --euca-dim:rgba(157,187,164,.12);
+  --euca-bord:rgba(157,187,164,.3);
+  --ui:'aktiv-grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --marca:'Poppins', sans-serif;
+}
+html,body{margin:0;height:100%;overflow:hidden;background:#0b0b0b;color:#fff;font-family:var(--ui)}
+#c{width:100%;height:100%;display:block;touch-action:none;outline:none}
+.ui{position:fixed;z-index:10;user-select:none}
+/* los panoramas van de una pared quemada de sol a un rincon oscuro:
+   sin estos velos la UI blanca desaparece en la mitad de las vistas */
+.velo{position:fixed;left:0;right:0;z-index:5;pointer-events:none}
+.velo.arriba{top:0;height:150px;background:linear-gradient(180deg,rgba(11,11,11,.5),rgba(11,11,11,0))}
+.velo.abajo{bottom:0;height:190px;background:linear-gradient(0deg,rgba(11,11,11,.5),rgba(11,11,11,0))}
+
+/* marca */
+#marca{left:30px;top:24px;font-family:var(--marca);font-weight:300;font-size:1.55rem;
+  line-height:1;letter-spacing:-.01em;color:#fff;text-decoration:none;
+  text-shadow:0 1px 12px rgba(0,0,0,.45);transition:color .25s ease}
+#marca:hover{color:var(--euca)}
+#proyecto{right:30px;top:30px;font-size:.58rem;letter-spacing:.25em;text-transform:uppercase;
+  color:rgba(255,255,255,.55);text-shadow:0 1px 10px rgba(0,0,0,.5);text-align:right}
+#proyecto b{display:block;color:#fff;font-weight:400;letter-spacing:.22em;margin-bottom:5px}
+
+/* puntos */
+#puntos{left:50%;bottom:34px;transform:translateX(-50%);display:flex;gap:1px}
+#puntos button{
+  padding:13px 26px;border:1px solid rgba(255,255,255,.28);border-right-width:0;
+  background:rgba(0,0,0,.32);color:rgba(255,255,255,.65);
+  font-family:var(--ui);font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;
+  cursor:pointer;backdrop-filter:blur(8px);
+  transition:border-color .25s ease,color .25s ease,background .25s ease}
+#puntos button:last-child{border-right-width:1px}
+#puntos button:hover{color:#fff;border-color:rgba(255,255,255,.5)}
+#puntos button.on{background:var(--euca);border-color:var(--euca);color:#000}
+
+/* sensor: aparece solo en aparatos con giroscopio */
+#sensor{left:50%;bottom:88px;transform:translateX(-50%);display:none;align-items:center;gap:9px;
+  padding:11px 22px;border:1px solid rgba(255,255,255,.28);background:rgba(0,0,0,.32);
+  color:rgba(255,255,255,.65);font-family:var(--ui);font-size:.58rem;letter-spacing:.22em;
+  text-transform:uppercase;cursor:pointer;backdrop-filter:blur(8px);
+  transition:color .3s ease,border-color .3s ease,background .3s ease}
+#sensor.visible{display:flex}
+#sensor::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;
+  opacity:.45;transition:opacity .3s ease,box-shadow .3s ease}
+#sensor.on{border-color:var(--euca-bord);background:var(--euca-dim);color:var(--euca)}
+#sensor.on::before{opacity:1;box-shadow:0 0 8px var(--euca)}
+
+/* controles de la tele */
+#tvui{right:30px;bottom:34px;display:none;gap:1px}
+#tvui button{padding:13px 22px;border:1px solid rgba(255,255,255,.28);border-right-width:0;
+  background:rgba(0,0,0,.32);color:rgba(255,255,255,.65);font-family:var(--ui);
+  font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;
+  backdrop-filter:blur(8px);transition:color .25s ease,border-color .25s ease}
+#tvui button:last-child{border-right-width:1px}
+#tvui button:hover{color:#fff;border-color:rgba(255,255,255,.5)}
+
+/* preloader: la linea de acento del index, cargando de izquierda a derecha */
+#carga{position:fixed;inset:0;z-index:20;background:#0b0b0b;display:flex;
+  flex-direction:column;align-items:center;justify-content:center;gap:26px;
+  transition:opacity .6s ease}
+#carga span{font-family:var(--marca);font-weight:300;font-size:1.7rem;letter-spacing:-.01em}
+#carga i{display:block;width:150px;height:1px;background:rgba(255,255,255,.16);position:relative;overflow:hidden}
+#carga i::after{content:'';position:absolute;inset:0;background:var(--euca);
+  transform:scaleX(0);transform-origin:left;animation:barra 1.5s ease-in-out infinite}
+@keyframes barra{0%{transform:scaleX(0)}50%{transform:scaleX(1)}100%{transform:scaleX(0);transform-origin:right}}
+#carga.off{opacity:0;pointer-events:none}
+
+@media (max-width:640px){
+  #marca{left:20px;top:18px;font-size:1.3rem}
+  #proyecto{right:20px;top:22px;font-size:.52rem}
+  #puntos button{padding:12px 18px;font-size:.58rem;letter-spacing:.18em}
+  #tvui{right:50%;transform:translateX(50%);bottom:88px}
+  #sensor{bottom:142px}
+}
+</style>
+</head>
+<body>
+
+<canvas id="c" touch-action="none"></canvas>
+
+<div class="velo arriba"></div>
+<div class="velo abajo"></div>
+
+<a class="ui" id="marca" href="https://imabox.uy" target="_blank" rel="noopener">imabox.</a>
+
+<div class="ui" id="proyecto">
+  <b>Botero</b>
+  Recorrido virtual
+</div>
+
+<div class="ui" id="puntos"></div>
+<button class="ui" id="sensor" type="button">Sensor</button>
+
+<div class="ui" id="tvui">
+  <button id="btn-pausa">Pausar</button>
+  <button id="btn-apagar">Apagar</button>
+</div>
+
+<div id="carga"><span>imabox.</span><i></i></div>
+
+<script src="./lib/babylon.js"></script>
+<script>
+/* ============================================================
+   Botero - prueba de recorrido con 3 panoramas
+   Todo esta en el espacio del modelo (metros): las camaras y la
+   pantalla de la tele salen tal cual del .glb exportado del Max,
+   asi que el plano del video calza solo, sin acomodarlo a ojo.
+   ============================================================ */
+
+/* --- datos que vienen del .glb ---
+   glTF es right-handed y Babylon left-handed: si se copian las
+   coordenadas tal cual, la escena entera queda espejada. La
+   conversion es negar la X, y por eso el shader del panorama usa
+   +atan2 donde la comprobacion contra las imagenes daba -atan2. */
+function delModelo(x, y, z){ return new BABYLON.Vector3(-x, y, z); }
+
+var PUNTOS = [
+  { n:'01', pano:'assets/pano1', p:delModelo(-165.092041, 9.466323, -446.990000) },
+  { n:'02', pano:'assets/pano2', p:delModelo(-166.145172, 9.466323, -448.673248) },
+  { n:'03', pano:'assets/pano3', p:delModelo(-165.712753, 9.466323, -451.357574) }
+];
+
+/* pantalla_tv: plana en x=-167.097, 1.026 m de ancho (sobre Z) x 0.725 de alto */
+var TV = {
+  centro: delModelo(-167.097, 8.944, -450.341),
+  ancho: 1.026,
+  alto: 0.725
+};
+
+var RADIO = 8;           // radio de la esfera del panorama, en metros
+var ALTURA_OJOS = 1.65;  // para apoyar los discos de navegacion en el piso
+
+var canvas = document.getElementById('c');
+var engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer:false, stencil:false });
+var scene  = new BABYLON.Scene(engine);
+scene.clearColor = new BABYLON.Color4(0.07,0.07,0.07,1);
+
+/* ---------- shader del panorama ----------
+   La convencion de los equirect salio de proyectar el quad de la tele
+   sobre las tres imagenes hasta que el contorno calzo con la pantalla:
+   en el espacio del modelo es u = 0.5 - atan2(x,z)/2pi. Aca la X ya
+   viene negada (ver delModelo), asi que queda +atan2. */
+BABYLON.Effect.ShadersStore['panoVertexShader'] = [
+  'precision highp float;',
+  'attribute vec3 position;',
+  'uniform mat4 worldViewProjection;',
+  'varying vec3 vDir;',
+  'void main(void){',
+  '  vDir = position;',
+  '  gl_Position = worldViewProjection * vec4(position, 1.0);',
+  '}'
+].join('\n');
+
+BABYLON.Effect.ShadersStore['panoFragmentShader'] = [
+  'precision highp float;',
+  'varying vec3 vDir;',
+  'uniform sampler2D pano;',
+  'uniform float opacidad;',
+  'const float PI = 3.14159265359;',
+  'void main(void){',
+  '  vec3 d = normalize(vDir);',
+  '  float u = 0.5 + atan(d.x, d.z) / (2.0 * PI);',
+  '  float v = 0.5 - asin(clamp(d.y, -1.0, 1.0)) / PI;',
+  '  gl_FragColor = vec4(texture2D(pano, vec2(u, v)).rgb, opacidad);',
+  '}'
+].join('\n');
+
+function hacerEsfera(nombre){
+  var m = BABYLON.MeshBuilder.CreateSphere(nombre, {
+    diameter: RADIO*2, segments: 48, sideOrientation: BABYLON.Mesh.BACKSIDE
+  }, scene);
+  var mat = new BABYLON.ShaderMaterial(nombre+'-mat', scene, 'pano', {
+    attributes:['position'],
+    uniforms:['worldViewProjection','opacidad'],
+    samplers:['pano'], needAlphaBlending:true
+  });
+  mat.backFaceCulling = false;
+  mat.setFloat('opacidad', 1.0);
+  m.material = mat;
+  m.isPickable = false;
+  m.infiniteDistance = false;
+  return m;
+}
+
+/* dos esferas: la del punto donde estoy y la del destino. Durante la
+   transicion cada una queda anclada a SU punto, no a la camara: por
+   eso al avanzar el panorama viejo se agranda y da sensacion de
+   movimiento en vez de un fundido plano. */
+var esferaA = hacerEsfera('panoA');
+var esferaB = hacerEsfera('panoB');
+esferaB.setEnabled(false);
+esferaB.material.alphaIndex = 1;
+esferaA.material.alphaIndex = 0;
+
+/* Los panoramas vienen a 6000x3000, pero muchas GPU de celular topan
+   en 4096 y una textura mas grande directamente no carga: ahi va la
+   copia de 4000x2000. Se decide con el limite que declara el aparato. */
+var SUFIJO = (engine.getCaps().maxTextureSize >= 6000) ? '.jpg' : '-mob.jpg';
+
+var texturas = [];
+function cargarPano(i, cb){
+  if (texturas[i]) { cb(texturas[i]); return; }
+  var t = new BABYLON.Texture(PUNTOS[i].pano + SUFIJO, scene, true, false,
+            BABYLON.Texture.BILINEAR_SAMPLINGMODE, function(){ cb(t); });
+  t.wrapU = BABYLON.Texture.WRAP_ADDRESSMODE;
+  t.wrapV = BABYLON.Texture.CLAMP_ADDRESSMODE;
+  t.anisotropicFilteringLevel = 8;
+  texturas[i] = t;
+}
+
+/* ---------- camara ----------
+   La camara cuelga de un nodo ("rig") que se para en cada punto y
+   gira solo en Y. Asi el sensor puede escribir la rotacion de la
+   camara mientras el dedo sigue corriendo el rig: los dos controles
+   conviven en vez de pelearse. */
+var rig = new BABYLON.TransformNode('rig', scene);
+rig.position = PUNTOS[0].p.clone();
+
+var cam = new BABYLON.FreeCamera('cam', BABYLON.Vector3.Zero(), scene);
+cam.parent = rig;
+cam.position = BABYLON.Vector3.Zero();
+cam.minZ = 0.05;
+cam.maxZ = 200;
+cam.fov  = 1.15;
+var yaw = Math.PI, pitch = 0;   // arranca mirando hacia -Z (al interior)
+var rigYaw = 0;                 // giro que agrega el dedo con el sensor prendido
+var sensorOn = false;
+
+/* control propio: mas predecible que attachControl para un 360 */
+var arrastrando = false, lx = 0, ly = 0, movido = 0;
+canvas.addEventListener('pointerdown', function(e){
+  arrastrando = true; movido = 0; lx = e.clientX; ly = e.clientY;
+  canvas.setPointerCapture(e.pointerId);
+});
+canvas.addEventListener('pointermove', function(e){
+  if (!arrastrando) return;
+  var dx = e.clientX - lx, dy = e.clientY - ly;
+  lx = e.clientX; ly = e.clientY;
+  movido += Math.abs(dx) + Math.abs(dy);
+  if (sensorOn){
+    /* con el sensor prendido el dedo solo corre el eje horizontal:
+       la inclinacion la manda el aparato */
+    rigYaw -= dx * 0.0026;
+  } else {
+    yaw   -= dx * 0.0026;
+    pitch -= dy * 0.0026;
+    pitch = Math.max(-1.45, Math.min(1.45, pitch));
+  }
+});
+canvas.addEventListener('pointerup', function(e){
+  arrastrando = false;
+  canvas.releasePointerCapture(e.pointerId);
+});
+canvas.addEventListener('wheel', function(e){
+  e.preventDefault();
+  cam.fov = Math.max(0.45, Math.min(1.5, cam.fov + (e.deltaY > 0 ? 0.06 : -0.06)));
+}, { passive:false });
+
+/* ---------- la tele ---------- */
+var video = null, videoTex = null, planoTv = null, hotspot = null;
+
+function crearHotspot(){
+  var dt = new BABYLON.DynamicTexture('hs', {width:256, height:256}, scene, true);
+  var ctx = dt.getContext();
+  ctx.clearRect(0,0,256,256);
+  ctx.beginPath(); ctx.arc(128,128,78,0,Math.PI*2);
+  ctx.fillStyle = 'rgba(11,11,11,0.42)'; ctx.fill();
+  ctx.lineWidth = 2.5; ctx.strokeStyle = '#9dbba4'; ctx.stroke();
+  ctx.beginPath(); ctx.arc(128,128,98,-0.5,0.5);
+  ctx.lineWidth = 1.5; ctx.strokeStyle = 'rgba(157,187,164,0.45)'; ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(113,96); ctx.lineTo(113,160); ctx.lineTo(168,128);
+  ctx.closePath(); ctx.fillStyle = '#9dbba4'; ctx.fill();
+  dt.hasAlpha = true; dt.update();
+
+  var mat = new BABYLON.StandardMaterial('hs-mat', scene);
+  mat.diffuseTexture = dt;
+  mat.opacityTexture = dt;
+  mat.emissiveColor = new BABYLON.Color3(1,1,1);
+  mat.disableLighting = true;
+  mat.backFaceCulling = false;
+
+  var p = BABYLON.MeshBuilder.CreatePlane('hotspot-tv', {size:0.34}, scene);
+  p.material = mat;
+  p.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
+  p.position = TV.centro.add(new BABYLON.Vector3(0.14, 0, 0));
+  p.renderingGroupId = 1;
+  return p;
+}
+
+function crearTv(){
+  video = document.createElement('video');
+  video.src = 'assets/tv.mp4';
+  video.crossOrigin = 'anonymous';
+  video.loop = true;
+  video.playsInline = true;
+  video.setAttribute('playsinline','');
+  video.preload = 'auto';
+
+  videoTex = new BABYLON.VideoTexture('tv', video, scene, true, false);
+  var mat = new BABYLON.StandardMaterial('tv-mat', scene);
+  mat.emissiveTexture = videoTex;
+  mat.diffuseColor = new BABYLON.Color3(0,0,0);
+  mat.specularColor = new BABYLON.Color3(0,0,0);
+  mat.disableLighting = true;
+
+  /* el plano ocupa la pantalla entera y el video (16:9) se recorta a
+     los costados para llenarla: la pantalla del render es mas cuadrada
+     (1.42) y con barras negras se notaba que no calzaba */
+  var rPantalla = TV.ancho / TV.alto;
+  var rVideo = 16/9;
+  videoTex.uScale = rPantalla / rVideo;
+  videoTex.uOffset = (1 - videoTex.uScale) / 2;
+
+  planoTv = BABYLON.MeshBuilder.CreatePlane('tv', {width:TV.ancho, height:TV.alto}, scene);
+  planoTv.material = mat;
+  planoTv.rotation.y = Math.PI/2;               // la pantalla se mira desde +X (X ya viene negada)
+  /* exactamente en el plano de la pantalla: no hay geometria real
+     detras (el fondo es la esfera del panorama), asi que no hace falta
+     separarlo, y separarlo lo corria en perspectiva */
+  planoTv.position = TV.centro.clone();
+  planoTv.setEnabled(false);
+  planoTv.isPickable = false;
+}
+
+function encenderTv(){
+  planoTv.setEnabled(true);
+  hotspot.setEnabled(false);
+  document.getElementById('tvui').style.display = 'flex';
+  var pr = video.play();
+  if (pr && pr.catch) pr.catch(function(){});
+}
+function apagarTv(){
+  video.pause();
+  video.currentTime = 0;
+  planoTv.setEnabled(false);
+  hotspot.setEnabled(true);
+  document.getElementById('tvui').style.display = 'none';
+}
+
+/* ---------- discos para saltar de punto ---------- */
+var discos = [];
+function crearDiscos(){
+  var dt = new BABYLON.DynamicTexture('disco', {width:256, height:256}, scene, true);
+  var ctx = dt.getContext();
+  ctx.clearRect(0,0,256,256);
+  ctx.beginPath(); ctx.arc(128,128,94,0,Math.PI*2);
+  ctx.fillStyle = 'rgba(157,187,164,0.14)'; ctx.fill();
+  ctx.lineWidth = 6; ctx.strokeStyle = 'rgba(157,187,164,0.9)'; ctx.stroke();
+  ctx.beginPath(); ctx.arc(128,128,22,0,Math.PI*2);
+  ctx.fillStyle = 'rgba(255,255,255,0.9)'; ctx.fill();
+  dt.hasAlpha = true; dt.update();
+
+  for (var i=0;i<PUNTOS.length;i++){
+    var mat = new BABYLON.StandardMaterial('disco-mat'+i, scene);
+    mat.diffuseTexture = dt;
+    mat.opacityTexture = dt;
+    mat.emissiveColor = new BABYLON.Color3(1,1,1);
+    mat.disableLighting = true;
+    mat.backFaceCulling = false;
+
+    var d = BABYLON.MeshBuilder.CreatePlane('ir-'+i, {size:0.6}, scene);
+    d.material = mat;
+    d.rotation.x = Math.PI/2;
+    d.position = PUNTOS[i].p.add(new BABYLON.Vector3(0, -ALTURA_OJOS, 0));
+    d.renderingGroupId = 1;
+    discos.push(d);
+  }
+}
+
+/* ---------- navegacion ---------- */
+var actual = 0, enViaje = false;
+
+function irA(destino){
+  if (enViaje || destino === actual) return;
+  enViaje = true;
+  var desde = rig.position.clone();
+  var hasta = PUNTOS[destino].p.clone();
+
+  cargarPano(destino, function(tex){
+    esferaB.material.setTexture('pano', tex);
+    esferaB.position = hasta.clone();
+    esferaB.material.setFloat('opacidad', 0.0);
+    esferaB.setEnabled(true);
+
+    var t0 = performance.now(), dur = 950;
+    var obs = scene.onBeforeRenderObservable.add(function(){
+      var k = Math.min(1, (performance.now() - t0) / dur);
+      var e = k < 0.5 ? 2*k*k : 1 - Math.pow(-2*k + 2, 2)/2;   // easeInOutQuad
+      rig.position = BABYLON.Vector3.Lerp(desde, hasta, e);
+      esferaB.material.setFloat('opacidad', Math.min(1, Math.max(0, (k - 0.15) / 0.6)));
+      if (k >= 1){
+        scene.onBeforeRenderObservable.remove(obs);
+        esferaA.position = hasta.clone();
+        esferaA.material.setTexture('pano', tex);
+        esferaB.setEnabled(false);
+        rig.position = hasta.clone();
+        actual = destino;
+        enViaje = false;
+        marcarBotones();
+      }
+    });
+  });
+}
+
+function marcarBotones(){
+  var bs = document.querySelectorAll('#puntos button');
+  for (var i=0;i<bs.length;i++) bs[i].className = (i===actual ? 'on' : '');
+  for (var j=0;j<discos.length;j++) discos[j].setEnabled(j !== actual);
+}
+
+/* clicks en la escena (solo si no fue un arrastre) */
+scene.onPointerObservable.add(function(pi){
+  if (pi.type !== BABYLON.PointerEventTypes.POINTERUP) return;
+  if (movido > 9) return;
+  var pick = scene.pick(scene.pointerX, scene.pointerY);
+  if (!pick || !pick.hit || !pick.pickedMesh) return;
+  var n = pick.pickedMesh.name;
+  if (n === 'hotspot-tv') encenderTv();
+  else if (n.indexOf('ir-') === 0) irA(parseInt(n.split('-')[1], 10));
+});
+
+/* ---------- arranque ---------- */
+var cont = document.getElementById('puntos');
+PUNTOS.forEach(function(p, i){
+  var b = document.createElement('button');
+  b.textContent = p.n;
+  b.onclick = function(){ irA(i); };
+  cont.appendChild(b);
+});
+document.getElementById('btn-apagar').onclick = apagarTv;
+document.getElementById('btn-pausa').onclick = function(){
+  if (video.paused){ video.play(); this.textContent = 'Pausar'; }
+  else { video.pause(); this.textContent = 'Seguir'; }
+};
+
+crearTv();
+hotspot = crearHotspot();
+crearDiscos();
+
+cargarPano(0, function(tex){
+  esferaA.material.setTexture('pano', tex);
+  esferaA.position = PUNTOS[0].p.clone();
+  marcarBotones();
+  var ov = document.getElementById('carga');
+  ov.className = 'off';
+  setTimeout(function(){ ov.style.display = 'none'; }, 600);
+});
+
+/* ============================================================
+   Control por sensor (giroscopio), igual que en 360/botero-360.html
+   - En desktop no aparece: sin giroscopio la vista queda congelada.
+   - En iOS 13+ el permiso solo se puede pedir desde un gesto, asi
+     que el chip dice "Activar sensor" y con un toque se prende.
+     Ojo: iOS ademas exige contexto seguro, o sea HTTPS. Por IP en
+     la red local el permiso se rechaza siempre.
+   - En Android arranca a un toque, pero recien despues de confirmar
+     que el sensor manda datos: hay equipos que exponen la API y
+     nunca disparan un evento.
+   El calculo (alpha/beta/gamma + rotacion de pantalla) lo hace el
+   input de Babylon, que ya resuelve el left-handed.
+   ============================================================ */
+var permisoPendiente = false, calibrar = false;
+var chip = document.getElementById('sensor');
+
+var hayApi   = typeof window.DeviceOrientationEvent !== 'undefined';
+var pidePerm = hayApi && typeof DeviceOrientationEvent.requestPermission === 'function';
+var esTactil = ('ontouchstart' in window) ||
+               (window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+/* con ?sensor=1 el chip se muestra igual: sirve para verlo en el
+   escritorio, aunque ahi el giroscopio no exista */
+var forzar = /[?&]sensor=1/.test(location.search);
+
+function pintarChip(){
+  chip.classList.toggle('on', sensorOn);
+  chip.textContent = permisoPendiente ? 'Activar sensor' : 'Sensor';
+}
+
+function prenderSensor(){
+  cam.rotationQuaternion = BABYLON.Quaternion.RotationYawPitchRoll(yaw, pitch, 0);
+  cam.inputs.addDeviceOrientation();
+  var inp = cam.inputs.attached.deviceOrientation;
+  if (inp) cam.inputs.attachInput(inp);
+  sensorOn = true;
+  permisoPendiente = false;
+  calibrar = true;    // en el primer frame se alinea con lo que estabas mirando
+  pintarChip();
+}
+
+function apagarSensor(){
+  var inp = cam.inputs.attached.deviceOrientation;
+  if (inp) cam.inputs.remove(inp);
+  if (cam.rotationQuaternion){
+    var e = cam.rotationQuaternion.toEulerAngles();
+    yaw = e.y + rigYaw;               // se conserva hacia donde estabas mirando
+    pitch = Math.max(-1.45, Math.min(1.45, e.x));
+    cam.rotationQuaternion = null;
+  }
+  rigYaw = 0;
+  rig.rotation.y = 0;
+  sensorOn = false;
+  pintarChip();
+}
+
+chip.addEventListener('click', function(e){
+  e.stopPropagation();
+  if (sensorOn){ apagarSensor(); return; }
+  if (pidePerm){
+    DeviceOrientationEvent.requestPermission().then(function(r){
+      if (r === 'granted') prenderSensor();
+      else { permisoPendiente = false; chip.textContent = 'Sensor bloqueado'; }
+    }).catch(function(){
+      permisoPendiente = false; chip.textContent = 'Sensor no disponible';
+    });
+  } else {
+    prenderSensor();
+  }
+});
+
+if (forzar){
+  chip.classList.add('visible');
+  permisoPendiente = pidePerm;
+  pintarChip();
+} else if (esTactil && hayApi){
+  if (pidePerm){
+    permisoPendiente = true;
+    chip.classList.add('visible');
+    pintarChip();
+  } else {
+    /* Android: se muestra el chip solo si el sensor emite de verdad */
+    var probar = function(ev){
+      if (ev.alpha === null && ev.beta === null && ev.gamma === null) return;
+      window.removeEventListener('deviceorientation', probar);
+      clearTimeout(tProbe);
+      chip.classList.add('visible');
+      pintarChip();
+    };
+    var tProbe = setTimeout(function(){
+      window.removeEventListener('deviceorientation', probar);
+    }, 1800);
+    window.addEventListener('deviceorientation', probar);
+  }
+}
+
+scene.registerBeforeRender(function(){
+  if (sensorOn){
+    /* al prender el sensor la vista saltaba al norte magnetico: se
+       compensa una sola vez con la diferencia contra lo que estabas
+       mirando, y de ahi en mas el dedo sigue corriendo el rig */
+    if (calibrar && cam.rotationQuaternion){
+      rigYaw = yaw - cam.rotationQuaternion.toEulerAngles().y;
+      calibrar = false;
+    }
+    rig.rotation.y = rigYaw;
+  } else {
+    cam.rotation.set(pitch, yaw, 0);
+  }
+});
+
+engine.runRenderLoop(function(){ scene.render(); });
+window.addEventListener('resize', function(){ engine.resize(); });
+</script>
+</body>
+</html>
