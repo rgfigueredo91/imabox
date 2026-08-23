@@ -448,7 +448,7 @@ footer img{height:46px; width:auto; margin-bottom:12px}
   background:var(--verde);
   display:flex; align-items:center; justify-content:center;
   box-shadow:0 8px 24px rgba(0,0,0,.22);
-  transition:transform .25s ease, background .25s ease;
+  transition:transform .25s ease, background .25s ease, opacity .25s ease;
 }
 .wa:hover{transform:scale(1.06); background:var(--verde-osc)}
 .wa svg{width:26px; height:26px; fill:#fff}
@@ -508,14 +508,27 @@ body.modal-abierto{overflow:hidden}
   .etapas{grid-template-columns:1fr}
 }
 @media (max-width:820px){
+  /* GOTCHA: backdrop-filter en el header lo convierte en containing block
+     de sus hijos position:fixed. Con el nav adentro, al bajar (header.solid)
+     el menu dejaba de medir el viewport y quedaba encerrado en los 66px del
+     header: se abria y no se veia. En movil el header va sin blur. */
+  header.solid{backdrop-filter:none; -webkit-backdrop-filter:none; background:rgba(251,250,247,.97)}
+
   nav{
     position:fixed; inset:0;
+    height:100vh; height:100svh;
+    z-index:1;
     flex-direction:column; justify-content:center; gap:26px;
     background:var(--verde);
+    overflow-y:auto;
     opacity:0; pointer-events:none;
     transition:opacity .3s ease;
   }
   body.menu-abierto nav{opacity:1; pointer-events:auto}
+  body.menu-abierto{overflow:hidden}
+  /* el boton de whatsapp flota por encima del header: con el menu
+     abierto se le montaba al ultimo link */
+  body.menu-abierto .wa{opacity:0; pointer-events:none}
   nav a.link, header.solid nav a.link{color:#fff; font-size:.95rem; letter-spacing:.18em}
   .burger{display:block; position:relative; z-index:2}
   body.menu-abierto .burger span{background:#fff}
@@ -523,6 +536,10 @@ body.modal-abierto{overflow:hidden}
   /* en pantallas chicas las capas dejan de estar pegadas: con el texto
      encima y poca altura, quedaban apretadas contra el borde */
   .capa{position:relative; height:auto; min-height:76vh; padding:110px var(--pad) 70px}
+  /* el hero es la excepcion: tiene que llenar la pantalla del celular.
+     svh y no dvh: al ocultarse las barras del navegador dvh recalcula
+     y el bloque salta mientras se scrollea. */
+  .capa.hero{min-height:100vh; min-height:100svh; padding:calc(var(--nav-h) + 26px) var(--pad) 92px}
   .capa.v-izq::after, .capa.v-fuerte::after{background:linear-gradient(180deg, rgba(24,31,24,.55), rgba(24,31,24,.75))}
   .detalles{grid-template-columns:1fr 1fr}
   .detalles .detalle:last-child{display:none}
@@ -936,14 +953,17 @@ body.modal-abierto{overflow:hidden}
 
 <script>
 /* ---------- video del hero ----------
-   El .mp4 pesa 3,4 MB: en pantallas chicas no se baja y queda el
-   poster. En desktop se pide recien despues de la carga. */
+   El .mp4 pesa 3,4 MB y se pide recien despues de la carga, para no
+   competir con el resto. En el celular tambien se baja: es el hero y
+   es lo primero que ve el cliente. Solo se saltea con ahorro de datos,
+   red 2G o si el sistema pide menos movimiento: ahi queda el poster. */
 (function(){
   var v = document.getElementById('hero-video');
   if (!v) return;
-  var chica = window.matchMedia('(max-width: 820px)').matches;
   var quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (chica || quieto) return;
+  var con = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+  var ahorro = !!(con && (con.saveData || /(^|-)2g$/.test(con.effectiveType || '')));
+  if (quieto || ahorro) return;
 
   function cargar(){
     v.src = 'video/hero.mp4';
@@ -961,20 +981,29 @@ var burger  = document.getElementById('burger');
 var enlaces = Array.prototype.slice.call(document.querySelectorAll('#nav a.link'));
 
 /* el hero queda pegado al viewport, asi que no sirve observarlo:
-   el fondo del nav se decide por la posicion del scroll */
+   el fondo del nav se decide por la posicion del scroll.
+   Se mide el hero y no la ventana: en el celular no son lo mismo
+   (la barra del navegador) y el nav se volvia claro con el video
+   todavia en pantalla, con el logo y la hamburguesa ilegibles. */
+var hero = document.getElementById('top');
+var altoHero = (hero ? hero.offsetHeight : window.innerHeight);
+window.addEventListener('resize', function(){
+  altoHero = (hero ? hero.offsetHeight : window.innerHeight);
+});
+
 var pidiendo = false;
 function alScroll(){
   if (pidiendo) return;
   pidiendo = true;
   requestAnimationFrame(function(){
     var y = window.scrollY;
-    cab.classList.toggle('solid', y > window.innerHeight * 0.75);
+    cab.classList.toggle('solid', y > altoHero * 0.9);
 
     /* el hero queda pegado hasta el final del documento, tapado por las
        secciones: si no se pausa, el video sigue corriendo toda la pagina */
     var v = document.getElementById('hero-video');
     if (v && v.src) {
-      var fuera = y > window.innerHeight * 1.1;
+      var fuera = y > altoHero * 1.1;
       if (fuera && !v.paused) v.pause();
       else if (!fuera && v.paused) { var p = v.play(); if (p && p.catch) p.catch(function(){}); }
     }
