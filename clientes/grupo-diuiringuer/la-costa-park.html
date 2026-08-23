@@ -220,20 +220,27 @@ body.menu-abierto .burger span:nth-child(3){transform:translateY(-6.5px) rotate(
 .tinte-verde h2, .tinte-verde h3{color:#fff}
 .tinte-verde .eyebrow{color:rgba(255,255,255,.55)}
 
-/* ---------- hero ---------- */
-.hero-logo{width:min(420px, 78vw); margin:0 0 30px}
-.hero .eyebrow{color:rgba(255,255,255,.75)}
-.hero-inner{max-width:660px}
+/* ---------- hero ----------
+   Todo el bloque va centrado: el logo manda y el resto se ordena
+   debajo, en el eje. El lockup del hero es el unico con "Costa"
+   en verde (lcp-lockup-hero.svg); el del nav y el pie van blancos. */
+.hero-logo{width:min(420px, 78vw); margin:0 auto 30px; filter:drop-shadow(0 3px 20px rgba(18,24,18,.5))}
+/* el v-centro aclaraba justo la franja del medio; ahora el contenido
+   esta ahi, y el video arranca en el cartel de hormigon (claro): sin
+   esto el logo se pierde contra la pared */
+.hero.v-centro::after{background:linear-gradient(180deg, rgba(26,32,26,.6) 0%, rgba(26,32,26,.4) 34%, rgba(26,32,26,.5) 64%, rgba(26,32,26,.7) 100%)}
+.hero .eyebrow{color:rgba(255,255,255,.75); justify-content:center}
+.hero-inner{max-width:660px; margin:0 auto; text-align:center}
 .hero-slogan{
   font-family:var(--serif);
   font-weight:300;
   font-size:clamp(1.15rem, 2.5vw, 1.7rem);
   line-height:1.35;
   color:rgba(255,255,255,.94);
-  margin:0 0 34px;
+  margin:0 auto 34px;
   max-width:24ch;
 }
-.hero-cta{display:flex; gap:14px; flex-wrap:wrap}
+.hero-cta{display:flex; gap:14px; flex-wrap:wrap; justify-content:center}
 .scroll-cue{
   position:absolute; left:50%; bottom:34px; z-index:3;
   transform:translateX(-50%);
@@ -599,7 +606,7 @@ body.modal-abierto{overflow:hidden}
   <div class="capa-in">
     <div class="hero-inner">
       <p class="eyebrow">Lagomar &middot; Ciudad de la Costa</p>
-      <img class="hero-logo" src="img/lcp-lockup-blanco.svg" alt="La Costa Park">
+      <img class="hero-logo" src="img/lcp-lockup-hero.svg" alt="La Costa Park">
       <p class="hero-slogan">Un lugar para vivir a tu manera.</p>
       <div class="hero-cta">
         <a class="btn light" href="#viviendas">Ver las viviendas</a>
