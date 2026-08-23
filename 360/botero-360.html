@@ -59,6 +59,53 @@
                 50%      { opacity: 0.8; }
             }
 
+            /* Chip de sensor &mdash; s&oacute;lo aparece en dispositivos con giroscopio */
+            #sensor-btn {
+                position: fixed;
+                bottom: 54px;
+                left: 50%;
+                transform: translateX(-50%);
+                display: none;
+                align-items: center;
+                gap: 7px;
+                background: rgba(0,0,0,0.35);
+                border: 1px solid rgba(255,255,255,0.12);
+                color: rgba(255,255,255,0.4);
+                font-family: 'Courier New', monospace;
+                font-size: 0.58rem;
+                letter-spacing: 2px;
+                text-transform: uppercase;
+                white-space: nowrap;
+                padding: 6px 15px;
+                border-radius: 20px;
+                cursor: pointer;
+                z-index: 6;
+                backdrop-filter: blur(8px);
+                transition: color 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+            }
+
+            #sensor-btn.visible { display: flex; }
+
+            #sensor-btn::before {
+                content: '';
+                width: 6px;
+                height: 6px;
+                border-radius: 50%;
+                background: currentColor;
+                opacity: 0.5;
+                transition: opacity 0.3s ease, box-shadow 0.3s ease;
+            }
+
+            #sensor-btn.on {
+                border-color: rgba(157,187,164,0.45);
+                color: var(--acento);
+            }
+
+            #sensor-btn.on::before {
+                opacity: 1;
+                box-shadow: 0 0 8px var(--acento);
+            }
+
             @media (prefers-reduced-motion: reduce) {
                 #drag-hint { animation: none; opacity: 0.55; }
             }
@@ -77,6 +124,7 @@
     </div>
 
     <div id="drag-hint">Arrastr&aacute; para mirar alrededor</div>
+    <button id="sensor-btn" type="button">Sensor</button>
     <div id="room-label">Botero <span>&middot;</span> Living</div>
 
 <script src="../js/three.min.js"></script>
@@ -95,9 +143,14 @@
 
     /* El spinner se va cuando la panor&aacute;mica termin&oacute; de cargar
        (con red de seguridad por si la carga falla) */
+    var spinnerGone = false;
+    var queuedHint  = null;
+
     function hideSpinner() {
         var s = document.getElementById('spinner-wrapper');
         if (s) s.style.display = 'none';
+        spinnerGone = true;
+        if (queuedHint) { var q = queuedHint; queuedHint = null; q(); }
     }
     panorama.addEventListener('load', hideSpinner);
     panorama.addEventListener('error', hideSpinner);
@@ -111,18 +164,122 @@
     viewer.add(panorama);
 
     /* El hint desaparece con la primera interacci&oacute;n */
-    var hint = document.getElementById('drag-hint');
+    var hintEl = document.getElementById('drag-hint');
+    var hintLive = true;
     function dropHint() {
-        if (!hint) return;
-        hint.classList.add('hidden');
+        if (!hintLive) return;
+        hintEl.classList.add('hidden');
+        hintLive = false;
         ['mousedown', 'touchstart', 'wheel', 'keydown'].forEach(function(ev) {
             window.removeEventListener(ev, dropHint);
         });
-        hint = null;
     }
     ['mousedown', 'touchstart', 'wheel', 'keydown'].forEach(function(ev) {
         window.addEventListener(ev, dropHint, { passive: true });
     });
+
+
+    /* ──────────────────────────────────────────────────────────────
+       Control por sensor (giroscopio)
+
+       Panolens ya trae el modo en el men&uacute; del engranaje
+       (Control &rarr; Touch / Sensor); ac&aacute; lo dejamos prendido solo
+       cuando el aparato de verdad puede usarlo:
+
+       - En desktop NO se activa: sin giroscopio la vista queda
+         congelada porque el sensor apaga el arrastre del mouse.
+       - En iOS 13+ el navegador exige pedir permiso desde un gesto
+         del usuario, as&iacute; que ah&iacute; no puede arrancar solo: el chip
+         dice "Activar sensor" y con un toque se prende.
+       - En Android arranca prendido, pero reci&eacute;n despu&eacute;s de
+         confirmar que el sensor manda datos de verdad (hay equipos
+         que exponen la API y nunca disparan un evento).
+       ────────────────────────────────────────────────────────────── */
+
+    var ORBIT  = PANOLENS.CONTROLS.ORBIT;
+    var SENSOR = PANOLENS.CONTROLS.DEVICEORIENTATION;
+
+    var btn = document.getElementById('sensor-btn');
+    var sensorOn = false;
+    var iosPermPending = false;
+
+    var hasApi  = typeof window.DeviceOrientationEvent !== 'undefined';
+    var needsOk = hasApi && typeof DeviceOrientationEvent.requestPermission === 'function';
+    var isTouch = ('ontouchstart' in window) ||
+                  (window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+
+    /* Si la panor&aacute;mica todav&iacute;a est&aacute; cargando, el cartel espera:
+       si no, se consume detr&aacute;s del spinner y nadie lo ve */
+    function setHint(text, autoHide) {
+        if (!spinnerGone) {
+            queuedHint = function() { setHint(text, autoHide); };
+            return;
+        }
+        hintEl.innerHTML = text;
+        hintEl.classList.remove('hidden');
+        hintLive = true;
+        if (autoHide) setTimeout(dropHint, 4500);
+    }
+
+    function paintBtn() {
+        btn.classList.toggle('on', sensorOn);
+        btn.textContent = iosPermPending ? 'Activar sensor' : 'Sensor';
+    }
+
+    function goSensor() {
+        sensorOn = true;
+        iosPermPending = false;
+        viewer.disableAutoRate();
+        viewer.enableControl(SENSOR);
+        paintBtn();
+        setHint('Mov&eacute; el tel&eacute;fono para mirar alrededor', true);
+    }
+
+    function goDrag() {
+        sensorOn = false;
+        viewer.enableControl(ORBIT);
+        viewer.enableAutoRate();
+        paintBtn();
+    }
+
+    btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (sensorOn) { goDrag(); return; }
+
+        if (needsOk) {
+            // iOS: el permiso solo se puede pedir desde este toque
+            DeviceOrientationEvent.requestPermission().then(function(res) {
+                if (res === 'granted') goSensor();
+                else { iosPermPending = false; paintBtn(); setHint('Sensor bloqueado por el navegador', true); }
+            }).catch(function() {
+                iosPermPending = false; paintBtn(); setHint('Sensor no disponible', true);
+            });
+        } else {
+            goSensor();
+        }
+    });
+
+    if (isTouch && hasApi) {
+        if (needsOk) {
+            // iOS 13+: queda a un toque de distancia
+            iosPermPending = true;
+            btn.classList.add('visible');
+            paintBtn();
+        } else {
+            // Android: probamos que el sensor realmente emita antes de prenderlo
+            var probe = function(ev) {
+                if (ev.alpha === null && ev.beta === null && ev.gamma === null) return;
+                window.removeEventListener('deviceorientation', probe);
+                clearTimeout(probeTimer);
+                btn.classList.add('visible');
+                goSensor();
+            };
+            var probeTimer = setTimeout(function() {
+                window.removeEventListener('deviceorientation', probe);
+            }, 1500);
+            window.addEventListener('deviceorientation', probe, { passive: true });
+        }
+    }
 
 </script>
 
