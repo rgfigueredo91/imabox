@@ -10,7 +10,7 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="La Costa Park &mdash; Un lugar para vivir a tu manera">
 <meta property="og:description" content="28 viviendas en un barrio cerrado de Lagomar, a cinco minutos de la rambla.">
-<meta property="og:image" content="img/hero.jpg">
+<meta property="og:image" content="img/hero-poster.jpg">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,7 +27,6 @@
 :root{
   --verde:#38513C;
   --verde-osc:#2B3E2E;
-  --verde-claro:#4A6650;
   --carbon:#303030;
   --arena:#DAD7D1;
   --arena-claro:#EFEDE8;
@@ -40,6 +39,9 @@
 
   --nav-h:76px;
   --pad:clamp(22px, 5vw, 90px);
+
+  /* motion: 500ms / power2.out, escalonado de 80ms */
+  --sal:cubic-bezier(.22,1,.36,1);
 }
 
 *{box-sizing:border-box}
@@ -52,7 +54,8 @@ body{
   font-weight:300;
   font-size:16px;
   line-height:1.65;
-  overflow-x:hidden;
+  /* nada de overflow-x:hidden aca: rompe position:sticky de las capas.
+     El ancho ya cierra solo (verificado: scrollWidth == viewport). */
 }
 img{max-width:100%; display:block}
 a{color:inherit}
@@ -113,13 +116,12 @@ p{margin:0 0 18px; max-width:62ch}
   background:var(--verde);
   color:#fff;
   cursor:pointer;
-  transition:background .3s ease, color .3s ease, border-color .3s ease, transform .3s ease;
+  transition:background .25s ease, color .25s ease, border-color .25s ease, transform .25s ease;
 }
 .btn:hover{background:var(--verde-osc); border-color:var(--verde-osc); transform:translateY(-1px)}
-.btn.ghost{background:transparent; color:var(--verde)}
-.btn.ghost:hover{background:var(--verde); color:#fff}
 .btn.light{background:transparent; border-color:rgba(255,255,255,.55); color:#fff}
 .btn.light:hover{background:#fff; color:var(--verde); border-color:#fff}
+:focus-visible{outline:2px solid var(--terracota); outline-offset:3px}
 
 /* ---------- nav ---------- */
 header{
@@ -128,7 +130,7 @@ header{
   z-index:60;
   display:flex; align-items:center;
   padding:0 var(--pad);
-  transition:background .45s ease, box-shadow .45s ease, height .45s ease;
+  transition:background .4s ease, box-shadow .4s ease, height .4s ease;
 }
 header.solid{
   background:rgba(251,250,247,.94);
@@ -137,7 +139,7 @@ header.solid{
   height:66px;
 }
 .brand{display:flex; align-items:center; text-decoration:none; flex:none; position:relative; z-index:2}
-.brand img{height:34px; width:auto; transition:opacity .35s ease}
+.brand img{height:34px; width:auto}
 .brand .oscuro{display:none}
 header.solid .brand .claro{display:none}
 header.solid .brand .oscuro{display:block}
@@ -145,10 +147,7 @@ header.solid .brand .oscuro{display:block}
 body.menu-abierto .brand .claro{display:block}
 body.menu-abierto .brand .oscuro{display:none}
 
-nav{
-  margin-left:auto;
-  display:flex; align-items:center; gap:34px;
-}
+nav{margin-left:auto; display:flex; align-items:center; gap:34px}
 nav a.link{
   font-size:.71rem;
   font-weight:500;
@@ -158,7 +157,7 @@ nav a.link{
   color:rgba(255,255,255,.85);
   position:relative;
   padding:4px 0;
-  transition:color .3s ease;
+  transition:color .25s ease;
 }
 header.solid nav a.link{color:var(--carbon)}
 nav a.link::after{
@@ -166,24 +165,18 @@ nav a.link::after{
   position:absolute; left:0; bottom:0;
   width:0; height:1px;
   background:var(--terracota);
-  transition:width .3s ease;
+  transition:width .25s ease;
 }
 nav a.link:hover::after, nav a.link.activo::after{width:100%}
 nav .btn{padding:11px 24px; font-size:.68rem}
 header:not(.solid) nav .btn{border-color:rgba(255,255,255,.6); background:transparent}
 header:not(.solid) nav .btn:hover{background:#fff; color:var(--verde)}
 
-.burger{
-  display:none;
-  margin-left:auto;
-  width:40px; height:40px;
-  background:none; border:0; cursor:pointer;
-  padding:0;
-}
+.burger{display:none; margin-left:auto; width:44px; height:44px; background:none; border:0; cursor:pointer; padding:0}
 .burger span{
   display:block; height:1.5px; width:22px;
   background:#fff; margin:5px auto;
-  transition:background .3s ease, transform .3s ease, opacity .3s ease;
+  transition:background .25s ease, transform .25s ease, opacity .25s ease;
 }
 header.solid .burger span{background:var(--carbon)}
 body.menu-abierto .burger span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
@@ -191,70 +184,46 @@ body.menu-abierto .burger span:nth-child(2){opacity:0}
 body.menu-abierto .burger span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
 
 /* ============================================================
-   Scroll por pantallas
-   Mismo mecanismo que el index de Imabox (js/index.js): un
-   contenedor de 100dvh con las secciones apiladas y la rueda
-   interceptada. Por defecto la pagina scrollea normal; el modo
-   snap lo enciende el JS con .snap-on en <html> solo cuando la
-   ventana da el alto (ver evaluarSnap()).
+   Capas fijas
+   Las fotos a sangre quedan pegadas al viewport mientras el
+   bloque siguiente sube por encima. Es scroll nativo: no se
+   secuestra la rueda (eso marea y rompe la accesibilidad).
    ============================================================ */
-.pantalla{position:relative; padding:clamp(70px, 9vw, 130px) var(--pad)}
-.wrap{max-width:1240px; margin:0 auto; width:100%}
-
-html.snap-on, html.snap-on body{height:100%; overflow:hidden}
-html.snap-on .snap{
-  height:100dvh;
-  overflow-y:scroll;
-  overflow-x:hidden;
-  scrollbar-width:none;
-}
-html.snap-on .snap::-webkit-scrollbar{display:none}
-html.snap-on .pantalla{
-  height:100dvh;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
+.capa{
+  position:sticky; top:0;
+  height:100vh; height:100svh;
+  z-index:0;
   overflow:hidden;
-  padding:calc(var(--nav-h) + 16px) var(--pad) 40px;
+  display:flex; align-items:center;
+  padding:0 var(--pad);
 }
-html.snap-on .pantalla.plena{padding:0; display:block}
-/* valvula de escape: si una seccion no entra en la ventana, la rueda
-   scrollea adentro antes de saltar a la siguiente (ver puedeScroll) */
-html.snap-on .desborde{max-height:100%; overflow-y:auto; scrollbar-width:none}
-html.snap-on .desborde::-webkit-scrollbar{display:none}
-/* el margen del ultimo hijo cuenta como desborde y dispara la valvula
-   sin que sobre contenido de verdad */
-html.snap-on .desborde > *:last-child{margin-bottom:0}
+.capa > img,
+.capa > video{
+  position:absolute; inset:0; z-index:0;
+  width:100%; height:100%;
+  object-fit:cover;
+}
+.capa::after{content:''; position:absolute; inset:0; z-index:1}
+.capa-in{position:relative; z-index:2; width:100%; max-width:1240px; margin:0 auto; color:#fff}
 
-/* tintes */
+/* velos, uno por capa segun donde cae el texto */
+.capa.v-centro::after{background:linear-gradient(180deg, rgba(26,32,26,.55) 0%, rgba(26,32,26,.12) 34%, rgba(26,32,26,.62) 100%)}
+.capa.v-izq::after{background:linear-gradient(90deg, rgba(24,31,24,.72) 0%, rgba(24,31,24,.42) 50%, rgba(24,31,24,.12) 100%)}
+.capa.v-fuerte::after{background:linear-gradient(90deg, rgba(24,31,24,.9) 0%, rgba(24,31,24,.78) 42%, rgba(24,31,24,.35) 72%, rgba(24,31,24,.1) 100%)}
+
+/* los bloques opacos que tapan la capa al subir */
+.sobre{position:relative; z-index:1; padding:clamp(72px, 9vw, 132px) var(--pad)}
+.wrap{max-width:1240px; margin:0 auto; width:100%}
+.tinte-papel{background:var(--papel)}
 .tinte-arena{background:var(--arena-claro)}
 .tinte-verde{background:var(--verde); color:rgba(255,255,255,.82)}
 .tinte-verde h2, .tinte-verde h3{color:#fff}
 .tinte-verde .eyebrow{color:rgba(255,255,255,.55)}
 
 /* ---------- hero ---------- */
-.hero{
-  min-height:100vh;
-  min-height:100dvh;
-  display:flex; align-items:center;
-  padding:calc(var(--nav-h) + 40px) var(--pad) 120px;
-  overflow:hidden;
-}
-/* el hero es .plena (sin padding) pero necesita el suyo propio */
-html.snap-on .hero{
-  height:100dvh; min-height:0;
-  padding:calc(var(--nav-h) + 40px) var(--pad) 120px;
-}
-.hero-bg{position:absolute; inset:0; z-index:0}
-.hero-bg img{width:100%; height:100%; object-fit:cover; object-position:center 62%}
-.hero-bg::after{
-  content:'';
-  position:absolute; inset:0;
-  background:linear-gradient(180deg, rgba(26,32,26,.55) 0%, rgba(26,32,26,.12) 34%, rgba(26,32,26,.62) 100%);
-}
-.hero-inner{position:relative; z-index:1; max-width:660px}
-.hero .eyebrow{color:rgba(255,255,255,.75)}
 .hero-logo{width:min(420px, 78vw); margin:0 0 30px}
+.hero .eyebrow{color:rgba(255,255,255,.75)}
+.hero-inner{max-width:660px}
 .hero-slogan{
   font-family:var(--serif);
   font-weight:300;
@@ -265,17 +234,13 @@ html.snap-on .hero{
   max-width:24ch;
 }
 .hero-cta{display:flex; gap:14px; flex-wrap:wrap}
-
 .scroll-cue{
-  position:absolute; left:50%; bottom:34px;
+  position:absolute; left:50%; bottom:34px; z-index:3;
   transform:translateX(-50%);
-  z-index:2;
   display:flex; flex-direction:column; align-items:center; gap:10px;
   font-size:.6rem; letter-spacing:.24em; text-transform:uppercase;
   color:rgba(255,255,255,.55);
   text-decoration:none;
-  background:none; border:0; cursor:pointer;
-  font-family:var(--sans);
 }
 .scroll-cue i{
   display:block; width:1px; height:42px;
@@ -285,34 +250,38 @@ html.snap-on .hero{
 }
 @keyframes cue{0%,100%{transform:scaleY(.35); opacity:.4} 50%{transform:scaleY(1); opacity:1}}
 
+/* frase suelta sobre una capa */
+.capa-frase{
+  font-family:var(--serif); font-weight:300;
+  font-size:clamp(1.3rem, 3.2vw, 2.3rem);
+  line-height:1.3;
+  color:#fff; margin:0; max-width:15ch;
+}
+.capa-dato{
+  margin:22px 0 0; max-width:34ch;
+  font-size:.95rem; color:rgba(255,255,255,.78);
+}
+
 /* intro + cifras */
 .intro-grid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:clamp(30px,6vw,90px); align-items:start}
 .cifras{
-  display:grid;
-  grid-template-columns:repeat(4, 1fr);
-  gap:1px;
+  display:grid; grid-template-columns:repeat(4, 1fr); gap:1px;
   background:rgba(56,81,60,.16);
   border:1px solid rgba(56,81,60,.16);
-  margin-top:clamp(40px,5vw,66px);
+  margin-top:clamp(44px,5vw,70px);
 }
-.cifra{background:var(--arena-claro); padding:24px 22px}
+.cifra{background:var(--arena-claro); padding:26px 22px}
 .cifra b{
-  display:block;
-  font-family:var(--serif);
-  font-weight:400;
-  font-size:clamp(1.5rem,2.6vw,2.1rem);
-  line-height:1;
-  color:var(--verde);
-  margin-bottom:9px;
+  display:block; font-family:var(--serif); font-weight:400;
+  font-size:clamp(1.5rem,2.6vw,2.1rem); line-height:1;
+  color:var(--verde); margin-bottom:9px;
 }
 .cifra span{font-size:.72rem; letter-spacing:.11em; text-transform:uppercase; color:#6c6c66}
 
 /* split imagen + texto */
 .split{
-  display:grid;
-  grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);
-  gap:clamp(30px,5vw,72px);
-  align-items:center;
+  display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);
+  gap:clamp(30px,5vw,72px); align-items:center;
 }
 .split.invertido .split-media{order:2}
 .split-media{position:relative; overflow:hidden}
@@ -321,58 +290,75 @@ html.snap-on .hero{
 .split-media img{width:100%; height:auto; object-fit:cover; aspect-ratio:4/3}
 .split-texto{padding:10px 0}
 
-/* tipologias: 3 + 3, en tarjetas compactas para que la seccion
-   entre en una pantalla */
-.tipos{
-  display:grid;
-  grid-template-columns:repeat(3, 1fr);
-  gap:16px;
-  margin-top:34px;
-}
+/* ---------- tipologias ---------- */
+.tipos{display:grid; grid-template-columns:repeat(3, 1fr); gap:16px; margin-top:38px}
 .tipo{
   background:#fff;
   border:1px solid rgba(56,81,60,.14);
-  padding:20px 22px 18px;
+  padding:20px 22px 16px;
   position:relative;
-  transition:transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+  transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+  /* es un boton: abre la planta */
+  display:block; width:100%; text-align:left;
+  font:inherit; color:inherit; cursor:pointer;
 }
 .tipo::before{
   content:'';
   position:absolute; left:0; top:0; bottom:0;
   width:3px; background:var(--verde);
   transform:scaleY(0); transform-origin:top;
-  transition:transform .4s ease;
+  transition:transform .3s ease;
 }
 .tipo:hover{transform:translateY(-3px); box-shadow:0 14px 34px rgba(48,48,48,.09); border-color:rgba(56,81,60,.28)}
 .tipo:hover::before{transform:scaleY(1)}
 .tipo-cab{display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:12px}
 .tipo-cod{font-family:var(--serif); font-size:1.6rem; line-height:1; color:var(--verde)}
 .tipo-un{font-size:.66rem; letter-spacing:.13em; text-transform:uppercase; color:var(--salvia)}
-.tipo-datos{
-  list-style:none; margin:0 0 14px; padding:0;
-  border-top:1px solid rgba(56,81,60,.12);
-}
+.tipo-datos{list-style:none; margin:0 0 14px; padding:0; border-top:1px solid rgba(56,81,60,.12)}
 .tipo-datos li{
   display:flex; justify-content:space-between; gap:14px;
-  padding:7px 0;
-  border-bottom:1px solid rgba(56,81,60,.09);
+  padding:7px 0; border-bottom:1px solid rgba(56,81,60,.09);
   font-size:.84rem;
 }
 .tipo-datos li span:first-child{color:#7a7a74; font-size:.76rem; letter-spacing:.05em}
 .tipo-datos li span:last-child{font-weight:500; color:var(--carbon)}
 .tipo-precio{font-size:.92rem; color:var(--verde); font-weight:500; margin:0}
 .tipo-precio small{display:block; font-size:.66rem; letter-spacing:.12em; text-transform:uppercase; color:var(--salvia); font-weight:400; margin-bottom:2px}
+.tipo-ver{
+  display:flex; align-items:center; gap:7px;
+  margin:14px 0 0; padding-top:12px;
+  border-top:1px solid rgba(56,81,60,.12);
+  font-size:.68rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--terracota);
+}
+.tipo-ver i{font-style:normal; transition:transform .25s ease}
+.tipo:hover .tipo-ver i{transform:translateX(4px)}
 
 .aviso{
-  margin-top:26px;
+  margin-top:28px;
   display:flex; flex-wrap:wrap; gap:18px 44px;
-  padding:22px 28px;
-  background:var(--verde);
-  color:rgba(255,255,255,.82);
+  padding:24px 30px;
+  background:var(--verde); color:rgba(255,255,255,.82);
 }
 .aviso div{flex:1 1 250px}
 .aviso b{display:block; color:#fff; font-weight:500; font-size:.7rem; letter-spacing:.15em; text-transform:uppercase; margin-bottom:6px}
 .aviso p{margin:0; font-size:.88rem; max-width:46ch}
+
+/* ---------- planta general ---------- */
+.mp-grid{display:grid; grid-template-columns:minmax(0,340px) minmax(0,1fr); gap:clamp(28px,4vw,56px); align-items:center}
+.mp-img{background:#fff; border:1px solid rgba(56,81,60,.14); padding:12px}
+.refs{list-style:none; margin:24px 0 0; padding:0}
+.refs button{
+  display:flex; align-items:center; gap:12px; width:100%;
+  background:none; border:0; border-bottom:1px solid rgba(56,81,60,.12);
+  padding:11px 0; font:inherit; color:inherit; text-align:left; cursor:pointer;
+  transition:color .2s ease;
+}
+.refs button:hover{color:var(--verde)}
+.refs .sw{width:16px; height:16px; flex:none; border:1px solid rgba(48,48,48,.35)}
+.refs .cod{font-family:var(--serif); font-size:1.02rem; color:var(--verde); min-width:34px}
+.refs .txt{font-size:.82rem; color:#6c6c66}
+.refs .un{margin-left:auto; font-size:.66rem; letter-spacing:.1em; text-transform:uppercase; color:var(--salvia); white-space:nowrap}
 
 /* listas de items */
 .items{
@@ -380,82 +366,41 @@ html.snap-on .hero{
   display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:2px 30px;
 }
 .items li{
-  padding:12px 0 12px 22px;
-  position:relative;
+  padding:12px 0 12px 22px; position:relative;
   border-bottom:1px solid rgba(255,255,255,.16);
   font-size:.94rem;
 }
-.items li::before{
-  content:'';
-  position:absolute; left:0; top:20px;
-  width:7px; height:1px; background:var(--terracota);
-}
-
-/* franja a sangre con la frase de marca */
-.banda{overflow:hidden}
-/* el encuadre corre el cartel hacia la derecha para que la frase
-   no se monte sobre las letras de hormigon */
-.banda img{width:100%; height:clamp(300px,46vh,460px); object-fit:cover; object-position:22% 45%}
-html.snap-on .banda img{height:100%}
-.banda::after{content:''; position:absolute; inset:0; background:linear-gradient(90deg, rgba(24,31,24,.62), rgba(24,31,24,.3))}
-.banda p{
-  position:absolute; inset:0; z-index:1;
-  display:flex; align-items:center;
-  margin:0; padding:0 var(--pad);
-  font-family:var(--serif); font-weight:300;
-  font-size:clamp(1.3rem,3.2vw,2.3rem);
-  color:#fff; max-width:none;
-}
-.banda p span{max-width:14ch}
+.items li::before{content:''; position:absolute; left:0; top:20px; width:7px; height:1px; background:var(--terracota)}
 
 /* franja de detalles */
-.detalles{display:grid; grid-template-columns:repeat(3, 1fr); gap:2px; height:100%}
+.detalles{display:grid; grid-template-columns:repeat(3, 1fr); gap:2px}
 .detalle{position:relative; overflow:hidden; margin:0}
-.detalle img{width:100%; height:100%; aspect-ratio:1/1; object-fit:cover; transition:transform 1.1s cubic-bezier(.2,.7,.3,1)}
-html.snap-on .detalle img{aspect-ratio:auto}
+.detalle img{width:100%; aspect-ratio:1/1; object-fit:cover; transition:transform 1.1s var(--sal)}
 .detalle:hover img{transform:scale(1.045)}
 /* velo inferior: sin el, los epigrafes desaparecen sobre las zonas claras */
 .detalle::after{
-  content:'';
-  position:absolute; left:0; right:0; bottom:0; height:38%;
+  content:''; position:absolute; left:0; right:0; bottom:0; height:38%;
   background:linear-gradient(180deg, rgba(20,26,20,0), rgba(20,26,20,.6));
   pointer-events:none;
 }
 .detalle figcaption{
   position:absolute; left:22px; bottom:20px; z-index:1;
-  font-size:.64rem; letter-spacing:.2em; text-transform:uppercase;
-  color:#fff;
+  font-size:.64rem; letter-spacing:.2em; text-transform:uppercase; color:#fff;
 }
 
-/* ubicacion */
-.ubi{overflow:hidden}
-.ubi-img{position:relative; height:100%}
-.ubi-img img{width:100%; height:clamp(460px,78vh,720px); object-fit:cover; object-position:center 60%}
-html.snap-on .ubi-img img{height:100%}
-.ubi-img::after{
-  content:''; position:absolute; inset:0;
-  background:linear-gradient(90deg, rgba(24,31,24,.9) 0%, rgba(24,31,24,.78) 42%, rgba(24,31,24,.35) 72%, rgba(24,31,24,.1) 100%);
-}
-.ubi-panel{
-  position:absolute; inset:0;
-  display:flex; align-items:center;
-  padding:0 var(--pad);
-}
-.ubi-panel .caja{max-width:620px; color:rgba(255,255,255,.86)}
-.ubi-panel h2{color:#fff}
-.ubi-panel .eyebrow{color:rgba(255,255,255,.6)}
-.ubi-panel .items li{border-color:rgba(255,255,255,.18)}
+/* ubicacion (va sobre una capa) */
+.ubi-caja{max-width:620px; color:rgba(255,255,255,.86)}
+.ubi-caja h2{color:#fff}
+.ubi-caja .eyebrow{color:rgba(255,255,255,.6)}
+.ubi-caja .items li{border-color:rgba(255,255,255,.18)}
 
 /* etapas */
 .etapas{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:1px;
-  background:rgba(56,81,60,.16);
-  border:1px solid rgba(56,81,60,.16);
-  margin-top:40px;
+  display:grid; grid-template-columns:repeat(3,1fr); gap:1px;
+  background:rgba(56,81,60,.16); border:1px solid rgba(56,81,60,.16);
+  margin-top:42px;
 }
-.etapa{background:var(--papel); padding:28px}
+.etapa{background:var(--papel); padding:30px 28px}
 .etapa .n{font-size:.66rem; letter-spacing:.2em; text-transform:uppercase; color:var(--terracota); margin-bottom:12px}
 .etapa .f{font-family:var(--serif); font-size:1.6rem; color:var(--verde); line-height:1; margin-bottom:10px}
 .etapa p{font-size:.9rem; margin:0; color:#6c6c66}
@@ -468,43 +413,32 @@ form{display:grid; grid-template-columns:1fr 1fr; gap:16px}
 label{font-size:.66rem; letter-spacing:.15em; text-transform:uppercase; color:#7a7a74}
 input, select, textarea{
   font-family:var(--sans); font-size:.95rem; font-weight:300;
-  color:var(--carbon);
-  background:transparent;
+  color:var(--carbon); background:transparent;
   border:0; border-bottom:1px solid rgba(56,81,60,.28);
-  padding:10px 2px;
-  transition:border-color .3s ease;
+  padding:11px 2px;
+  transition:border-color .25s ease;
 }
 input:focus, select:focus, textarea:focus{outline:0; border-color:var(--verde)}
-textarea{resize:vertical; min-height:70px}
+textarea{resize:vertical; min-height:74px}
 form .btn{grid-column:1 / -1; justify-self:start; margin-top:6px}
 .form-nota{grid-column:1 / -1; font-size:.76rem; color:#8a8a84; margin:0}
 
 .datos{padding:0; margin:24px 0 0}
-.datos li{list-style:none; padding:12px 0; border-bottom:1px solid rgba(56,81,60,.14)}
+.datos li{list-style:none; padding:13px 0; border-bottom:1px solid rgba(56,81,60,.14)}
 .datos b{display:block; font-size:.66rem; letter-spacing:.15em; text-transform:uppercase; color:var(--salvia); font-weight:500; margin-bottom:4px}
 .datos a{text-decoration:none; border-bottom:1px solid rgba(56,81,60,.3)}
 
-/* la ultima pantalla lleva el contacto centrado y el pie abajo */
-.ultima{padding:0}
-html.snap-on .ultima{padding:0}
-.ultima-cuerpo{
-  flex:1;
-  display:flex; align-items:center;
-  padding:calc(var(--nav-h) + 16px) var(--pad) 40px;
-}
+/* pie */
 footer{
-  background:var(--verde-osc);
-  color:rgba(255,255,255,.55);
-  padding:34px var(--pad) 30px;
-  font-size:.8rem;
-  flex:none;
+  position:relative; z-index:1;
+  background:var(--verde-osc); color:rgba(255,255,255,.55);
+  padding:44px var(--pad) 38px; font-size:.8rem;
 }
 .foot-grid{
   max-width:1240px; margin:0 auto;
-  display:flex; flex-wrap:wrap; gap:24px; align-items:flex-end;
-  justify-content:space-between;
+  display:flex; flex-wrap:wrap; gap:26px; align-items:flex-end; justify-content:space-between;
 }
-footer img{height:44px; width:auto; margin-bottom:12px}
+footer img{height:46px; width:auto; margin-bottom:12px}
 .foot-legal{font-size:.72rem; color:rgba(255,255,255,.48); text-align:right}
 
 /* whatsapp flotante */
@@ -514,13 +448,53 @@ footer img{height:44px; width:auto; margin-bottom:12px}
   background:var(--verde);
   display:flex; align-items:center; justify-content:center;
   box-shadow:0 8px 24px rgba(0,0,0,.22);
-  transition:transform .3s ease, background .3s ease;
+  transition:transform .25s ease, background .25s ease;
 }
 .wa:hover{transform:scale(1.06); background:var(--verde-osc)}
 .wa svg{width:26px; height:26px; fill:#fff}
 
-/* reveal al hacer scroll */
-.rv{opacity:0; transform:translateY(22px); transition:opacity .9s ease, transform .9s cubic-bezier(.2,.7,.3,1)}
+/* ---------- ficha de tipologia ---------- */
+.modal{position:fixed; inset:0; z-index:90; display:flex; align-items:center; justify-content:center; padding:clamp(14px,3vw,40px)}
+.modal[hidden]{display:none}
+.modal-fondo{position:absolute; inset:0; background:rgba(24,31,24,.72); backdrop-filter:blur(3px)}
+.modal-caja{
+  position:relative;
+  display:grid; grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);
+  width:min(1120px, 100%); max-height:100%;
+  background:var(--papel);
+  box-shadow:0 30px 70px rgba(0,0,0,.35);
+  overflow:hidden;
+}
+.modal-plano{background:#fff; display:flex; align-items:center; justify-content:center; padding:18px; min-height:0}
+.modal-plano img{max-width:100%; max-height:min(74vh, 660px); width:auto; height:auto; object-fit:contain}
+.modal-datos{padding:clamp(24px,3vw,38px); overflow-y:auto; background:var(--arena-claro)}
+.modal-datos h3{font-size:clamp(1.4rem,2.4vw,1.9rem); text-transform:uppercase; margin-bottom:18px; line-height:1.2}
+.modal-lista{list-style:none; margin:0 0 20px; padding:0; border-top:1px solid rgba(56,81,60,.14)}
+.modal-lista li{display:flex; justify-content:space-between; gap:16px; padding:8px 0; border-bottom:1px solid rgba(56,81,60,.1); font-size:.86rem}
+.modal-lista li span:first-child{color:#7a7a74; font-size:.78rem}
+.modal-lista li span:last-child{font-weight:500}
+.modal-lista li.total span{color:var(--verde); font-weight:600}
+.modal-amb{font-size:.9rem; color:#5a5a55; margin-bottom:22px}
+.modal-nota{font-size:.72rem; color:#8a8a84; margin:18px 0 0}
+.modal-x{
+  position:absolute; right:10px; top:8px; z-index:3;
+  width:44px; height:44px; border:0; background:rgba(251,250,247,.9); border-radius:50%;
+  font-size:1.5rem; line-height:1; color:var(--carbon); cursor:pointer;
+}
+.modal-x:hover{background:#fff}
+.modal-nav{
+  position:absolute; top:50%; transform:translateY(-50%); z-index:3;
+  width:44px; height:44px; border-radius:50%;
+  border:1px solid rgba(56,81,60,.2); background:rgba(251,250,247,.92);
+  font-size:1.4rem; line-height:1; color:var(--verde); cursor:pointer;
+}
+.modal-nav:hover{background:#fff}
+.modal-nav.prev{left:10px}
+.modal-nav.next{right:calc(40.8% + 10px)}
+body.modal-abierto{overflow:hidden}
+
+/* reveal al entrar en pantalla */
+.rv{opacity:0; transform:translateY(20px); transition:opacity .5s ease, transform .5s var(--sal)}
 .rv.visible{opacity:1; transform:none}
 
 /* ---------- responsive ---------- */
@@ -528,7 +502,7 @@ footer img{height:44px; width:auto; margin-bottom:12px}
   .tipos{grid-template-columns:repeat(2,1fr)}
 }
 @media (max-width:1024px){
-  .intro-grid, .split, .contacto-grid{grid-template-columns:1fr}
+  .intro-grid, .split, .contacto-grid, .mp-grid{grid-template-columns:1fr}
   .split.invertido .split-media{order:0}
   .cifras{grid-template-columns:repeat(2,1fr)}
   .etapas{grid-template-columns:1fr}
@@ -539,21 +513,26 @@ footer img{height:44px; width:auto; margin-bottom:12px}
     flex-direction:column; justify-content:center; gap:26px;
     background:var(--verde);
     opacity:0; pointer-events:none;
-    transition:opacity .35s ease;
+    transition:opacity .3s ease;
   }
   body.menu-abierto nav{opacity:1; pointer-events:auto}
   nav a.link, header.solid nav a.link{color:#fff; font-size:.95rem; letter-spacing:.18em}
   .burger{display:block; position:relative; z-index:2}
   body.menu-abierto .burger span{background:#fff}
   header:not(.solid) nav .btn, nav .btn{border-color:rgba(255,255,255,.6); background:transparent; color:#fff}
+  /* en pantallas chicas las capas dejan de estar pegadas: con el texto
+     encima y poca altura, quedaban apretadas contra el borde */
+  .capa{position:relative; height:auto; min-height:76vh; padding:110px var(--pad) 70px}
+  .capa.v-izq::after, .capa.v-fuerte::after{background:linear-gradient(180deg, rgba(24,31,24,.55), rgba(24,31,24,.75))}
   .detalles{grid-template-columns:1fr 1fr}
   .detalles .detalle:last-child{display:none}
-  .ubi-img img{height:auto; aspect-ratio:4/5}
-  .ubi-panel{position:static; padding:36px var(--pad) 54px; background:var(--verde)}
-  .ubi-img::after{background:linear-gradient(180deg, rgba(26,32,26,.4), rgba(26,32,26,.15))}
   form{grid-template-columns:1fr}
-  .ultima-cuerpo{padding:clamp(70px,9vw,130px) var(--pad)}
   .foot-legal{text-align:left}
+  .modal-caja{grid-template-columns:1fr; max-height:92vh; overflow-y:auto}
+  .modal-plano img{max-height:46vh}
+  .modal-nav{top:auto; bottom:14px; transform:none}
+  .modal-nav.next{right:14px}
+  .modal-nav.prev{left:14px}
 }
 @media (max-width:640px){
   .tipos{grid-template-columns:1fr}
@@ -568,56 +547,56 @@ footer img{height:44px; width:auto; margin-bottom:12px}
   .rv{opacity:1; transform:none; transition:none}
   .scroll-cue i{animation:none}
   .detalle img{transition:none}
+  /* el efecto de capas es scroll nativo, pero igual se desactiva */
+  .capa{position:relative; height:auto; min-height:80vh}
 }
 </style>
 </head>
 <body>
 
-<!-- ══════════════ NAV ══════════════ -->
+<!-- ============== NAV ============== -->
 <header id="cab">
   <a class="brand" href="#top" aria-label="La Costa Park">
     <img class="claro"  src="img/lcp-lockup-blanco.svg" alt="La Costa Park">
     <img class="oscuro" src="img/lcp-lockup.svg" alt="La Costa Park">
   </a>
 
-  <button class="burger" id="burger" aria-label="Men&uacute;" aria-expanded="false">
+  <button class="burger" id="burger" aria-label="Menu" aria-expanded="false">
     <span></span><span></span><span></span>
   </button>
 
   <nav id="nav">
     <a class="link" href="#proyecto">Proyecto</a>
     <a class="link" href="#viviendas">Viviendas</a>
+    <a class="link" href="#planta-general">Planta general</a>
     <a class="link" href="#amenities">Espacios comunes</a>
     <a class="link" href="#ubicacion">Ubicaci&oacute;n</a>
-    <a class="link" href="#etapas">Etapas</a>
     <a class="btn" href="#contacto">Contacto</a>
   </nav>
 </header>
 
-<div class="snap" id="snap">
+<!-- ============== 01 HERO (capa) ============== -->
+<div class="capa v-centro hero" id="top">
+  <video id="hero-video" poster="img/hero-poster.jpg" muted loop playsinline preload="none" aria-hidden="true"></video>
 
-<!-- ══════════════ 01 HERO ══════════════ -->
-<section class="pantalla plena hero" id="top">
-  <div class="hero-bg">
-    <img src="img/hero.jpg" alt="Vista del complejo La Costa Park al atardecer" fetchpriority="high">
-  </div>
-
-  <div class="hero-inner">
-    <p class="eyebrow">Lagomar &middot; Ciudad de la Costa</p>
-    <img class="hero-logo" src="img/lcp-lockup-blanco.svg" alt="La Costa Park">
-    <p class="hero-slogan">Un lugar para vivir a tu manera.</p>
-    <div class="hero-cta">
-      <a class="btn light" href="#viviendas">Ver las viviendas</a>
-      <a class="btn light" href="#contacto">Quiero informaci&oacute;n</a>
+  <div class="capa-in">
+    <div class="hero-inner">
+      <p class="eyebrow">Lagomar &middot; Ciudad de la Costa</p>
+      <img class="hero-logo" src="img/lcp-lockup-blanco.svg" alt="La Costa Park">
+      <p class="hero-slogan">Un lugar para vivir a tu manera.</p>
+      <div class="hero-cta">
+        <a class="btn light" href="#viviendas">Ver las viviendas</a>
+        <a class="btn light" href="#contacto">Quiero informaci&oacute;n</a>
+      </div>
     </div>
   </div>
 
-  <button class="scroll-cue" type="button" id="cue"><span>Bajar</span><i></i></button>
-</section>
+  <a class="scroll-cue" href="#proyecto"><span>Bajar</span><i></i></a>
+</div>
 
-<!-- ══════════════ 02 INTRO ══════════════ -->
-<section class="pantalla tinte-arena" id="proyecto">
-  <div class="wrap desborde">
+<!-- ============== 02 INTRO ============== -->
+<section class="sobre tinte-arena" id="proyecto">
+  <div class="wrap">
     <div class="intro-grid rv">
       <div>
         <p class="eyebrow">El proyecto</p>
@@ -638,9 +617,9 @@ footer img{height:44px; width:auto; margin-bottom:12px}
   </div>
 </section>
 
-<!-- ══════════════ 03 ARQUITECTURA ══════════════ -->
-<section class="pantalla">
-  <div class="wrap desborde">
+<!-- ============== 03 ARQUITECTURA ============== -->
+<section class="sobre tinte-papel">
+  <div class="wrap">
     <div class="split rv">
       <div class="split-media"><img src="img/proyecto.jpg" alt="Calle interna del complejo con paisajismo" loading="lazy"></div>
       <div class="split-texto">
@@ -653,26 +632,27 @@ footer img{height:44px; width:auto; margin-bottom:12px}
   </div>
 </section>
 
-<!-- ══════════════ 04 FRANJA DE MARCA ══════════════ -->
-<section class="pantalla plena banda">
-  <img src="img/acceso.jpg" alt="Cartel de La Costa Park en el muro de acceso" loading="lazy">
-  <p><span>Un lugar para vivir a tu manera.</span></p>
-</section>
+<!-- ============== 04 CAPA: el conjunto ============== -->
+<div class="capa v-izq">
+  <img src="img/hero.jpg" alt="Vista del complejo desde la calle, al atardecer" loading="lazy">
+  <div class="capa-in">
+    <p class="capa-frase">Casas de una y dos plantas, en tres calles internas.</p>
+    <p class="capa-dato">Seis tipolog&iacute;as de 60 a 93 m&sup2;, de dos y tres dormitorios.</p>
+  </div>
+</div>
 
-<!-- ══════════════ 05 VIVIENDAS · 2 DORMITORIOS ══════════════
-     Las seis tipologias van en dos pantallas: las seis juntas
-     necesitaban 800px y en un notebook entran 617. -->
-<section class="pantalla tinte-arena" id="viviendas">
-  <div class="wrap desborde">
+<!-- ============== 05 VIVIENDAS ============== -->
+<section class="sobre tinte-arena" id="viviendas">
+  <div class="wrap">
     <div class="rv">
-      <p class="eyebrow">Viviendas &middot; seis tipolog&iacute;as</p>
-      <h2>Dos dormitorios, desde USD 170.000</h2>
-      <p class="lead">Todas las casas se entregan con cochera, jard&iacute;n y parrillero propio.</p>
+      <p class="eyebrow">Viviendas</p>
+      <h2>Seis tipolog&iacute;as, de 60 a 93 m&sup2;</h2>
+      <p class="lead">Todas con cochera, jard&iacute;n y parrillero. Las de dos plantas suman un tercer dormitorio y un segundo ba&ntilde;o. Toc&aacute; una para ver la planta.</p>
     </div>
 
     <div class="tipos">
 
-      <article class="tipo rv">
+      <button type="button" class="tipo rv" data-tipo="B1">
         <div class="tipo-cab"><span class="tipo-cod">B1</span><span class="tipo-un">4 unidades</span></div>
         <ul class="tipo-datos">
           <li><span>Superficie</span><span>60,30 m&sup2;</span></li>
@@ -680,9 +660,10 @@ footer img{height:44px; width:auto; margin-bottom:12px}
           <li><span>Plantas</span><span>Una</span></li>
         </ul>
         <p class="tipo-precio"><small>Precio</small>USD 170.000 &ndash; 190.000</p>
-      </article>
+        <p class="tipo-ver">Ver la planta <i>&rarr;</i></p>
+      </button>
 
-      <article class="tipo rv">
+      <button type="button" class="tipo rv" data-tipo="A1">
         <div class="tipo-cab"><span class="tipo-cod">A1</span><span class="tipo-un">8 unidades</span></div>
         <ul class="tipo-datos">
           <li><span>Superficie</span><span>60,90 m&sup2;</span></li>
@@ -690,9 +671,10 @@ footer img{height:44px; width:auto; margin-bottom:12px}
           <li><span>Plantas</span><span>Una</span></li>
         </ul>
         <p class="tipo-precio"><small>Precio</small>USD 170.000 &ndash; 190.000</p>
-      </article>
+        <p class="tipo-ver">Ver la planta <i>&rarr;</i></p>
+      </button>
 
-      <article class="tipo rv">
+      <button type="button" class="tipo rv" data-tipo="C2">
         <div class="tipo-cab"><span class="tipo-cod">C2</span><span class="tipo-un">2 unidades</span></div>
         <ul class="tipo-datos">
           <li><span>Superficie</span><span>73,40 m&sup2;</span></li>
@@ -700,24 +682,10 @@ footer img{height:44px; width:auto; margin-bottom:12px}
           <li><span>Plantas</span><span>Dos</span></li>
         </ul>
         <p class="tipo-precio"><small>Precio</small>USD 200.000 &ndash; 220.000</p>
-      </article>
+        <p class="tipo-ver">Ver la planta <i>&rarr;</i></p>
+      </button>
 
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════ 06 VIVIENDAS · 3 DORMITORIOS ══════════════ -->
-<section class="pantalla tinte-arena" id="viviendas-3">
-  <div class="wrap desborde">
-    <div class="rv">
-      <p class="eyebrow">Viviendas &middot; seis tipolog&iacute;as</p>
-      <h2>Tres dormitorios, hasta 93 m&sup2;</h2>
-      <p class="lead">Las de dos plantas suman un tercer dormitorio y un segundo ba&ntilde;o.</p>
-    </div>
-
-    <div class="tipos">
-
-      <article class="tipo rv">
+      <button type="button" class="tipo rv" data-tipo="C1">
         <div class="tipo-cab"><span class="tipo-cod">C1</span><span class="tipo-un">2 unidades</span></div>
         <ul class="tipo-datos">
           <li><span>Superficie</span><span>89,40 m&sup2;</span></li>
@@ -725,9 +693,10 @@ footer img{height:44px; width:auto; margin-bottom:12px}
           <li><span>Plantas</span><span>Dos</span></li>
         </ul>
         <p class="tipo-precio"><small>Precio</small>USD 240.000 &ndash; 260.000</p>
-      </article>
+        <p class="tipo-ver">Ver la planta <i>&rarr;</i></p>
+      </button>
 
-      <article class="tipo rv">
+      <button type="button" class="tipo rv" data-tipo="A2">
         <div class="tipo-cab"><span class="tipo-cod">A2</span><span class="tipo-un">8 unidades</span></div>
         <ul class="tipo-datos">
           <li><span>Superficie</span><span>89,60 m&sup2;</span></li>
@@ -735,9 +704,10 @@ footer img{height:44px; width:auto; margin-bottom:12px}
           <li><span>Plantas</span><span>Dos</span></li>
         </ul>
         <p class="tipo-precio"><small>Precio</small>USD 220.000 &ndash; 240.000</p>
-      </article>
+        <p class="tipo-ver">Ver la planta <i>&rarr;</i></p>
+      </button>
 
-      <article class="tipo rv">
+      <button type="button" class="tipo rv" data-tipo="B2">
         <div class="tipo-cab"><span class="tipo-cod">B2</span><span class="tipo-un">4 unidades</span></div>
         <ul class="tipo-datos">
           <li><span>Superficie</span><span>92,70 m&sup2;</span></li>
@@ -745,7 +715,8 @@ footer img{height:44px; width:auto; margin-bottom:12px}
           <li><span>Plantas</span><span>Dos</span></li>
         </ul>
         <p class="tipo-precio"><small>Precio</small>USD 220.000 &ndash; 240.000</p>
-      </article>
+        <p class="tipo-ver">Ver la planta <i>&rarr;</i></p>
+      </button>
 
     </div>
 
@@ -762,9 +733,42 @@ footer img{height:44px; width:auto; margin-bottom:12px}
   </div>
 </section>
 
-<!-- ══════════════ 06 ESPACIOS COMUNES ══════════════ -->
-<section class="pantalla tinte-verde" id="amenities">
-  <div class="wrap desborde">
+<!-- ============== 06 PLANTA GENERAL ============== -->
+<section class="sobre tinte-papel" id="planta-general">
+  <div class="wrap">
+    <div class="mp-grid">
+      <div class="rv">
+        <p class="eyebrow">Planta general</p>
+        <h2>C&oacute;mo se ordena el barrio</h2>
+        <p>Tres tiras de viviendas sobre calles internas, el SUM en el medio y el ingreso por calle Libertad. Cada color es una tipolog&iacute;a: toc&aacute; una para ver su planta.</p>
+        <ul class="refs">
+          <li><button type="button" data-tipo="A1"><span class="sw" style="background:#FFFFB4"></span><span class="cod">A1</span><span class="txt">2 dorm., una planta</span><span class="un">8 un.</span></button></li>
+          <li><button type="button" data-tipo="A2"><span class="sw" style="background:#FBD2BE"></span><span class="cod">A2</span><span class="txt">3 dorm., d&uacute;plex</span><span class="un">8 un.</span></button></li>
+          <li><button type="button" data-tipo="B1"><span class="sw" style="background:#BFD7EB"></span><span class="cod">B1</span><span class="txt">2 dorm., una planta</span><span class="un">4 un.</span></button></li>
+          <li><button type="button" data-tipo="B2"><span class="sw" style="background:#B4B4F5"></span><span class="cod">B2</span><span class="txt">3 dorm., d&uacute;plex</span><span class="un">4 un.</span></button></li>
+          <li><button type="button" data-tipo="C1"><span class="sw" style="background:#FFB4B4"></span><span class="cod">C1</span><span class="txt">3 dorm., d&uacute;plex</span><span class="un">2 un.</span></button></li>
+          <li><button type="button" data-tipo="C2"><span class="sw" style="background:#ECB4FF"></span><span class="cod">C2</span><span class="txt">2 dorm., d&uacute;plex</span><span class="un">2 un.</span></button></li>
+          <li><button type="button" data-tipo="SUM"><span class="sw" style="background:#F5EDD4"></span><span class="cod">SUM</span><span class="txt">Espacio com&uacute;n</span><span class="un">51 m&sup2;</span></button></li>
+        </ul>
+      </div>
+      <div class="mp-img rv">
+        <img src="img/planos/masterplan.jpg" alt="Planta general esquematica del complejo, con las viviendas coloreadas por tipologia" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== 07 CAPA: la marca ============== -->
+<div class="capa v-izq">
+  <img src="img/acceso.jpg" alt="Cartel de La Costa Park en el muro de acceso" loading="lazy">
+  <div class="capa-in">
+    <p class="capa-frase">Un lugar para vivir a tu manera.</p>
+  </div>
+</div>
+
+<!-- ============== 08 ESPACIOS COMUNES ============== -->
+<section class="sobre tinte-verde" id="amenities">
+  <div class="wrap">
     <div class="split invertido rv">
       <div class="split-media"><img src="img/comunidad.jpg" alt="Vecinos en los espacios comunes del complejo" loading="lazy"></div>
       <div class="split-texto">
@@ -772,7 +776,7 @@ footer img{height:44px; width:auto; margin-bottom:12px}
         <h2>Un SUM, un jard&iacute;n y calles para caminar</h2>
         <p>El complejo est&aacute; pensado para que la vida pase tambi&eacute;n afuera de la casa: espacios de encuentro, verde entre las viviendas y calles internas anchas.</p>
         <ul class="items">
-          <li>SUM con barbacoa</li>
+          <li>SUM con barbacoa, de 51 m&sup2;</li>
           <li>Espacios recreativos</li>
           <li>Jard&iacute;n comunitario</li>
           <li>Seguridad</li>
@@ -784,22 +788,20 @@ footer img{height:44px; width:auto; margin-bottom:12px}
   </div>
 </section>
 
-<!-- ══════════════ 07 DETALLES ══════════════ -->
-<section class="pantalla plena">
+<!-- ============== 09 DETALLES ============== -->
+<section class="sobre tinte-papel" style="padding-left:0; padding-right:0">
   <div class="detalles">
-    <figure class="detalle rv"><img src="img/detalle-luz.jpg" alt="Detalle de luminaria sobre muro de hormig&oacute;n" loading="lazy"><figcaption>Hormig&oacute;n</figcaption></figure>
+    <figure class="detalle rv"><img src="img/detalle-luz.jpg" alt="Detalle de luminaria sobre muro de hormigon" loading="lazy"><figcaption>Hormig&oacute;n</figcaption></figure>
     <figure class="detalle rv"><img src="img/detalle-madera.jpg" alt="Detalle de revestimiento de madera y sendero de piedra" loading="lazy"><figcaption>Madera</figcaption></figure>
     <figure class="detalle rv"><img src="img/entorno.jpg" alt="Lavandas en el paisajismo del complejo" loading="lazy"><figcaption>Paisajismo</figcaption></figure>
   </div>
 </section>
 
-<!-- ══════════════ 08 UBICACION ══════════════ -->
-<section class="pantalla plena ubi" id="ubicacion">
-  <div class="ubi-img">
-    <img src="img/ubicacion.jpg" alt="Ingreso al complejo desde la calle" loading="lazy">
-  </div>
-  <div class="ubi-panel">
-    <div class="caja rv">
+<!-- ============== 10 CAPA: ubicacion ============== -->
+<div class="capa v-fuerte" id="ubicacion">
+  <img src="img/ubicacion.jpg" alt="Ingreso al complejo desde la calle" loading="lazy">
+  <div class="capa-in">
+    <div class="ubi-caja rv">
       <p class="eyebrow">Ubicaci&oacute;n</p>
       <h2>En Lagomar, con todo a mano</h2>
       <ul class="items">
@@ -815,11 +817,11 @@ footer img{height:44px; width:auto; margin-bottom:12px}
       </p>
     </div>
   </div>
-</section>
+</div>
 
-<!-- ══════════════ 09 ETAPAS ══════════════ -->
-<section class="pantalla" id="etapas">
-  <div class="wrap desborde">
+<!-- ============== 11 ETAPAS ============== -->
+<section class="sobre tinte-papel" id="etapas">
+  <div class="wrap">
     <div class="rv">
       <p class="eyebrow">Obra y entrega</p>
       <h2>La obra se hace en tres etapas</h2>
@@ -846,214 +848,172 @@ footer img{height:44px; width:auto; margin-bottom:12px}
   </div>
 </section>
 
-<!-- ══════════════ 10 CONTACTO + PIE ══════════════ -->
-<section class="pantalla ultima" id="contacto">
-  <div class="ultima-cuerpo">
-    <div class="wrap desborde">
-      <div class="contacto-grid">
-        <div class="rv">
-          <p class="eyebrow">Contacto</p>
-          <h2>Pedinos informaci&oacute;n</h2>
-          <p>Te mandamos disponibilidad, plantas, precios actualizados y formas de pago.</p>
-          <ul class="datos">
-            <li><b>Tel&eacute;fono</b><a href="tel:+59893999644">093 999 644</a></li>
-            <li><b>Correo</b><a href="mailto:marcos2002urtiaga@gmail.com">marcos2002urtiaga@gmail.com</a></li>
-            <li><b>D&oacute;nde</b>Lagomar, Ciudad de la Costa, Canelones</li>
-          </ul>
-        </div>
-
-        <form class="rv" id="form">
-          <div class="campo">
-            <label for="nombre">Nombre</label>
-            <input id="nombre" name="nombre" type="text" required autocomplete="name">
-          </div>
-          <div class="campo">
-            <label for="tel">Tel&eacute;fono</label>
-            <input id="tel" name="tel" type="tel" required autocomplete="tel" placeholder="09X XXX XXX">
-          </div>
-          <div class="campo ancho">
-            <label for="mail">Correo electr&oacute;nico</label>
-            <input id="mail" name="mail" type="email" autocomplete="email">
-          </div>
-          <div class="campo ancho">
-            <label for="tipo">Tipolog&iacute;a de inter&eacute;s</label>
-            <select id="tipo" name="tipo">
-              <option value="">Sin definir</option>
-              <option>2 dormitorios &mdash; una planta (A1 / B1)</option>
-              <option>2 dormitorios &mdash; dos plantas (C2)</option>
-              <option>3 dormitorios &mdash; dos plantas (A2 / B2 / C1)</option>
-            </select>
-          </div>
-          <div class="campo ancho">
-            <label for="msg">Mensaje</label>
-            <textarea id="msg" name="msg" rows="2"></textarea>
-          </div>
-          <button class="btn" type="submit">Enviar consulta</button>
-          <p class="form-nota">Al enviar se abre WhatsApp con la consulta ya escrita.</p>
-        </form>
+<!-- ============== 12 CONTACTO ============== -->
+<section class="sobre tinte-arena" id="contacto">
+  <div class="wrap">
+    <div class="contacto-grid">
+      <div class="rv">
+        <p class="eyebrow">Contacto</p>
+        <h2>Pedinos informaci&oacute;n</h2>
+        <p>Te mandamos disponibilidad, plantas, precios actualizados y formas de pago.</p>
+        <ul class="datos">
+          <li><b>Tel&eacute;fono</b><a href="tel:+59893999644">093 999 644</a></li>
+          <li><b>Correo</b><a href="mailto:marcos2002urtiaga@gmail.com">marcos2002urtiaga@gmail.com</a></li>
+          <li><b>D&oacute;nde</b>Lagomar, Ciudad de la Costa, Canelones</li>
+        </ul>
       </div>
+
+      <form class="rv" id="form">
+        <div class="campo">
+          <label for="nombre">Nombre</label>
+          <input id="nombre" name="nombre" type="text" required autocomplete="name">
+        </div>
+        <div class="campo">
+          <label for="tel">Tel&eacute;fono</label>
+          <input id="tel" name="tel" type="tel" required autocomplete="tel" placeholder="09X XXX XXX">
+        </div>
+        <div class="campo ancho">
+          <label for="mail">Correo electr&oacute;nico</label>
+          <input id="mail" name="mail" type="email" autocomplete="email">
+        </div>
+        <div class="campo ancho">
+          <label for="tipo">Tipolog&iacute;a de inter&eacute;s</label>
+          <select id="tipo" name="tipo">
+            <option value="">Sin definir</option>
+            <option>2 dormitorios &mdash; una planta (A1 / B1)</option>
+            <option>2 dormitorios &mdash; d&uacute;plex (C2)</option>
+            <option>3 dormitorios &mdash; d&uacute;plex (A2 / B2 / C1)</option>
+          </select>
+        </div>
+        <div class="campo ancho">
+          <label for="msg">Mensaje</label>
+          <textarea id="msg" name="msg" rows="2"></textarea>
+        </div>
+        <button class="btn" type="submit">Enviar consulta</button>
+        <p class="form-nota">Al enviar se abre WhatsApp con la consulta ya escrita.</p>
+      </form>
     </div>
   </div>
-
-  <footer>
-    <div class="foot-grid">
-      <div>
-        <img src="img/lcp-lockup-blanco.svg" alt="La Costa Park">
-        <div>Lagomar, Ciudad de la Costa &middot; Canelones, Uruguay</div>
-      </div>
-      <div class="foot-legal">
-        Im&aacute;genes ilustrativas. Precios y plazos sujetos a modificaci&oacute;n.<br>
-        Grupo Diuiringuer &middot; Sitio por <a href="https://imabox.uy" style="color:inherit">Imabox</a>
-      </div>
-    </div>
-  </footer>
 </section>
 
-</div><!-- /snap -->
+<footer>
+  <div class="foot-grid">
+    <div>
+      <img src="img/lcp-lockup-blanco.svg" alt="La Costa Park">
+      <div>Lagomar, Ciudad de la Costa &middot; Canelones, Uruguay</div>
+    </div>
+    <div class="foot-legal">
+      Im&aacute;genes ilustrativas. Precios y plazos sujetos a modificaci&oacute;n.<br>
+      Grupo Diuiringuer &middot; Sitio por <a href="https://imabox.uy" style="color:inherit">Imabox</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ============== FICHA DE TIPOLOGIA ============== -->
+<div class="modal" id="modal" hidden>
+  <div class="modal-fondo" data-cerrar></div>
+  <div class="modal-caja" role="dialog" aria-modal="true" aria-labelledby="modal-tit">
+    <button class="modal-x" type="button" data-cerrar aria-label="Cerrar">&times;</button>
+    <button class="modal-nav prev" type="button" aria-label="Tipologia anterior">&lsaquo;</button>
+    <button class="modal-nav next" type="button" aria-label="Tipologia siguiente">&rsaquo;</button>
+
+    <div class="modal-plano"><img id="modal-img" src="" alt=""></div>
+
+    <div class="modal-datos">
+      <p class="eyebrow" id="modal-eyebrow"></p>
+      <h3 id="modal-tit"></h3>
+      <ul class="modal-lista" id="modal-lista"></ul>
+      <p class="modal-amb" id="modal-amb"></p>
+      <a class="btn" id="modal-cta" href="#contacto">Consultar por esta tipolog&iacute;a</a>
+      <p class="modal-nota" id="modal-nota"></p>
+    </div>
+  </div>
+</div>
 
 <a class="wa" href="https://wa.me/59893999644?text=Hola,%20quiero%20informaci%C3%B3n%20sobre%20La%20Costa%20Park" target="_blank" rel="noopener" aria-label="Escribir por WhatsApp">
-  <svg viewBox="0 0 24 24"><path d="M17.47 14.38c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.25-.46-2.38-1.47-.88-.78-1.47-1.75-1.64-2.05-.17-.3-.02-.46.13-.6.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.6-.92-2.2-.24-.58-.49-.5-.67-.5h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.01-1.04 2.47s1.06 2.86 1.21 3.06c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.63.71.22 1.36.19 1.87.12.57-.09 1.75-.72 2-1.41.25-.69.25-1.28.17-1.41-.07-.13-.27-.2-.57-.35zM12.04 2.5c-5.24 0-9.5 4.26-9.5 9.5 0 1.68.44 3.31 1.28 4.75L2.5 21.5l4.88-1.28a9.46 9.46 0 0 0 4.66 1.22h.01c5.23 0 9.49-4.26 9.49-9.5 0-2.54-.99-4.92-2.78-6.71a9.42 9.42 0 0 0-6.72-2.73zm0 17.4h-.01a7.9 7.9 0 0 1-4.02-1.1l-.29-.17-2.98.78.8-2.9-.19-.3a7.87 7.87 0 0 1-1.21-4.21c0-4.35 3.55-7.9 7.9-7.9 2.11 0 4.09.83 5.58 2.32a7.84 7.84 0 0 1 2.31 5.59c0 4.36-3.54 7.9-7.89 7.9z"/></svg>
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.47 14.38c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.25-.46-2.38-1.47-.88-.78-1.47-1.75-1.64-2.05-.17-.3-.02-.46.13-.6.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.6-.92-2.2-.24-.58-.49-.5-.67-.5h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.01-1.04 2.47s1.06 2.86 1.21 3.06c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.63.71.22 1.36.19 1.87.12.57-.09 1.75-.72 2-1.41.25-.69.25-1.28.17-1.41-.07-.13-.27-.2-.57-.35zM12.04 2.5c-5.24 0-9.5 4.26-9.5 9.5 0 1.68.44 3.31 1.28 4.75L2.5 21.5l4.88-1.28a9.46 9.46 0 0 0 4.66 1.22h.01c5.23 0 9.49-4.26 9.49-9.5 0-2.54-.99-4.92-2.78-6.71a9.42 9.42 0 0 0-6.72-2.73zm0 17.4h-.01a7.9 7.9 0 0 1-4.02-1.1l-.29-.17-2.98.78.8-2.9-.19-.3a7.87 7.87 0 0 1-1.21-4.21c0-4.35 3.55-7.9 7.9-7.9 2.11 0 4.09.83 5.58 2.32a7.84 7.84 0 0 1 2.31 5.59c0 4.36-3.54 7.9-7.89 7.9z"/></svg>
 </a>
 
 <script>
-/* ══════════════════════════════════════════════════════════
-   Scroll por pantallas
-   Portado de js/index.js (el index de Imabox): un contenedor
-   de 100dvh, la rueda interceptada y una traba de 900ms para
-   que un solo gesto no salte dos secciones.
-   ══════════════════════════════════════════════════════════ */
-var cab       = document.getElementById('cab');
-var snap      = document.getElementById('snap');
-var pantallas = Array.prototype.slice.call(snap.querySelectorAll('.pantalla'));
-var enlaces   = Array.prototype.slice.call(document.querySelectorAll('#nav a[href^="#"]'));
+/* ---------- video del hero ----------
+   El .mp4 pesa 3,4 MB: en pantallas chicas no se baja y queda el
+   poster. En desktop se pide recien despues de la carga. */
+(function(){
+  var v = document.getElementById('hero-video');
+  if (!v) return;
+  var chica = window.matchMedia('(max-width: 820px)').matches;
+  var quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (chica || quieto) return;
 
-var burger  = document.getElementById('burger');
-
-var actual  = 0;
-var trabada = false;
-var snapOn  = false;
-
-/* El snap solo se enciende si la ventana da el alto. En un celular
-   (o en un notebook bajo) secciones como Viviendas no entran en una
-   pantalla, asi que ahi conviene el scroll de toda la vida. */
-function alcanzaParaSnap(){
-  return window.innerWidth >= 1024 && window.innerHeight >= 700
-         && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-}
-
-function marcarNav(){
-  cab.classList.toggle('solid', actual > 0);
-  var id = pantallas[actual] ? pantallas[actual].id : '';
-  enlaces.forEach(function(a){
-    a.classList.toggle('activo', a.classList.contains('link') && a.getAttribute('href') === '#' + id);
-  });
-}
-
-function irA(i){
-  i = Math.max(0, Math.min(pantallas.length - 1, i));
-  if (i === actual) return;
-  actual = i;
-  marcarNav();
-  revelar(pantallas[i]);
-  if (snapOn) {
-    snap.scrollTo({ top: i * snap.clientHeight, behavior: 'smooth' });
-    trabada = true;
-    setTimeout(function(){ trabada = false; }, 900);
-  } else {
-    pantallas[i].scrollIntoView({ behavior: 'smooth' });
+  function cargar(){
+    v.src = 'video/hero.mp4';
+    v.load();
+    var p = v.play();
+    if (p && p.catch) p.catch(function(){ /* si el navegador lo bloquea, queda el poster */ });
   }
-}
+  if (document.readyState === 'complete') cargar();
+  else window.addEventListener('load', cargar);
+})();
 
-/* Si la seccion no entra en la ventana, la rueda scrollea adentro antes
-   de pasar a la siguiente. El umbral no es 0: toda seccion arrastra unos
-   20px de sobrante de margenes, y sin holgura cada pantalla se comia una
-   rueditada muerta antes de saltar. */
-var HOLGURA = 48;
+/* ---------- nav ---------- */
+var cab     = document.getElementById('cab');
+var burger  = document.getElementById('burger');
+var enlaces = Array.prototype.slice.call(document.querySelectorAll('#nav a.link'));
 
-function puedeScroll(el, dy){
-  if (!el) return false;
-  var margen = el.scrollHeight - el.clientHeight;
-  if (margen < HOLGURA) return false;
-  return dy > 0 ? el.scrollTop < margen - 1 : el.scrollTop > 1;
-}
+/* el hero queda pegado al viewport, asi que no sirve observarlo:
+   el fondo del nav se decide por la posicion del scroll */
+var pidiendo = false;
+function alScroll(){
+  if (pidiendo) return;
+  pidiendo = true;
+  requestAnimationFrame(function(){
+    var y = window.scrollY;
+    cab.classList.toggle('solid', y > window.innerHeight * 0.75);
 
-snap.addEventListener('wheel', function(e){
-  if (!snapOn) return;
-  var caja = e.target.closest ? e.target.closest('.desborde') : null;
-  if (puedeScroll(caja, e.deltaY)) return;
-  e.preventDefault();
-  if (trabada) return;
-  irA(actual + (e.deltaY > 0 ? 1 : -1));
-}, { passive: false });
-
-document.addEventListener('keydown', function(e){
-  if (!snapOn || document.body.classList.contains('menu-abierto')) return;
-  var t = e.target.tagName;
-  if (t === 'INPUT' || t === 'TEXTAREA' || t === 'SELECT') return;
-  if (e.key === 'ArrowDown' || e.key === 'PageDown'){ e.preventDefault(); irA(actual + 1); }
-  if (e.key === 'ArrowUp'   || e.key === 'PageUp'){   e.preventDefault(); irA(actual - 1); }
-});
-
-function evaluarSnap(){
-  var quiero = alcanzaParaSnap();
-  if (quiero === snapOn) return;
-  snapOn = quiero;
-  document.documentElement.classList.toggle('snap-on', snapOn);
-  if (snapOn) snap.scrollTo({ top: actual * snap.clientHeight, behavior: 'auto' });
-}
-
-var reT = null;
-window.addEventListener('resize', function(){
-  clearTimeout(reT);
-  reT = setTimeout(function(){
-    evaluarSnap();
-    /* al cambiar el alto, las posiciones calculadas quedan desfasadas */
-    if (snapOn) snap.scrollTo({ top: actual * snap.clientHeight, behavior: 'auto' });
-  }, 150);
-});
-
-/* que seccion esta en pantalla: la que cruza la franja del medio.
-   Sirve igual con snap o sin snap, y con secciones de cualquier alto. */
-var ioSec = new IntersectionObserver(function(es){
-  es.forEach(function(e){
-    if (!e.isIntersecting || trabada) return;
-    actual = pantallas.indexOf(e.target);
-    marcarNav();
+    /* el hero queda pegado hasta el final del documento, tapado por las
+       secciones: si no se pausa, el video sigue corriendo toda la pagina */
+    var v = document.getElementById('hero-video');
+    if (v && v.src) {
+      var fuera = y > window.innerHeight * 1.1;
+      if (fuera && !v.paused) v.pause();
+      else if (!fuera && v.paused) { var p = v.play(); if (p && p.catch) p.catch(function(){}); }
+    }
+    pidiendo = false;
   });
-}, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
-pantallas.forEach(function(p){ ioSec.observe(p); });
+}
+window.addEventListener('scroll', alScroll, { passive: true });
+alScroll();
 
-/* los links del menu saltan por indice, no por ancla */
-enlaces.forEach(function(a){
-  a.addEventListener('click', function(ev){
-    var destino = document.querySelector(a.getAttribute('href'));
-    var i = pantallas.indexOf(destino);
-    if (i < 0) return;
-    ev.preventDefault();
-    document.body.classList.remove('menu-abierto');
-    burger.setAttribute('aria-expanded', 'false');
-    irA(i);
-  });
-});
-
-document.getElementById('cue').addEventListener('click', function(){ irA(1); });
-
-/* ---------- menu movil ---------- */
 burger.addEventListener('click', function(){
   var abierto = document.body.classList.toggle('menu-abierto');
   burger.setAttribute('aria-expanded', abierto ? 'true' : 'false');
 });
+document.querySelectorAll('#nav a').forEach(function(a){
+  a.addEventListener('click', function(){
+    document.body.classList.remove('menu-abierto');
+    burger.setAttribute('aria-expanded', 'false');
+  });
+});
+
+/* marca en el menu la seccion que cruza el medio de la pantalla */
+var conId = enlaces.map(function(a){ return document.querySelector(a.getAttribute('href')); })
+                   .filter(Boolean);
+var ioNav = new IntersectionObserver(function(es){
+  es.forEach(function(e){
+    if (!e.isIntersecting) return;
+    enlaces.forEach(function(a){
+      a.classList.toggle('activo', a.getAttribute('href') === '#' + e.target.id);
+    });
+  });
+}, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
+conId.forEach(function(s){ ioNav.observe(s); });
 
 /* ---------- reveal ----------
-   Todo el contenido arranca en opacity:0, asi que si el observer no
-   llega a correr la pagina queda en blanco. Por las dudas, a los 3
-   segundos se muestra todo igual. */
+   Todo arranca en opacity:0, asi que si el observer no llega a
+   correr la pagina queda en blanco: a los 3 segundos se muestra
+   todo igual. */
 var rvs = Array.prototype.slice.call(document.querySelectorAll('.rv'));
-
-function revelar(ambito){
-  (ambito ? Array.prototype.slice.call(ambito.querySelectorAll('.rv')) : rvs)
-    .forEach(function(el){ el.classList.add('visible'); });
-}
+function revelarTodo(){ rvs.forEach(function(el){ el.classList.add('visible'); }); }
 
 if ('IntersectionObserver' in window) {
   var io = new IntersectionObserver(function(entradas){
@@ -1065,15 +1025,139 @@ if ('IntersectionObserver' in window) {
   }, { threshold: .12, rootMargin: '0px 0px -8% 0px' });
 
   rvs.forEach(function(el, i){
-    // escalonado suave entre hermanos de una misma grilla
-    el.style.transitionDelay = (Math.min(i % 6, 5) * 60) + 'ms';
+    el.style.transitionDelay = (Math.min(i % 6, 5) * 80) + 'ms';
     io.observe(el);
   });
-
-  setTimeout(function(){ revelar(); }, 3000);
+  setTimeout(revelarTodo, 3000);
 } else {
-  revelar();
+  revelarTodo();
 }
+
+/* ══════════════════════════════════════════════════════════
+   Ficha de tipologia
+   Los m2, dormitorios y precio se leen de la tarjeta para no
+   tener el mismo dato escrito en dos lados. Aca solo va lo que
+   la tarjeta no muestra: la planta y el desglose de areas de la
+   planilla del estudio (lamina REV 5, 03/07/2026).
+   ══════════════════════════════════════════════════════════ */
+var FICHAS = {
+  A1: { plano:'a1', tit:'A1 &middot; una planta, dos dormitorios',
+        desglose:[['Planta baja','59,20 m&sup2;'],['Parrillero','1,70 m&sup2;']],
+        amb:'Living-comedor integrado con la cocina, dos dormitorios y un ba&ntilde;o. Afuera, el parrillero con deck de madera y el jard&iacute;n.' },
+  A2: { plano:'a2', tit:'A2 &middot; duplex, tres dormitorios',
+        desglose:[['Planta baja','43,90 m&sup2;'],['Planta alta','44,00 m&sup2;'],['Parrillero','1,70 m&sup2;']],
+        amb:'Abajo el living-comedor, la cocina, el lavadero y un ba&ntilde;o. Arriba los tres dormitorios, el segundo ba&ntilde;o y el hall.' },
+  B1: { plano:'b1', tit:'B1 &middot; una planta, dos dormitorios',
+        desglose:[['Planta baja','58,40 m&sup2;'],['Parrillero','1,90 m&sup2;']],
+        amb:'Living-comedor con cocina, dos dormitorios y un ba&ntilde;o. El parrillero da al patio.' },
+  B2: { plano:'b2', tit:'B2 &middot; duplex, tres dormitorios',
+        desglose:[['Planta baja','42,30 m&sup2;'],['Planta alta','48,50 m&sup2;'],['Parrillero','1,90 m&sup2;']],
+        amb:'Abajo el living-comedor, la cocina, el lavadero y un ba&ntilde;o. Arriba los tres dormitorios y el segundo ba&ntilde;o.' },
+  C1: { plano:'c', tit:'C1 &middot; duplex, tres dormitorios',
+        desglose:[['Planta baja','41,30 m&sup2;'],['Planta alta','46,40 m&sup2;'],['Parrillero','1,70 m&sup2;']],
+        amb:'Abajo el living-comedor y la cocina; arriba los tres dormitorios y el segundo ba&ntilde;o.',
+        nota:'C1 y C2 se dibujan juntas: son una pareja de viviendas apareadas.' },
+  C2: { plano:'c', tit:'C2 &middot; duplex, dos dormitorios',
+        desglose:[['Planta baja','38,70 m&sup2;'],['Planta alta','34,70 m&sup2;']],
+        amb:'Abajo el living-comedor y la cocina; arriba los dos dormitorios y los dos ba&ntilde;os.',
+        nota:'C1 y C2 se dibujan juntas: son una pareja de viviendas apareadas.' },
+  SUM: { plano:'sum', tit:'SUM con barbacoa', suelto:true,
+        desglose:[['Area construida','51,45 m&sup2;']],
+        amb:'El espacio com&uacute;n del complejo: sal&oacute;n con barbacoa, ba&ntilde;o y una galer&iacute;a al frente.' }
+};
+
+var ORDEN = ['A1','A2','B1','B2','C1','C2','SUM'];
+
+var modal  = document.getElementById('modal');
+var mImg   = document.getElementById('modal-img');
+var mEye   = document.getElementById('modal-eyebrow');
+var mTit   = document.getElementById('modal-tit');
+var mLista = document.getElementById('modal-lista');
+var mAmb   = document.getElementById('modal-amb');
+var mNota  = document.getElementById('modal-nota');
+var mCta   = document.getElementById('modal-cta');
+var tipoActual = null;
+
+function tarjetaDe(cod){ return document.querySelector('.tipo[data-tipo="' + cod + '"]'); }
+
+function abrirFicha(cod){
+  var f = FICHAS[cod];
+  if (!f) return;
+  tipoActual = cod;
+
+  var filas = f.desglose.map(function(d){
+    return '<li><span>' + d[0] + '</span><span>' + d[1] + '</span></li>';
+  });
+
+  /* lo que ya esta en la tarjeta se lee de ahi */
+  var t = tarjetaDe(cod);
+  if (t) {
+    t.querySelectorAll('.tipo-datos li').forEach(function(li){
+      var c = li.querySelectorAll('span');
+      if (c[0].textContent.indexOf('Superficie') === 0) {
+        filas.push('<li class="total"><span>Total</span><span>' + c[1].innerHTML + '</span></li>');
+      } else {
+        filas.push('<li><span>' + c[0].innerHTML + '</span><span>' + c[1].innerHTML + '</span></li>');
+      }
+    });
+    filas.push('<li><span>Unidades</span><span>' + t.querySelector('.tipo-un').innerHTML + '</span></li>');
+    filas.push('<li class="total"><span>Precio</span><span>' +
+               t.querySelector('.tipo-precio').lastChild.textContent.trim() + '</span></li>');
+  }
+
+  mEye.innerHTML   = f.suelto ? 'Espacio comun' : 'Tipologia';
+  mTit.innerHTML   = f.tit;
+  mLista.innerHTML = filas.join('');
+  mAmb.innerHTML   = f.amb;
+  mNota.innerHTML  = f.nota || 'Planta del proyecto ejecutivo, escala 1/100. Equipamiento ilustrativo.';
+  mCta.style.display = f.suelto ? 'none' : '';
+
+  /* la imagen se pide recien al abrir: son siete planos que no
+     tienen por que pesar en la carga inicial */
+  mImg.src = 'img/planos/' + f.plano + '.jpg';
+  mImg.alt = 'Planta de ' + cod;
+
+  modal.hidden = false;
+  document.body.classList.add('modal-abierto');
+  modal.querySelector('.modal-x').focus();
+}
+
+function cerrarFicha(){
+  modal.hidden = true;
+  document.body.classList.remove('modal-abierto');
+  if (tipoActual) {
+    var t = tarjetaDe(tipoActual);
+    if (t) t.focus();
+  }
+  tipoActual = null;
+}
+
+function fichaVecina(paso){
+  var i = ORDEN.indexOf(tipoActual);
+  if (i < 0) return;
+  abrirFicha(ORDEN[(i + paso + ORDEN.length) % ORDEN.length]);
+}
+
+document.querySelectorAll('[data-tipo]').forEach(function(el){
+  el.addEventListener('click', function(){ abrirFicha(el.getAttribute('data-tipo')); });
+});
+modal.querySelectorAll('[data-cerrar]').forEach(function(el){
+  el.addEventListener('click', cerrarFicha);
+});
+modal.querySelector('.modal-nav.prev').addEventListener('click', function(){ fichaVecina(-1); });
+modal.querySelector('.modal-nav.next').addEventListener('click', function(){ fichaVecina(1); });
+mCta.addEventListener('click', function(ev){
+  ev.preventDefault();
+  cerrarFicha();
+  document.getElementById('contacto').scrollIntoView({ behavior: 'smooth' });
+});
+
+document.addEventListener('keydown', function(e){
+  if (modal.hidden) return;
+  if (e.key === 'Escape')     cerrarFicha();
+  if (e.key === 'ArrowLeft')  fichaVecina(-1);
+  if (e.key === 'ArrowRight') fichaVecina(1);
+});
 
 /* ---------- formulario ----------
    El sitio es estatico, no hay backend: el envio arma un mensaje de
@@ -1091,16 +1175,12 @@ document.getElementById('form').addEventListener('submit', function(ev){
     'Telefono: ' + f.tel.value
   ];
   if (f.mail.value) lineas.push('Correo: ' + f.mail.value);
-  if (f.tipo.value)  lineas.push('Interes: ' + f.tipo.value);
-  if (f.msg.value)   lineas.push('', f.msg.value);
+  if (f.tipo.value) lineas.push('Interes: ' + f.tipo.value);
+  if (f.msg.value)  lineas.push('', f.msg.value);
 
   window.open('https://wa.me/' + TEL_VENTAS + '?text=' +
               encodeURIComponent(lineas.join('\n')), '_blank', 'noopener');
 });
-
-evaluarSnap();
-marcarNav();
-revelar(pantallas[0]);
 </script>
 
 </body>
