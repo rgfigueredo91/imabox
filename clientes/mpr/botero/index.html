@@ -477,8 +477,13 @@ cargarPano(0, function(tex){
    El calculo (alpha/beta/gamma + rotacion de pantalla) lo hace el
    input de Babylon, que ya resuelve el left-handed.
    ============================================================ */
-var permisoPendiente = false, calibrar = false;
+var permisoPendiente = false, calibrar = false, eventos = 0;
 var chip = document.getElementById('sensor');
+
+/* contador aparte, solo para saber si el aparato emite */
+window.addEventListener('deviceorientation', function(ev){
+  if (ev.alpha !== null || ev.beta !== null || ev.gamma !== null) eventos++;
+});
 
 var hayApi   = typeof window.DeviceOrientationEvent !== 'undefined';
 var pidePerm = hayApi && typeof DeviceOrientationEvent.requestPermission === 'function';
@@ -493,20 +498,35 @@ function pintarChip(){
   chip.textContent = permisoPendiente ? 'Activar sensor' : 'Sensor';
 }
 
+/* OJO: inputs.attachInput() no hace nada si la camara nunca paso por
+   attachControl (mira attachedToElement), y aca los controles son
+   propios. Por eso hay que vaciar los inputs por defecto, agregar el
+   de orientacion y recien ahi llamar attachControl: si no, el input
+   queda en la lista pero sordo, y el sensor no mueve nada. */
 function prenderSensor(){
   cam.rotationQuaternion = BABYLON.Quaternion.RotationYawPitchRoll(yaw, pitch, 0);
+  /* fuera los inputs por defecto: si quedan, attachControl tambien los
+     engancha y el mouse/touch de Babylon se suma al control propio */
+  cam.inputs.removeByType('FreeCameraKeyboardMoveInput');
+  cam.inputs.removeByType('FreeCameraMouseInput');
+  cam.inputs.removeByType('FreeCameraTouchInput');
   cam.inputs.addDeviceOrientation();
-  var inp = cam.inputs.attached.deviceOrientation;
-  if (inp) cam.inputs.attachInput(inp);
+  cam.attachControl(canvas, true);
   sensorOn = true;
   permisoPendiente = false;
   calibrar = true;    // en el primer frame se alinea con lo que estabas mirando
+  eventos = 0;
+  setTimeout(function(){
+    /* si el aparato no mando un solo evento, conviene decirlo en vez
+       de dejar la pantalla quieta sin explicacion */
+    if (sensorOn && eventos === 0) chip.textContent = 'Sin datos';
+  }, 2500);
   pintarChip();
 }
 
 function apagarSensor(){
-  var inp = cam.inputs.attached.deviceOrientation;
-  if (inp) cam.inputs.remove(inp);
+  cam.detachControl(canvas);
+  cam.inputs.removeByType('FreeCameraDeviceOrientationInput');
   if (cam.rotationQuaternion){
     var e = cam.rotationQuaternion.toEulerAngles();
     yaw = e.y + rigYaw;               // se conserva hacia donde estabas mirando
