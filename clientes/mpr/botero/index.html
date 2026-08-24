@@ -193,6 +193,12 @@ var N_POLVO = parseInt(PAR.get('n') || '0', 10);
 var BRILLO_POLVO = parseFloat(PAR.get('brillo') || '0');
 var RADIO_POLVO = parseFloat(PAR.get('radio') || '0');
 
+/* viento: amplitudes en pixeles del equirect de 6000x3000.
+   ?planta= y ?sombra= para ajustar, ?masc=0 para apagarlo */
+var HAY_MASC = PAR.get('masc') !== '0';
+var AMP_PLANTA = parseFloat(PAR.get('planta') || '3.0');
+var AMP_SOMBRA = parseFloat(PAR.get('sombra') || '7.0');
+
 var canvas = document.getElementById('c');
 var engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer:false, stencil:false });
 var scene  = new BABYLON.Scene(engine);
@@ -214,17 +220,66 @@ BABYLON.Effect.ShadersStore['panoVertexShader'] = [
   '}'
 ].join('\n');
 
+/* ---------- viento sobre la planta y su sombra ----------
+   No se mueve nada: se mueve DE DONDE se lee cada pixel. Al (u,v) se le
+   suma un empujon chico y animado antes de muestrear la foto, y el
+   empujon se multiplica por una mascara, asi que solo pasa donde
+   queremos. La mascara (assets/mascara3.jpg) trae tres canales:
+     R = la planta        (salio del verdor: es lo unico verde de la sala)
+     G = su sombra        (salio de comparar cada pixel con su entorno)
+     B = rigidez, 0 abajo y 1 arriba: sin esto la planta se mueve entera
+         y parece una calcomania sacudida; con esto la maceta queda
+         firme y solo cabecean las puntas.
+   La sombra es una mancha aparte, en la pared, que el shader no
+   relaciona con la planta: se le da la MISMA senal de viento con un
+   retardo chico, y con eso las dos se ven sincronizadas. Va con mas
+   amplitud y en otra direccion porque esta estirada por la proyeccion.
+   La amplitud se cuenta en pixeles del equirect de 6000x3000: son dos o
+   tres. Mas que eso arrastra pared en el borde de las hojas. */
 BABYLON.Effect.ShadersStore['panoFragmentShader'] = [
   'precision highp float;',
   'varying vec3 vDir;',
   'uniform sampler2D pano;',
+  'uniform sampler2D mascara;',
   'uniform float opacidad;',
+  'uniform float tiempo;',
+  'uniform float usaMasc;',
+  'uniform float ampPlanta;',
+  'uniform float ampSombra;',
+  'uniform float retSombra;',
   'const float PI = 3.14159265359;',
+  'const vec2 PXUV = vec2(1.0/6000.0, 1.0/3000.0);',
+  /* dos capas: las ramas, lentas y amplias, y las hojas, mas rapidas y
+     chicas. Una sola capa da movimiento de gelatina. */
+  'vec2 soplo(vec2 uv, float t){',
+  '  float ramas = sin(uv.y*16.0 + t*0.90)*0.6 + sin(uv.x*22.0 - t*0.70)*0.4;',
+  '  float hojas = sin(uv.y*70.0 + t*2.40)*0.5 + sin(uv.x*85.0 + t*1.90)*0.5;',
+  '  return vec2(ramas + 0.35*hojas, 0.0);',
+  '}',
   'void main(void){',
   '  vec3 d = normalize(vDir);',
   '  float u = 0.5 + atan(d.x, d.z) / (2.0 * PI);',
   '  float v = 0.5 - asin(clamp(d.y, -1.0, 1.0)) / PI;',
-  '  gl_FragColor = vec4(texture2D(pano, vec2(u, v)).rgb, opacidad);',
+  '  vec2 uv = vec2(u, v);',
+  '  if (usaMasc > 0.5){',
+  '    vec3 m = texture2D(mascara, uv).rgb;',
+  '    if (m.r + m.g > 0.012){',
+  /* rafaga: el viento no sopla parejo, va y viene. Dos senos de periodo
+     distinto para que no se note el ciclo. */
+  '      float raf = 0.55 + 0.45 * sin(tiempo*0.21) * sin(tiempo*0.13 + 1.7);',
+  '      vec2 desp = vec2(0.0);',
+  '      if (m.r > 0.004){',
+  '        float s = soplo(uv, tiempo).x;',
+  '        desp += vec2(1.0, -0.25) * s * raf * m.b * m.r * ampPlanta;',
+  '      }',
+  '      if (m.g > 0.004){',
+  '        float s = soplo(uv, tiempo - retSombra).x;',
+  '        desp += vec2(-0.8, -0.6) * s * raf * m.b * m.g * ampSombra;',
+  '      }',
+  '      uv += desp * PXUV;',
+  '    }',
+  '  }',
+  '  gl_FragColor = vec4(texture2D(pano, uv).rgb, opacidad);',
   '}'
 ].join('\n');
 
@@ -234,11 +289,17 @@ function hacerEsfera(nombre){
   }, scene);
   var mat = new BABYLON.ShaderMaterial(nombre+'-mat', scene, 'pano', {
     attributes:['position'],
-    uniforms:['worldViewProjection','opacidad'],
-    samplers:['pano'], needAlphaBlending:true
+    uniforms:['worldViewProjection','opacidad','tiempo','usaMasc',
+              'ampPlanta','ampSombra','retSombra'],
+    samplers:['pano','mascara'], needAlphaBlending:true
   });
   mat.backFaceCulling = false;
   mat.setFloat('opacidad', 1.0);
+  mat.setFloat('tiempo', 0);
+  mat.setFloat('usaMasc', 0);
+  mat.setFloat('ampPlanta', AMP_PLANTA);
+  mat.setFloat('ampSombra', AMP_SOMBRA);
+  mat.setFloat('retSombra', 0.14);
   m.material = mat;
   m.isPickable = false;
   m.infiniteDistance = false;
@@ -254,6 +315,23 @@ var esferaB = hacerEsfera('panoB');
 esferaB.setEnabled(false);
 esferaB.material.alphaIndex = 1;
 esferaA.material.alphaIndex = 0;
+
+/* La mascara es del panorama 03 y nada mas: la planta cae en otro lugar
+   de cada equirect, asi que cada punto necesitaria la suya. En el 01 y
+   el 02 se ve chica y lejos, no se notaria el movimiento. */
+var PANO_CON_MASCARA = 2;
+var T0_VIENTO = performance.now();
+var texMascara = new BABYLON.Texture('assets/mascara3.jpg', scene, true, false,
+                   BABYLON.Texture.BILINEAR_SAMPLINGMODE);
+texMascara.wrapU = BABYLON.Texture.WRAP_ADDRESSMODE;
+texMascara.wrapV = BABYLON.Texture.CLAMP_ADDRESSMODE;
+esferaA.material.setTexture('mascara', texMascara);
+esferaB.material.setTexture('mascara', texMascara);
+
+function ponerPano(mat, tex, indice){
+  mat.setTexture('pano', tex);
+  mat.setFloat('usaMasc', (HAY_MASC && indice === PANO_CON_MASCARA) ? 1 : 0);
+}
 
 /* Los panoramas vienen a 6000x3000, pero muchas GPU de celular topan
    en 4096 y una textura mas grande directamente no carga: ahi va la
@@ -557,7 +635,7 @@ function irA(destino){
   var hasta = PUNTOS[destino].p.clone();
 
   cargarPano(destino, function(tex){
-    esferaB.material.setTexture('pano', tex);
+    ponerPano(esferaB.material, tex, destino);
     esferaB.position = hasta.clone();
     esferaB.material.setFloat('opacidad', 0.0);
     esferaB.setEnabled(true);
@@ -571,7 +649,7 @@ function irA(destino){
       if (k >= 1){
         scene.onBeforeRenderObservable.remove(obs);
         esferaA.position = hasta.clone();
-        esferaA.material.setTexture('pano', tex);
+        ponerPano(esferaA.material, tex, destino);
         esferaB.setEnabled(false);
         rig.position = hasta.clone();
         actual = destino;
@@ -619,7 +697,7 @@ crearDiscos();
 if (HAY_POLVO) crearPolvo();
 
 cargarPano(INICIO, function(tex){
-  esferaA.material.setTexture('pano', tex);
+  ponerPano(esferaA.material, tex, INICIO);
   esferaA.position = PUNTOS[INICIO].p.clone();
   marcarBotones();
   var ov = document.getElementById('carga');
@@ -756,6 +834,10 @@ scene.registerBeforeRender(function(){
     cam.rotation.set(pitch, yaw, 0);
   }
   actualizarPolvo();
+  /* el reloj del viento, en segundos, para las dos esferas */
+  var tv = (performance.now() - T0_VIENTO) / 1000;
+  esferaA.material.setFloat('tiempo', tv);
+  esferaB.material.setFloat('tiempo', tv);
 });
 
 engine.runRenderLoop(function(){ scene.render(); });
