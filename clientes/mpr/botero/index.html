@@ -440,7 +440,7 @@ function crearHotspot(){
   mat.disableLighting = true;
   mat.backFaceCulling = false;
 
-  var p = BABYLON.MeshBuilder.CreatePlane('hotspot-tv', {size:0.34}, scene);
+  var p = BABYLON.MeshBuilder.CreatePlane('hotspot-tv', {size:0.25}, scene);
   p.material = mat;
   p.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
   p.position = TV.centro.add(new BABYLON.Vector3(0.14, 0, 0));
@@ -483,9 +483,20 @@ function crearTv(){
   planoTv.isPickable = false;
 }
 
+/* La tele se prende solo desde el 02 y el 03: desde el 01 queda de
+   costado y lejos, y el hotspot ahi molestaba mas de lo que servia. */
+var PUNTOS_TV = [1, 2];
+var tvOn = false;
+
+function verHotspotTv(){
+  if (!hotspot) return;
+  hotspot.setEnabled(!tvOn && PUNTOS_TV.indexOf(actual) >= 0);
+}
+
 function encenderTv(){
   planoTv.setEnabled(true);
-  hotspot.setEnabled(false);
+  tvOn = true;
+  verHotspotTv();
   document.getElementById('tvui').style.display = 'flex';
   var pr = video.play();
   if (pr && pr.catch) pr.catch(function(){});
@@ -494,7 +505,8 @@ function apagarTv(){
   video.pause();
   video.currentTime = 0;
   planoTv.setEnabled(false);
-  hotspot.setEnabled(true);
+  tvOn = false;
+  verHotspotTv();
   document.getElementById('tvui').style.display = 'none';
 }
 
@@ -545,7 +557,7 @@ function crearInterruptor(){
   mat.disableLighting = true;
   mat.backFaceCulling = false;
 
-  var p = BABYLON.MeshBuilder.CreatePlane('interruptor', {size:0.8}, scene);
+  var p = BABYLON.MeshBuilder.CreatePlane('interruptor', {size:0.6}, scene);
   p.material = mat;
   p.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
   p.position = LAMPARAS.clone();
@@ -615,7 +627,7 @@ function crearDiscos(){
     mat.disableLighting = true;
     mat.backFaceCulling = false;
 
-    var d = BABYLON.MeshBuilder.CreatePlane('ir-'+i, {size:0.6}, scene);
+    var d = BABYLON.MeshBuilder.CreatePlane('ir-'+i, {size:0.45}, scene);
     d.material = mat;
     d.rotation.x = Math.PI/2;
     d.position = PUNTOS[i].p.add(new BABYLON.Vector3(0, -ALTURA_OJOS, 0));
@@ -777,6 +789,7 @@ function marcarBotones(){
   for (var j=0;j<discos.length;j++) discos[j].setEnabled(j !== actual);
   /* el interruptor solo en el 02: es el unico punto con las dos versiones */
   if (interruptor) interruptor.setEnabled(actual === PUNTO_LUZ);
+  verHotspotTv();
 }
 
 /* clicks en la escena (solo si no fue un arrastre) */
