@@ -63,14 +63,38 @@ html,body{margin:0;height:100%;overflow:hidden;background:#0b0b0b;color:#fff;fon
 #sensor.on{border-color:var(--euca-bord);background:var(--euca-dim);color:var(--euca)}
 #sensor.on::before{opacity:1;box-shadow:0 0 8px var(--euca)}
 
-/* controles de la tele */
-#tvui{right:30px;bottom:34px;display:none;gap:1px}
+/* controles de la tele: van abajo a la izquierda porque abajo a la
+   derecha ahora esta el plano */
+#tvui{left:30px;bottom:34px;display:none;gap:1px}
 #tvui button{padding:13px 22px;border:1px solid rgba(255,255,255,.28);border-right-width:0;
   background:rgba(0,0,0,.32);color:rgba(255,255,255,.65);font-family:var(--ui);
   font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;
   backdrop-filter:blur(8px);transition:color .25s ease,border-color .25s ease}
 #tvui button:last-child{border-right-width:1px}
 #tvui button:hover{color:#fff;border-color:rgba(255,255,255,.5)}
+
+/* plano abajo a la derecha. El ancho se anima; el alto sale solo de la
+   proporcion de la imagen (1700x879), asi el SVG de encima calza
+   siempre con el dibujo sin importar el tamano. */
+#mapa{right:30px;bottom:34px;width:250px;cursor:pointer;
+  border:1px solid rgba(255,255,255,.28);background:rgba(0,0,0,.32);
+  backdrop-filter:blur(8px);padding:6px;
+  transition:width .45s cubic-bezier(.22,.61,.36,1),border-color .25s ease}
+#mapa:hover{border-color:rgba(255,255,255,.5)}
+#mapa.grande{width:min(58vw,880px)}
+#mapa .lienzo{position:relative;width:100%;line-height:0}
+#mapa img{width:100%;height:auto;display:block;opacity:.9}
+#mapa svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+#mapa .punto{cursor:pointer}
+#mapa .punto circle{fill:rgba(11,11,11,.6);stroke:#9dbba4;stroke-width:10}
+#mapa .punto.aqui circle{fill:#9dbba4;stroke:#9dbba4}
+#mapa .punto text{fill:#9dbba4;font-family:var(--ui);font-size:76px;
+  font-weight:500;letter-spacing:.06em;text-anchor:middle;dominant-baseline:central}
+#mapa .punto.aqui text{fill:#0b0b0b}
+#mapa .rotulo{position:absolute;left:10px;top:8px;z-index:2;
+  font-size:.5rem;letter-spacing:.22em;text-transform:uppercase;
+  color:rgba(255,255,255,.75);text-shadow:0 1px 6px rgba(0,0,0,.8);
+  pointer-events:none}
 
 /* preloader: la linea de acento del index, cargando de izquierda a derecha */
 #carga{position:fixed;inset:0;z-index:20;background:#0b0b0b;display:flex;
@@ -87,8 +111,11 @@ html,body{margin:0;height:100%;overflow:hidden;background:#0b0b0b;color:#fff;fon
   #marca{left:20px;top:18px;font-size:1.3rem}
   #proyecto{right:20px;top:22px;font-size:.52rem}
   #puntos button{padding:12px 18px;font-size:.58rem;letter-spacing:.18em}
-  #tvui{right:50%;transform:translateX(50%);bottom:88px}
+  #tvui{left:50%;transform:translateX(-50%);bottom:88px}
   #sensor{bottom:142px}
+  #mapa{width:145px;right:16px;bottom:88px;padding:4px}
+  #mapa.grande{width:calc(100vw - 32px)}
+  #mapa .rotulo{display:none}
 }
 </style>
 </head>
@@ -112,6 +139,24 @@ html,body{margin:0;height:100%;overflow:hidden;background:#0b0b0b;color:#fff;fon
 <div class="ui" id="tvui">
   <button id="btn-pausa">Pausar</button>
   <button id="btn-apagar">Apagar</button>
+</div>
+
+<div class="ui" id="mapa">
+  <div class="rotulo">Planta</div>
+  <div class="lienzo">
+    <img src="assets/plano.jpg" alt="Planta de la vivienda">
+    <svg id="mapa-svg" viewBox="0 0 2848 1472">
+      <defs>
+        <radialGradient id="haz">
+          <stop offset="0%"   stop-color="#9dbba4" stop-opacity=".75"/>
+          <stop offset="65%"  stop-color="#9dbba4" stop-opacity=".34"/>
+          <stop offset="100%" stop-color="#9dbba4" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <path id="mapa-cono" fill="url(#haz)"></path>
+      <g id="mapa-puntos"></g>
+    </svg>
+  </div>
 </div>
 
 <div id="carga"><span>imabox.</span><i></i></div>
@@ -735,17 +780,109 @@ function crearPolvo(){
   polvo.start();
 }
 
+/* hacia donde mira la camara y donde esta, en coordenadas del mundo.
+   Lo usan el polvo (para la dispersion) y el plano (para el cono), asi
+   que se calcula una sola vez por cuadro en el bucle principal. */
 var _fwd = BABYLON.Vector3.Zero();
 var _camPos = BABYLON.Vector3.Zero();
-function actualizarPolvo(){
-  if (!polvo) return;
+function mirarDesde(){
   _camPos.copyFrom(cam.globalPosition);
   cam.getDirectionToRef(BABYLON.Axis.Z, _fwd);
+}
+function actualizarPolvo(){
+  if (!polvo) return;
   var d = BABYLON.Vector3.Dot(_fwd, SOL);
   /* dispersion hacia adelante: brilla mirando al sol y casi desaparece
      de espaldas. El exponente es lo que le da el corte. */
   visPolvo = RAYO.brillo * (RAYO.piso_min +
              (1 - RAYO.piso_min) * Math.pow(Math.max(0, d), 2.2));
+}
+
+/* ---------- planta con la posicion y hacia donde se mira ----------
+   Como se ato el plano al modelo: Rodrigo marco los tres puntos a mano
+   sobre el plano. Ajustar giro y escala con esas tres marcas sale mal,
+   porque los tres puntos estan casi alineados (el angulo en el 02 es de
+   139 grados) y ahi un error de 20 cm al poner una marca gira todo. Asi
+   que se uso otra cosa:
+   - El GIRO sale de los propios panoramas. Desde el 03 el balcon cae
+     hacia -Z y la cocina hacia +Z; en el plano el balcon esta a la
+     izquierda y la cocina a la derecha. El sillon cae hacia -X y en el
+     plano esta arriba. O sea: plano_x crece con z, plano_y crece con x.
+     Las tres marcas de Rodrigo respetan ese orden, lo que confirma que
+     la correspondencia es esa.
+   - La ESCALA sale de las medidas escritas en el plano: el estar de
+     5,13 m mide 1193 px, o sea 232,6 px/m.
+   - La TRASLACION es lo unico que sale de las marcas, y por promedio.
+   Con eso los tres puntos quedan exactos entre si (vienen del .glb) y
+   apoyados donde Rodrigo los marco. */
+var MAPA = {
+  esc: 232.6,                                   // px del plano por metro
+  ref: { x:165.649989, z:-449.006941 },         // centro de los tres puntos
+  refPx: { x:1052.1, y:467.97 },                // su lugar en el plano
+  radio: 430                                    // largo del cono, en px del plano
+};
+
+function aPlano(p){
+  return {
+    x: MAPA.refPx.x + MAPA.esc * (p.z - MAPA.ref.z),
+    y: MAPA.refPx.y + MAPA.esc * (p.x - MAPA.ref.x)
+  };
+}
+
+var mapaCono = document.getElementById('mapa-cono');
+var mapaPuntos = [];
+var conoAncho = -1;
+
+function crearMapa(){
+  var cont = document.getElementById('mapa-puntos');
+  var SVG = 'http://www.w3.org/2000/svg';
+  PUNTOS.forEach(function(pt, i){
+    var q = aPlano(pt.p);
+    var g = document.createElementNS(SVG, 'g');
+    g.setAttribute('class', 'punto');
+    g.setAttribute('transform', 'translate(' + q.x.toFixed(1) + ',' + q.y.toFixed(1) + ')');
+    var c = document.createElementNS(SVG, 'circle');
+    c.setAttribute('r', 62);
+    var t = document.createElementNS(SVG, 'text');
+    t.textContent = pt.n;
+    g.appendChild(c); g.appendChild(t);
+    g.addEventListener('click', function(e){ e.stopPropagation(); irA(i); });
+    cont.appendChild(g);
+    mapaPuntos.push(g);
+  });
+  /* el plano entero agranda y achica */
+  var caja = document.getElementById('mapa');
+  caja.addEventListener('click', function(){ this.classList.toggle('grande'); });
+  if (PAR.get('plano') === '1') caja.classList.add('grande');
+}
+
+function marcarMapa(){
+  for (var i = 0; i < mapaPuntos.length; i++){
+    mapaPuntos[i].setAttribute('class', 'punto' + (i === actual ? ' aqui' : ''));
+  }
+}
+
+function actualizarMapa(){
+  if (!mapaCono) return;
+  var q = aPlano(rig.position);
+  /* el angulo en el plano es el mismo atan2(x, z) que usa el shader del
+     panorama, porque plano_x va con z y plano_y va con x */
+  var ang = Math.atan2(_fwd.x, _fwd.z) * 180 / Math.PI;
+  mapaCono.setAttribute('transform',
+    'translate(' + q.x.toFixed(1) + ',' + q.y.toFixed(1) + ') rotate(' + ang.toFixed(1) + ')');
+
+  /* la abertura del cono es la real de la camara: el fov de Babylon es
+     el vertical, asi que hay que pasarlo a horizontal con la relacion
+     de la pantalla */
+  var rel = engine.getRenderWidth() / Math.max(1, engine.getRenderHeight());
+  var mitad = Math.atan(Math.tan(cam.fov / 2) * rel);
+  if (Math.abs(mitad - conoAncho) > 0.004){
+    conoAncho = mitad;
+    var R = MAPA.radio, c = Math.cos(mitad) * R, s = Math.sin(mitad) * R;
+    mapaCono.setAttribute('d',
+      'M0 0 L' + c.toFixed(1) + ' ' + (-s).toFixed(1) +
+      ' A' + R + ' ' + R + ' 0 0 1 ' + c.toFixed(1) + ' ' + s.toFixed(1) + ' Z');
+  }
 }
 
 /* ---------- navegacion ---------- */
@@ -790,6 +927,7 @@ function marcarBotones(){
   /* el interruptor solo en el 02: es el unico punto con las dos versiones */
   if (interruptor) interruptor.setEnabled(actual === PUNTO_LUZ);
   verHotspotTv();
+  marcarMapa();
 }
 
 /* clicks en la escena (solo si no fue un arrastre) */
@@ -823,6 +961,7 @@ hotspot = crearHotspot();
 crearDiscos();
 interruptor = crearInterruptor();
 pintarInterruptor();
+crearMapa();
 if (HAY_POLVO) crearPolvo();
 
 cargarPano(INICIO, function(tex){
@@ -962,7 +1101,9 @@ scene.registerBeforeRender(function(){
   } else {
     cam.rotation.set(pitch, yaw, 0);
   }
+  mirarDesde();
   actualizarPolvo();
+  actualizarMapa();
   /* el reloj del viento, en segundos, para las dos esferas */
   var tv = (performance.now() - T0_VIENTO) / 1000;
   esferaA.material.setFloat('tiempo', tv);
