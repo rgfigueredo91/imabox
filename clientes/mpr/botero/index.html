@@ -134,9 +134,16 @@ function delModelo(x, y, z){ return new BABYLON.Vector3(-x, y, z); }
 
 var PUNTOS = [
   { n:'01', pano:'assets/pano1', p:delModelo(-165.092041, 9.466323, -446.990000) },
-  { n:'02', pano:'assets/pano2', p:delModelo(-166.145172, 9.466323, -448.673248) },
+  { n:'02', pano:'assets/pano2', p:delModelo(-166.145172, 9.466323, -448.673248),
+    luz:'assets/pano2-luz' },
   { n:'03', pano:'assets/pano3', p:delModelo(-165.712753, 9.466323, -451.357574) }
 ];
+
+/* El punto 02 tiene dos versiones renderizadas, con las lamparas del
+   comedor apagadas y prendidas. Un interruptor flotante alterna entre
+   las dos con un fundido, sin moverse del lugar. */
+var PUNTO_LUZ = 1;
+var luzOn = false;
 
 /* pantalla_tv: plana en x=-167.097, 1.026 m de ancho (sobre Z) x 0.725 de alto */
 var TV = {
@@ -195,6 +202,7 @@ var RADIO_POLVO = parseFloat(PAR.get('radio') || '0');
 
 /* viento: amplitudes en pixeles del equirect de 6000x3000.
    ?planta= y ?sombra= para ajustar, ?masc=0 para apagarlo */
+if (PAR.get('luz') === '1') luzOn = true;   // arrancar con las lamparas prendidas
 var HAY_MASC = PAR.get('masc') !== '0';
 var AMP_PLANTA = parseFloat(PAR.get('planta') || '3.0');
 var AMP_SOMBRA = parseFloat(PAR.get('sombra') || '7.0');
@@ -338,15 +346,22 @@ function ponerPano(mat, tex, indice){
    copia de 4000x2000. Se decide con el limite que declara el aparato. */
 var SUFIJO = (engine.getCaps().maxTextureSize >= 6000) ? '.jpg' : '-mob.jpg';
 
-var texturas = [];
+/* La cache va por ruta y no por indice, porque un mismo punto puede
+   tener dos panoramas. Y la ruta la decide el estado de la luz: asi, si
+   prendes las lamparas, te vas a otro punto y volves, siguen prendidas. */
+var texturas = {};
+function rutaPano(i){
+  return (luzOn && PUNTOS[i].luz) ? PUNTOS[i].luz : PUNTOS[i].pano;
+}
 function cargarPano(i, cb){
-  if (texturas[i]) { cb(texturas[i]); return; }
-  var t = new BABYLON.Texture(PUNTOS[i].pano + SUFIJO, scene, true, false,
+  var url = rutaPano(i) + SUFIJO;
+  if (texturas[url]) { cb(texturas[url]); return; }
+  var t = new BABYLON.Texture(url, scene, true, false,
             BABYLON.Texture.BILINEAR_SAMPLINGMODE, function(){ cb(t); });
   t.wrapU = BABYLON.Texture.WRAP_ADDRESSMODE;
   t.wrapV = BABYLON.Texture.CLAMP_ADDRESSMODE;
   t.anisotropicFilteringLevel = 8;
-  texturas[i] = t;
+  texturas[url] = t;
 }
 
 /* ---------- camara ----------
@@ -481,6 +496,102 @@ function apagarTv(){
   planoTv.setEnabled(false);
   hotspot.setEnabled(true);
   document.getElementById('tvui').style.display = 'none';
+}
+
+/* ---------- interruptor de las lamparas del comedor ----------
+   Va colgado justo debajo de las pantallas: la posicion salio de leer
+   las lamparas en el panorama 02 (u=0.355, v=0.535) y tirar ese rayo a
+   3 metros. Solo se ve estando en el 02, que es el unico punto que
+   tiene la version con la luz prendida. */
+var LAMPARAS = PUNTOS[PUNTO_LUZ].p.add(
+                 new BABYLON.Vector3(-0.7867, -0.1097, 0.6075).scale(3.0));
+var interruptor = null, texLlave = [null, null];
+
+function texInterruptor(on){
+  var dt = new BABYLON.DynamicTexture('llave'+(on?1:0), {width:256, height:256}, scene, true);
+  var ctx = dt.getContext();
+  ctx.clearRect(0,0,256,256);
+  /* prendido: un halo tibio detras, que es lo que se lee de lejos */
+  if (on){
+    var g = ctx.createRadialGradient(128,128,60, 128,128,126);
+    g.addColorStop(0, 'rgba(157,187,164,0.45)');
+    g.addColorStop(1, 'rgba(157,187,164,0)');
+    ctx.fillStyle = g; ctx.fillRect(0,0,256,256);
+  }
+  /* el fondo del circulo queda oscuro en los dos estados: el halo ya
+     dice que esta prendido, y con el circulo claro la tecla se perdia */
+  ctx.beginPath(); ctx.arc(128,128,86,0,Math.PI*2);
+  ctx.fillStyle = 'rgba(11,11,11,0.44)';
+  ctx.fill();
+  ctx.lineWidth = 3; ctx.strokeStyle = '#9dbba4'; ctx.stroke();
+  /* la llave: un marco con la tecla arriba o abajo. A este tamano un
+     dibujo de lampara no se entiende; una tecla si. */
+  ctx.lineWidth = 4; ctx.strokeStyle = '#9dbba4';
+  ctx.strokeRect(96, 74, 64, 108);
+  ctx.fillStyle = on ? '#9dbba4' : 'rgba(157,187,164,0.5)';
+  if (on) ctx.fillRect(102, 80, 52, 47);
+  else    ctx.fillRect(102, 129, 52, 47);
+  dt.hasAlpha = true; dt.update();
+  return dt;
+}
+
+function crearInterruptor(){
+  texLlave[0] = texInterruptor(false);
+  texLlave[1] = texInterruptor(true);
+  var mat = new BABYLON.StandardMaterial('llave-mat', scene);
+  mat.diffuseTexture = texLlave[0];
+  mat.opacityTexture = texLlave[0];
+  mat.emissiveColor = new BABYLON.Color3(1,1,1);
+  mat.disableLighting = true;
+  mat.backFaceCulling = false;
+
+  var p = BABYLON.MeshBuilder.CreatePlane('interruptor', {size:0.8}, scene);
+  p.material = mat;
+  p.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
+  p.position = LAMPARAS.clone();
+  p.renderingGroupId = 1;
+  p.setEnabled(false);
+  return p;
+}
+
+function pintarInterruptor(){
+  if (!interruptor) return;
+  var t = texLlave[luzOn ? 1 : 0];
+  interruptor.material.diffuseTexture = t;
+  interruptor.material.opacityTexture = t;
+}
+
+/* Cambia el panorama del punto donde estoy con un fundido, sin moverme:
+   se reusa la segunda esfera, anclada al mismo lugar. */
+function fundirEnElLugar(){
+  if (enViaje) return;
+  enViaje = true;
+  var aqui = PUNTOS[actual].p.clone();
+  cargarPano(actual, function(tex){
+    ponerPano(esferaB.material, tex, actual);
+    esferaB.position = aqui.clone();
+    esferaB.material.setFloat('opacidad', 0.0);
+    esferaB.setEnabled(true);
+    var t0 = performance.now(), dur = 700;
+    var obs = scene.onBeforeRenderObservable.add(function(){
+      var k = Math.min(1, (performance.now() - t0) / dur);
+      esferaB.material.setFloat('opacidad', k);
+      if (k >= 1){
+        scene.onBeforeRenderObservable.remove(obs);
+        ponerPano(esferaA.material, tex, actual);
+        esferaA.position = aqui.clone();
+        esferaB.setEnabled(false);
+        enViaje = false;
+      }
+    });
+  });
+}
+
+function alternarLuz(){
+  if (enViaje) return;
+  luzOn = !luzOn;
+  pintarInterruptor();
+  fundirEnElLugar();
 }
 
 /* ---------- discos para saltar de punto ---------- */
@@ -664,6 +775,8 @@ function marcarBotones(){
   var bs = document.querySelectorAll('#puntos button');
   for (var i=0;i<bs.length;i++) bs[i].className = (i===actual ? 'on' : '');
   for (var j=0;j<discos.length;j++) discos[j].setEnabled(j !== actual);
+  /* el interruptor solo en el 02: es el unico punto con las dos versiones */
+  if (interruptor) interruptor.setEnabled(actual === PUNTO_LUZ);
 }
 
 /* clicks en la escena (solo si no fue un arrastre) */
@@ -674,6 +787,7 @@ scene.onPointerObservable.add(function(pi){
   if (!pick || !pick.hit || !pick.pickedMesh) return;
   var n = pick.pickedMesh.name;
   if (n === 'hotspot-tv') encenderTv();
+  else if (n === 'interruptor') alternarLuz();
   else if (n.indexOf('ir-') === 0) irA(parseInt(n.split('-')[1], 10));
 });
 
@@ -694,6 +808,8 @@ document.getElementById('btn-pausa').onclick = function(){
 crearTv();
 hotspot = crearHotspot();
 crearDiscos();
+interruptor = crearInterruptor();
+pintarInterruptor();
 if (HAY_POLVO) crearPolvo();
 
 cargarPano(INICIO, function(tex){
