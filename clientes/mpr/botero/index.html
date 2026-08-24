@@ -147,6 +147,51 @@ var TV = {
 
 var RADIO = 8;           // radio de la esfera del panorama, en metros
 var ALTURA_OJOS = 1.65;  // para apoyar los discos de navegacion en el piso
+var PISO_Y = PUNTOS[0].p.y - ALTURA_OJOS;
+
+/* --- el rayo de sol, medido sobre el panorama 03 ---
+   Direccion al sol: se leyo la posicion del disco en el equirect
+   (u=0.0792, v=0.3433) y se paso a vector con la misma convencion del
+   shader. Da 28 grados de elevacion, que es lo que corresponde a las
+   sombras largas del render. Comprobacion: el horizonte del mar cae
+   exactamente en v=0.5, o sea a la altura de los ojos.
+   Donde pega: se leyo la mancha de luz sobre el piso (u=0.643, v=0.80)
+   y se cruzo ese rayo con el plano del piso. Queda cerca de la pared
+   de la tele, que es justo donde el render tiene la sombra de la planta.
+   Con esos dos datos el haz queda definido sin inventar nada: es el
+   segmento que sale de la mancha del piso y sube hacia el sol. */
+var SOL = new BABYLON.Vector3(-0.421, 0.4725, -0.774);
+
+var RAYO = {
+  piso: new BABYLON.Vector3(166.651, PISO_Y, -450.611),
+  largo: 5.8,        // hasta el techo, sobre la direccion del sol
+  radio: 0.9,        // mas ancho que esto y deja de leerse como haz
+  ensancha: 0.5,     // un poco mas abierto arriba que abajo
+  cantidad: 520,     // muchas y chicas, no pocas y grandes
+  vida: [14, 26],    // segundos
+  tam: [0.004, 0.016],
+  caida: 0.022,      // m/s: el polvo cae MUY lento o parece nieve
+  /* el brillo bajo no es timidez: con blending aditivo una mota tenue
+     desaparece sola contra el cielo quemado y se lee contra el interior
+     en sombra, que es exactamente lo que hace el polvo de verdad. Con
+     brillo alto se ve sobre todo y parece nieve. */
+  brillo: 0.6,
+  piso_min: 0.05,    // cuanto se ve mirando en contra del sol
+  cerca: 1.6         // m: mas cerca que esto se apaga, o son manchones
+};
+
+/* ayudas para probar sin tener que arrastrar hasta encontrar la vista:
+   ?p=3 arranca en ese punto, ?mira=yaw,pitch fija hacia donde se mira,
+   ?polvo=0 lo apaga para comparar con y sin */
+var PAR = new URLSearchParams(location.search);
+var INICIO = Math.max(1, Math.min(3, parseInt(PAR.get('p') || '1', 10))) - 1;
+var HAY_POLVO = PAR.get('polvo') !== '0';
+/* las tres perillas del polvo, abiertas por URL para poder ajustarlas
+   mirando la pagina en vez de a ciegas: ?n= cantidad de motas,
+   ?brillo= cuanto suman, ?radio= que tan ancho es el haz */
+var N_POLVO = parseInt(PAR.get('n') || '0', 10);
+var BRILLO_POLVO = parseFloat(PAR.get('brillo') || '0');
+var RADIO_POLVO = parseFloat(PAR.get('radio') || '0');
 
 var canvas = document.getElementById('c');
 var engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer:false, stencil:false });
@@ -232,7 +277,7 @@ function cargarPano(i, cb){
    camara mientras el dedo sigue corriendo el rig: los dos controles
    conviven en vez de pelearse. */
 var rig = new BABYLON.TransformNode('rig', scene);
-rig.position = PUNTOS[0].p.clone();
+rig.position = PUNTOS[INICIO].p.clone();
 
 var cam = new BABYLON.FreeCamera('cam', BABYLON.Vector3.Zero(), scene);
 cam.parent = rig;
@@ -241,6 +286,11 @@ cam.minZ = 0.05;
 cam.maxZ = 200;
 cam.fov  = 1.15;
 var yaw = Math.PI, pitch = 0;   // arranca mirando hacia -Z (al interior)
+if (PAR.get('mira')){
+  var _m = PAR.get('mira').split(',');
+  yaw = parseFloat(_m[0]) || 0;
+  pitch = parseFloat(_m[1] || '0') || 0;
+}
 var rigYaw = 0;                 // giro que agrega el dedo con el sensor prendido
 var sensorOn = false;
 
@@ -385,8 +435,120 @@ function crearDiscos(){
   }
 }
 
+/* ---------- polvo en el rayo de sol ----------
+   Es lo unico de la escena que se dibuja de verdad en 3D, y funciona
+   porque suma luz en vez de tener que igualar un material: con blending
+   aditivo no hay nada que "calce mal" con el render.
+   Tres cosas lo hacen creible y las tres son faciles de arruinar:
+   1. Vive SOLO dentro del haz. Si se emite en toda la sala parece nieve.
+   2. Se ve fuerte solo mirando hacia el sol (dispersion hacia adelante).
+      Con brillo constante queda mal y no se entiende por que.
+   3. Cae a 2 cm por segundo. A velocidad de particula de videojuego,
+      se arruina.
+   Las posiciones se escriben en coordenadas del mundo (por eso el
+   emisor es el origen y hay startPositionFunction propia): asi el haz
+   queda quieto en la sala y se ve distinto desde cada punto, como
+   corresponde. */
+var polvo = null, visPolvo = 0;
+var EJE_U = BABYLON.Vector3.Cross(SOL, BABYLON.Axis.Y).normalize();
+var EJE_V = BABYLON.Vector3.Cross(SOL, EJE_U).normalize();
+
+function texMota(){
+  var dt = new BABYLON.DynamicTexture('mota', {width:64, height:64}, scene, true);
+  var ctx = dt.getContext();
+  var g = ctx.createRadialGradient(32,32,0, 32,32,32);
+  g.addColorStop(0,   'rgba(255,255,255,1)');
+  g.addColorStop(0.22,'rgba(255,255,255,0.5)');
+  g.addColorStop(1,   'rgba(255,255,255,0)');
+  ctx.fillStyle = g; ctx.fillRect(0,0,64,64);
+  dt.hasAlpha = true; dt.update();
+  return dt;
+}
+
+function crearPolvo(){
+  if (N_POLVO > 0) RAYO.cantidad = N_POLVO;
+  if (BRILLO_POLVO > 0) RAYO.brillo = BRILLO_POLVO;
+  if (RADIO_POLVO > 0) RAYO.radio = RADIO_POLVO;
+  polvo = new BABYLON.ParticleSystem('polvo', Math.ceil(RAYO.cantidad * 1.35), scene);
+  polvo.particleTexture = texMota();
+  polvo.blendMode = BABYLON.ParticleSystem.BLENDMODE_ADD;
+  polvo.emitter = BABYLON.Vector3.Zero();
+
+  /* un cilindro alrededor del segmento piso -> sol, apenas mas abierto
+     arriba. La raiz cuadrada reparte parejo en el disco: sin eso se
+     amontonan todas en el eje. */
+  polvo.startPositionFunction = function(m, out, part){
+    var s = Math.random();
+    var r = Math.sqrt(Math.random()) * (RAYO.radio + s * RAYO.ensancha);
+    var a = Math.random() * Math.PI * 2;
+    out.copyFrom(RAYO.piso);
+    out.addInPlace(SOL.scale(s * RAYO.largo));
+    out.addInPlace(EJE_U.scale(Math.cos(a) * r));
+    out.addInPlace(EJE_V.scale(Math.sin(a) * r));
+    part.__a0 = 0.25 + Math.random() * 0.75;   // cada mota con su brillo
+  };
+  polvo.startDirectionFunction = function(m, out){
+    out.set((Math.random()-0.5) * 0.018,
+            -RAYO.caida * (0.45 + Math.random()),
+            (Math.random()-0.5) * 0.018);
+  };
+  polvo.minEmitPower = 1; polvo.maxEmitPower = 1;
+  polvo.minLifeTime = RAYO.vida[0]; polvo.maxLifeTime = RAYO.vida[1];
+  polvo.minSize = RAYO.tam[0]; polvo.maxSize = RAYO.tam[1];
+  polvo.color1 = new BABYLON.Color4(1, 0.97, 0.90, 1);
+  polvo.color2 = new BABYLON.Color4(1, 0.93, 0.82, 1);
+  polvo.colorDead = new BABYLON.Color4(1, 0.95, 0.86, 0);
+  polvo.gravity = new BABYLON.Vector3(0, -0.0015, 0);
+  /* con updateSpeed 1/60 el paso equivale a un segundo real, asi que
+     vidas y velocidades de arriba estan en segundos y m/s de verdad */
+  polvo.updateSpeed = 1/60;
+  polvo.emitRate = RAYO.cantidad / ((RAYO.vida[0] + RAYO.vida[1]) / 2);
+  /* despues de la esfera del panorama, que es transparente y se dibuja
+     al final del grupo 0: en el mismo grupo el polvo quedaria tapado */
+  polvo.renderingGroupId = 1;
+  /* sin esto el haz tarda 20 segundos en poblarse y arranca vacio */
+  polvo.preWarmCycles = 220;
+  polvo.preWarmStepOffset = 6;
+
+  /* la opacidad la manejamos nosotros: la de Babylon se interpola sola
+     hacia colorDead y no hay forma de modularla por frame sin que se
+     acumule. Aca se ESCRIBE cada frame (no se multiplica) a partir del
+     brillo propio de la mota, su edad y cuanto se mira hacia el sol. */
+  var updBase = polvo.updateFunction;
+  polvo.updateFunction = function(parts){
+    updBase.call(polvo, parts);
+    for (var i = 0; i < parts.length; i++){
+      var p = parts[i];
+      var t = p.age / p.lifeTime;
+      var f = Math.min(1, t * 6) * Math.min(1, (1 - t) * 6);   // entra y sale
+      /* el haz pasa a dos metros de la cabeza: una mota a 30 cm se
+         dibuja del tamano de una pelota. Se apagan las muy cercanas. */
+      var dx = p.position.x - _camPos.x,
+          dy = p.position.y - _camPos.y,
+          dz = p.position.z - _camPos.z;
+      var dist = Math.sqrt(dx*dx + dy*dy + dz*dz);
+      if (dist < RAYO.cerca) f *= dist / RAYO.cerca;
+      p.color.a = (p.__a0 || 0.6) * f * visPolvo;
+    }
+  };
+  polvo.start();
+}
+
+var _fwd = BABYLON.Vector3.Zero();
+var _camPos = BABYLON.Vector3.Zero();
+function actualizarPolvo(){
+  if (!polvo) return;
+  _camPos.copyFrom(cam.globalPosition);
+  cam.getDirectionToRef(BABYLON.Axis.Z, _fwd);
+  var d = BABYLON.Vector3.Dot(_fwd, SOL);
+  /* dispersion hacia adelante: brilla mirando al sol y casi desaparece
+     de espaldas. El exponente es lo que le da el corte. */
+  visPolvo = RAYO.brillo * (RAYO.piso_min +
+             (1 - RAYO.piso_min) * Math.pow(Math.max(0, d), 2.2));
+}
+
 /* ---------- navegacion ---------- */
-var actual = 0, enViaje = false;
+var actual = INICIO, enViaje = false;
 
 function irA(destino){
   if (enViaje || destino === actual) return;
@@ -454,10 +616,11 @@ document.getElementById('btn-pausa').onclick = function(){
 crearTv();
 hotspot = crearHotspot();
 crearDiscos();
+if (HAY_POLVO) crearPolvo();
 
-cargarPano(0, function(tex){
+cargarPano(INICIO, function(tex){
   esferaA.material.setTexture('pano', tex);
-  esferaA.position = PUNTOS[0].p.clone();
+  esferaA.position = PUNTOS[INICIO].p.clone();
   marcarBotones();
   var ov = document.getElementById('carga');
   ov.className = 'off';
@@ -592,6 +755,7 @@ scene.registerBeforeRender(function(){
   } else {
     cam.rotation.set(pitch, yaw, 0);
   }
+  actualizarPolvo();
 });
 
 engine.runRenderLoop(function(){ scene.render(); });
