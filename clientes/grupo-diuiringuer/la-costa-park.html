@@ -179,7 +179,15 @@ header:not(.solid) .btn:hover{background:#fff; border-color:#fff; color:var(--ve
 
 /* ---------- hero ---------- */
 .hero-logo{width:min(430px, 80vw); margin:0 auto 28px; filter:drop-shadow(0 3px 20px rgba(18,24,18,.5))}
-.hero .eyebrow{color:rgba(255,255,255,.78); justify-content:center}
+/* en el hero la volanta va centrada sobre el logo. El guion de acento
+   solo del lado izquierdo dejaba el texto corrido aunque el bloque
+   estuviera centrado: aca se pone de los dos lados. */
+/* OJO: la volanta es un <p>, y la regla global p{max-width:58ch} le
+   achicaba la caja a unos 365px pegada a la izquierda. El
+   justify-content centraba dentro de ESA caja, asi que el texto
+   quedaba corrido aunque todo lo demas del hero estuviera centrado. */
+.hero .eyebrow{color:rgba(255,255,255,.78); justify-content:center; text-align:center; max-width:none}
+.hero .eyebrow::after{content:''; width:26px; height:1px; background:var(--terracota); flex:none}
 .hero-inner{max-width:690px; margin:0 auto; text-align:center}
 .hero-slogan{
   font-family:var(--serif); font-weight:300;
