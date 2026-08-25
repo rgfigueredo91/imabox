@@ -182,11 +182,17 @@ var ALTURA_OJOS = 1.6;
    Conclusion: para ubicar los hotspots vale lo que se ve en el
    panorama, no las coordenadas crudas del modelo.
    La vuelta es la direccion opuesta, o sea 'hacia' mas 0.5. */
+/* 'suelto' marca los puntos que no estan en la cadena de la calle: se
+   llega a ellos desde la ficha de la tipologia, no caminando. Entre
+   esos y sus vecinos no se dibujan flechas, porque no hay por donde
+   caminar de uno al otro. */
 var PUNTOS = [
   { n:'01', nombre:'Calle de acceso', pano:'assets/pano1',
     mira:0.498, hacia:0.498, alpha:'assets/pano1-alpha.jpg' },
   { n:'02', nombre:'Calle interna', pano:'assets/pano2',
-    mira:0.496 }
+    mira:0.496 },
+  { n:'03', nombre:'Interior &middot; dos dormitorios', pano:'assets/pano3',
+    mira:0.55, suelto:true }
 ];
 
 /* El hotspot que lleva al punto siguiente. Se dibuja en el piso,
@@ -230,6 +236,11 @@ var HAY_PROXY = PAR.get('proxy') === '1';
 var HAY_NUBES = PAR.get('nubes') === '1';
 var HAY_MOTAS = PAR.get('motas') !== '0';
 var OPAC_NUBES = parseFloat(PAR.get('opnubes') || '0.72');
+
+/* ?p=3 arranca directo en ese punto. Lo usa la ficha de la tipologia
+   del interactivo para abrir el interior sin pasar por la calle. */
+var INICIO = Math.max(1, Math.min(PUNTOS.length,
+               parseInt(PAR.get('p') || '1', 10))) - 1;
 
 var canvas = document.getElementById('c');
 var engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer:false, stencil:false });
@@ -427,7 +438,7 @@ cam.minZ = 0.05; cam.maxZ = 200; cam.fov = 1.15;
 
 /* arranca mirando hacia la calle: u -> angulo */
 function anguloDeU(u){ return (u - 0.5) * Math.PI * 2; }
-var yaw = anguloDeU(PUNTOS[0].mira), pitch = 0;
+var yaw = anguloDeU(PUNTOS[INICIO].mira), pitch = 0;
 var rigYaw = 0, sensorOn = false;
 /* ?mira=yaw,pitch para revisar una vista puntual sin tener que
    arrastrar hasta encontrarla */
@@ -532,10 +543,13 @@ function ubicarHotspot(){
   var sig = PUNTOS[actual + 1];
   var ant = PUNTOS[actual - 1];
 
-  ponerDisco(hsAdelante, pt.hacia, !!(sig && pt.hacia !== undefined));
+  /* desde un punto suelto (o hacia uno) no se camina: no va flecha */
+  var haciaAdelante = !!(sig && !sig.suelto && !pt.suelto && pt.hacia !== undefined);
+  var haciaAtras    = !!(ant && !ant.suelto && !pt.suelto && ant.hacia !== undefined);
+
+  ponerDisco(hsAdelante, pt.hacia, haciaAdelante);
   /* para volver, la direccion es la opuesta a la que trajo hasta aca */
-  ponerDisco(hsAtras, ant && ant.hacia !== undefined ? (ant.hacia + 0.5) % 1 : 0,
-             !!(ant && ant.hacia !== undefined));
+  ponerDisco(hsAtras, ant && ant.hacia !== undefined ? (ant.hacia + 0.5) % 1 : 0, haciaAtras);
 }
 
 /* ---------- nubes ----------
@@ -792,7 +806,7 @@ function aplicarProxy(){
 }
 
 /* ---------- navegacion ---------- */
-var actual = 0, enViaje = false;
+var actual = INICIO, enViaje = false;
 
 /* El panorama que dejamos queda anclado donde estaba y el nuevo se
    planta un poco mas adelante, en el eje de la calle. Mientras la
@@ -875,7 +889,9 @@ function irA(destino){
 function marcar(){
   var bs = document.querySelectorAll('#puntos button');
   for (var i=0;i<bs.length;i++) bs[i].className = (i === actual ? 'on' : '');
-  document.getElementById('lugar-txt').textContent = PUNTOS[actual].nombre;
+  /* innerHTML y no textContent: los nombres traen entidades como
+     &middot;, y con textContent se verian escritas tal cual */
+  document.getElementById('lugar-txt').innerHTML = PUNTOS[actual].nombre;
 }
 
 scene.onPointerObservable.add(function(pi){
@@ -904,9 +920,9 @@ crearHotspots();
 if (HAY_NUBES) crearNubes();
 if (HAY_MOTAS) crearMotas();
 
-cargarPano(0, function(tex){
+cargarPano(INICIO, function(tex){
   esferaA.material.setTexture('pano', tex);
-  ponerCielo(esferaA.material, 0);
+  ponerCielo(esferaA.material, INICIO);
   esferaA.position = rig.position.clone();
   marcar();
   /* la malla se pide despues del panorama: pesa 10 MB y no tiene que

@@ -720,7 +720,10 @@ var TIPOS = {
     precio:'USD 170.000 &ndash; 190.000',
     ambientes:'Living-comedor integrado con la cocina, dos dormitorios y un ba&ntilde;o. Afuera, el deck con el parrillero y el jard&iacute;n propio.',
     galeria: [],                      // renders de la tipologia
-    tour: '360/'                      // el panorama de la calle
+    /* ?p=3 entra directo al panorama del interior; desde ahi se puede
+       saltar a los de la calle con los chips de abajo */
+    tour: '360/?p=3',
+    tourTxt: 'Recorr&eacute; el living, el comedor y la cocina en 360&deg;, con salida al jard&iacute;n propio.'
   }
 };
 
@@ -914,8 +917,10 @@ function hojaHTML(id, v, t){
   }
   if (id === 'tour'){
     return t.tour
-      ? '<p class="fi-txt">Recorr&eacute; la calle de esta vivienda en 360&deg;, con vista completa desde el frente.</p>' +
-        '<a class="fi-btn" href="' + t.tour + '">Abrir el tour 360&deg;</a>'
+      ? '<p class="fi-txt">' + (t.tourTxt ||
+          'Recorr&eacute; esta vivienda en 360&deg;.') + '</p>' +
+        '<a class="fi-btn" href="' + t.tour + '">Abrir el tour 360&deg;</a>' +
+        '<a class="fi-btn hueco" href="360/">Ver la calle</a>'
       : '<div class="fi-vacio">El tour de esta vivienda todav&iacute;a no est&aacute; disponible.</div>';
   }
   /* datos */
