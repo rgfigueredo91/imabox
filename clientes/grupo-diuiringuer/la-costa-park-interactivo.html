@@ -232,6 +232,89 @@ body.en-portada #barra{opacity:0; pointer-events:none}
   .punto .txt{font-size:.6rem; letter-spacing:.12em; padding:8px 12px}
   .punto .anillo{width:38px; height:38px}
 }
+
+/* ---------- viviendas clicables sobre la cenital ----------
+   Cada una es un <path> con el contorno de su techo, sacado de la
+   mascara que viene del render. Van en el mismo lienzo que los
+   hotspots, asi comparten el encuadre del video. */
+#p-svg{position:absolute; inset:0; width:1920px; height:1080px; overflow:visible}
+.viv{
+  fill:rgba(56,81,60,0); stroke:rgba(251,250,247,0); stroke-width:2.5;
+  cursor:pointer; pointer-events:auto;
+  transition:fill .22s ease, stroke .22s ease;
+}
+.viv:hover, .viv.activa{fill:rgba(143,174,147,.42); stroke:rgba(251,250,247,.95)}
+/* el rotulo aparece con el hover, sobre la casa */
+.viv-rot{
+  position:absolute; transform:translate(-50%,-50%);
+  pointer-events:none; opacity:0; transition:opacity .22s ease;
+  font-size:22px; font-weight:600; letter-spacing:.12em; color:#fff;
+  text-shadow:0 2px 10px rgba(0,0,0,.7); white-space:nowrap;
+}
+.viv-rot.visible{opacity:1}
+
+/* ---------- ficha de la vivienda ---------- */
+#ficha{
+  position:fixed; right:0; top:0; bottom:0; z-index:50;
+  width:min(430px, 100%); background:var(--verde-osc);
+  border-left:1px solid rgba(218,215,209,.16);
+  transform:translateX(101%); transition:transform .42s var(--sal);
+  display:flex; flex-direction:column;
+}
+#ficha.abierta{transform:none}
+.fi-cab{padding:26px 30px 20px; border-bottom:1px solid rgba(218,215,209,.14); position:relative; flex:none}
+.fi-x{position:absolute; right:14px; top:14px; width:40px; height:40px; font-size:1.5rem; line-height:1; color:var(--arena)}
+.fi-x:hover{color:#fff}
+.fi-cod{font-family:var(--serif); font-size:2.1rem; line-height:1; color:#fff; margin:0}
+.fi-tipo{margin:8px 0 0; font-size:.94rem; color:var(--salvia)}
+.fi-estado{display:inline-flex; align-items:center; gap:8px; margin-top:15px;
+  padding:6px 14px; font-size:.64rem; letter-spacing:.16em; text-transform:uppercase;
+  background:rgba(218,215,209,.1); color:var(--arena)}
+.fi-estado i{width:8px; height:8px; border-radius:50%; background:#8FAE93; display:block}
+
+/* menu de secciones */
+.fi-menu{display:flex; gap:1px; flex:none; background:rgba(218,215,209,.14)}
+.fi-menu button{
+  flex:1; padding:13px 6px; background:var(--verde-osc);
+  font-size:.6rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--salvia); transition:color .2s ease, background .2s ease;
+}
+.fi-menu button:hover{color:var(--arena)}
+.fi-menu button.on{background:var(--verde); color:#fff}
+
+.fi-cuerpo{flex:1; overflow-y:auto; padding:24px 30px 30px}
+.fi-hoja{display:none}
+.fi-hoja.on{display:block}
+.fi-plano{background:var(--papel); padding:10px}
+.fi-plano img{width:100%; height:auto; display:block}
+.fi-lista{list-style:none; margin:0 0 20px; padding:0; border-top:1px solid rgba(218,215,209,.14)}
+.fi-lista li{display:flex; justify-content:space-between; gap:16px; padding:11px 0;
+  border-bottom:1px solid rgba(218,215,209,.1); font-size:.94rem}
+.fi-lista li span:first-child{color:var(--salvia); font-size:.85rem}
+.fi-lista li span:last-child{color:#fff; font-weight:500}
+.fi-lista li.fuerte span:last-child{font-family:var(--serif); font-weight:400; font-size:1.2rem}
+.fi-txt{font-size:.93rem; color:rgba(218,215,209,.84); margin:0 0 20px}
+.fi-btn{
+  display:flex; align-items:center; justify-content:center; gap:10px; width:100%;
+  padding:15px 18px; margin-bottom:10px; text-decoration:none;
+  font-size:.7rem; letter-spacing:.15em; text-transform:uppercase; font-weight:500;
+  background:var(--verde); border:1px solid var(--verde); color:#fff;
+  transition:background .25s ease, transform .2s ease;
+}
+.fi-btn:hover{background:#44634a; transform:translateY(-1px)}
+.fi-btn.hueco{background:transparent; border-color:rgba(218,215,209,.34)}
+.fi-btn.hueco:hover{background:rgba(218,215,209,.08)}
+.fi-galeria{display:grid; grid-template-columns:1fr 1fr; gap:8px}
+.fi-galeria img{width:100%; aspect-ratio:4/3; object-fit:cover}
+.fi-vacio{font-size:.86rem; color:var(--salvia); padding:22px; text-align:center;
+  border:1px dashed rgba(218,215,209,.22)}
+.fi-nota{font-size:.74rem; color:var(--salvia); margin:16px 0 0}
+@media (max-width:820px){
+  #ficha{left:0; right:0; top:auto; height:84vh; width:100%;
+         border-left:0; border-top:1px solid rgba(218,215,209,.16);
+         transform:translateY(101%)}
+  #ficha.abierta{transform:none}
+}
 /* Nada de velo encima del video: se ve tal cual, sin apagar. El boton
    se sostiene solo, con su fondo y su sombra. */
 #p-centro{
@@ -319,13 +402,28 @@ body.en-portada #barra{opacity:0; pointer-events:none}
   <video class="capa-v" id="vid1" muted playsinline preload="auto" aria-hidden="true"></video>
   <!-- sobre el loop de cada etapa: aca van a colgar los hotspots y las
        viviendas clicables cuando lleguen -->
-  <div id="p-puntos"><div id="p-lienzo"></div></div>
+  <div id="p-puntos">
+    <div id="p-lienzo">
+      <svg id="p-svg" viewBox="0 0 1920 1080" aria-hidden="true"></svg>
+    </div>
+  </div>
   <div id="p-centro">
     <p id="p-volanta"></p>
     <button id="p-entrar" type="button"></button>
   </div>
   <button id="p-saltar" type="button">Saltar</button>
 </div>
+
+<aside id="ficha" aria-hidden="true">
+  <div class="fi-cab">
+    <button class="fi-x" type="button" id="fi-x" aria-label="Cerrar">&times;</button>
+    <p class="fi-cod" id="fi-cod">&mdash;</p>
+    <p class="fi-tipo" id="fi-tipo"></p>
+    <span class="fi-estado" id="fi-estado"><i></i><b></b></span>
+  </div>
+  <div class="fi-menu" id="fi-menu"></div>
+  <div class="fi-cuerpo" id="fi-cuerpo"></div>
+</aside>
 
 <div id="carga">
   <img src="img/lcp-lockup-hero.svg" alt="La Costa Park">
@@ -578,12 +676,48 @@ var ETAPAS = {
        las tipologias cuando lleguen las mascaras. */
     puntos: [
       { x:900, y:652, txt:'Recorrer la calle', icono:'&#8599;', url:'360/' }
+    ],
+
+    /* Las viviendas clicables. El contorno sale de la mascara que
+       viene del render; ver TIPOS mas abajo para los datos.
+       IMPORTANTE para las que faltan: la mascara llega en 2764x1536,
+       que es la proporcion del video 04 ORIGINAL (1288x716), NO la del
+       publicado. Antes de trazar el contorno hay que repetirle la
+       misma cadena que se le hizo al video:
+         scale=1288:716 -> crop=1269:714:11:1 -> scale=1920:1080     */
+    viviendas: [
+      { id:'A1 01', tipo:'A1',
+        d:'M861 678 L932 678 L933 714 L970 714 L969 856 L951 858 L949 879 L800 877 L798 835 L804 755 L855 753 L861 678 Z' }
     ]
   }
 
 };
 
 var ETAPA_INICIAL = 'aerea';
+
+/* ============================================================
+   Las tipologias. Lo que es igual para todas las viviendas de una
+   tipologia vive aca una sola vez; lo que cambia casa por casa (el
+   estado) va en ESTADOS.
+   ============================================================ */
+var TIPOS = {
+  A1: {
+    nombre: 'Dos dormitorios, una planta',
+    planta: 'img/tipologias/a1-planta.jpg',
+    m2:'60,90 m&sup2;', dorm:'2', banos:'1', plantas:'Una', cocheras:'1',
+    precio:'USD 170.000 &ndash; 190.000',
+    ambientes:'Living-comedor integrado con la cocina, dos dormitorios y un ba&ntilde;o. Afuera, el deck con el parrillero y el jard&iacute;n propio.',
+    galeria: [],                      // renders de la tipologia
+    tour: '360/'                      // el panorama de la calle
+  }
+};
+
+/* Estado por vivienda: 'libre' mientras no haya grilla de ventas */
+var ESTADOS = {};
+var NOMBRE_ESTADO = { libre:'Disponible', reservada:'Reservada', vendida:'Vendida' };
+var COLOR_ESTADO  = { libre:'#8FAE93', reservada:'#D9A441', vendida:'#8A8A84' };
+
+var TEL = '59893999644';
 
 /* ============================================================ */
 var portada = document.getElementById('portada');
@@ -664,7 +798,9 @@ window.addEventListener('resize', encuadrarLienzo);
 encuadrarLienzo();
 
 function pintarPuntos(e){
-  pLienzo.innerHTML = '';
+  /* selectivo y no innerHTML: adentro del lienzo tambien vive el SVG
+     de las viviendas */
+  pLienzo.querySelectorAll('.punto').forEach(function(el){ el.remove(); });
   if (!e.puntos) return;
   e.puntos.forEach(function(p){
     var el = document.createElement('a');
@@ -681,7 +817,169 @@ function pintarPuntos(e){
     pLienzo.querySelectorAll('.punto').forEach(function(el){ el.classList.add('visible'); });
   }, 260);
 }
-function limpiarPuntos(){ pLienzo.innerHTML = ''; }
+/* ---------- viviendas clicables ----------
+   Cada una es un path con el contorno de su techo. El rotulo con el
+   codigo aparece solo con el hover: fijo, 28 codigos encima de la
+   cenital taparian el render. */
+var pSvg = document.getElementById('p-svg');
+
+function pintarViviendas(e){
+  pSvg.innerHTML = '';
+  pLienzo.querySelectorAll('.viv-rot').forEach(function(el){ el.remove(); });
+  if (!e.viviendas) return;
+  var SVGNS = 'http://www.w3.org/2000/svg';
+
+  e.viviendas.forEach(function(v){
+    var p = document.createElementNS(SVGNS, 'path');
+    p.setAttribute('d', v.d);
+    p.setAttribute('class', 'viv');
+    p.setAttribute('tabindex', '0');
+    p.setAttribute('role', 'button');
+    var t = document.createElementNS(SVGNS, 'title');
+    t.textContent = 'Vivienda ' + v.id;
+    p.appendChild(t);
+    pSvg.appendChild(p);
+
+    /* el centro del contorno, para colgar el rotulo */
+    var caja = p.getBBox();
+    var rot = document.createElement('div');
+    rot.className = 'viv-rot';
+    rot.style.left = (caja.x + caja.width / 2) + 'px';
+    rot.style.top  = (caja.y + caja.height / 2) + 'px';
+    rot.textContent = v.id;
+    pLienzo.appendChild(rot);
+
+    function entra(){ rot.classList.add('visible'); }
+    function sale(){ if (!p.classList.contains('activa')) rot.classList.remove('visible'); }
+    p.addEventListener('mouseenter', entra);
+    p.addEventListener('mouseleave', sale);
+    p.addEventListener('focus', entra);
+    p.addEventListener('blur', sale);
+    p.addEventListener('click', function(){ abrirFicha(v, p, rot); });
+    p.addEventListener('keydown', function(ev){
+      if (ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); abrirFicha(v, p, rot); }
+    });
+  });
+}
+
+function limpiarPuntos(){
+  pLienzo.querySelectorAll('.punto, .viv-rot').forEach(function(el){ el.remove(); });
+  pSvg.innerHTML = '';
+}
+
+/* ============================================================
+   Ficha de la vivienda
+   Se abre al tocar una casa: la planta, las imagenes, el tour y los
+   datos comerciales, cada uno en su hoja. Mismo criterio que el
+   showroom de KIU, con las secciones que pidio Rodrigo.
+   ============================================================ */
+var ficha   = document.getElementById('ficha');
+var fiMenu  = document.getElementById('fi-menu');
+var fiCuerpo= document.getElementById('fi-cuerpo');
+var vivSel  = null, rotSel = null;
+
+var HOJAS = [
+  { id:'planta', txt:'Planta' },
+  { id:'imagenes', txt:'Im&aacute;genes' },
+  { id:'tour', txt:'Tour virtual' },
+  { id:'datos', txt:'Precio' }
+];
+
+function hojaHTML(id, v, t){
+  if (id === 'planta'){
+    return t.planta
+      ? '<div class="fi-plano"><img src="' + t.planta + '" alt="Planta ' + v.tipo + '"></div>' +
+        '<p class="fi-nota">Planta del proyecto ejecutivo. Equipamiento ilustrativo.</p>'
+      : '<div class="fi-vacio">La planta de esta tipolog&iacute;a todav&iacute;a no est&aacute; cargada.</div>';
+  }
+  if (id === 'imagenes'){
+    if (!t.galeria || !t.galeria.length){
+      return '<div class="fi-vacio">Todav&iacute;a no hay im&aacute;genes de esta tipolog&iacute;a.</div>';
+    }
+    return '<div class="fi-galeria">' +
+      t.galeria.map(function(g){ return '<img src="' + g + '" alt="' + v.tipo + '" loading="lazy">'; }).join('') +
+      '</div>';
+  }
+  if (id === 'tour'){
+    return t.tour
+      ? '<p class="fi-txt">Recorr&eacute; la calle de esta vivienda en 360&deg;, con vista completa desde el frente.</p>' +
+        '<a class="fi-btn" href="' + t.tour + '">Abrir el tour 360&deg;</a>'
+      : '<div class="fi-vacio">El tour de esta vivienda todav&iacute;a no est&aacute; disponible.</div>';
+  }
+  /* datos */
+  var est = ESTADOS[v.id] || 'libre';
+  return '<ul class="fi-lista">' +
+    '<li><span>Superficie</span><span>' + t.m2 + '</span></li>' +
+    '<li><span>Dormitorios</span><span>' + t.dorm + '</span></li>' +
+    '<li><span>Ba&ntilde;os</span><span>' + t.banos + '</span></li>' +
+    '<li><span>Plantas</span><span>' + t.plantas + '</span></li>' +
+    '<li><span>Cochera</span><span>' + t.cocheras + '</span></li>' +
+    '<li><span>Disponibilidad</span><span>' + NOMBRE_ESTADO[est] + '</span></li>' +
+    '<li class="fuerte"><span>Precio</span><span>' + t.precio + '</span></li>' +
+    '</ul>' +
+    '<p class="fi-txt">' + t.ambientes + '</p>' +
+    '<a class="fi-btn" href="https://wa.me/' + TEL + '?text=' +
+      encodeURIComponent('Hola, quiero informacion sobre la vivienda ' + v.id +
+                         ' (tipologia ' + v.tipo + ') de La Costa Park.') +
+      '" target="_blank" rel="noopener">Consultar por esta casa</a>' +
+    '<a class="fi-btn hueco" href="la-costa-park.html#contacto">Pedir m&aacute;s informaci&oacute;n</a>';
+}
+
+function abrirFicha(v, path, rot){
+  var t = TIPOS[v.tipo];
+  if (!t) return;
+
+  pSvg.querySelectorAll('.viv.activa').forEach(function(el){ el.classList.remove('activa'); });
+  pLienzo.querySelectorAll('.viv-rot.visible').forEach(function(el){ el.classList.remove('visible'); });
+  path.classList.add('activa');
+  rot.classList.add('visible');
+  vivSel = path; rotSel = rot;
+
+  document.getElementById('fi-cod').textContent = v.id;
+  document.getElementById('fi-tipo').innerHTML = v.tipo + ' &middot; ' + t.nombre;
+  var est = ESTADOS[v.id] || 'libre';
+  var e = document.getElementById('fi-estado');
+  e.querySelector('i').style.background = COLOR_ESTADO[est];
+  e.querySelector('b').textContent = NOMBRE_ESTADO[est];
+
+  fiMenu.innerHTML = '';
+  fiCuerpo.innerHTML = '';
+  HOJAS.forEach(function(h, i){
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.innerHTML = h.txt;
+    b.className = (i === 0 ? 'on' : '');
+    b.addEventListener('click', function(){
+      fiMenu.querySelectorAll('button').forEach(function(x){ x.classList.remove('on'); });
+      b.classList.add('on');
+      fiCuerpo.querySelectorAll('.fi-hoja').forEach(function(x){ x.classList.remove('on'); });
+      fiCuerpo.querySelector('[data-hoja="' + h.id + '"]').classList.add('on');
+      fiCuerpo.scrollTop = 0;
+    });
+    fiMenu.appendChild(b);
+
+    var d = document.createElement('div');
+    d.className = 'fi-hoja' + (i === 0 ? ' on' : '');
+    d.setAttribute('data-hoja', h.id);
+    d.innerHTML = hojaHTML(h.id, v, t);
+    fiCuerpo.appendChild(d);
+  });
+
+  ficha.classList.add('abierta');
+  ficha.setAttribute('aria-hidden', 'false');
+}
+
+function cerrarFicha(){
+  ficha.classList.remove('abierta');
+  ficha.setAttribute('aria-hidden', 'true');
+  if (vivSel) vivSel.classList.remove('activa');
+  if (rotSel) rotSel.classList.remove('visible');
+  vivSel = rotSel = null;
+}
+document.getElementById('fi-x').addEventListener('click', cerrarFicha);
+document.addEventListener('keydown', function(e){
+  if (e.key === 'Escape' && ficha.classList.contains('abierta')) cerrarFicha();
+});
 
 function mostrarCentro(e){
   /* ya estamos en el loop: el boton de saltar no tiene mas sentido */
@@ -707,6 +1005,7 @@ function alLoopDe(e){
   ocultarCarga();
   mostrarCentro(e);
   pintarPuntos(e);
+  pintarViviendas(e);
   /* recien ahora se baja lo que sigue: antes le competia el ancho de
      banda al video que se estaba viendo */
   if (e.va) precargarVideo(ETAPAS[e.va].intro);
@@ -723,6 +1022,7 @@ function correrEtapa(id, directo){
   enLoop = false;
   ocultarCentro();
   limpiarPuntos();
+  cerrarFicha();
   /* mientras corre el video de entrada la barra estorba; vuelve en
      cuanto arranca el loop, si no en la ultima etapa no habria salida */
   document.body.classList.add('en-portada');
