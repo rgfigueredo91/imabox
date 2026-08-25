@@ -176,9 +176,20 @@ var DIST_HOTSPOT = 6;        // metros adelante
 var RADIO = 8;               // radio de la esfera del panorama
 
 var PAR = new URLSearchParams(location.search);
-/* El cielo del render se reemplaza por uno propio con nubes, usando la
-   mascara de alpha. ?cielo=0 lo apaga para comparar. */
-var HAY_CIELO = PAR.get('cielo') !== '0';
+/* ---------- cielo en movimiento: PROBADO Y DESCARTADO ----------
+   Se llego a hacer andar: un equirect de cielo detras (el render del
+   entorno solo, sin geometria) que se desplaza en U, con la mascara de
+   alpha decidiendo pixel por pixel si se ve el cielo o la casa. Las
+   nubes se movian bien, detras del skyline y sin costura.
+   El problema no es tecnico: al correr el cielo se corre TAMBIEN el
+   sol, y como las sombras del render se quedan quietas, se nota que
+   hay truco. Con el sol en cuadro no hay velocidad que lo salve.
+   Queda todo armado y apagado. Se prende con ?cielo=1 para verlo.
+   Si alguna vez se quiere retomar, el camino seria un cielo de fondo
+   SIN el sol, y dejar el sol donde esta.
+   Por defecto se usa el panorama tal cual, que ya trae las nubes
+   renderizadas. */
+var HAY_CIELO = PAR.get('cielo') === '1';
 var VEL_CIELO = parseFloat(PAR.get('velcielo') || '0.0012');   // vueltas/s
 var corre = 0;
 
