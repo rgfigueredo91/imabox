@@ -106,7 +106,9 @@ button{font:inherit; color:inherit; cursor:pointer; background:none; border:0}
   #marca{left:16px; top:14px} #marca img{height:28px}
   #lugar{right:16px; top:18px; font-size:.54rem}
   .fila button{padding:12px 16px; letter-spacing:.16em}
-  #salir{right:16px; bottom:84px; padding:11px 16px}
+  /* en el celular el rotulo entero no entra al lado de los chips */
+  #salir{right:16px; bottom:84px; padding:11px 14px}
+  #salir .larga{display:none}
   #sensor{bottom:138px}
 }
 </style>
@@ -128,7 +130,9 @@ button{font:inherit; color:inherit; cursor:pointer; background:none; border:0}
 
 <div class="ui fila" id="puntos"></div>
 <button class="ui" id="sensor" type="button">Sensor</button>
-<a class="ui" id="salir" href="../la-costa-park-interactivo.html">Salir</a>
+<!-- vuelve a la planta del interactivo, y con directo=1 para caer en el
+     loop sin tener que ver otra vez la bajada de la aerea -->
+<a class="ui" id="salir" href="../la-costa-park-interactivo.html?etapa=barrio&amp;directo=1">&larr; Volver<span class="larga"> a la planta</span></a>
 
 <div class="ui" id="pista">Arrastr&aacute; para mirar alrededor</div>
 

@@ -702,7 +702,21 @@ function ocultarCentro(){
 var saltar = function(){};
 pSaltar.addEventListener('click', function(){ saltar(); });
 
-function correrEtapa(id){
+function alLoopDe(e){
+  document.body.classList.remove('en-portada');
+  ocultarCarga();
+  mostrarCentro(e);
+  pintarPuntos(e);
+  /* recien ahora se baja lo que sigue: antes le competia el ancho de
+     banda al video que se estaba viendo */
+  if (e.va) precargarVideo(ETAPAS[e.va].intro);
+  else if (e.vaEscena) prepararPrimera();
+}
+
+/* 'directo' saltea el video de entrada y arranca en el loop. Lo usa el
+   visor 360 al volver: el que ya vio la bajada no tiene por que
+   verla de nuevo cada vez que sale del panorama. */
+function correrEtapa(id, directo){
   var e = ETAPAS[id];
   if (!e) return;
   etapaAct = id;
@@ -713,20 +727,18 @@ function correrEtapa(id){
      cuanto arranca el loop, si no en la ultima etapa no habria salida */
   document.body.classList.add('en-portada');
 
+  if (directo){
+    enLoop = true;
+    reproducir(e.loop, true).then(function(){ alLoopDe(e); });
+    return;
+  }
+
   reproducir(e.intro, false).then(function(v){
     ocultarCarga();
     saltar = alFaltar(v, 0.5, function(){
       if (enLoop) return;
       enLoop = true;
-      reproducir(e.loop, true).then(function(){
-        document.body.classList.remove('en-portada');
-        mostrarCentro(e);
-        pintarPuntos(e);
-        /* recien ahora se baja lo que sigue: antes le competia el
-           ancho de banda al video que se estaba viendo */
-        if (e.va) precargarVideo(ETAPAS[e.va].intro);
-        else if (e.vaEscena) prepararPrimera();
-      });
+      reproducir(e.loop, true).then(function(){ alLoopDe(e); });
     });
   });
 }
@@ -775,10 +787,11 @@ function prepararPrimera(){
   });
 }
 
-/* ?etapa=barrio arranca en esa etapa, para no tener que ver todo el
-   recorrido cada vez que se revisa una vista */
+/* ?etapa=barrio arranca en esa etapa; con &directo=1 va derecho al
+   loop, sin el video de entrada (asi vuelve el que sale del 360) */
 var pedida = (location.search.match(/[?&]etapa=([a-z0-9_-]+)/i) || [])[1];
-correrEtapa(ETAPAS[pedida] ? pedida : ETAPA_INICIAL);
+var directo = /[?&]directo=1/.test(location.search);
+correrEtapa(ETAPAS[pedida] ? pedida : ETAPA_INICIAL, directo && ETAPAS[pedida]);
 </script>
 </body>
 </html>
