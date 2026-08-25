@@ -394,11 +394,13 @@ canvas.addEventListener('wheel', function(e){
   cam.fov = Math.max(0.45, Math.min(1.5, cam.fov + (e.deltaY > 0 ? 0.06 : -0.06)));
 }, { passive:false });
 
-/* ---------- hotspot de avance ----------
-   Un disco apoyado en el piso, en el eje de la calle. Se dibuja con
-   un anillo y una flecha: sin la flecha se lee como "estas aca" en
-   vez de "vení para aca". */
-var hotspot = null, tPulso = 0;
+/* ---------- hotspots de avance y retroceso ----------
+   Dos discos apoyados en el piso, sobre el eje de la calle: uno
+   adelante y otro atras. Se dibujan con un anillo y una flecha: sin
+   la flecha se leen como "estas aca" en vez de "vení para aca".
+   El de atras usa la misma textura, con el plano girado media vuelta:
+   asi la flecha apunta al lugar de donde venimos. */
+var hsAdelante = null, hsAtras = null, tPulso = 0;
 
 function texDisco(){
   var dt = new BABYLON.DynamicTexture('disco', {width:256, height:256}, scene, true);
@@ -417,30 +419,38 @@ function texDisco(){
   return dt;
 }
 
-function crearHotspot(){
+function crearHotspots(){
   var mat = new BABYLON.StandardMaterial('hs-mat', scene);
   var t = texDisco();
   mat.diffuseTexture = t; mat.opacityTexture = t;
   mat.emissiveColor = new BABYLON.Color3(1,1,1);
   mat.disableLighting = true; mat.backFaceCulling = false;
 
-  var p = BABYLON.MeshBuilder.CreatePlane('ir', {size:1.5}, scene);
-  p.material = mat;
-  p.rotation.x = Math.PI/2;         // apoyado en el piso
-  p.renderingGroupId = 1;
-  hotspot = p;
+  function disco(nombre){
+    var p = BABYLON.MeshBuilder.CreatePlane(nombre, {size:1.5}, scene);
+    p.material = mat;
+    p.rotation.x = Math.PI/2;         // apoyado en el piso
+    p.renderingGroupId = 1;
+    return p;
+  }
+  hsAdelante = disco('ir-adelante');
+  hsAtras    = disco('ir-atras');
   ubicarHotspot();
 }
 
 function ubicarHotspot(){
-  var pt = PUNTOS[actual];
-  var a = anguloDeU(pt.calle);
-  hotspot.position = new BABYLON.Vector3(
-    Math.sin(a) * DIST_HOTSPOT, -ALTURA_OJOS, Math.cos(a) * DIST_HOTSPOT);
-  /* la flecha tiene que apuntar en la direccion de la calle */
-  hotspot.rotation.y = -a;
-  /* si no hay a donde ir, no se muestra */
-  hotspot.setEnabled(PUNTOS.length > actual + 1);
+  var a = anguloDeU(PUNTOS[actual].calle);
+  var dx = Math.sin(a) * DIST_HOTSPOT, dz = Math.cos(a) * DIST_HOTSPOT;
+
+  hsAdelante.position = new BABYLON.Vector3(dx, -ALTURA_OJOS, dz);
+  hsAdelante.rotation.y = -a;
+  hsAdelante.setEnabled(actual + 1 < PUNTOS.length);
+
+  /* el de atras va del lado opuesto, y girado media vuelta para que la
+     flecha apunte hacia donde vamos a volver */
+  hsAtras.position = new BABYLON.Vector3(-dx, -ALTURA_OJOS, -dz);
+  hsAtras.rotation.y = -a + Math.PI;
+  hsAtras.setEnabled(actual > 0);
 }
 
 /* ---------- nubes ----------
@@ -616,9 +626,14 @@ function irA(destino){
   if (enViaje || destino === actual || !PUNTOS[destino]) return;
   enViaje = true;
 
+  /* yendo para atras el avance va al reves: la camara retrocede y el
+     panorama que dejamos se achica en vez de agrandarse, que es como
+     se siente caminar hacia atras */
+  var signo = (destino > actual) ? 1 : -1;
   var a = anguloDeU(PUNTOS[actual].calle);
   var desde = BABYLON.Vector3.Zero();
-  var hasta = new BABYLON.Vector3(Math.sin(a) * AVANCE, 0, Math.cos(a) * AVANCE);
+  var hasta = new BABYLON.Vector3(Math.sin(a) * AVANCE * signo, 0,
+                                  Math.cos(a) * AVANCE * signo);
 
   cargarPano(destino, function(tex){
     esferaA.position = desde.clone();
@@ -627,7 +642,8 @@ function irA(destino){
     esferaB.position = hasta.clone();
     esferaB.material.setFloat('opacidad', 0);
     esferaB.setEnabled(true);
-    if (hotspot) hotspot.setEnabled(false);
+    if (hsAdelante) hsAdelante.setEnabled(false);
+    if (hsAtras) hsAtras.setEnabled(false);
 
     var t0 = performance.now(), dur = 1100;
     var obs = scene.onBeforeRenderObservable.add(function(){
@@ -662,7 +678,10 @@ scene.onPointerObservable.add(function(pi){
   if (pi.type !== BABYLON.PointerEventTypes.POINTERUP) return;
   if (movido > 9) return;
   var pick = scene.pick(scene.pointerX, scene.pointerY);
-  if (pick && pick.hit && pick.pickedMesh && pick.pickedMesh.name === 'ir') irA(actual + 1);
+  if (!pick || !pick.hit || !pick.pickedMesh) return;
+  var n = pick.pickedMesh.name;
+  if (n === 'ir-adelante') irA(actual + 1);
+  else if (n === 'ir-atras') irA(actual - 1);
 });
 
 /* ---------- arranque ---------- */
@@ -677,7 +696,7 @@ PUNTOS.forEach(function(pt, i){
 /* con un solo punto la fila de numeros no dice nada */
 if (PUNTOS.length < 2) cont.hidden = true;
 
-crearHotspot();
+crearHotspots();
 if (HAY_NUBES) crearNubes();
 if (HAY_MOTAS) crearMotas();
 
@@ -807,12 +826,11 @@ scene.registerBeforeRender(function(){
   esferaA.material.setFloat('corre', corre);
   esferaB.material.setFloat('corre', corre);
 
-  /* el disco late despacio: quieto se pierde entre el pedregullo */
-  if (hotspot && hotspot.isEnabled()){
-    tPulso += dt;
-    var s = 1 + Math.sin(tPulso * 1.8) * 0.055;
-    hotspot.scaling.set(s, s, 1);
-  }
+  /* los discos laten despacio: quietos se pierden entre el pedregullo */
+  tPulso += dt;
+  var s = 1 + Math.sin(tPulso * 1.8) * 0.055;
+  if (hsAdelante && hsAdelante.isEnabled()) hsAdelante.scaling.set(s, s, 1);
+  if (hsAtras && hsAtras.isEnabled()) hsAtras.scaling.set(s, s, 1);
 });
 
 engine.runRenderLoop(function(){ scene.render(); });
