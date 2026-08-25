@@ -1,4 +1,23 @@
 User-agent: *
 Allow: /
 
+# Material de clientes: presupuestos, briefs y showrooms en curso.
+# Las paginas ya llevan noindex, pero esto evita que se gasten
+# rastreos en carpetas que no aportan al posicionamiento.
+Disallow: /clientes/
+Disallow: /propuesta-mpr.html
+
+# Panel interno y herramientas de trabajo
+Disallow: /admin/
+Disallow: /360/hotspot-picker.html
+
+# Tours exportados con LAYAMA y visores viejos: ninguna pagina del
+# sitio los enlaza y traen titulos sueltos como "Project Title" o "test"
+Disallow: /ps-vr/
+Disallow: /ps-vr3/
+Disallow: /ps-vr6/
+Disallow: /app-files/
+Disallow: /app-files2/
+Disallow: /object/
+
 Sitemap: https://imabox.uy/sitemap.xml
