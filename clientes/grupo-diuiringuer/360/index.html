@@ -888,7 +888,15 @@ function irA(destino){
 
 function marcar(){
   var bs = document.querySelectorAll('#puntos button');
-  for (var i=0;i<bs.length;i++) bs[i].className = (i === actual ? 'on' : '');
+  for (var i=0;i<bs.length;i++){
+    var idx = parseInt(bs[i].getAttribute('data-i'), 10);
+    bs[i].className = (idx === actual ? 'on' : '');
+  }
+  /* estando en un punto suelto la fila desaparece: desde el interior
+     no se sale a los panoramas de la calle. Y con un solo punto en la
+     cadena, la fila de numeros tampoco dice nada. */
+  var cont = document.getElementById('puntos');
+  cont.hidden = PUNTOS[actual].suelto || bs.length < 2;
   /* innerHTML y no textContent: los nombres traen entidades como
      &middot;, y con textContent se verian escritas tal cual */
   document.getElementById('lugar-txt').innerHTML = PUNTOS[actual].nombre;
@@ -905,16 +913,19 @@ scene.onPointerObservable.add(function(pi){
 });
 
 /* ---------- arranque ---------- */
+/* Los chips solo listan los puntos de la calle. Los sueltos (hoy el
+   interior) quedan afuera: se entra a ellos desde la ficha de la
+   tipologia y son un 360 en si mismos, sin salida a los demas. */
 var cont = document.getElementById('puntos');
 PUNTOS.forEach(function(pt, i){
+  if (pt.suelto) return;
   var b = document.createElement('button');
   b.type = 'button';
   b.textContent = pt.n;
+  b.setAttribute('data-i', i);
   b.onclick = function(){ irA(i); };
   cont.appendChild(b);
 });
-/* con un solo punto la fila de numeros no dice nada */
-if (PUNTOS.length < 2) cont.hidden = true;
 
 crearHotspots();
 if (HAY_NUBES) crearNubes();
