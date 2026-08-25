@@ -168,19 +168,23 @@ var ALTURA_OJOS = 1.6;
    (0 a 1). En los dos panoramas la calle se va al fondo en u=0.5, o
    sea el centro exacto de la imagen.
 
-   'hacia' es en que direccion queda el punto SIGUIENTE, tambien en u.
-   No es lo mismo que 'mira' y no se puede deducir de la imagen: hay
-   que sacarlo de las posiciones de las camaras.
-   Del .glb: cam 01 en (-924.449, 1.680, 1626.807) y cam 02 en
-   (-942.880, 1.680, 1626.807), o sea 18.43 m separadas en X puro.
-   Esa direccion cae en u=0.25, a 90 grados de la calle: los dos
-   puntos NO estan en la misma calle, estan en calles paralelas con
-   casas en el medio. Antes el hotspot apuntaba al frente y llevaba a
-   un lugar que no era.
+   'hacia' es en que direccion queda el punto SIGUIENTE. Es la calle:
+   se avanza derecho hacia el auto que viene de frente y se queda mas
+   cerca de el, que es justo lo que muestra el panorama 02.
+
+   OJO con el .glb: sus camaras estan separadas 18.43 m en X puro, y
+   si uno pasa esa direccion por la convencion del shader da u=0.25,
+   o sea 90 grados al costado de la calle. Eso NO significa que los
+   puntos esten de costado: significa que VRay orienta el equirect
+   segun hacia donde mira la camara, no segun los ejes del mundo.
+   Las dos camaras miran a -X (se lee de su cuaternion) y avanzan en
+   -X, asi que en la imagen eso cae en el centro, u=0.5.
+   Conclusion: para ubicar los hotspots vale lo que se ve en el
+   panorama, no las coordenadas crudas del modelo.
    La vuelta es la direccion opuesta, o sea 'hacia' mas 0.5. */
 var PUNTOS = [
   { n:'01', nombre:'Calle de acceso', pano:'assets/pano1',
-    mira:0.498, hacia:0.25, alpha:'assets/pano1-alpha.jpg' },
+    mira:0.498, hacia:0.498, alpha:'assets/pano1-alpha.jpg' },
   { n:'02', nombre:'Calle interna', pano:'assets/pano2',
     mira:0.496 }
 ];
@@ -817,6 +821,10 @@ function irA(destino){
                     camsGlb['360 ' + PUNTOS[destino].n]);
 
   if (conProxy){
+    /* OJO: esto solo sirve si el proxy esta prendido, y hoy no lo esta.
+       Ademas quedo pendiente compensar la rotacion del equirect: VRay
+       lo orienta segun la camara y el shader asume los ejes del mundo,
+       asi que la reproyeccion sale girada 90 grados. */
     desde = camsGlb['360 ' + PUNTOS[actual].n].clone();
     hasta = camsGlb['360 ' + PUNTOS[destino].n].clone();
   } else {
