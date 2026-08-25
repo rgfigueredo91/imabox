@@ -176,11 +176,13 @@ body.en-portada #barra{opacity:0; pointer-events:none}
    ============================================================ */
 #portada{position:fixed; inset:0; z-index:30; background:var(--verde-noche)}
 #portada.ida{opacity:0; pointer-events:none; transition:opacity .8s ease}
-#portada video{
+.capa-v{
   position:absolute; inset:0; width:100%; height:100%;
   object-fit:cover; opacity:0; transition:opacity .55s ease;
 }
-#portada video.activa{opacity:1}
+.capa-v.activa{opacity:1}
+/* capa vacia para los hotspots sobre el loop */
+#p-puntos{position:absolute; inset:0; pointer-events:none}
 #p-velo{
   position:absolute; inset:0;
   background:linear-gradient(180deg, rgba(18,26,18,.5) 0%, rgba(18,26,18,.06) 30%,
@@ -261,12 +263,17 @@ body.en-portada #barra{opacity:0; pointer-events:none}
 <div id="botones"></div>
 
 <div id="portada">
-  <video id="v-intro" muted playsinline preload="auto" poster="img/interactivo/aerea-poster.jpg" aria-hidden="true"></video>
-  <video id="v-loop"  muted playsinline preload="auto" loop aria-hidden="true"></video>
+  <!-- dos capas de video que se van turnando: siempre hay una a la
+       vista mientras la otra carga lo que sigue -->
+  <video class="capa-v" id="vid0" muted playsinline preload="auto" poster="img/interactivo/aerea-poster.jpg" aria-hidden="true"></video>
+  <video class="capa-v" id="vid1" muted playsinline preload="auto" aria-hidden="true"></video>
   <div id="p-velo"></div>
+  <!-- sobre el loop de cada etapa: aca van a colgar los hotspots y las
+       viviendas clicables cuando lleguen -->
+  <div id="p-puntos"></div>
   <div id="p-centro">
-    <p id="p-volanta">Lagomar &middot; Ciudad de la Costa</p>
-    <button id="p-entrar" type="button">Ingresar al barrio <i>&rarr;</i></button>
+    <p id="p-volanta"></p>
+    <button id="p-entrar" type="button"></button>
   </div>
   <button id="p-saltar" type="button">Saltar</button>
 </div>
@@ -480,23 +487,60 @@ document.addEventListener('keydown', function(e){
 });
 
 /* ============================================================
-   PORTADA
-   El video 01 baja entre las nubes y termina en la aerea. El 02 es
-   esa misma aerea, casi quieta, y va en loop. El loop se enciende
-   medio segundo ANTES de que el primero termine y se funde encima:
-   asi no hay parpadeo en el empalme, y de paso se disimula que los
-   dos videos no traen exactamente el mismo encuadre.
+   ETAPAS DE VIDEO
+
+   Cada etapa son dos videos: uno que se reproduce una sola vez y
+   otro que queda en loop cuando el primero termina. Sobre el loop
+   aparece el boton que lleva a lo que sigue.
+
+   El truco del empalme: el loop arranca medio segundo ANTES de que
+   termine el video de entrada y se funde encima. Cortar seco al
+   'ended' se ve, porque el ultimo cuadro se congela un instante
+   mientras el otro arranca.
+
+   Hay DOS elementos <video> que se van turnando: el que esta oculto
+   carga lo que sigue mientras el otro se ve. Con eso alcanza para
+   encadenar cuantas etapas haga falta.
+
+   Para agregar una etapa: una entrada mas en ETAPAS. Si termina en
+   otra etapa se usa 'va'; si termina pasando al recorrido de
+   imagenes, 'vaEscena'.
    ============================================================ */
+var ETAPAS = {
+
+  aerea: {
+    intro:   'video/aerea-intro.mp4',     // baja entre las nubes
+    loop:    'video/aerea-loop.mp4',      // la aerea, casi quieta
+    volanta: 'Lagomar &middot; Ciudad de la Costa',
+    boton:   'Ingresar al barrio',
+    va:      'barrio'
+  },
+
+  /* Ultima etapa. A proposito NO lleva volanta ni boton: el loop de la
+     cenital queda limpio porque encima van a ir las tipologias, cada
+     una clicable por su cuenta con su mascara. Esa capa ya esta
+     puesta y vacia: #p-puntos. */
+  barrio: {
+    intro:   'video/barrio-intro.mp4',    // de la aerea al conjunto
+    loop:    'video/barrio-loop.mp4'      // la cenital de las 28 casas
+  }
+
+};
+
+var ETAPA_INICIAL = 'aerea';
+
+/* ============================================================ */
 var portada = document.getElementById('portada');
-var vIntro  = document.getElementById('v-intro');
-var vLoop   = document.getElementById('v-loop');
+var vids    = [document.getElementById('vid0'), document.getElementById('vid1')];
 var pCentro = document.getElementById('p-centro');
 var pSaltar = document.getElementById('p-saltar');
-var enLoop = false, arrancada = false;
+var pVolanta= document.getElementById('p-volanta');
+var pEntrar = document.getElementById('p-entrar');
+var aLaVista = -1;             // cual de los dos <video> se ve
+var etapaAct = null;
+var enLoop = false;
 
 document.body.classList.add('en-portada');
-vIntro.src = 'video/aerea-intro.mp4';
-vLoop.src  = 'video/aerea-loop.mp4';
 
 function ocultarCarga(){
   var c = document.getElementById('carga');
@@ -505,42 +549,119 @@ function ocultarCarga(){
   setTimeout(function(){ c.style.display = 'none'; }, 800);
 }
 
-function alLoop(){
-  if (enLoop) return;
-  enLoop = true;
-  var p = vLoop.play();
-  if (p && p.catch) p.catch(function(){});
-  vLoop.classList.add('activa');
-  setTimeout(function(){ vIntro.classList.remove('activa'); vIntro.pause(); }, 620);
-  pCentro.classList.add('visible');
+/* pone un video en la capa que esta libre, espera a que pueda
+   reproducirse y lo funde encima de la otra */
+function reproducir(src, enBucle){
+  var i = (aLaVista === 0) ? 1 : 0;
+  var v = vids[i];
+  var previo = (aLaVista >= 0) ? vids[aLaVista] : null;
+
+  v.loop = !!enBucle;
+  v.src = src;
+  v.load();
+
+  return new Promise(function(listo){
+    var arranco = false;
+    function andando(){
+      if (arranco) return;
+      arranco = true;
+      var p = v.play();
+      if (p && p.catch) p.catch(function(){});
+      v.classList.add('activa');
+      aLaVista = i;
+      if (previo){
+        setTimeout(function(){ previo.classList.remove('activa'); previo.pause(); }, 620);
+      }
+      listo(v);
+    }
+    v.addEventListener('canplay', andando, { once:true });
+    v.addEventListener('error', andando, { once:true });
+    /* red lenta: no dejar la pantalla colgada esperando */
+    setTimeout(andando, 8000);
+  });
+}
+
+/* llama a fn cuando al video le falten 'seg' segundos */
+function alFaltar(v, seg, fn){
+  var disparado = false;
+  function ver(){
+    if (disparado) return;
+    if (v.duration && v.duration - v.currentTime < seg){ disparado = true; fn(); }
+  }
+  v.addEventListener('timeupdate', ver);
+  v.addEventListener('ended', function(){ if (!disparado){ disparado = true; fn(); } });
+  return function(){ if (!disparado){ disparado = true; fn(); } };  // para el boton Saltar
+}
+
+function mostrarCentro(e){
+  /* ya estamos en el loop: el boton de saltar no tiene mas sentido */
   pSaltar.classList.add('ida');
-  /* recien ahora se baja la primera escena: antes le competia el
-     ancho de banda al video de entrada */
+  /* una etapa sin boton deja el loop limpio (la ultima, donde van las
+     tipologias clicables) */
+  if (!e.boton){ pCentro.classList.remove('visible'); return; }
+  pVolanta.innerHTML = e.volanta || '';
+  pVolanta.style.display = e.volanta ? '' : 'none';
+  pEntrar.innerHTML = e.boton + ' <i>&rarr;</i>';
+  pCentro.classList.add('visible');
+}
+function ocultarCentro(){
+  pCentro.classList.remove('visible');
+  pSaltar.classList.remove('ida');
+}
+
+var saltar = function(){};
+pSaltar.addEventListener('click', function(){ saltar(); });
+
+function correrEtapa(id){
+  var e = ETAPAS[id];
+  if (!e) return;
+  etapaAct = id;
+  enLoop = false;
+  ocultarCentro();
+
+  reproducir(e.intro, false).then(function(v){
+    ocultarCarga();
+    saltar = alFaltar(v, 0.5, function(){
+      if (enLoop) return;
+      enLoop = true;
+      reproducir(e.loop, true).then(function(){
+        mostrarCentro(e);
+        /* recien ahora se baja lo que sigue: antes le competia el
+           ancho de banda al video que se estaba viendo */
+        if (e.va) precargarVideo(ETAPAS[e.va].intro);
+        else if (e.vaEscena) prepararPrimera();
+      });
+    });
+  });
+}
+
+var yaPedidos = {};
+function precargarVideo(src){
+  if (yaPedidos[src]) return;
+  yaPedidos[src] = true;
+  var x = new XMLHttpRequest();
+  x.open('GET', src, true);
+  x.responseType = 'blob';
+  x.send();
+}
+
+pEntrar.addEventListener('click', function(){
+  var e = ETAPAS[etapaAct];
+  if (!e) return;
+  if (e.va){ correrEtapa(e.va); return; }
+
+  /* ultima etapa: se apaga la portada y queda el recorrido de imagenes */
   prepararPrimera();
-}
-
-vIntro.addEventListener('timeupdate', function(){
-  if (vIntro.duration && vIntro.duration - vIntro.currentTime < 0.5) alLoop();
+  portada.classList.add('ida');
+  document.body.classList.remove('en-portada');
+  setTimeout(function(){
+    portada.style.display = 'none';
+    vids.forEach(function(v){ v.pause(); v.removeAttribute('src'); v.load(); });
+  }, 900);
 });
-vIntro.addEventListener('ended', alLoop);
-vIntro.addEventListener('error', alLoop);
-pSaltar.addEventListener('click', alLoop);
-
-function arrancarPortada(){
-  if (arrancada) return;
-  arrancada = true;
-  vIntro.classList.add('activa');
-  var p = vIntro.play();
-  /* si el navegador bloquea el autoplay, se va derecho al loop con el
-     boton a la vista: nunca queda una pantalla negra esperando */
-  if (p && p.catch) p.catch(alLoop);
-  ocultarCarga();
-}
-vIntro.addEventListener('canplay', arrancarPortada, { once:true });
-setTimeout(arrancarPortada, 7000);   // red lenta: no dejar la marca colgada
 
 /* la primera escena se deja lista DEBAJO de la portada, asi cuando se
-   toca "Ingresar al barrio" ya esta puesta y el fundido no espera */
+   toca el boton ya esta puesta y el fundido no espera */
 var primeraLista = false;
 function prepararPrimera(){
   if (primeraLista) return;
@@ -558,15 +679,10 @@ function prepararPrimera(){
   });
 }
 
-document.getElementById('p-entrar').addEventListener('click', function(){
-  prepararPrimera();
-  portada.classList.add('ida');
-  document.body.classList.remove('en-portada');
-  setTimeout(function(){
-    portada.style.display = 'none';
-    vLoop.pause(); vIntro.removeAttribute('src'); vIntro.load();
-  }, 900);
-});
+/* ?etapa=barrio arranca en esa etapa, para no tener que ver todo el
+   recorrido cada vez que se revisa una vista */
+var pedida = (location.search.match(/[?&]etapa=([a-z0-9_-]+)/i) || [])[1];
+correrEtapa(ETAPAS[pedida] ? pedida : ETAPA_INICIAL);
 </script>
 </body>
 </html>
