@@ -265,6 +265,72 @@ body.en-portada #barra{opacity:0; pointer-events:none}
 }
 .viv-rot.visible{opacity:1}
 
+/* ---------- barra de unidades ----------
+   Las 26 en fila abajo, con scroll horizontal. Es la via de entrada en
+   el celular, donde no hay hover sobre el plano: ahi tocar una casa
+   chiquita en la cenital es imposible, y este listado lo resuelve.
+   En escritorio convive con el hover. */
+/* Sin barra de fondo ni rotulo: solo los botones flotando sobre el
+   video, para no taparle el proyecto. Se sostienen con su propio
+   fondo translucido. */
+/* Apoyados sobre el muro perimetral del fondo, no pegados al borde de
+   la pantalla: ahi abajo esta el cesped y quedaban flotando. */
+#unidades{
+  position:fixed; left:0; right:0; bottom:7.5vh; z-index:45;
+  transform:translateY(140%); transition:transform .45s var(--sal);
+  pointer-events:none;      /* solo los botones reciben el toque */
+}
+#unidades.visible{transform:none}
+#uni-fila{
+  overflow-x:auto; overscroll-behavior-x:contain;
+  padding:6px clamp(12px,3vw,26px);
+  -webkit-overflow-scrolling:touch;
+  pointer-events:auto;
+}
+/* OJO: justify-content:center sobre un contenedor con overflow-x
+   recorta el principio cuando el contenido desborda, y los primeros
+   botones quedan inalcanzables. El truco es una capa interna de ancho
+   justo: se centra sola mientras entra, y cuando no, ocupa todo y el
+   scroll arranca donde corresponde. */
+#uni-int{
+  display:flex; gap:3px; width:max-content; margin:0 auto;
+  scroll-snap-type:x proximity;
+}
+/* la barra de scroll molesta mas de lo que ayuda: se navega
+   arrastrando o con las flechas */
+#uni-fila::-webkit-scrollbar{display:none}
+#uni-fila{scrollbar-width:none}
+.uni{
+  flex:none; scroll-snap-align:center;
+  /* el padding horizontal es lo unico que se ajusta para que las 26
+     entren de una en una pantalla comun y queden centradas; el alto y
+     el cuerpo de letra no se tocan */
+  padding:7px 7px;
+  font-size:.6rem; font-weight:500; letter-spacing:.06em;
+  color:#fff;
+  background:rgba(12,18,12,.86);
+  backdrop-filter:blur(8px);
+  border:1px solid rgba(218,215,209,.45);
+  white-space:nowrap;
+  transition:background .2s ease, border-color .2s ease, color .2s ease;
+}
+.uni:hover{background:var(--papel); color:var(--verde); border-color:var(--papel)}
+.uni.on{background:var(--verde); border-color:var(--papel); color:#fff}
+/* las que todavia no tienen su mascara: se leen, pero se distinguen de
+   las que si llevan a algun lado */
+.uni.pendiente{opacity:.62; cursor:default}
+.uni.pendiente:hover{background:rgba(12,18,12,.86); color:#fff;
+  border-color:rgba(218,215,209,.45)}
+.uni b{font-weight:500}
+
+/* con los botones abajo, lo que estaba pegado al piso sube */
+body.con-unidades #p-saltar{bottom:calc(clamp(22px,4vh,34px) + 48px)}
+
+@media (max-width:820px){
+  #unidades{padding:0 0 9px}
+  .uni{padding:6px 9px; font-size:.56rem}
+}
+
 /* ---------- ficha de la vivienda ---------- */
 #ficha{
   position:fixed; right:0; top:0; bottom:0; z-index:50;
@@ -317,7 +383,49 @@ body.en-portada #barra{opacity:0; pointer-events:none}
 .fi-btn.hueco{background:transparent; border-color:rgba(218,215,209,.34)}
 .fi-btn.hueco:hover{background:rgba(218,215,209,.08)}
 .fi-galeria{display:grid; grid-template-columns:1fr 1fr; gap:8px}
-.fi-galeria img{width:100%; aspect-ratio:4/3; object-fit:cover}
+.fi-mini{padding:0; display:block; overflow:hidden; background:#1a1a1a}
+.fi-mini img{width:100%; aspect-ratio:4/3; object-fit:cover; display:block;
+  transition:transform .5s var(--sal), opacity .25s ease}
+.fi-mini:hover img{transform:scale(1.05); opacity:.88}
+
+/* ---------- imagen a pantalla completa ----------
+   Va por encima de la ficha (z 60 contra 50) y ocupa todo, para que la
+   foto se vea sin el panel al costado comiendole espacio. */
+#lupa{
+  position:fixed; inset:0; z-index:60;
+  background:rgba(12,18,12,.94); backdrop-filter:blur(6px);
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none; transition:opacity .3s ease;
+}
+#lupa.abierta{opacity:1; pointer-events:auto}
+#lupa img{
+  max-width:92vw; max-height:82vh; object-fit:contain;
+  box-shadow:0 24px 70px rgba(0,0,0,.5);
+}
+#lupa .pie{
+  position:absolute; left:0; right:0; bottom:26px; text-align:center;
+  font-size:.72rem; letter-spacing:.14em; text-transform:uppercase;
+  color:rgba(218,215,209,.75);
+}
+#lupa .x{position:absolute; right:20px; top:16px; width:46px; height:46px;
+  font-size:1.7rem; line-height:1; color:var(--arena)}
+#lupa .x:hover{color:#fff}
+#lupa .nav{
+  position:absolute; top:50%; transform:translateY(-50%);
+  width:52px; height:52px; font-size:1.7rem; line-height:1;
+  color:var(--arena); background:rgba(18,26,18,.45);
+  border:1px solid rgba(218,215,209,.28);
+  transition:background .2s ease, border-color .2s ease;
+}
+#lupa .nav:hover{background:rgba(218,215,209,.14); border-color:var(--arena)}
+#lupa .nav.ant{left:20px}
+#lupa .nav.sig{right:20px}
+@media (max-width:820px){
+  #lupa img{max-width:96vw; max-height:70vh}
+  #lupa .nav{width:44px; height:44px; font-size:1.4rem}
+  #lupa .nav.ant{left:8px}
+  #lupa .nav.sig{right:8px}
+}
 .fi-vacio{font-size:.86rem; color:var(--salvia); padding:22px; text-align:center;
   border:1px dashed rgba(218,215,209,.22)}
 .fi-nota{font-size:.74rem; color:var(--salvia); margin:16px 0 0}
@@ -426,6 +534,10 @@ body.en-portada #barra{opacity:0; pointer-events:none}
   <button id="p-saltar" type="button">Saltar</button>
 </div>
 
+<div id="unidades" aria-hidden="true">
+  <div id="uni-fila"><div id="uni-int"></div></div>
+</div>
+
 <aside id="ficha" aria-hidden="true">
   <div class="fi-cab">
     <button class="fi-x" type="button" id="fi-x" aria-label="Cerrar">&times;</button>
@@ -436,6 +548,14 @@ body.en-portada #barra{opacity:0; pointer-events:none}
   <div class="fi-menu" id="fi-menu"></div>
   <div class="fi-cuerpo" id="fi-cuerpo"></div>
 </aside>
+
+<div id="lupa" aria-hidden="true">
+  <button class="x" type="button" id="lupa-x" aria-label="Cerrar">&times;</button>
+  <button class="nav ant" type="button" id="lupa-ant" aria-label="Anterior">&lsaquo;</button>
+  <img id="lupa-img" src="" alt="">
+  <button class="nav sig" type="button" id="lupa-sig" aria-label="Siguiente">&rsaquo;</button>
+  <div class="pie" id="lupa-pie"></div>
+</div>
 
 <div id="carga">
   <img src="img/lcp-lockup-hero.svg" alt="La Costa Park">
@@ -719,13 +839,45 @@ var TIPOS = {
     m2:'60,90 m&sup2;', dorm:'2', banos:'1', plantas:'Una', cocheras:'1',
     precio:'USD 170.000 &ndash; 190.000',
     ambientes:'Living-comedor integrado con la cocina, dos dormitorios y un ba&ntilde;o. Afuera, el deck con el parrillero y el jard&iacute;n propio.',
-    galeria: [],                      // renders de la tipologia
+    /* La miniatura usa la version chica y al abrir se pide la grande:
+       cuatro imagenes de 500 KB para llenar una grilla de 180 px seria
+       tirar el ancho de banda. */
+    galeria: [
+      { ch:'img/interior-m.jpg',   gr:'img/interior.jpg',   txt:'Living comedor abierto al jard&iacute;n' },
+      { ch:'img/parrillero-m.jpg', gr:'img/parrillero.jpg', txt:'Parrillero y jard&iacute;n propio' },
+      { ch:'img/calle-m.jpg',      gr:'img/calle.jpg',      txt:'Calle interna del complejo' },
+      { ch:'img/sum-m.jpg',        gr:'img/sum.jpg',        txt:'SUM con barbacoa' }
+    ],
     /* ?p=3 entra directo al panorama del interior; desde ahi se puede
        saltar a los de la calle con los chips de abajo */
     tour: '360/?p=3',
     tourTxt: 'Recorr&eacute; el interior de la vivienda en 360&deg;.'
   }
 };
+
+/* ============================================================
+   Las 26 viviendas, para la barra de abajo.
+
+   OJO: la reparticion por tipologia es tentativa. Sale de la lamina
+   del estudio (A1 x8, A2 x8, B1 x4, B2 x4, C1 x2, C2 x2 = 28), bajada
+   a las 26 que confirmo Rodrigo. Los codigos reales hay que
+   confirmarlos con la grilla de ventas.
+
+   Una unidad aparece activa cuando tiene su contorno cargado en la
+   etapa 'barrio' (mismo id). Las demas se ven en la lista pero no
+   llevan a ningun lado: asi se entiende que el barrio son 26 y no
+   parece que faltara la mitad.
+   ============================================================ */
+var UNIDADES = (function(){
+  var reparto = [['A1', 8], ['A2', 8], ['B1', 4], ['B2', 4], ['C1', 1], ['C2', 1]];
+  var lista = [];
+  reparto.forEach(function(r){
+    for (var i = 1; i <= r[1]; i++){
+      lista.push({ id: r[0] + ' ' + ('0' + i).slice(-2), tipo: r[0] });
+    }
+  });
+  return lista;
+})();
 
 /* Estado por vivienda: 'libre' mientras no haya grilla de ventas */
 var ESTADOS = {};
@@ -841,6 +993,7 @@ var pSvg = document.getElementById('p-svg');
 function pintarViviendas(e){
   pSvg.innerHTML = '';
   pLienzo.querySelectorAll('.viv-rot').forEach(function(el){ el.remove(); });
+  vivPorId = {};
   if (!e.viviendas) return;
   var SVGNS = 'http://www.w3.org/2000/svg';
 
@@ -854,6 +1007,8 @@ function pintarViviendas(e){
     t.textContent = 'Vivienda ' + v.id;
     p.appendChild(t);
     pSvg.appendChild(p);
+    /* la barra de abajo dispara el click sobre este mismo path */
+    vivPorId[v.id] = p;
 
     /* el centro del contorno, para colgar el rotulo */
     var caja = p.getBBox();
@@ -880,6 +1035,65 @@ function pintarViviendas(e){
 function limpiarPuntos(){
   pLienzo.querySelectorAll('.punto, .viv-rot').forEach(function(el){ el.remove(); });
   pSvg.innerHTML = '';
+}
+
+/* ---------- barra de unidades ---------- */
+/* los botones cuelgan de la capa interna, que es la que se centra */
+var uniFila = document.getElementById('uni-int');
+var barraUni = document.getElementById('unidades');
+var vivPorId = {};      // id de unidad -> el <path> de su contorno
+
+function pintarUnidades(e){
+  /* OJO: aca NO se toca vivPorId. Lo llena pintarViviendas, que corre
+     justo antes; vaciarlo aca dejaba la barra sin a que apuntar y los
+     botones no abrian nada. */
+  uniFila.innerHTML = '';
+  if (!e.viviendas){ ocultarUnidades(); return; }
+
+  /* que unidades tienen contorno cargado */
+  var conMascara = {};
+  e.viviendas.forEach(function(v){ conMascara[v.id] = v; });
+
+  UNIDADES.forEach(function(u){
+    var b = document.createElement('button');
+    b.type = 'button';
+    var lista = !!conMascara[u.id];
+    b.className = 'uni' + (lista ? '' : ' pendiente');
+    b.innerHTML = '<b>' + u.id + '</b>';
+    b.setAttribute('data-id', u.id);
+    if (lista){
+      b.title = 'Ver la vivienda ' + u.id;
+      b.addEventListener('click', function(){
+        var p = vivPorId[u.id];
+        if (p) p.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      });
+    } else {
+      b.title = u.id + ' — todavia sin cargar';
+    }
+    uniFila.appendChild(b);
+  });
+
+  barraUni.classList.add('visible');
+  barraUni.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('con-unidades');
+}
+
+function ocultarUnidades(){
+  barraUni.classList.remove('visible');
+  barraUni.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('con-unidades');
+}
+
+/* marca en la barra cual es la unidad abierta, y la trae a la vista si
+   quedo fuera del scroll */
+function marcarUnidad(id){
+  uniFila.querySelectorAll('.uni').forEach(function(b){
+    var suyo = b.getAttribute('data-id') === id;
+    b.classList.toggle('on', suyo);
+    if (suyo && b.scrollIntoView) {
+      b.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+  });
 }
 
 /* ============================================================
@@ -912,8 +1126,12 @@ function hojaHTML(id, v, t){
       return '<div class="fi-vacio">Todav&iacute;a no hay im&aacute;genes de esta tipolog&iacute;a.</div>';
     }
     return '<div class="fi-galeria">' +
-      t.galeria.map(function(g){ return '<img src="' + g + '" alt="' + v.tipo + '" loading="lazy">'; }).join('') +
-      '</div>';
+      t.galeria.map(function(g, i){
+        return '<button type="button" class="fi-mini" data-ver="' + i + '">' +
+               '<img src="' + g.ch + '" alt="' + g.txt.replace(/&[a-z]+;/g, '') + '" loading="lazy">' +
+               '</button>';
+      }).join('') + '</div>' +
+      '<p class="fi-nota">Toc&aacute; una imagen para verla en grande.</p>';
   }
   if (id === 'tour'){
     /* solo el interior: estando dentro de la ficha de una unidad, un
@@ -960,6 +1178,7 @@ function abrirFicha(v, path, rot){
   e.querySelector('i').style.background = COLOR_ESTADO[est];
   e.querySelector('b').textContent = NOMBRE_ESTADO[est];
 
+  galAct = t.galeria || [];
   fiMenu.innerHTML = '';
   fiCuerpo.innerHTML = '';
   HOJAS.forEach(function(h, i){
@@ -983,9 +1202,48 @@ function abrirFicha(v, path, rot){
     fiCuerpo.appendChild(d);
   });
 
+  marcarUnidad(v.id);
   ficha.classList.add('abierta');
   ficha.setAttribute('aria-hidden', 'false');
 }
+
+/* ---------- imagen a pantalla completa ----------
+   La ficha muestra miniaturas chicas; al tocar una se abre la version
+   grande encima de todo, con flechas y teclado. */
+var lupa    = document.getElementById('lupa');
+var lupaImg = document.getElementById('lupa-img');
+var lupaPie = document.getElementById('lupa-pie');
+var galAct = [], galIdx = 0;
+
+function verImagen(i){
+  if (!galAct.length) return;
+  galIdx = (i + galAct.length) % galAct.length;
+  var g = galAct[galIdx];
+  lupaImg.src = g.gr;
+  lupaImg.alt = g.txt.replace(/&[a-z]+;/g, '');
+  lupaPie.innerHTML = g.txt + (galAct.length > 1
+    ? '  <span style="opacity:.5">&nbsp;&nbsp;' + (galIdx + 1) + ' / ' + galAct.length + '</span>' : '');
+  lupa.classList.add('abierta');
+  lupa.setAttribute('aria-hidden', 'false');
+}
+function cerrarLupa(){
+  lupa.classList.remove('abierta');
+  lupa.setAttribute('aria-hidden', 'true');
+  /* se suelta la imagen para no dejarla en memoria */
+  setTimeout(function(){ if (!lupa.classList.contains('abierta')) lupaImg.src = ''; }, 320);
+}
+document.getElementById('lupa-x').addEventListener('click', cerrarLupa);
+document.getElementById('lupa-ant').addEventListener('click', function(e){ e.stopPropagation(); verImagen(galIdx - 1); });
+document.getElementById('lupa-sig').addEventListener('click', function(e){ e.stopPropagation(); verImagen(galIdx + 1); });
+/* tocar el fondo cierra; tocar la foto o los botones, no */
+lupa.addEventListener('click', function(e){ if (e.target === lupa) cerrarLupa(); });
+
+/* las miniaturas se crean cada vez que se abre una ficha, asi que el
+   click se escucha en el cuerpo y no en cada boton */
+document.getElementById('fi-cuerpo').addEventListener('click', function(e){
+  var b = e.target.closest ? e.target.closest('.fi-mini') : null;
+  if (b) verImagen(parseInt(b.getAttribute('data-ver'), 10));
+});
 
 function cerrarFicha(){
   ficha.classList.remove('abierta');
@@ -993,9 +1251,18 @@ function cerrarFicha(){
   if (vivSel) vivSel.classList.remove('activa');
   if (rotSel) rotSel.classList.remove('visible');
   vivSel = rotSel = null;
+  uniFila.querySelectorAll('.uni.on').forEach(function(b){ b.classList.remove('on'); });
 }
 document.getElementById('fi-x').addEventListener('click', cerrarFicha);
 document.addEventListener('keydown', function(e){
+  /* con la imagen abierta el teclado es de ella: Escape cierra la foto,
+     no la ficha que quedo atras */
+  if (lupa.classList.contains('abierta')){
+    if (e.key === 'Escape') cerrarLupa();
+    else if (e.key === 'ArrowLeft') verImagen(galIdx - 1);
+    else if (e.key === 'ArrowRight') verImagen(galIdx + 1);
+    return;
+  }
   if (e.key === 'Escape' && ficha.classList.contains('abierta')) cerrarFicha();
 });
 
@@ -1023,7 +1290,10 @@ function alLoopDe(e){
   ocultarCarga();
   mostrarCentro(e);
   pintarPuntos(e);
+  /* primero los contornos, que llenan vivPorId, y despues la barra que
+     los usa */
   pintarViviendas(e);
+  pintarUnidades(e);
   /* recien ahora se baja lo que sigue: antes le competia el ancho de
      banda al video que se estaba viendo */
   if (e.va) precargarVideo(ETAPAS[e.va].intro);
@@ -1040,6 +1310,7 @@ function correrEtapa(id, directo){
   enLoop = false;
   ocultarCentro();
   limpiarPuntos();
+  ocultarUnidades();
   cerrarFicha();
   /* mientras corre el video de entrada la barra estorba; vuelve en
      cuanto arranca el loop, si no en la ultima etapa no habria salida */
