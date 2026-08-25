@@ -145,6 +145,8 @@ button{font:inherit; color:inherit; cursor:pointer; background:none; border:0}
 </div>
 
 <script src="./lib/babylon.js"></script>
+<!-- el plugin de glTF: el core solo no sabe abrir .glb -->
+<script src="./lib/loaders.js"></script>
 <script>
 /* ============================================================
    Los puntos del recorrido.
@@ -162,19 +164,25 @@ button{font:inherit; color:inherit; cursor:pointer; background:none; border:0}
    ============================================================ */
 var ALTURA_OJOS = 1.6;
 
-/* 'calle' es donde cae el punto de fuga de la calle en ESE equirect,
-   en coordenada u (0 a 1). Se lee mirando la imagen: en los dos da
-   casi 0.5, o sea el centro exacto, porque las camaras se pusieron
-   mirando en el eje de la calle.
-   'dist' es cuanto se avanza hasta el punto siguiente, en metros. Se
-   midio comparando el ancho angular del auto que se ve en los dos
-   panoramas: pasa de 3.6 a 14.9 grados, y con 1.79 m de ancho real da
-   28.5 m contra 6.9 m. O sea unos 21 m de avance. */
+/* 'mira' es hacia donde arranca la vista, en coordenada u del equirect
+   (0 a 1). En los dos panoramas la calle se va al fondo en u=0.5, o
+   sea el centro exacto de la imagen.
+
+   'hacia' es en que direccion queda el punto SIGUIENTE, tambien en u.
+   No es lo mismo que 'mira' y no se puede deducir de la imagen: hay
+   que sacarlo de las posiciones de las camaras.
+   Del .glb: cam 01 en (-924.449, 1.680, 1626.807) y cam 02 en
+   (-942.880, 1.680, 1626.807), o sea 18.43 m separadas en X puro.
+   Esa direccion cae en u=0.25, a 90 grados de la calle: los dos
+   puntos NO estan en la misma calle, estan en calles paralelas con
+   casas en el medio. Antes el hotspot apuntaba al frente y llevaba a
+   un lugar que no era.
+   La vuelta es la direccion opuesta, o sea 'hacia' mas 0.5. */
 var PUNTOS = [
-  { n:'01', nombre:'Entrada de la calle', pano:'assets/pano1',
-    calle:0.498, dist:21, alpha:'assets/pano1-alpha.jpg' },
-  { n:'02', nombre:'Mitad de la calle', pano:'assets/pano2',
-    calle:0.496 }
+  { n:'01', nombre:'Calle de acceso', pano:'assets/pano1',
+    mira:0.498, hacia:0.25, alpha:'assets/pano1-alpha.jpg' },
+  { n:'02', nombre:'Calle interna', pano:'assets/pano2',
+    mira:0.496 }
 ];
 
 /* El hotspot que lleva al punto siguiente. Se dibuja en el piso,
@@ -213,6 +221,8 @@ var corre = 0;
    quedaban SIEMPRE encima de las casas, porque no hay con que ocluirlas.
    Ahora que el cielo va detras de verdad, sobran. Se pueden encender
    con ?nubes=1 para comparar. */
+/* ?proxy=1 prende la malla del modelo para el paralaje real */
+var HAY_PROXY = PAR.get('proxy') === '1';
 var HAY_NUBES = PAR.get('nubes') === '1';
 var HAY_MOTAS = PAR.get('motas') !== '0';
 var OPAC_NUBES = parseFloat(PAR.get('opnubes') || '0.72');
@@ -269,6 +279,62 @@ BABYLON.Effect.ShadersStore['panoFragmentShader'] = [
   '    }',
   '  }',
   '  gl_FragColor = vec4(col, opacidad);',
+  '}'
+].join('\n');
+
+/* ============================================================
+   MALLA PROXY (paralaje real, la tecnica de LAYAMA)
+
+   La esfera del panorama es plana: al avanzar, todo se agranda por
+   igual y lo cercano no se corre respecto de lo lejano. El paralaje
+   de verdad sale de proyectar el panorama sobre la GEOMETRIA.
+
+   Como funciona: se carga la malla del modelo y, para cada pixel de
+   ella, se calcula la direccion desde la camara que TOMO el panorama
+   (no desde donde estamos ahora) y se muestrea el equirect con esa
+   direccion. Al movernos, la malla se ve desde otro angulo y lo
+   cercano se corre respecto de lo lejano: eso es el paralaje.
+
+   Durante la transicion se proyectan los DOS panoramas a la vez, cada
+   uno desde su camara, y se mezcla. Asi lo que la camara vieja no
+   veia (y por lo tanto pinta estirado) se corrige a medida que entra
+   el panorama nuevo.
+
+   Se prende con ?proxy=1.
+   ============================================================ */
+BABYLON.Effect.ShadersStore['proxyVertexShader'] = [
+  'precision highp float;',
+  'attribute vec3 position;',
+  'uniform mat4 world;',
+  'uniform mat4 worldViewProjection;',
+  'varying vec3 vMundo;',
+  'void main(void){',
+  '  vMundo = (world * vec4(position, 1.0)).xyz;',
+  '  gl_Position = worldViewProjection * vec4(position, 1.0);',
+  '}'
+].join('\n');
+
+BABYLON.Effect.ShadersStore['proxyFragmentShader'] = [
+  'precision highp float;',
+  'varying vec3 vMundo;',
+  'uniform sampler2D panoA;',
+  'uniform sampler2D panoB;',
+  'uniform vec3 origenA;',
+  'uniform vec3 origenB;',
+  'uniform float mezcla;',
+  'const float PI = 3.14159265359;',
+  'vec2 aEquirect(vec3 d){',
+  '  d = normalize(d);',
+  '  return vec2(0.5 + atan(d.x, d.z) / (2.0 * PI),',
+  '              0.5 - asin(clamp(d.y, -1.0, 1.0)) / PI);',
+  '}',
+  'void main(void){',
+  '  vec3 c = texture2D(panoA, aEquirect(vMundo - origenA)).rgb;',
+  '  if (mezcla > 0.001){',
+  '    vec3 c2 = texture2D(panoB, aEquirect(vMundo - origenB)).rgb;',
+  '    c = mix(c, c2, mezcla);',
+  '  }',
+  '  gl_FragColor = vec4(c, 1.0);',
   '}'
 ].join('\n');
 
@@ -357,7 +423,7 @@ cam.minZ = 0.05; cam.maxZ = 200; cam.fov = 1.15;
 
 /* arranca mirando hacia la calle: u -> angulo */
 function anguloDeU(u){ return (u - 0.5) * Math.PI * 2; }
-var yaw = anguloDeU(PUNTOS[0].calle), pitch = 0;
+var yaw = anguloDeU(PUNTOS[0].mira), pitch = 0;
 var rigYaw = 0, sensorOn = false;
 /* ?mira=yaw,pitch para revisar una vista puntual sin tener que
    arrastrar hasta encontrarla */
@@ -438,19 +504,34 @@ function crearHotspots(){
   ubicarHotspot();
 }
 
+/* cada disco se planta en la direccion donde esta el punto al que
+   lleva, no "adelante" a secas: los puntos pueden estar en cualquier
+   angulo, no en fila */
+function ponerDisco(disco, u, ver){
+  disco.setEnabled(ver);
+  if (!ver) return;
+  var a = anguloDeU(u);
+  var o = rig.position;
+  disco.position = new BABYLON.Vector3(
+    o.x + Math.sin(a) * DIST_HOTSPOT,
+    o.y - ALTURA_OJOS,
+    o.z + Math.cos(a) * DIST_HOTSPOT);
+  /* el plano esta acostado (rotation.x = 90), asi que su "arriba"
+     local cae sobre +Z. Rotando 'a' en Y, ese +Z va justo a
+     (sin a, cos a), que es la direccion buscada. Con el signo
+     cambiado se veia bien solo cuando el angulo era casi cero. */
+  disco.rotation.y = a;
+}
+
 function ubicarHotspot(){
-  var a = anguloDeU(PUNTOS[actual].calle);
-  var dx = Math.sin(a) * DIST_HOTSPOT, dz = Math.cos(a) * DIST_HOTSPOT;
+  var pt = PUNTOS[actual];
+  var sig = PUNTOS[actual + 1];
+  var ant = PUNTOS[actual - 1];
 
-  hsAdelante.position = new BABYLON.Vector3(dx, -ALTURA_OJOS, dz);
-  hsAdelante.rotation.y = -a;
-  hsAdelante.setEnabled(actual + 1 < PUNTOS.length);
-
-  /* el de atras va del lado opuesto, y girado media vuelta para que la
-     flecha apunte hacia donde vamos a volver */
-  hsAtras.position = new BABYLON.Vector3(-dx, -ALTURA_OJOS, -dz);
-  hsAtras.rotation.y = -a + Math.PI;
-  hsAtras.setEnabled(actual > 0);
+  ponerDisco(hsAdelante, pt.hacia, !!(sig && pt.hacia !== undefined));
+  /* para volver, la direccion es la opuesta a la que trajo hasta aca */
+  ponerDisco(hsAtras, ant && ant.hacia !== undefined ? (ant.hacia + 0.5) % 1 : 0,
+             !!(ant && ant.hacia !== undefined));
 }
 
 /* ---------- nubes ----------
@@ -562,7 +643,9 @@ function crearMotas(){
   motas = new BABYLON.ParticleSystem('motas', 420, scene);
   motas.particleTexture = dt;
   motas.blendMode = BABYLON.ParticleSystem.BLENDMODE_ADD;
-  motas.emitter = BABYLON.Vector3.Zero();
+  /* un nodo y no un punto fijo: con la malla proxy la camara se para
+     donde la puso el Max, y las motas tienen que ir con ella */
+  motas.emitter = rig;
   motas.minEmitBox = new BABYLON.Vector3(-5, -1.4, -5);
   motas.maxEmitBox = new BABYLON.Vector3( 5,  2.6,  5);
   motas.minLifeTime = 12; motas.maxLifeTime = 22;
@@ -612,6 +695,98 @@ function alFrente(){
   visMotas = 0.06 + 0.94 * Math.pow(Math.max(0, d), 2.2);
 }
 
+/* ---------- carga de la malla proxy ---------- */
+var proxy = null, matProxy = null, camsGlb = {};
+/* a mano para poder inspeccionar desde la consola */
+window.rig = rig; window.camsGlb = camsGlb;
+
+function cargarProxy(){
+  BABYLON.SceneLoader.ImportMesh('', 'assets/', 'modelo.glb', scene,
+    function(mallas, ps, ls, ag, nodos, cams){
+      /* las camaras del .glb dan la posicion exacta de cada punto de
+         vista, ya convertidas por el loader al espacio de Babylon: no
+         hay que adivinar coordenadas ni negar la X a mano.
+         Segun la version, la camara importada trae globalPosition o
+         solo position, y a veces cuelga de un nodo padre: por eso se
+         resuelve con computeWorldMatrix y varios respaldos. */
+      function posDe(o){
+        if (!o) return null;
+        try {
+          if (o.computeWorldMatrix) o.computeWorldMatrix(true);
+          if (o.getAbsolutePosition) return o.getAbsolutePosition().clone();
+          if (o.globalPosition) return o.globalPosition.clone();
+          if (o.position) return o.position.clone();
+        } catch(e){}
+        return null;
+      }
+      (cams || []).forEach(function(c){
+        var p = posDe(c);
+        if (p) camsGlb[c.name] = p;
+        /* la camara importada no tiene que robarle el control a la
+           nuestra */
+        if (c.detachControl) { try { c.detachControl(canvas); } catch(e){} }
+      });
+      scene.activeCamera = cam;
+      ['360 01','360 02'].forEach(function(nom){
+        if (camsGlb[nom]) return;
+        var p = posDe(scene.getNodeByName ? scene.getNodeByName(nom) : null) ||
+                posDe(scene.getCameraByName ? scene.getCameraByName(nom) : null);
+        if (p) camsGlb[nom] = p;
+      });
+      console.log('[proxy] camaras:', Object.keys(camsGlb).map(function(k){
+        return k + ' ' + camsGlb[k].toString(); }).join('  |  '));
+
+      matProxy = new BABYLON.ShaderMaterial('proxy-mat', scene, 'proxy', {
+        attributes:['position'],
+        uniforms:['world','worldViewProjection','origenA','origenB','mezcla'],
+        samplers:['panoA','panoB']
+      });
+      matProxy.backFaceCulling = true;
+      matProxy.setFloat('mezcla', 0);
+
+      var utiles = [];
+      mallas.forEach(function(m){
+        if (!m.getTotalVertices || !m.getTotalVertices()) return;   // el __root__
+        m.material = matProxy;
+        m.isPickable = false;
+        /* despues de la esfera del panorama: la esfera hace de cielo y
+           de fondo lejano, la malla tapa lo que si esta modelado */
+        m.renderingGroupId = 0;
+        m.alphaIndex = 5;
+        utiles.push(m);
+      });
+      proxy = utiles;
+      console.log('[proxy] mallas:', utiles.length);
+
+      /* hasta aca la escena trabajaba centrada en el origen, pero la
+         malla vive donde la puso el Max: hay que pararse en la camara
+         real, si no el panorama se proyecta desde un punto que no
+         corresponde y sale cualquier cosa */
+      var o = camsGlb['360 ' + PUNTOS[actual].n];
+      if (o){
+        rig.position.copyFrom(o);
+        esferaA.position.copyFrom(o);
+        esferaB.position.copyFrom(o);
+        ubicarHotspot();
+      }
+      aplicarProxy();
+    },
+    null,
+    function(esc, msg){ console.log('[proxy] no se pudo cargar:', msg); }
+  );
+}
+
+/* pone en el material las dos texturas y los dos origenes */
+function aplicarProxy(){
+  if (!matProxy) return;
+  var a = PUNTOS[actual];
+  var ta = texturas[a.pano + SUFIJO];
+  var oa = camsGlb['360 ' + a.n];
+  if (ta) matProxy.setTexture('panoA', ta);
+  if (oa) matProxy.setVector3('origenA', oa);
+  matProxy.setFloat('mezcla', 0);
+}
+
 /* ---------- navegacion ---------- */
 var actual = 0, enViaje = false;
 
@@ -626,16 +801,35 @@ function irA(destino){
   if (enViaje || destino === actual || !PUNTOS[destino]) return;
   enViaje = true;
 
-  /* yendo para atras el avance va al reves: la camara retrocede y el
-     panorama que dejamos se achica en vez de agrandarse, que es como
-     se siente caminar hacia atras */
+  /* Con la malla proxy la camara recorre la distancia REAL entre los
+     dos puntos de vista (los da el .glb), porque ahi el paralaje lo
+     produce la geometria y no hace falta el truco del avance corto.
+     Sin proxy, la esfera mide 8 m de radio y no se puede recorrer 18:
+     se avanza poco y el resto lo tapa el fundido. */
+  /* el avance va en la direccion donde esta el otro punto: yendo para
+     adelante, la del punto actual; volviendo, la opuesta a la que
+     trajo hasta aca */
   var signo = (destino > actual) ? 1 : -1;
-  var a = anguloDeU(PUNTOS[actual].calle);
-  var desde = BABYLON.Vector3.Zero();
-  var hasta = new BABYLON.Vector3(Math.sin(a) * AVANCE * signo, 0,
-                                  Math.cos(a) * AVANCE * signo);
+  var uDir = (signo > 0) ? PUNTOS[actual].hacia : PUNTOS[destino].hacia;
+  var a = anguloDeU(uDir !== undefined ? uDir : PUNTOS[actual].mira);
+  var desde, hasta;
+  var conProxy = !!(proxy && camsGlb['360 ' + PUNTOS[actual].n] &&
+                    camsGlb['360 ' + PUNTOS[destino].n]);
+
+  if (conProxy){
+    desde = camsGlb['360 ' + PUNTOS[actual].n].clone();
+    hasta = camsGlb['360 ' + PUNTOS[destino].n].clone();
+  } else {
+    desde = rig.position.clone();
+    hasta = desde.add(new BABYLON.Vector3(Math.sin(a) * AVANCE * signo, 0,
+                                          Math.cos(a) * AVANCE * signo));
+  }
 
   cargarPano(destino, function(tex){
+    if (conProxy){
+      matProxy.setTexture('panoB', tex);
+      matProxy.setVector3('origenB', hasta);
+    }
     esferaA.position = desde.clone();
     esferaB.material.setTexture('pano', tex);
     ponerCielo(esferaB.material, destino);
@@ -650,19 +844,21 @@ function irA(destino){
       var k = Math.min(1, (performance.now() - t0) / dur);
       var e = k < 0.5 ? 2*k*k : 1 - Math.pow(-2*k + 2, 2)/2;
       rig.position = BABYLON.Vector3.Lerp(desde, hasta, e);
-      esferaB.material.setFloat('opacidad', Math.min(1, Math.max(0, (k - 0.12) / 0.62)));
+      var op = Math.min(1, Math.max(0, (k - 0.12) / 0.62));
+      esferaB.material.setFloat('opacidad', op);
+      if (conProxy) matProxy.setFloat('mezcla', op);
       if (k >= 1){
         scene.onBeforeRenderObservable.remove(obs);
-        /* de vuelta al origen: la escena siempre trabaja centrada */
         esferaA.material.setTexture('pano', tex);
         ponerCielo(esferaA.material, destino);
-        esferaA.position = BABYLON.Vector3.Zero();
         esferaB.setEnabled(false);
-        rig.position = BABYLON.Vector3.Zero();
+        rig.position = hasta.clone();
+        esferaA.position = hasta.clone();
         actual = destino;
         enViaje = false;
         marcar();
         ubicarHotspot();
+        aplicarProxy();
       }
     });
   });
@@ -703,8 +899,11 @@ if (HAY_MOTAS) crearMotas();
 cargarPano(0, function(tex){
   esferaA.material.setTexture('pano', tex);
   ponerCielo(esferaA.material, 0);
-  esferaA.position = BABYLON.Vector3.Zero();
+  esferaA.position = rig.position.clone();
   marcar();
+  /* la malla se pide despues del panorama: pesa 10 MB y no tiene que
+     competir con lo primero que se ve */
+  if (HAY_PROXY) setTimeout(cargarProxy, 400);
   var c = document.getElementById('carga');
   c.classList.add('ida');
   setTimeout(function(){ c.style.display = 'none'; }, 700);
@@ -814,6 +1013,13 @@ scene.registerBeforeRender(function(){
     rig.rotation.y = rigYaw;
   } else {
     cam.rotation.set(pitch, yaw, 0);
+  }
+
+  /* las esferas hacen de cielo y de fondo lejano: van siempre
+     centradas en la camara, si no al moverse se saldria de ellas */
+  if (!enViaje){
+    esferaA.position.copyFrom(rig.position);
+    esferaB.position.copyFrom(rig.position);
   }
 
   alFrente();
