@@ -55,6 +55,8 @@
         .bg-11 { background: url('../img/elbio-fernandez/n01.webp') center/cover no-repeat; }
         .bg-12 { background: url('../img/cover2index.webp') center/cover no-repeat; }
         .bg-13 { background: url('../img/colinas-de-maldonado/frontal.webp') center/cover no-repeat; }
+        .bg-14 { background: url('../img/narinos.webp') center/cover no-repeat; }
+        .bg-15 { background: url('../img/botero.webp') center/cover no-repeat; }
         /* ── FLOATING PREVIEW ── */
         @media (hover: hover) and (pointer: fine) { .proj-content { display: none; } }
 

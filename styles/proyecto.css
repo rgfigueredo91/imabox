@@ -1,0 +1,159 @@
+/* ============================================================
+   Página de proyecto — estilos compartidos
+
+   Sale de link-center.html, que tenía todo en un <style> propio.
+   La diferencia está en la galería: allá cada imagen tenía su celda
+   escrita a mano (#lc-aerea-01 { grid-row: 1/3; grid-column: 1/5 }),
+   o sea 25 reglas que hay que recalcular si se agrega o se saca una
+   foto. Acá cada pieza lleva una clase con su forma (g-hero, g-alta,
+   g-ancha, g-media) y el grid se acomoda solo con grid-auto-flow:
+   dense: agregar una imagen es una línea, sin tocar el CSS.
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #0e0e0e; color: #fff; font-family: 'Poppins', sans-serif; }
+*::-webkit-scrollbar { display: none; }
+* { scrollbar-width: none; }
+
+/* ── CABEZAL ── */
+.project-header {
+    padding: 120px 48px 48px;
+    display: flex; align-items: flex-end;
+    justify-content: space-between; gap: 32px; flex-wrap: wrap;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    max-width: 1400px; margin: 0 auto;
+}
+.back-link {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'aktiv-grotesk', sans-serif;
+    font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(255,255,255,0.35); text-decoration: none;
+    transition: color 0.2s; margin-bottom: 20px;
+}
+.back-link:hover { color: #9dbba4; }
+.project-eyebrow {
+    font-family: 'aktiv-grotesk', sans-serif;
+    font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase;
+    color: #9dbba4; margin-bottom: 10px;
+    display: flex; align-items: center; gap: 10px;
+}
+.project-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: #9dbba4; }
+.project-header h1 {
+    font-family: 'aktiv-grotesk', sans-serif;
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 200; letter-spacing: -0.02em; line-height: 1; color: #fff;
+}
+.project-header h1 span { color: #9dbba4; }
+.project-meta { display: flex; flex-direction: column; gap: 6px; text-align: right; }
+.meta-item {
+    font-family: 'aktiv-grotesk', sans-serif;
+    font-size: 0.7rem; letter-spacing: 0.12em; color: rgba(255,255,255,0.35);
+}
+.meta-item strong { color: rgba(255,255,255,0.7); font-weight: 400; margin-left: 6px; }
+
+/* ── GALERÍA ── */
+.gallery-section { padding: 8px; margin-top: 8px; }
+.hes-gallery {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-rows: 18vw;
+    grid-auto-flow: dense;   /* rellena los huecos que deja cada forma */
+    gap: 2px;
+}
+.img { position: relative; overflow: hidden; background: #1a1a1a; cursor: pointer; }
+.img img, .img video {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    transition: transform 0.6s ease;
+}
+.img:hover img { transform: scale(1.04); }
+.img:hover { opacity: 0.9; }
+
+/* Las cuatro formas. Cada pieza entra por su proporción real:
+   vertical y cuadrada → g-alta, apaisada → g-media,
+   panorámica → g-ancha, y la principal → g-hero. */
+.g-hero  { grid-column: span 4; grid-row: span 2; }
+.g-alta  { grid-column: span 2; grid-row: span 2; }
+.g-ancha { grid-column: span 3; grid-row: span 1; }
+.g-media { grid-column: span 2; grid-row: span 1; }
+
+/* ── VERTICALES DE REDES DENTRO DE LA GALERÍA ── */
+.g-video { cursor: default; }
+.g-video video { object-fit: cover; }
+.g-video figcaption {
+    position: absolute; left: 14px; bottom: 12px; z-index: 2;
+    font-family: 'aktiv-grotesk', sans-serif;
+    font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(255,255,255,0.9);
+    text-shadow: 0 1px 8px rgba(0,0,0,0.7);
+    pointer-events: none;
+}
+/* un velo abajo para que el rótulo se lea sobre cualquier cuadro */
+.g-video::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 40%;
+    background: linear-gradient(180deg, rgba(14,14,14,0), rgba(14,14,14,0.55));
+    pointer-events: none;
+}
+
+/* ── VIDEO PRINCIPAL ── */
+.video-section { max-width: 1200px; margin: 80px auto 0; padding: 0 48px 80px; }
+.video-eyebrow {
+    font-family: 'aktiv-grotesk', sans-serif;
+    font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase;
+    color: #9dbba4; margin-bottom: 16px;
+    display: flex; align-items: center; gap: 10px;
+}
+.video-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: #9dbba4; }
+.video-section h2 {
+    font-family: 'aktiv-grotesk', sans-serif;
+    font-size: clamp(1.6rem, 3.5vw, 2.8rem);
+    font-weight: 200; letter-spacing: -0.02em; line-height: 1.1;
+    color: #fff; margin-bottom: 16px;
+}
+.video-section h2 em { color: #9dbba4; font-style: normal; }
+.video-section p {
+    font-size: 0.88rem; line-height: 1.8;
+    color: rgba(255,255,255,0.45);
+    max-width: 600px; margin-bottom: 40px;
+    font-family: 'Poppins', sans-serif; font-weight: 300;
+}
+.video-wrap {
+    position: relative; width: 100%;
+    aspect-ratio: 16 / 9; background: #111; overflow: hidden;
+}
+.video-wrap video { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* ── PIE ── */
+footer {
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 28px 48px; display: flex; align-items: center;
+    justify-content: space-between; flex-wrap: wrap; gap: 12px;
+}
+footer .logo { font-family: 'aktiv-grotesk', sans-serif; font-size: 0.9rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.3); }
+footer p { font-size: 0.7rem; color: rgba(255,255,255,0.18); letter-spacing: 0.08em; }
+.footer-social { display: flex; gap: 18px; align-items: center; }
+.footer-social a { color: #9dbba4; font-size: 1.15rem; text-decoration: none; transition: opacity 0.2s; }
+.footer-social a:hover { opacity: 0.65; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1024px) {
+    .hes-gallery { grid-template-columns: repeat(4, 1fr); grid-auto-rows: 26vw; }
+    .g-hero  { grid-column: span 4; grid-row: span 2; }
+    .g-alta  { grid-column: span 2; grid-row: span 2; }
+    .g-ancha { grid-column: span 4; grid-row: span 1; }
+    .g-media { grid-column: span 2; grid-row: span 1; }
+    .project-header { padding: 100px 24px 36px; }
+    .project-meta { text-align: left; }
+    .video-section { padding: 0 24px 60px; margin-top: 60px; }
+}
+@media (max-width: 600px) {
+    /* dos columnas y no una: con los verticales mezclados, una sola
+       columna deja tiras larguísimas de scroll */
+    .hes-gallery { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 46vw; gap: 3px; }
+    .g-hero  { grid-column: span 2; grid-row: span 2; }
+    .g-alta  { grid-column: span 1; grid-row: span 2; }
+    .g-ancha { grid-column: span 2; grid-row: span 1; }
+    .g-media { grid-column: span 2; grid-row: span 1; }
+    .gallery-section { padding: 4px; }
+    footer { flex-direction: column; text-align: center; padding: 28px 24px; }
+    .video-section { padding: 0 16px 48px; margin-top: 48px; }
+}
