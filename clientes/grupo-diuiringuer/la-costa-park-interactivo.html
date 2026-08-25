@@ -42,6 +42,18 @@
 }
 *{box-sizing:border-box}
 html,body{height:100%}
+
+/* ---------- puntero con la marca ----------
+   El simbolo recortado en redondo, con el punto activo en el centro
+   (16 16) porque es circular y no una flecha.
+   Va con 'auto' de respaldo: si el PNG no carga, o el navegador no
+   soporta cursores de imagen, queda el del sistema y no un puntero
+   invisible. Sobre texto y campos se deja el cursor normal, que ahi
+   el de marca estorba mas de lo que suma. */
+body, #botones, .paso, .punto, .chip, #p-entrar, #p-saltar, .viv, .fi-menu button, .fi-btn, .fi-x{
+  cursor:url('img/cursor.png') 16 16, auto;
+}
+input, textarea, select{cursor:auto}
 body{
   margin:0; background:var(--verde-noche); color:var(--arena);
   font-family:var(--sans); font-weight:300; font-size:16px; line-height:1.6;

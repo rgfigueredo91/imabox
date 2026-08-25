@@ -55,6 +55,17 @@
 
 *{box-sizing:border-box}
 html{scroll-behavior:smooth; -webkit-text-size-adjust:100%}
+
+/* ---------- puntero con la marca ----------
+   El simbolo recortado en redondo, con el punto activo en el centro
+   (16 16) porque es circular y no una flecha. Lleva 'auto' de
+   respaldo por si el PNG no carga. En los campos del formulario y
+   sobre texto seleccionable se deja el cursor del sistema: ahi el de
+   marca molesta mas de lo que suma. */
+body, a, button, .btn, .via, .casa, summary{
+  cursor:url('img/cursor.png') 16 16, auto;
+}
+input, textarea, select, label, p, h1, h2, h3, li{cursor:auto}
 body{
   margin:0;
   background:var(--papel);
