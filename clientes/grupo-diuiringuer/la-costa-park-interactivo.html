@@ -916,11 +916,12 @@ function hojaHTML(id, v, t){
       '</div>';
   }
   if (id === 'tour'){
+    /* solo el interior: estando dentro de la ficha de una unidad, un
+       boton a la calle saca al que estaba mirando la vivienda */
     return t.tour
       ? '<p class="fi-txt">' + (t.tourTxt ||
           'Recorr&eacute; esta vivienda en 360&deg;.') + '</p>' +
-        '<a class="fi-btn" href="' + t.tour + '">Abrir el tour 360&deg;</a>' +
-        '<a class="fi-btn hueco" href="360/">Ver la calle</a>'
+        '<a class="fi-btn" href="' + t.tour + '">Abrir el tour 360&deg;</a>'
       : '<div class="fi-vacio">El tour de esta vivienda todav&iacute;a no est&aacute; disponible.</div>';
   }
   /* datos */
