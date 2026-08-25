@@ -1,0 +1,713 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>La Costa Park &mdash; Recorrido 360</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/svg+xml" href="../img/lcp-simbolo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Averia+Serif+Libre:wght@300;400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   La Costa Park - recorrido 360
+   Mismo visor que el de Botero (Babylon con shader equirect propio
+   y dos esferas que hacen crossfade mientras la camara avanza),
+   con la identidad de La Costa Park en vez de la de imabox.
+
+   La diferencia grande con Botero: alla los panoramas eran
+   interiores y las coordenadas salian de un .glb. Aca es exterior,
+   no hay modelo, y todo se ubica en un sistema relativo a la
+   camara: el punto de vista es el origen y el piso esta a la
+   altura de los ojos por debajo.
+   ============================================================ */
+:root{
+  --verde:#38513C;
+  --verde-osc:#22301F;
+  --arena:#DAD7D1;
+  --papel:#FBFAF7;
+  --salvia:#A1A395;
+  --terracota:#B95A3F;
+  --serif:'Averia Serif Libre', Georgia, serif;
+  --sans:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+}
+html,body{margin:0; height:100%; overflow:hidden; background:var(--verde-osc);
+  color:var(--arena); font-family:var(--sans); font-weight:300}
+#c{width:100%; height:100%; display:block; touch-action:none; outline:none}
+.ui{position:fixed; z-index:10; user-select:none}
+button{font:inherit; color:inherit; cursor:pointer; background:none; border:0}
+[hidden]{display:none!important}
+:focus-visible{outline:2px solid var(--terracota); outline-offset:3px}
+
+/* velos: el panorama va de un cielo quemado a un pedregullo claro,
+   sin esto la UI clara desaparece en media vista */
+.velo{position:fixed; left:0; right:0; z-index:5; pointer-events:none}
+.velo.arriba{top:0; height:150px; background:linear-gradient(180deg, rgba(22,31,21,.55), rgba(22,31,21,0))}
+.velo.abajo{bottom:0; height:180px; background:linear-gradient(0deg, rgba(22,31,21,.55), rgba(22,31,21,0))}
+
+/* marca */
+#marca{left:26px; top:20px}
+#marca img{height:34px; width:auto; display:block; filter:drop-shadow(0 2px 10px rgba(0,0,0,.5))}
+#lugar{right:26px; top:26px; text-align:right; font-size:.6rem; letter-spacing:.22em;
+  text-transform:uppercase; color:rgba(218,215,209,.6); text-shadow:0 1px 10px rgba(0,0,0,.5)}
+#lugar b{display:block; color:var(--papel); font-weight:500; letter-spacing:.2em; margin-bottom:5px}
+
+/* chips de abajo */
+.fila{left:50%; bottom:30px; transform:translateX(-50%); display:flex; gap:1px}
+.fila button{
+  padding:13px 24px; border:1px solid rgba(218,215,209,.32); border-right-width:0;
+  background:rgba(22,31,21,.42); color:rgba(218,215,209,.75);
+  font-size:.62rem; letter-spacing:.2em; text-transform:uppercase;
+  backdrop-filter:blur(8px);
+  transition:border-color .25s ease, color .25s ease, background .25s ease;
+}
+.fila button:last-child{border-right-width:1px}
+.fila button:hover{color:var(--papel); border-color:rgba(218,215,209,.6)}
+.fila button.on{background:var(--verde); border-color:var(--verde); color:#fff}
+
+#sensor{left:50%; bottom:84px; transform:translateX(-50%); display:none; align-items:center; gap:9px;
+  padding:11px 20px; border:1px solid rgba(218,215,209,.32); background:rgba(22,31,21,.42);
+  color:rgba(218,215,209,.75); font-size:.58rem; letter-spacing:.2em; text-transform:uppercase;
+  backdrop-filter:blur(8px); transition:color .3s ease, border-color .3s ease, background .3s ease}
+#sensor.visible{display:flex}
+#sensor::before{content:''; width:5px; height:5px; border-radius:50%; background:currentColor;
+  opacity:.45; transition:opacity .3s ease, box-shadow .3s ease}
+#sensor.on{border-color:rgba(127,169,138,.5); background:rgba(56,81,60,.5); color:#bcd6c1}
+#sensor.on::before{opacity:1; box-shadow:0 0 8px #7FA98A}
+
+#salir{right:26px; bottom:30px; padding:13px 22px; border:1px solid rgba(218,215,209,.32);
+  background:rgba(22,31,21,.42); color:rgba(218,215,209,.75); text-decoration:none;
+  font-size:.6rem; letter-spacing:.2em; text-transform:uppercase; backdrop-filter:blur(8px);
+  transition:color .25s ease, border-color .25s ease}
+#salir:hover{color:var(--papel); border-color:rgba(218,215,209,.6)}
+
+/* pista de uso, se va con el primer arrastre */
+#pista{left:50%; top:50%; transform:translate(-50%,-50%); z-index:8; pointer-events:none;
+  font-size:.62rem; letter-spacing:.22em; text-transform:uppercase; color:rgba(255,255,255,.8);
+  text-shadow:0 1px 12px rgba(0,0,0,.7); transition:opacity .7s ease}
+#pista.ida{opacity:0}
+
+/* carga */
+#carga{position:fixed; inset:0; z-index:30; background:var(--verde-osc);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:26px;
+  transition:opacity .6s ease}
+#carga img{width:min(280px,64vw)}
+#carga i{display:block; width:150px; height:1px; background:rgba(218,215,209,.2); position:relative; overflow:hidden}
+#carga i::after{content:''; position:absolute; inset:0; background:var(--terracota);
+  transform:scaleX(0); transform-origin:left; animation:barra 1.5s ease-in-out infinite}
+@keyframes barra{0%{transform:scaleX(0)}50%{transform:scaleX(1)}100%{transform:scaleX(0);transform-origin:right}}
+#carga.ida{opacity:0; pointer-events:none}
+
+@media (max-width:640px){
+  #marca{left:16px; top:14px} #marca img{height:28px}
+  #lugar{right:16px; top:18px; font-size:.54rem}
+  .fila button{padding:12px 16px; letter-spacing:.16em}
+  #salir{right:16px; bottom:84px; padding:11px 16px}
+  #sensor{bottom:138px}
+}
+</style>
+</head>
+<body>
+
+<canvas id="c" touch-action="none"></canvas>
+<div class="velo arriba"></div>
+<div class="velo abajo"></div>
+
+<a class="ui" id="marca" href="../la-costa-park.html" aria-label="La Costa Park">
+  <img src="../img/lcp-lockup-blanco.svg" alt="La Costa Park">
+</a>
+
+<div class="ui" id="lugar">
+  <b>La Costa Park</b>
+  <span id="lugar-txt">Calle interna</span>
+</div>
+
+<div class="ui fila" id="puntos"></div>
+<button class="ui" id="sensor" type="button">Sensor</button>
+<a class="ui" id="salir" href="../la-costa-park-interactivo.html">Salir</a>
+
+<div class="ui" id="pista">Arrastr&aacute; para mirar alrededor</div>
+
+<div id="carga">
+  <img src="../img/lcp-lockup-hero.svg" alt="La Costa Park">
+  <i></i>
+</div>
+
+<script src="./lib/babylon.js"></script>
+<script>
+/* ============================================================
+   Los puntos del recorrido.
+
+   Sin modelo 3D de por medio, las posiciones son relativas: el
+   primer punto es el origen y los demas se ubican en metros
+   respecto de el. 'mira' es hacia donde apunta la calle en ESE
+   panorama, en coordenadas u del equirect: se mide leyendo donde
+   cae el punto de fuga (para el 01 dio u=0.498, o sea casi el
+   centro exacto de la imagen).
+
+   Para sumar el panorama siguiente: el archivo en assets/ y una
+   entrada mas aca, con 'p' a la distancia real que separa las dos
+   camaras.
+   ============================================================ */
+var ALTURA_OJOS = 1.6;
+
+var PUNTOS = [
+  { n:'01', nombre:'Calle interna', pano:'assets/pano1', p:new BABYLON.Vector3(0, 0, 0),
+    calle:0.498 },
+
+  /* PROVISORIO: todavia no llego el segundo panorama, asi que este
+     punto reusa el primero. Esta puesto para que el hotspot tenga a
+     donde llevar y se vea funcionando el avance con las dos esferas.
+     Cuando llegue el 360 02: cambiar 'pano' por el archivo nuevo,
+     poner en 'p' la distancia real entre las dos camaras y medir su
+     'calle' (donde cae el punto de fuga en ESE equirect). */
+  { n:'02', nombre:'Calle interna', pano:'assets/pano1',
+    p:new BABYLON.Vector3(-0.08, 0, 6), calle:0.498 }
+];
+
+/* El hotspot que lleva al punto siguiente. Se dibuja en el piso,
+   sobre el eje de la calle del punto donde estoy. */
+var DIST_HOTSPOT = 6;        // metros adelante
+
+var RADIO = 8;               // radio de la esfera del panorama
+
+var PAR = new URLSearchParams(location.search);
+var HAY_NUBES = PAR.get('nubes') !== '0';
+var HAY_MOTAS = PAR.get('motas') !== '0';
+/* ?opnubes= para ajustar cuanto pesan sin tocar el codigo */
+var OPAC_NUBES = parseFloat(PAR.get('opnubes') || '0.72');
+
+var canvas = document.getElementById('c');
+var engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer:false, stencil:false });
+var scene  = new BABYLON.Scene(engine);
+scene.clearColor = new BABYLON.Color4(0.13,0.19,0.13,1);
+
+/* ---------- shader del panorama ----------
+   Misma convencion que en el visor de Botero:
+   u = 0.5 + atan2(x,z)/2pi   v = 0.5 - asin(y)/pi */
+BABYLON.Effect.ShadersStore['panoVertexShader'] = [
+  'precision highp float;',
+  'attribute vec3 position;',
+  'uniform mat4 worldViewProjection;',
+  'varying vec3 vDir;',
+  'void main(void){',
+  '  vDir = position;',
+  '  gl_Position = worldViewProjection * vec4(position, 1.0);',
+  '}'
+].join('\n');
+
+BABYLON.Effect.ShadersStore['panoFragmentShader'] = [
+  'precision highp float;',
+  'varying vec3 vDir;',
+  'uniform sampler2D pano;',
+  'uniform float opacidad;',
+  'const float PI = 3.14159265359;',
+  'void main(void){',
+  '  vec3 d = normalize(vDir);',
+  '  float u = 0.5 + atan(d.x, d.z) / (2.0 * PI);',
+  '  float v = 0.5 - asin(clamp(d.y, -1.0, 1.0)) / PI;',
+  '  gl_FragColor = vec4(texture2D(pano, vec2(u, v)).rgb, opacidad);',
+  '}'
+].join('\n');
+
+function hacerEsfera(nombre){
+  var m = BABYLON.MeshBuilder.CreateSphere(nombre, {
+    diameter: RADIO*2, segments: 48, sideOrientation: BABYLON.Mesh.BACKSIDE
+  }, scene);
+  var mat = new BABYLON.ShaderMaterial(nombre+'-mat', scene, 'pano', {
+    attributes:['position'],
+    uniforms:['worldViewProjection','opacidad'],
+    samplers:['pano'], needAlphaBlending:true
+  });
+  mat.backFaceCulling = false;
+  mat.setFloat('opacidad', 1.0);
+  m.material = mat;
+  m.isPickable = false;
+  return m;
+}
+
+/* dos esferas: cada una anclada a SU punto durante la transicion.
+   Por eso al avanzar el panorama viejo se agranda y da sensacion de
+   movimiento, en vez de un fundido plano. */
+var esferaA = hacerEsfera('panoA');
+var esferaB = hacerEsfera('panoB');
+esferaB.setEnabled(false);
+/* OJO: el orden hay que fijarlo en el MESH, no en el material. Babylon
+   ordena los transparentes por mesh.alphaIndex y, a igual indice, de
+   mas lejos a mas cerca. Las esferas estan centradas en la camara, o
+   sea a distancia 0: sin esto quedan ULTIMAS y tapan todo lo que este
+   adentro (las nubes desaparecian por eso). */
+esferaA.alphaIndex = 0;
+esferaB.alphaIndex = 1;
+
+/* el panorama es 4000x2000, que entra en cualquier GPU; la copia
+   chica es por peso de descarga, no por limite de textura */
+var SUFIJO = (engine.getCaps().maxTextureSize >= 4000 && window.innerWidth > 900)
+             ? '.jpg' : '-mob.jpg';
+
+var texturas = {};
+function cargarPano(i, cb){
+  var url = PUNTOS[i].pano + SUFIJO;
+  if (texturas[url]) { cb(texturas[url]); return; }
+  var t = new BABYLON.Texture(url, scene, true, false,
+            BABYLON.Texture.BILINEAR_SAMPLINGMODE, function(){ cb(t); });
+  t.wrapU = BABYLON.Texture.WRAP_ADDRESSMODE;
+  t.wrapV = BABYLON.Texture.CLAMP_ADDRESSMODE;
+  t.anisotropicFilteringLevel = 8;
+  texturas[url] = t;
+}
+
+/* ---------- camara ----------
+   Cuelga de un nodo ("rig") que se para en cada punto y gira solo en
+   Y: asi el sensor puede escribir la rotacion de la camara mientras
+   el dedo corre el rig, y los dos controles conviven. */
+var rig = new BABYLON.TransformNode('rig', scene);
+rig.position = PUNTOS[0].p.clone();
+
+var cam = new BABYLON.FreeCamera('cam', BABYLON.Vector3.Zero(), scene);
+cam.parent = rig;
+cam.position = BABYLON.Vector3.Zero();
+cam.minZ = 0.05; cam.maxZ = 200; cam.fov = 1.15;
+
+/* arranca mirando hacia la calle: u -> angulo */
+function anguloDeU(u){ return (u - 0.5) * Math.PI * 2; }
+var yaw = anguloDeU(PUNTOS[0].calle), pitch = 0;
+var rigYaw = 0, sensorOn = false;
+/* ?mira=yaw,pitch para revisar una vista puntual sin tener que
+   arrastrar hasta encontrarla */
+if (PAR.get('mira')){
+  var _m = PAR.get('mira').split(',');
+  yaw = parseFloat(_m[0]) || 0;
+  pitch = parseFloat(_m[1] || '0') || 0;
+}
+
+var arrastrando = false, lx = 0, ly = 0, movido = 0;
+canvas.addEventListener('pointerdown', function(e){
+  arrastrando = true; movido = 0; lx = e.clientX; ly = e.clientY;
+  canvas.setPointerCapture(e.pointerId);
+  irPista();
+});
+canvas.addEventListener('pointermove', function(e){
+  if (!arrastrando) return;
+  var dx = e.clientX - lx, dy = e.clientY - ly;
+  lx = e.clientX; ly = e.clientY;
+  movido += Math.abs(dx) + Math.abs(dy);
+  if (sensorOn){
+    rigYaw -= dx * 0.0026;
+  } else {
+    yaw -= dx * 0.0026;
+    pitch = Math.max(-1.45, Math.min(1.45, pitch - dy * 0.0026));
+  }
+});
+canvas.addEventListener('pointerup', function(e){
+  arrastrando = false;
+  canvas.releasePointerCapture(e.pointerId);
+});
+canvas.addEventListener('wheel', function(e){
+  e.preventDefault();
+  cam.fov = Math.max(0.45, Math.min(1.5, cam.fov + (e.deltaY > 0 ? 0.06 : -0.06)));
+}, { passive:false });
+
+/* ---------- hotspot de avance ----------
+   Un disco apoyado en el piso, en el eje de la calle. Se dibuja con
+   un anillo y una flecha: sin la flecha se lee como "estas aca" en
+   vez de "vení para aca". */
+var hotspot = null, tPulso = 0;
+
+function texDisco(){
+  var dt = new BABYLON.DynamicTexture('disco', {width:256, height:256}, scene, true);
+  var x = dt.getContext();
+  x.clearRect(0,0,256,256);
+  x.beginPath(); x.arc(128,128,96,0,Math.PI*2);
+  x.fillStyle = 'rgba(56,81,60,0.34)'; x.fill();
+  x.lineWidth = 7; x.strokeStyle = 'rgba(251,250,247,0.92)'; x.stroke();
+  x.beginPath(); x.arc(128,128,74,0,Math.PI*2);
+  x.lineWidth = 1.5; x.strokeStyle = 'rgba(251,250,247,0.4)'; x.stroke();
+  /* flecha hacia adelante */
+  x.beginPath(); x.moveTo(128,66); x.lineTo(166,124); x.lineTo(140,124);
+  x.lineTo(140,180); x.lineTo(116,180); x.lineTo(116,124); x.lineTo(90,124);
+  x.closePath(); x.fillStyle = '#FBFAF7'; x.fill();
+  dt.hasAlpha = true; dt.update();
+  return dt;
+}
+
+function crearHotspot(){
+  var mat = new BABYLON.StandardMaterial('hs-mat', scene);
+  var t = texDisco();
+  mat.diffuseTexture = t; mat.opacityTexture = t;
+  mat.emissiveColor = new BABYLON.Color3(1,1,1);
+  mat.disableLighting = true; mat.backFaceCulling = false;
+
+  var p = BABYLON.MeshBuilder.CreatePlane('ir', {size:1.5}, scene);
+  p.material = mat;
+  p.rotation.x = Math.PI/2;         // apoyado en el piso
+  p.renderingGroupId = 1;
+  hotspot = p;
+  ubicarHotspot();
+}
+
+function ubicarHotspot(){
+  var pt = PUNTOS[actual];
+  var a = anguloDeU(pt.calle);
+  hotspot.position = pt.p.add(new BABYLON.Vector3(
+    Math.sin(a) * DIST_HOTSPOT, -ALTURA_OJOS, Math.cos(a) * DIST_HOTSPOT));
+  /* la flecha tiene que apuntar en la direccion de la calle */
+  hotspot.rotation.y = -a;
+  /* si no hay a donde ir, no se muestra */
+  hotspot.setEnabled(PUNTOS.length > actual + 1);
+}
+
+/* ---------- nubes ----------
+   El cielo del render es un degradado azul liso, sin una sola nube:
+   hay lugar de sobra y no compite con nada. Son planos con una
+   textura difusa, siempre de frente a la camara, que cruzan despacio
+   el hemisferio de arriba. Alpha normal y no aditivo: con aditivo el
+   blanco sobre el azul se va a un celeste electrico. */
+var nubes = [];
+
+function texNube(){
+  var dt = new BABYLON.DynamicTexture('nube', {width:512, height:256}, scene, true);
+  var x = dt.getContext();
+  x.clearRect(0,0,512,256);
+  /* Un cumulo: varios globos apoyados sobre una misma base, mas altos
+     en el medio. Dos cosas lo hacen leer como nube y no como mancha:
+     los globos comparten la base (abajo queda recto) y el degradado
+     de cada uno es apretado, o sea con borde. Con el degradado suave
+     de punta a punta esto se ve como bruma, no como nube. */
+  var globos = [[128,178,74],[196,150,92],[268,168,84],[330,182,62],
+                [162,140,58],[232,124,66]];
+  for (var i=0;i<globos.length;i++){
+    var g = globos[i];
+    var rad = x.createRadialGradient(g[0],g[1],0, g[0],g[1],g[2]);
+    rad.addColorStop(0,   'rgba(255,255,255,0.92)');
+    rad.addColorStop(0.55,'rgba(255,255,255,0.74)');
+    rad.addColorStop(0.82,'rgba(255,255,255,0.22)');
+    rad.addColorStop(1,   'rgba(255,255,255,0)');
+    x.fillStyle = rad;
+    x.beginPath(); x.arc(g[0],g[1],g[2],0,Math.PI*2); x.fill();
+  }
+  /* la panza se difumina un poco: una nube no termina en un filo */
+  var piso = x.createLinearGradient(0,186, 0,256);
+  piso.addColorStop(0, 'rgba(0,0,0,0)');
+  piso.addColorStop(1, 'rgba(0,0,0,1)');
+  x.globalCompositeOperation = 'destination-out';
+  x.fillStyle = piso; x.fillRect(0,186,512,70);
+  x.globalCompositeOperation = 'source-over';
+  dt.hasAlpha = true; dt.update();
+  return dt;
+}
+
+function crearNubes(){
+  var t = texNube();
+  var mat = new BABYLON.StandardMaterial('nube-mat', scene);
+  mat.diffuseTexture = t; mat.opacityTexture = t;
+  mat.emissiveColor = new BABYLON.Color3(1,1,1);
+  mat.disableLighting = true; mat.backFaceCulling = false;
+  mat.alpha = OPAC_NUBES;
+
+  for (var i=0;i<9;i++){
+    var n = BABYLON.MeshBuilder.CreatePlane('nube'+i, {width:3.2, height:1.6}, scene);
+    n.material = mat;
+    n.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
+    n.isPickable = false;
+    n.renderingGroupId = 0;
+    /* despues de las dos esferas del panorama, y entre ellas ordenadas
+       por distancia */
+    n.alphaIndex = 10;
+    /* repartidas por el cielo. La altura y el radio dan una elevacion
+       de 30 a 55 grados: mas abajo se meterian entre las casas, mas
+       arriba solo se verian mirando al cenit. */
+    /* casi pegadas a la esfera del panorama (radio 8): mas cerca se
+       leen como bruma encima de la camara en vez de nubes lejanas */
+    nubes.push({
+      m: n,
+      ang: (i / 9) * Math.PI * 2 + Math.random() * 0.5,
+      alt: 3.2 + Math.random() * 3.0,
+      rad: 7.1 + Math.random() * 0.6,
+      vel: 0.007 + Math.random() * 0.009,      // rad/s: una vuelta en 12-15 min
+      esc: 0.7 + Math.random() * 0.7
+    });
+    n.scaling.set(nubes[i].esc, nubes[i].esc, 1);
+  }
+}
+
+function moverNubes(dt){
+  for (var i=0;i<nubes.length;i++){
+    var n = nubes[i];
+    n.ang += n.vel * dt;
+    n.m.position.set(Math.sin(n.ang) * n.rad, n.alt, Math.cos(n.ang) * n.rad);
+  }
+}
+
+/* ---------- motas al sol ----------
+   Hay sol duro (las sombras del pedregullo estan marcadas), asi que
+   las motas en suspension se justifican. Mismo criterio que en
+   Botero: blending aditivo y brillo bajo, para que se borren solas
+   contra el cielo quemado y se lean contra las zonas en sombra.
+   Aca no hay un haz definido, es aire abierto: van repartidas
+   alrededor de la camara. */
+var motas = null, visMotas = 0;
+var SOL_U = 0.5, SOL_V = 0.255;      // leido del panorama: el resplandor
+var SOL = (function(){
+  var a = anguloDeU(SOL_U), el = (0.5 - SOL_V) * Math.PI;
+  return new BABYLON.Vector3(Math.sin(a)*Math.cos(el), Math.sin(el), Math.cos(a)*Math.cos(el));
+})();
+
+function crearMotas(){
+  var dt = new BABYLON.DynamicTexture('mota', {width:64, height:64}, scene, true);
+  var x = dt.getContext();
+  var g = x.createRadialGradient(32,32,0, 32,32,32);
+  g.addColorStop(0,   'rgba(255,255,255,1)');
+  g.addColorStop(0.22,'rgba(255,255,255,0.5)');
+  g.addColorStop(1,   'rgba(255,255,255,0)');
+  x.fillStyle = g; x.fillRect(0,0,64,64);
+  dt.hasAlpha = true; dt.update();
+
+  motas = new BABYLON.ParticleSystem('motas', 420, scene);
+  motas.particleTexture = dt;
+  motas.blendMode = BABYLON.ParticleSystem.BLENDMODE_ADD;
+  motas.emitter = BABYLON.Vector3.Zero();
+  motas.minEmitBox = new BABYLON.Vector3(-5, -1.4, -5);
+  motas.maxEmitBox = new BABYLON.Vector3( 5,  2.6,  5);
+  motas.minLifeTime = 12; motas.maxLifeTime = 22;
+  motas.minSize = 0.006; motas.maxSize = 0.020;
+  motas.color1 = new BABYLON.Color4(1, 0.98, 0.92, 1);
+  motas.color2 = new BABYLON.Color4(1, 0.95, 0.86, 1);
+  motas.colorDead = new BABYLON.Color4(1, 0.96, 0.9, 0);
+  motas.direction1 = new BABYLON.Vector3(-0.02, -0.030, -0.02);
+  motas.direction2 = new BABYLON.Vector3( 0.02, -0.012,  0.02);
+  motas.minEmitPower = 1; motas.maxEmitPower = 1;
+  motas.gravity = new BABYLON.Vector3(0, -0.001, 0);
+  motas.updateSpeed = 1/60;
+  motas.emitRate = 320 / 17;
+  motas.renderingGroupId = 1;
+  motas.preWarmCycles = 200;
+  motas.preWarmStepOffset = 6;
+
+  /* la opacidad se escribe cada cuadro (no se multiplica: la de
+     Babylon se interpola sola hacia colorDead y se acumularia) */
+  var base = motas.updateFunction;
+  motas.updateFunction = function(parts){
+    base.call(motas, parts);
+    for (var i=0;i<parts.length;i++){
+      var p = parts[i];
+      var t = p.age / p.lifeTime;
+      var f = Math.min(1, t*6) * Math.min(1, (1-t)*6);
+      var dx = p.position.x - _camPos.x, dy = p.position.y - _camPos.y, dz = p.position.z - _camPos.z;
+      var d = Math.sqrt(dx*dx + dy*dy + dz*dz);
+      if (d < 1.4) f *= d / 1.4;    // muy cerca se dibujan como manchones
+      p.color.a = f * visMotas * 0.55;
+    }
+  };
+  motas.start();
+}
+
+var _fwd = BABYLON.Vector3.Zero(), _camPos = BABYLON.Vector3.Zero();
+function alFrente(){
+  _camPos.copyFrom(cam.globalPosition);
+  cam.getDirectionToRef(BABYLON.Axis.Z, _fwd);
+  if (!motas) return;
+  /* dispersion hacia adelante: brillan mirando al sol y casi
+     desaparecen de espaldas */
+  var d = BABYLON.Vector3.Dot(_fwd, SOL);
+  visMotas = 0.06 + 0.94 * Math.pow(Math.max(0, d), 2.2);
+}
+
+/* ---------- navegacion ---------- */
+var actual = 0, enViaje = false;
+
+function irA(destino){
+  if (enViaje || destino === actual || !PUNTOS[destino]) return;
+  enViaje = true;
+  var desde = rig.position.clone();
+  var hasta = PUNTOS[destino].p.clone();
+
+  cargarPano(destino, function(tex){
+    esferaB.material.setTexture('pano', tex);
+    esferaB.position = hasta.clone();
+    esferaB.material.setFloat('opacidad', 0);
+    esferaB.setEnabled(true);
+    if (hotspot) hotspot.setEnabled(false);
+
+    var t0 = performance.now(), dur = 950;
+    var obs = scene.onBeforeRenderObservable.add(function(){
+      var k = Math.min(1, (performance.now() - t0) / dur);
+      var e = k < 0.5 ? 2*k*k : 1 - Math.pow(-2*k + 2, 2)/2;
+      rig.position = BABYLON.Vector3.Lerp(desde, hasta, e);
+      esferaB.material.setFloat('opacidad', Math.min(1, Math.max(0, (k - 0.15) / 0.6)));
+      if (k >= 1){
+        scene.onBeforeRenderObservable.remove(obs);
+        esferaA.position = hasta.clone();
+        esferaA.material.setTexture('pano', tex);
+        esferaB.setEnabled(false);
+        rig.position = hasta.clone();
+        actual = destino;
+        enViaje = false;
+        marcar();
+        ubicarHotspot();
+      }
+    });
+  });
+}
+
+function marcar(){
+  var bs = document.querySelectorAll('#puntos button');
+  for (var i=0;i<bs.length;i++) bs[i].className = (i === actual ? 'on' : '');
+  document.getElementById('lugar-txt').textContent = PUNTOS[actual].nombre;
+}
+
+scene.onPointerObservable.add(function(pi){
+  if (pi.type !== BABYLON.PointerEventTypes.POINTERUP) return;
+  if (movido > 9) return;
+  var pick = scene.pick(scene.pointerX, scene.pointerY);
+  if (pick && pick.hit && pick.pickedMesh && pick.pickedMesh.name === 'ir') irA(actual + 1);
+});
+
+/* ---------- arranque ---------- */
+var cont = document.getElementById('puntos');
+PUNTOS.forEach(function(pt, i){
+  var b = document.createElement('button');
+  b.type = 'button';
+  b.textContent = pt.n;
+  b.onclick = function(){ irA(i); };
+  cont.appendChild(b);
+});
+/* con un solo punto la fila de numeros no dice nada */
+if (PUNTOS.length < 2) cont.hidden = true;
+
+crearHotspot();
+if (HAY_NUBES) crearNubes();
+if (HAY_MOTAS) crearMotas();
+
+cargarPano(0, function(tex){
+  esferaA.material.setTexture('pano', tex);
+  esferaA.position = PUNTOS[0].p.clone();
+  marcar();
+  var c = document.getElementById('carga');
+  c.classList.add('ida');
+  setTimeout(function(){ c.style.display = 'none'; }, 700);
+});
+
+var pista = document.getElementById('pista');
+var tPista = setTimeout(irPista, 5000);
+function irPista(){ clearTimeout(tPista); pista.classList.add('ida'); }
+
+/* ============================================================
+   Sensor (giroscopio), igual que en el visor de Botero.
+   OJO: inputs.attachInput() no hace nada si la camara nunca paso
+   por attachControl (mira attachedToElement), y aca los controles
+   son propios. Hay que vaciar los inputs por defecto, agregar el de
+   orientacion y RECIEN AHI llamar attachControl.
+   iOS ademas exige HTTPS para dar el permiso.
+   ============================================================ */
+var permisoPendiente = false, calibrar = false, eventos = 0;
+var chip = document.getElementById('sensor');
+
+window.addEventListener('deviceorientation', function(ev){
+  if (ev.alpha !== null || ev.beta !== null || ev.gamma !== null) eventos++;
+});
+
+var hayApi   = typeof window.DeviceOrientationEvent !== 'undefined';
+var pidePerm = hayApi && typeof DeviceOrientationEvent.requestPermission === 'function';
+var esTactil = ('ontouchstart' in window) ||
+               (window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+var forzar = /[?&]sensor=1/.test(location.search);
+
+function pintarChip(){
+  chip.classList.toggle('on', sensorOn);
+  chip.textContent = permisoPendiente ? 'Activar sensor' : 'Sensor';
+}
+
+function prenderSensor(){
+  cam.rotationQuaternion = BABYLON.Quaternion.RotationYawPitchRoll(yaw, pitch, 0);
+  cam.inputs.removeByType('FreeCameraKeyboardMoveInput');
+  cam.inputs.removeByType('FreeCameraMouseInput');
+  cam.inputs.removeByType('FreeCameraTouchInput');
+  cam.inputs.addDeviceOrientation();
+  cam.attachControl(canvas, true);
+  sensorOn = true; permisoPendiente = false; calibrar = true; eventos = 0;
+  setTimeout(function(){
+    if (sensorOn && eventos === 0) chip.textContent = 'Sin datos';
+  }, 2500);
+  pintarChip();
+}
+
+function apagarSensor(){
+  cam.detachControl(canvas);
+  cam.inputs.removeByType('FreeCameraDeviceOrientationInput');
+  if (cam.rotationQuaternion){
+    var e = cam.rotationQuaternion.toEulerAngles();
+    yaw = e.y + rigYaw;
+    pitch = Math.max(-1.45, Math.min(1.45, e.x));
+    cam.rotationQuaternion = null;
+  }
+  rigYaw = 0; rig.rotation.y = 0; sensorOn = false;
+  pintarChip();
+}
+
+chip.addEventListener('click', function(e){
+  e.stopPropagation();
+  if (sensorOn){ apagarSensor(); return; }
+  if (pidePerm){
+    DeviceOrientationEvent.requestPermission().then(function(r){
+      if (r === 'granted') prenderSensor();
+      else { permisoPendiente = false; chip.textContent = 'Sensor bloqueado'; }
+    }).catch(function(){
+      permisoPendiente = false; chip.textContent = 'Sensor no disponible';
+    });
+  } else prenderSensor();
+});
+
+if (forzar){
+  chip.classList.add('visible'); permisoPendiente = pidePerm; pintarChip();
+} else if (esTactil && hayApi){
+  if (pidePerm){
+    permisoPendiente = true; chip.classList.add('visible'); pintarChip();
+  } else {
+    var probar = function(ev){
+      if (ev.alpha === null && ev.beta === null && ev.gamma === null) return;
+      window.removeEventListener('deviceorientation', probar);
+      clearTimeout(tProbe);
+      chip.classList.add('visible'); pintarChip();
+    };
+    var tProbe = setTimeout(function(){
+      window.removeEventListener('deviceorientation', probar);
+    }, 1800);
+    window.addEventListener('deviceorientation', probar);
+  }
+}
+
+/* ---------- bucle ---------- */
+var tPrev = performance.now();
+scene.registerBeforeRender(function(){
+  var ahora = performance.now();
+  var dt = Math.min(0.1, (ahora - tPrev) / 1000);
+  tPrev = ahora;
+
+  if (sensorOn){
+    if (calibrar && cam.rotationQuaternion){
+      rigYaw = yaw - cam.rotationQuaternion.toEulerAngles().y;
+      calibrar = false;
+    }
+    rig.rotation.y = rigYaw;
+  } else {
+    cam.rotation.set(pitch, yaw, 0);
+  }
+
+  alFrente();
+  moverNubes(dt);
+
+  /* el disco late despacio: quieto se pierde entre el pedregullo */
+  if (hotspot && hotspot.isEnabled()){
+    tPulso += dt;
+    var s = 1 + Math.sin(tPulso * 1.8) * 0.055;
+    hotspot.scaling.set(s, s, 1);
+  }
+});
+
+engine.runRenderLoop(function(){ scene.render(); });
+window.addEventListener('resize', function(){ engine.resize(); });
+</script>
+</body>
+</html>
