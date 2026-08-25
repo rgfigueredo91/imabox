@@ -273,19 +273,33 @@ body.en-portada #barra{opacity:0; pointer-events:none}
 /* Sin barra de fondo ni rotulo: solo los botones flotando sobre el
    video, para no taparle el proyecto. Se sostienen con su propio
    fondo translucido. */
-/* Apoyados sobre el muro perimetral del fondo, no pegados al borde de
-   la pantalla: ahi abajo esta el cesped y quedaban flotando. */
+/* En escritorio van arriba, en el hueco que dejan el logo y el boton
+   de salir, asi no le tapan nada al proyecto. En el celular no hay
+   lugar ahi (el logo y el boton ya se comen el ancho), y ademas la
+   mano llega mejor abajo: ver el bloque de 820px.
+   El padding lateral es fijo y no relativo porque tiene que despejar
+   justo esos dos elementos, que estan a un ancho fijo. */
 #unidades{
-  position:fixed; left:0; right:0; bottom:4.5vh; z-index:45;
-  transform:translateY(140%); transition:transform .45s var(--sal);
+  position:fixed; left:0; right:0; top:0; z-index:45;
+  height:68px; display:flex; align-items:center;
+  padding:0 152px;
+  transform:translateY(-140%); transition:transform .45s var(--sal);
   pointer-events:none;      /* solo los botones reciben el toque */
 }
 #unidades.visible{transform:none}
 #uni-fila{
+  width:100%;
   overflow-x:auto; overscroll-behavior-x:contain;
-  padding:6px clamp(12px,3vw,26px);
+  padding:6px 0;
   -webkit-overflow-scrolling:touch;
   pointer-events:auto;
+  /* los extremos se desvanecen: cuando las 26 no entran, un corte seco
+     parece que la lista termina ahi. Si entran todas, el degradado cae
+     sobre el vacio y no se ve. */
+  -webkit-mask-image:linear-gradient(90deg, transparent 0, #000 18px,
+                     #000 calc(100% - 18px), transparent 100%);
+  mask-image:linear-gradient(90deg, transparent 0, #000 18px,
+             #000 calc(100% - 18px), transparent 100%);
 }
 /* OJO: justify-content:center sobre un contenedor con overflow-x
    recorta el principio cuando el contenido desborda, y los primeros
@@ -327,7 +341,14 @@ body.en-portada #barra{opacity:0; pointer-events:none}
 body.con-unidades #p-saltar{bottom:calc(clamp(22px,4vh,34px) + 48px)}
 
 @media (max-width:820px){
-  #unidades{padding:0 0 9px}
+  /* en el celular vuelven abajo: arriba no entran al lado del logo, y
+     ademas el pulgar llega mejor al pie de la pantalla */
+  #unidades{
+    top:auto; bottom:4.5vh; height:auto; padding:0;
+    transform:translateY(160%);
+  }
+  #unidades.visible{transform:none}
+  #uni-fila{padding:6px 12px}
   .uni{padding:6px 9px; font-size:.56rem}
 }
 
