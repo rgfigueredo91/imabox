@@ -43,7 +43,10 @@ button{font:inherit; color:inherit; cursor:pointer; background:none; border:0}
 /* velos: el panorama va de un cielo quemado a un pedregullo claro,
    sin esto la UI clara desaparece en media vista */
 .velo{position:fixed; left:0; right:0; z-index:5; pointer-events:none}
-.velo.arriba{top:0; height:150px; background:linear-gradient(180deg, rgba(22,31,21,.55), rgba(22,31,21,0))}
+/* el de arriba va flojo: ahi esta el cielo con las nubes, que es
+   justamente lo que hay que mostrar. La marca y el rotulo se sostienen
+   con su propia sombra. */
+.velo.arriba{top:0; height:118px; background:linear-gradient(180deg, rgba(22,31,21,.34), rgba(22,31,21,0))}
 .velo.abajo{bottom:0; height:180px; background:linear-gradient(0deg, rgba(22,31,21,.55), rgba(22,31,21,0))}
 
 /* marca */
@@ -154,7 +157,7 @@ var ALTURA_OJOS = 1.6;
 
 var PUNTOS = [
   { n:'01', nombre:'Calle interna', pano:'assets/pano1', p:new BABYLON.Vector3(0, 0, 0),
-    calle:0.498 },
+    calle:0.498, alpha:'assets/pano1-alpha.jpg' },
 
   /* PROVISORIO: todavia no llego el segundo panorama, asi que este
      punto reusa el primero. Esta puesto para que el hotspot tenga a
@@ -163,7 +166,7 @@ var PUNTOS = [
      poner en 'p' la distancia real entre las dos camaras y medir su
      'calle' (donde cae el punto de fuga en ESE equirect). */
   { n:'02', nombre:'Calle interna', pano:'assets/pano1',
-    p:new BABYLON.Vector3(-0.08, 0, 6), calle:0.498 }
+    p:new BABYLON.Vector3(-0.08, 0, 6), calle:0.498, alpha:'assets/pano1-alpha.jpg' }
 ];
 
 /* El hotspot que lleva al punto siguiente. Se dibuja en el piso,
@@ -173,9 +176,18 @@ var DIST_HOTSPOT = 6;        // metros adelante
 var RADIO = 8;               // radio de la esfera del panorama
 
 var PAR = new URLSearchParams(location.search);
-var HAY_NUBES = PAR.get('nubes') !== '0';
+/* El cielo del render se reemplaza por uno propio con nubes, usando la
+   mascara de alpha. ?cielo=0 lo apaga para comparar. */
+var HAY_CIELO = PAR.get('cielo') !== '0';
+var VEL_CIELO = parseFloat(PAR.get('velcielo') || '0.0012');   // vueltas/s
+var corre = 0;
+
+/* Las nubes de billboard eran el parche de antes de tener la mascara:
+   quedaban SIEMPRE encima de las casas, porque no hay con que ocluirlas.
+   Ahora que el cielo va detras de verdad, sobran. Se pueden encender
+   con ?nubes=1 para comparar. */
+var HAY_NUBES = PAR.get('nubes') === '1';
 var HAY_MOTAS = PAR.get('motas') !== '0';
-/* ?opnubes= para ajustar cuanto pesan sin tocar el codigo */
 var OPAC_NUBES = parseFloat(PAR.get('opnubes') || '0.72');
 
 var canvas = document.getElementById('c');
@@ -197,17 +209,39 @@ BABYLON.Effect.ShadersStore['panoVertexShader'] = [
   '}'
 ].join('\n');
 
+/* El cielo se reemplaza en el propio shader.
+   La mascara de alpha del render trae negro donde hay cielo y blanco
+   donde hay geometria, asi que con un mix se elige de que textura sale
+   cada pixel. Como el cielo de atras es otro equirect, DESPLAZARLE LA
+   U es exactamente rotar el mundo alrededor del eje Y: las nubes se
+   deslizan sin deformarse y sin costura (la textura va en WRAP), y
+   quedan detras del skyline sin que haya que hacer nada mas.
+   El borde se suaviza con smoothstep: la mascara viene de un JPG y a
+   filo pelado se ve el escalonado del recorte. */
 BABYLON.Effect.ShadersStore['panoFragmentShader'] = [
   'precision highp float;',
   'varying vec3 vDir;',
   'uniform sampler2D pano;',
+  'uniform sampler2D mascara;',
+  'uniform sampler2D cielo;',
   'uniform float opacidad;',
+  'uniform float corre;',
+  'uniform float usaCielo;',
   'const float PI = 3.14159265359;',
   'void main(void){',
   '  vec3 d = normalize(vDir);',
   '  float u = 0.5 + atan(d.x, d.z) / (2.0 * PI);',
   '  float v = 0.5 - asin(clamp(d.y, -1.0, 1.0)) / PI;',
-  '  gl_FragColor = vec4(texture2D(pano, vec2(u, v)).rgb, opacidad);',
+  '  vec3 col = texture2D(pano, vec2(u, v)).rgb;',
+  '  if (usaCielo > 0.5){',
+  '    float m = texture2D(mascara, vec2(u, v)).r;',
+  '    m = smoothstep(0.28, 0.62, m);',
+  '    if (m < 0.999){',
+  '      vec3 c = texture2D(cielo, vec2(fract(u + corre), v)).rgb;',
+  '      col = mix(c, col, m);',
+  '    }',
+  '  }',
+  '  gl_FragColor = vec4(col, opacidad);',
   '}'
 ].join('\n');
 
@@ -217,11 +251,13 @@ function hacerEsfera(nombre){
   }, scene);
   var mat = new BABYLON.ShaderMaterial(nombre+'-mat', scene, 'pano', {
     attributes:['position'],
-    uniforms:['worldViewProjection','opacidad'],
-    samplers:['pano'], needAlphaBlending:true
+    uniforms:['worldViewProjection','opacidad','corre','usaCielo'],
+    samplers:['pano','mascara','cielo'], needAlphaBlending:true
   });
   mat.backFaceCulling = false;
   mat.setFloat('opacidad', 1.0);
+  mat.setFloat('corre', 0);
+  mat.setFloat('usaCielo', 0);
   m.material = mat;
   m.isPickable = false;
   return m;
@@ -247,6 +283,28 @@ var SUFIJO = (engine.getCaps().maxTextureSize >= 4000 && window.innerWidth > 900
              ? '.jpg' : '-mob.jpg';
 
 var texturas = {};
+
+/* el cielo de atras y la mascara que dice donde va */
+var texCielo = new BABYLON.Texture('assets/cielo.jpg', scene, true, false,
+                 BABYLON.Texture.BILINEAR_SAMPLINGMODE);
+texCielo.wrapU = BABYLON.Texture.WRAP_ADDRESSMODE;
+texCielo.wrapV = BABYLON.Texture.CLAMP_ADDRESSMODE;
+
+function ponerCielo(mat, i){
+  var pt = PUNTOS[i];
+  if (!HAY_CIELO || !pt.alpha){ mat.setFloat('usaCielo', 0); return; }
+  if (!texturas[pt.alpha]){
+    var t = new BABYLON.Texture(pt.alpha, scene, true, false,
+              BABYLON.Texture.BILINEAR_SAMPLINGMODE);
+    t.wrapU = BABYLON.Texture.WRAP_ADDRESSMODE;
+    t.wrapV = BABYLON.Texture.CLAMP_ADDRESSMODE;
+    texturas[pt.alpha] = t;
+  }
+  mat.setTexture('mascara', texturas[pt.alpha]);
+  mat.setTexture('cielo', texCielo);
+  mat.setFloat('usaCielo', 1);
+}
+
 function cargarPano(i, cb){
   var url = PUNTOS[i].pano + SUFIJO;
   if (texturas[url]) { cb(texturas[url]); return; }
@@ -497,7 +555,10 @@ function crearMotas(){
       var dx = p.position.x - _camPos.x, dy = p.position.y - _camPos.y, dz = p.position.z - _camPos.z;
       var d = Math.sqrt(dx*dx + dy*dy + dz*dz);
       if (d < 1.4) f *= d / 1.4;    // muy cerca se dibujan como manchones
-      p.color.a = f * visMotas * 0.55;
+      /* En Botero las motas podian ir mas fuertes porque el cielo
+         estaba quemado y se borraban solas. Aca el cielo es azul
+         medio y a ese brillo se leen como puntos blancos. */
+      p.color.a = f * visMotas * 0.30;
     }
   };
   motas.start();
@@ -525,6 +586,7 @@ function irA(destino){
 
   cargarPano(destino, function(tex){
     esferaB.material.setTexture('pano', tex);
+    ponerCielo(esferaB.material, destino);
     esferaB.position = hasta.clone();
     esferaB.material.setFloat('opacidad', 0);
     esferaB.setEnabled(true);
@@ -540,6 +602,7 @@ function irA(destino){
         scene.onBeforeRenderObservable.remove(obs);
         esferaA.position = hasta.clone();
         esferaA.material.setTexture('pano', tex);
+        ponerCielo(esferaA.material, destino);
         esferaB.setEnabled(false);
         rig.position = hasta.clone();
         actual = destino;
@@ -582,6 +645,7 @@ if (HAY_MOTAS) crearMotas();
 
 cargarPano(0, function(tex){
   esferaA.material.setTexture('pano', tex);
+  ponerCielo(esferaA.material, 0);
   esferaA.position = PUNTOS[0].p.clone();
   marcar();
   var c = document.getElementById('carga');
@@ -697,6 +761,13 @@ scene.registerBeforeRender(function(){
 
   alFrente();
   moverNubes(dt);
+
+  /* el cielo de atras se corre en U. Una vuelta entera en unos 14
+     minutos: a ojo no se ve "moverse", pero si mirás un rato el cielo
+     cambio. Mas rapido que eso se nota el truco. */
+  corre = (corre + dt * VEL_CIELO) % 1;
+  esferaA.material.setFloat('corre', corre);
+  esferaB.material.setFloat('corre', corre);
 
   /* el disco late despacio: quieto se pierde entre el pedregullo */
   if (hotspot && hotspot.isEnabled()){
