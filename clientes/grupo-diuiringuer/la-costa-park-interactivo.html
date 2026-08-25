@@ -77,9 +77,12 @@ button{font:inherit; color:inherit; cursor:pointer; background:none; border:0}
 
 /* ---------- barra ---------- */
 #barra{
-  position:fixed; inset:0 0 auto 0; height:68px; z-index:20;
+  position:fixed; inset:0 0 auto 0; height:68px; z-index:36;
   display:flex; align-items:center; gap:16px; padding:0 clamp(16px,3vw,34px);
+  transition:opacity .6s ease;
 }
+/* mientras corre el video de entrada la barra estorba */
+body.en-portada #barra{opacity:0; pointer-events:none}
 #barra .marca img{height:34px; filter:drop-shadow(0 2px 10px rgba(0,0,0,.5))}
 #barra .sep{flex:1}
 .chip{
@@ -162,6 +165,62 @@ button{font:inherit; color:inherit; cursor:pointer; background:none; border:0}
 @keyframes barra{0%{transform:scaleX(0)}50%{transform:scaleX(1)}100%{transform:scaleX(0);transform-origin:right}}
 #carga.ida{opacity:0; pointer-events:none}
 
+/* ============================================================
+   Portada: el video de entrada y despues el loop
+   Son DOS <video> apilados, no uno que cambia de src. El de entrada
+   baja entre las nubes y termina en la aerea; el del loop es esa
+   misma aerea con movimiento leve. El loop arranca a reproducirse
+   medio segundo ANTES de que termine el otro y se funde encima: asi
+   el empalme no tiene ni un parpadeo, y de paso disimula que los dos
+   videos no vienen exactamente con el mismo encuadre.
+   ============================================================ */
+#portada{position:fixed; inset:0; z-index:30; background:var(--verde-noche)}
+#portada.ida{opacity:0; pointer-events:none; transition:opacity .8s ease}
+#portada video{
+  position:absolute; inset:0; width:100%; height:100%;
+  object-fit:cover; opacity:0; transition:opacity .55s ease;
+}
+#portada video.activa{opacity:1}
+#p-velo{
+  position:absolute; inset:0;
+  background:linear-gradient(180deg, rgba(18,26,18,.5) 0%, rgba(18,26,18,.06) 30%,
+                                     rgba(18,26,18,.1) 58%, rgba(18,26,18,.6) 100%);
+}
+#p-centro{
+  position:absolute; inset:0; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:22px; text-align:center;
+  padding:0 24px;
+  opacity:0; transform:translateY(12px);
+  transition:opacity .7s ease, transform .7s var(--sal);
+}
+#p-centro.visible{opacity:1; transform:none}
+#p-volanta{
+  font-size:.68rem; font-weight:500; letter-spacing:.24em; text-transform:uppercase;
+  color:rgba(255,255,255,.85); margin:0; text-shadow:0 1px 12px rgba(0,0,0,.7);
+}
+#p-entrar{
+  display:inline-flex; align-items:center; gap:13px;
+  padding:19px 44px;
+  font-size:.76rem; font-weight:500; letter-spacing:.18em; text-transform:uppercase;
+  color:#fff; background:rgba(56,81,60,.82);
+  border:1px solid rgba(218,215,209,.55);
+  backdrop-filter:blur(8px);
+  box-shadow:0 10px 40px rgba(0,0,0,.35);
+  transition:background .28s ease, border-color .28s ease, color .28s ease, transform .28s ease;
+}
+#p-entrar:hover{background:var(--papel); border-color:var(--papel); color:var(--verde); transform:translateY(-2px)}
+#p-entrar i{font-style:normal; opacity:.75; transition:transform .25s ease}
+#p-entrar:hover i{transform:translateX(4px)}
+#p-saltar{
+  position:absolute; right:clamp(16px,3vw,34px); bottom:clamp(22px,4vh,34px); z-index:2;
+  font-size:.64rem; letter-spacing:.2em; text-transform:uppercase;
+  color:rgba(255,255,255,.7); padding:10px 16px;
+  border:1px solid rgba(255,255,255,.28);
+  transition:opacity .4s ease, color .25s ease, border-color .25s ease;
+}
+#p-saltar:hover{color:#fff; border-color:#fff}
+#p-saltar.ida{opacity:0; pointer-events:none}
+
 @media (max-width:820px){
   #texto{bottom:auto; top:130px; left:clamp(16px,4vw,24px); right:clamp(16px,4vw,24px); max-width:none}
   #botones{flex-direction:column; align-items:stretch}
@@ -201,6 +260,17 @@ button{font:inherit; color:inherit; cursor:pointer; background:none; border:0}
 
 <div id="botones"></div>
 
+<div id="portada">
+  <video id="v-intro" muted playsinline preload="auto" poster="img/interactivo/aerea-poster.jpg" aria-hidden="true"></video>
+  <video id="v-loop"  muted playsinline preload="auto" loop aria-hidden="true"></video>
+  <div id="p-velo"></div>
+  <div id="p-centro">
+    <p id="p-volanta">Lagomar &middot; Ciudad de la Costa</p>
+    <button id="p-entrar" type="button">Ingresar al barrio <i>&rarr;</i></button>
+  </div>
+  <button id="p-saltar" type="button">Saltar</button>
+</div>
+
 <div id="carga">
   <img src="img/lcp-lockup-hero.svg" alt="La Costa Park">
   <i></i>
@@ -237,12 +307,12 @@ var ESCENAS = {
 
   acceso: {
     img: 'img/acceso.jpg',
-    eyebrow: 'Lagomar &middot; Ciudad de la Costa',
-    titulo: 'Bienvenido a<br>La Costa Park',
-    bajada: '28 casas en un barrio cerrado, a cinco minutos de la rambla.',
+    eyebrow: 'El acceso',
+    titulo: 'Entrada por<br>calle Libertad',
+    bajada: 'Predio cerrado, con seguridad y un solo ingreso.',
     miga: 'Acceso',
     botones: [
-      { txt:'Entrar al barrio', va:'calle', principal:true }
+      { txt:'Recorrer las calles', va:'calle', principal:true }
     ]
   },
 
@@ -409,8 +479,72 @@ document.addEventListener('keydown', function(e){
   if (e.key === 'Escape' && rastro.length) ir(rastro.pop(), true);
 });
 
-/* ---------- arranque ---------- */
-(function(){
+/* ============================================================
+   PORTADA
+   El video 01 baja entre las nubes y termina en la aerea. El 02 es
+   esa misma aerea, casi quieta, y va en loop. El loop se enciende
+   medio segundo ANTES de que el primero termine y se funde encima:
+   asi no hay parpadeo en el empalme, y de paso se disimula que los
+   dos videos no traen exactamente el mismo encuadre.
+   ============================================================ */
+var portada = document.getElementById('portada');
+var vIntro  = document.getElementById('v-intro');
+var vLoop   = document.getElementById('v-loop');
+var pCentro = document.getElementById('p-centro');
+var pSaltar = document.getElementById('p-saltar');
+var enLoop = false, arrancada = false;
+
+document.body.classList.add('en-portada');
+vIntro.src = 'video/aerea-intro.mp4';
+vLoop.src  = 'video/aerea-loop.mp4';
+
+function ocultarCarga(){
+  var c = document.getElementById('carga');
+  if (c.classList.contains('ida')) return;
+  c.classList.add('ida');
+  setTimeout(function(){ c.style.display = 'none'; }, 800);
+}
+
+function alLoop(){
+  if (enLoop) return;
+  enLoop = true;
+  var p = vLoop.play();
+  if (p && p.catch) p.catch(function(){});
+  vLoop.classList.add('activa');
+  setTimeout(function(){ vIntro.classList.remove('activa'); vIntro.pause(); }, 620);
+  pCentro.classList.add('visible');
+  pSaltar.classList.add('ida');
+  /* recien ahora se baja la primera escena: antes le competia el
+     ancho de banda al video de entrada */
+  prepararPrimera();
+}
+
+vIntro.addEventListener('timeupdate', function(){
+  if (vIntro.duration && vIntro.duration - vIntro.currentTime < 0.5) alLoop();
+});
+vIntro.addEventListener('ended', alLoop);
+vIntro.addEventListener('error', alLoop);
+pSaltar.addEventListener('click', alLoop);
+
+function arrancarPortada(){
+  if (arrancada) return;
+  arrancada = true;
+  vIntro.classList.add('activa');
+  var p = vIntro.play();
+  /* si el navegador bloquea el autoplay, se va derecho al loop con el
+     boton a la vista: nunca queda una pantalla negra esperando */
+  if (p && p.catch) p.catch(alLoop);
+  ocultarCarga();
+}
+vIntro.addEventListener('canplay', arrancarPortada, { once:true });
+setTimeout(arrancarPortada, 7000);   // red lenta: no dejar la marca colgada
+
+/* la primera escena se deja lista DEBAJO de la portada, asi cuando se
+   toca "Ingresar al barrio" ya esta puesta y el fundido no espera */
+var primeraLista = false;
+function prepararPrimera(){
+  if (primeraLista) return;
+  primeraLista = true;
   var e = ESCENAS[INICIO];
   var primera = capas[0];
   primera.src = e.img;
@@ -421,11 +555,18 @@ document.addEventListener('keydown', function(e){
     actual = INICIO;
     pintarTexto(e);
     precargarVecinas(INICIO);
-    var c = document.getElementById('carga');
-    c.classList.add('ida');
-    setTimeout(function(){ c.style.display = 'none'; }, 800);
   });
-})();
+}
+
+document.getElementById('p-entrar').addEventListener('click', function(){
+  prepararPrimera();
+  portada.classList.add('ida');
+  document.body.classList.remove('en-portada');
+  setTimeout(function(){
+    portada.style.display = 'none';
+    vLoop.pause(); vIntro.removeAttribute('src'); vIntro.load();
+  }, 900);
+});
 </script>
 </body>
 </html>
