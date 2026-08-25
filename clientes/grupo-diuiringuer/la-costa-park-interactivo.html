@@ -183,11 +183,8 @@ body.en-portada #barra{opacity:0; pointer-events:none}
 .capa-v.activa{opacity:1}
 /* capa vacia para los hotspots sobre el loop */
 #p-puntos{position:absolute; inset:0; pointer-events:none}
-#p-velo{
-  position:absolute; inset:0;
-  background:linear-gradient(180deg, rgba(18,26,18,.5) 0%, rgba(18,26,18,.06) 30%,
-                                     rgba(18,26,18,.1) 58%, rgba(18,26,18,.6) 100%);
-}
+/* Nada de velo encima del video: se ve tal cual, sin apagar. El boton
+   se sostiene solo, con su fondo y su sombra. */
 #p-centro{
   position:absolute; inset:0; display:flex; flex-direction:column;
   align-items:center; justify-content:center; gap:22px; text-align:center;
@@ -267,7 +264,6 @@ body.en-portada #barra{opacity:0; pointer-events:none}
        vista mientras la otra carga lo que sigue -->
   <video class="capa-v" id="vid0" muted playsinline preload="auto" poster="img/interactivo/aerea-poster.jpg" aria-hidden="true"></video>
   <video class="capa-v" id="vid1" muted playsinline preload="auto" aria-hidden="true"></video>
-  <div id="p-velo"></div>
   <!-- sobre el loop de cada etapa: aca van a colgar los hotspots y las
        viviendas clicables cuando lleguen -->
   <div id="p-puntos"></div>
@@ -618,6 +614,9 @@ function correrEtapa(id){
   etapaAct = id;
   enLoop = false;
   ocultarCentro();
+  /* mientras corre el video de entrada la barra estorba; vuelve en
+     cuanto arranca el loop, si no en la ultima etapa no habria salida */
+  document.body.classList.add('en-portada');
 
   reproducir(e.intro, false).then(function(v){
     ocultarCarga();
@@ -625,6 +624,7 @@ function correrEtapa(id){
       if (enLoop) return;
       enLoop = true;
       reproducir(e.loop, true).then(function(){
+        document.body.classList.remove('en-portada');
         mostrarCentro(e);
         /* recien ahora se baja lo que sigue: antes le competia el
            ancho de banda al video que se estaba viendo */
