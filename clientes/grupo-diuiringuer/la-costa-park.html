@@ -464,6 +464,16 @@ footer img{height:48px; width:auto; margin-bottom:14px}
   color:#83837c;
 }
 .casa .btn{margin-top:20px; padding:13px 26px; font-size:.68rem}
+/* la flechita avisa que el boton se va a otra pestana */
+.btn-fuera{
+  width:13px; height:13px; flex:none; opacity:.8;
+  fill:none; stroke:currentColor; stroke-width:2;
+  stroke-linecap:round; stroke-linejoin:round;
+}
+.solo-lector{
+  position:absolute; width:1px; height:1px; overflow:hidden;
+  clip-path:inset(50%); white-space:nowrap;
+}
 .tipos-cta{margin:38px 0 0; max-width:none; text-align:center}
 
 /* ---------- preventa ----------
@@ -778,7 +788,11 @@ footer img{height:48px; width:auto; margin-bottom:14px}
           <li>Parrillero</li>
         </ul>
         <p class="precio"><small>Precio</small>USD 170.000 &ndash; 220.000</p>
-        <a class="btn" href="la-costa-park-interactivo.html?etapa=barrio">Ver tipolog&iacute;a</a>
+        <a class="btn" href="la-costa-park-interactivo.html?etapa=barrio" target="_blank" rel="noopener">
+          Ver tipolog&iacute;a
+          <svg class="btn-fuera" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4l-8.6 8.6"/><path d="M18 14.6V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h4.4"/></svg>
+          <span class="solo-lector"> (se abre en una pesta&ntilde;a nueva)</span>
+        </a>
       </div>
       <div class="casa">
         <h3>Casa de 3 dormitorios</h3>
@@ -794,7 +808,11 @@ footer img{height:48px; width:auto; margin-bottom:14px}
           <li>Parrillero</li>
         </ul>
         <p class="precio"><small>Precio</small>USD 220.000 &ndash; 260.000</p>
-        <a class="btn" href="la-costa-park-interactivo.html?etapa=barrio">Ver tipolog&iacute;a</a>
+        <a class="btn" href="la-costa-park-interactivo.html?etapa=barrio" target="_blank" rel="noopener">
+          Ver tipolog&iacute;a
+          <svg class="btn-fuera" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4l-8.6 8.6"/><path d="M18 14.6V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h4.4"/></svg>
+          <span class="solo-lector"> (se abre en una pesta&ntilde;a nueva)</span>
+        </a>
       </div>
     </div>
 
