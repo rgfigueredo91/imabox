@@ -160,9 +160,14 @@ header.solid{
 .brand .oscuro{display:none}
 header.solid .brand .claro{display:none}
 header.solid .brand .oscuro{display:block}
-header .btn{margin-left:auto; padding:12px 26px; font-size:.7rem}
-header:not(.solid) .btn{background:transparent; border-color:rgba(255,255,255,.6); color:#fff}
-header:not(.solid) .btn:hover{background:#fff; border-color:#fff; color:var(--carbon)}
+/* el boton del showroom va en oliva en los dos estados, sobre el video
+   y sobre el nav solido. Es el unico color de la paleta que aguanta un
+   boton chico y se ve desde lejos; el resto son grises. */
+header .btn{
+  margin-left:auto; padding:12px 26px; font-size:.7rem;
+  background:var(--oliva); border-color:var(--oliva); color:#fff;
+}
+header .btn:hover{background:var(--oliva-osc); border-color:var(--oliva-osc)}
 
 /* ============================================================
    Capas fijas: la foto queda pegada al viewport mientras el bloque
