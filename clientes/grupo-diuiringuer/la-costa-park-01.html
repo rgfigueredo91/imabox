@@ -40,18 +40,24 @@
    - Los velos de las fotos pasan de verdosos a grises neutros: la
      propuesta 01 es arquitectonica y neutra, el tinte verde la
      empujaba para el otro lado.
+
+   PRUEBA (26/08): los bloques que eran casi negros ahora van en el
+   taupe de la paleta, que es el otro tono del logotipo. Toda la
+   pagina queda mas clara y mas calida. El carbon se queda solo para
+   el texto: en taupe no se lee. Si tampoco convence, se cambian dos
+   variables y listo.
    ============================================================ */
 
 :root{
   /* los cinco de la lamina de paleta */
-  --carbon:#303030;
-  --taupe:#847B70;
+  --carbon:#303030;   /* de aca en mas, solo para texto */
+  --taupe:#847B70;    /* y este es el que llena los bloques */
   --gris:#A6A4A0;
   --oliva:#79855C;
 
   /* derivados para fondos y estados: no estan en la lamina, son
      aclarados y oscurecidos de los anteriores */
-  --carbon-osc:#1F1F1F;
+  --taupe-osc:#6F665B;
   --oliva-osc:#66714D;
   --hueso:#F1EFEC;
   --papel:#FAF9F7;
@@ -128,11 +134,11 @@ p{margin:0 0 20px; max-width:58ch}
   font-family:var(--sans); font-size:.76rem; font-weight:500;
   letter-spacing:.16em; text-transform:uppercase; text-decoration:none;
   padding:16px 34px; border-radius:999px;
-  border:1px solid var(--carbon); background:var(--carbon); color:#fff;
+  border:1px solid var(--taupe); background:var(--taupe); color:#fff;
   cursor:pointer;
   transition:background .25s ease, color .25s ease, border-color .25s ease, transform .25s ease;
 }
-.btn:hover{background:var(--carbon-osc); border-color:var(--carbon-osc); transform:translateY(-1px)}
+.btn:hover{background:var(--taupe-osc); border-color:var(--taupe-osc); transform:translateY(-1px)}
 .btn.light{background:#fff; border-color:#fff; color:var(--carbon)}
 .btn.light:hover{background:var(--hueso); border-color:var(--hueso)}
 .btn.hueco{background:transparent; border-color:rgba(255,255,255,.6); color:#fff}
@@ -205,10 +211,12 @@ header .btn:hover{background:var(--oliva-osc); border-color:var(--oliva-osc)}
 .wrap{max-width:1240px; margin:0 auto; width:100%}
 .tinte-papel{background:var(--papel)}
 .tinte-hueso{background:var(--hueso)}
-.tinte-oscuro{background:var(--carbon); color:rgba(255,255,255,.82)}
-.tinte-oscuro h2, .tinte-oscuro h3{color:#fff}
-.tinte-oscuro .eyebrow{color:var(--gris)}
-.tinte-oscuro .lead{color:rgba(255,255,255,.84)}
+.tinte-taupe{background:var(--taupe); color:rgba(255,255,255,.9)}
+.tinte-taupe h2, .tinte-taupe h3{color:#fff}
+/* sobre taupe el gris de la paleta casi no se despega del fondo:
+   aca la volanta va en blanco bajado */
+.tinte-taupe .eyebrow{color:rgba(255,255,255,.66)}
+.tinte-taupe .lead{color:rgba(255,255,255,.9)}
 
 /* ---------- hero ----------
    Aca va el lockup apilado (simbolo arriba, texto abajo), que es como
@@ -288,7 +296,7 @@ header .btn:hover{background:var(--oliva-osc); border-color:var(--oliva-osc)}
   display:block; font-family:var(--sans); font-size:.68rem; font-weight:400;
   letter-spacing:.14em; text-transform:uppercase; color:var(--gris); margin-bottom:4px;
 }
-.nota-preventa{margin-top:22px; padding:26px 32px; background:var(--carbon); color:rgba(255,255,255,.84)}
+.nota-preventa{margin-top:22px; padding:26px 32px; background:var(--taupe); color:rgba(255,255,255,.9)}
 .nota-preventa b{color:#fff; font-weight:500}
 .nota-preventa p{margin:0; max-width:none; font-size:.98rem}
 
@@ -307,7 +315,7 @@ header .btn:hover{background:var(--oliva-osc); border-color:var(--oliva-osc)}
 }
 .items li{padding:13px 0 13px 24px; position:relative; border-bottom:1px solid var(--linea); font-size:1rem}
 .items li::before{content:''; position:absolute; left:0; top:22px; width:8px; height:1px; background:var(--oliva)}
-.tinte-oscuro .items li{border-color:rgba(255,255,255,.18)}
+.tinte-taupe .items li{border-color:rgba(255,255,255,.18)}
 .ubi-caja .items li{border-color:rgba(255,255,255,.2)}
 
 /* ubicacion (va sobre una capa) */
@@ -326,7 +334,7 @@ header .btn:hover{background:var(--oliva-osc); border-color:var(--oliva-osc)}
   text-decoration:none;
   transition:border-color .25s ease, transform .25s ease;
 }
-.via:hover{border-color:var(--carbon); transform:translateY(-2px)}
+.via:hover{border-color:var(--taupe); transform:translateY(-2px)}
 .via svg{width:26px; height:26px; flex:none; fill:var(--oliva)}
 .via b{display:block; font-size:.68rem; letter-spacing:.15em; text-transform:uppercase; color:var(--gris); font-weight:500}
 .via span{font-size:1.05rem; color:var(--carbon); word-break:break-word}
@@ -350,7 +358,7 @@ form .btn{grid-column:1 / -1; justify-self:start; margin-top:8px}
 /* ---------- pie ---------- */
 footer{
   position:relative; z-index:1;
-  background:var(--carbon-osc); color:rgba(255,255,255,.55);
+  background:var(--taupe-osc); color:rgba(255,255,255,.66);
   padding:48px var(--pad) 40px; font-size:.84rem;
 }
 .foot-grid{
@@ -358,7 +366,7 @@ footer{
   display:flex; flex-wrap:wrap; gap:26px; align-items:flex-end; justify-content:space-between;
 }
 footer img{height:44px; width:auto; margin-bottom:14px}
-.foot-legal{font-size:.76rem; color:rgba(255,255,255,.48); text-align:right}
+.foot-legal{font-size:.76rem; color:rgba(255,255,255,.6); text-align:right}
 
 /* ---------- whatsapp flotante ----------
    Es el unico lugar donde el oliva ocupa una superficie grande: en
@@ -540,7 +548,7 @@ footer img{height:44px; width:auto; margin-bottom:14px}
 </section>
 
 <!-- ============== 06 ESPACIOS COMUNES ============== -->
-<section class="sobre tinte-oscuro" id="comunes">
+<section class="sobre tinte-taupe" id="comunes">
   <div class="wrap">
     <div class="split invertido rv">
       <div class="split-media">
@@ -639,7 +647,9 @@ footer img{height:44px; width:auto; margin-bottom:14px}
 <footer>
   <div class="foot-grid">
     <div>
-      <img src="img/lcp01-lockup-blanco.svg" alt="La Costa Park">
+      <!-- en el pie va el mono blanco: sobre taupe, el gris del simbolo
+           y el de "park" se pierden contra el fondo -->
+      <img src="img/lcp01-lockup-mono-blanco.svg" alt="La Costa Park">
       <div>Lagomar, Ciudad de la Costa &middot; Canelones, Uruguay</div>
     </div>
     <div class="foot-legal">
