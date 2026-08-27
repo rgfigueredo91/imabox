@@ -395,14 +395,22 @@ footer img{height:48px; width:auto; margin-bottom:14px}
    que casa -> la oferta -> contacto.
    ============================================================ */
 
-/* ---------- hero: pregunta, marca, promesa, una sola accion ----------
-   La volanta dejo de ser el lugar donde queda y paso a ser la pregunta
-   que se hace el que entra. Va en caja baja: a ese largo, en
-   mayusculas espaciadas no se lee. */
+/* ---------- hero: volanta, marca, promesa, una sola accion ----------
+   La volanta dice de que va el proyecto en tres palabras. Al ser corta
+   vuelve a ser una volanta de verdad, en versalitas espaciadas y con
+   las dos rayas de acento; con la pregunta larga que habia antes eso
+   no se podia leer. Ojo con el max-width:none: es un <p> y la regla
+   global p{max-width:58ch} le arma una caja angosta pegada a la
+   izquierda, y el centrado pasa a ser dentro de ESA caja. */
 .hero-pregunta{
-  font-size:1rem; line-height:1.5;
+  display:flex; align-items:center; justify-content:center; gap:14px;
+  font-size:.72rem; font-weight:500;
+  letter-spacing:.22em; text-transform:uppercase;
   color:rgba(255,255,255,.82);
-  margin:0 auto 24px; max-width:36ch;
+  margin:0 auto 24px; max-width:none;
+}
+.hero-pregunta::before, .hero-pregunta::after{
+  content:''; width:26px; height:1px; background:var(--oliva-claro); flex:none;
 }
 .hero-titulo{margin:0}
 
@@ -532,10 +540,53 @@ footer img{height:48px; width:auto; margin-bottom:14px}
   .ubi-mapa{padding:16px 16px 10px}
 }
 
+/* ---------- grupo: la trayectoria del desarrollador ----------
+   Corta a proposito: dos columnas de texto, tres obras y un link
+   discreto. No es la seccion que vende, es la que saca la duda de
+   quien esta atras. */
+.grupo{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:clamp(30px,6vw,90px); align-items:start}
+.enlace{
+  display:inline-flex; align-items:center; gap:8px;
+  font-size:.95rem; text-decoration:none; color:var(--oliva-osc);
+  border-bottom:1px solid rgba(121,133,92,.4); padding-bottom:2px;
+  transition:border-color .25s ease, gap .25s var(--sal);
+}
+.enlace:hover{border-color:var(--oliva-osc); gap:13px}
+.obras{
+  list-style:none; padding:0; margin:clamp(40px,5vw,64px) 0 0;
+  display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:20px;
+}
+/* marco vacio a la espera de las fotos del grupo. Lleva trama en
+   diagonal para que se lea como un hueco puesto a proposito y no como
+   una imagen que no cargo. */
+.obra-foto{
+  aspect-ratio:4/3; border:1px solid var(--linea);
+  background:repeating-linear-gradient(-45deg, transparent 0 9px, rgba(48,48,48,.045) 9px 18px);
+}
+.obra span{
+  display:block; margin-top:12px;
+  font-size:.72rem; letter-spacing:.16em; text-transform:uppercase; color:var(--gris);
+}
+.obras-nota{margin:18px 0 0; font-size:.78rem; color:#8f8f88; max-width:none}
+
+/* el select del formulario copia el subrayado de los inputs; la flecha
+   es un data URI para no depender de la que dibuja cada sistema */
+select{
+  font-family:var(--sans); font-size:1rem; font-weight:300;
+  color:var(--carbon); background-color:transparent;
+  border:0; border-bottom:1px solid rgba(48,48,48,.28); border-radius:0;
+  padding:12px 22px 12px 2px;
+  appearance:none; -webkit-appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23847B70' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right 2px center; background-size:15px;
+  transition:border-color .25s ease;
+}
+select:focus{outline:0; border-color:var(--oliva)}
+
 /* ---------- responsive ---------- */
 @media (max-width:1024px){
   .mirada, .split, .contacto-grid, .casas,
-  .beneficios, .ubi-grid{grid-template-columns:1fr}
+  .beneficios, .ubi-grid, .grupo{grid-template-columns:1fr}
   .split.invertido .split-media{order:0}
   .cifras{grid-template-columns:repeat(2,1fr)}
 }
@@ -592,7 +643,7 @@ footer img{height:48px; width:auto; margin-bottom:14px}
 
   <div class="capa-in">
     <div class="hero-inner">
-      <p class="hero-pregunta">&iquest;Busc&aacute;s tu casa en un barrio seguro, con <b class="destaca-claro">naturaleza</b> y conectado con todo?</p>
+      <p class="hero-pregunta">Seguridad, <b class="destaca-claro">naturaleza</b> y cercan&iacute;a</p>
       <h1 class="hero-titulo">
         <img class="hero-logo" src="img/lcp-lockup-hero-neutro.svg" alt="La Costa Park">
       </h1>
@@ -612,10 +663,10 @@ footer img{height:48px; width:auto; margin-bottom:14px}
     <div class="mirada rv">
       <div>
         <p class="eyebrow">El proyecto</p>
-        <h2>28 casas en un barrio cerrado de Ciudad de la Costa</h2>
+        <h2>28 casas en un barrio jard&iacute;n en Ciudad de la Costa</h2>
       </div>
       <div>
-        <p class="lead">Casas de una y dos plantas dentro de un <b class="destaca">barrio cerrado con seguridad</b>, ubicadas en Lagomar.</p>
+        <p class="lead">Casas de una y dos plantas dentro de un <b class="destaca">barrio con seguridad</b>, ubicadas en Lagomar.</p>
         <p>La Costa Park combina tranquilidad, buena ubicaci&oacute;n y cercan&iacute;a a los principales servicios de Ciudad de la Costa.</p>
       </div>
     </div>
@@ -854,7 +905,7 @@ footer img{height:48px; width:auto; margin-bottom:14px}
     </div>
 
     <p class="tipos-cta rv">
-      <a class="btn" href="la-costa-park-interactivo.html">Explorar showroom completo</a>
+      <a class="btn" href="la-costa-park-interactivo.html">Explor&aacute; el showroom completo</a>
     </p>
   </div>
 </section>
@@ -870,13 +921,40 @@ footer img{height:48px; width:auto; margin-bottom:14px}
   </div>
 </section>
 
-<!-- ============== 07 CONTACTO ============== -->
+<!-- ============== 07 GRUPO DIURINGUER ============== -->
+<section class="sobre tinte-papel" id="grupo">
+  <div class="wrap">
+    <div class="grupo rv">
+      <div>
+        <p class="eyebrow">La experiencia detr&aacute;s de La Costa Park</p>
+        <h2>Un proyecto respaldado por trayectoria y compromiso</h2>
+      </div>
+      <div>
+        <p class="lead">La Costa Park es desarrollado por <b class="destaca">Grupo Diuringuer</b>, una empresa con trayectoria en proyectos residenciales que priorizan la calidad constructiva, la planificaci&oacute;n y los espacios pensados para vivir mejor.</p>
+        <p>
+          <a class="enlace" href="https://grupodiuringuer.com.uy" target="_blank" rel="noopener">
+            Conocer m&aacute;s sobre Grupo Diuringuer <span aria-hidden="true">&rarr;</span>
+          </a>
+        </p>
+      </div>
+    </div>
+
+    <ul class="obras rv">
+      <li class="obra"><div class="obra-foto"></div><span>Siracusa</span></li>
+      <li class="obra"><div class="obra-foto"></div><span>Proyecto anterior</span></li>
+      <li class="obra"><div class="obra-foto"></div><span>Proyecto anterior</span></li>
+    </ul>
+    <p class="obras-nota rv">Espacio reservado para las fotos de los proyectos anteriores del grupo.</p>
+  </div>
+</section>
+
+<!-- ============== 08 CONTACTO ============== -->
 <section class="sobre tinte-hueso" id="contacto">
   <div class="wrap">
     <div class="contacto-grid">
       <div class="rv">
         <p class="eyebrow">Contacto</p>
-        <h2>Pedinos informaci&oacute;n</h2>
+        <h2>M&aacute;s informaci&oacute;n</h2>
         <p class="lead">Te enviamos disponibilidad, planos, precios actualizados y formas de pago.</p>
 
         <a class="via" href="https://wa.me/59893999644?text=Hola,%20quiero%20informaci%C3%B3n%20sobre%20La%20Costa%20Park" target="_blank" rel="noopener">
@@ -903,7 +981,16 @@ footer img{height:48px; width:auto; margin-bottom:14px}
           <input id="tel" name="tel" type="tel" required autocomplete="tel" placeholder="09X XXX XXX">
         </div>
         <div class="campo ancho">
-          <label for="msg">&iquest;Qu&eacute; quer&eacute;s saber? <i>(opcional)</i></label>
+          <label for="busca">&iquest;Qu&eacute; busc&aacute;s?</label>
+          <select id="busca" name="busca">
+            <option value="">Eleg&iacute; una opci&oacute;n</option>
+            <option>Mi primera casa</option>
+            <option>Invertir o alquilar</option>
+            <option>Mudarme a un lugar m&aacute;s tranquilo</option>
+          </select>
+        </div>
+        <div class="campo ancho">
+          <label for="msg">Contanos m&aacute;s <i>(opcional)</i></label>
           <textarea id="msg" name="msg" rows="2" placeholder="Por ejemplo: precios de las de tres dormitorios"></textarea>
         </div>
         <button class="btn" type="submit">Enviar consulta</button>
@@ -921,7 +1008,7 @@ footer img{height:48px; width:auto; margin-bottom:14px}
     </div>
     <div class="foot-legal">
       Im&aacute;genes ilustrativas. Precios y plazos sujetos a modificaci&oacute;n.<br>
-      Grupo Diuiringuer &middot; Sitio por <a href="https://imabox.uy" style="color:inherit">Imabox</a>
+      Grupo Diuringuer &middot; Sitio por <a href="https://imabox.uy" style="color:inherit">Imabox</a>
     </div>
   </div>
 </footer>
@@ -1028,6 +1115,7 @@ document.getElementById('form').addEventListener('submit', function(ev){
     'Nombre: ' + f.nombre.value,
     'Telefono: ' + f.tel.value
   ];
+  if (f.busca.value) lineas.push('Busca: ' + f.busca.value);
   if (f.msg.value) lineas.push('', f.msg.value);
 
   window.open('https://wa.me/' + TEL_VENTAS + '?text=' +
