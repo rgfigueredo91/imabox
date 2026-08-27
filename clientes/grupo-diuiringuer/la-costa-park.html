@@ -228,14 +228,11 @@ header .btn:hover{background:var(--oliva-osc); border-color:var(--oliva-osc)}
 .tinte-taupe .lead{color:rgba(255,255,255,.9)}
 
 /* ---------- hero ---------- */
-/* el lockup del hero va en oliva claro y no en blanco: contra el video
-   un verde medio separa menos que el blanco, asi que lleva dos sombras
-   en vez de una. Una abierta, para despegarlo del fondo, y otra corta y
-   pegada que le devuelve el filo a los bordes. */
-.hero-logo{
-  width:min(430px, 80vw); margin:0 auto 28px;
-  filter:drop-shadow(0 3px 20px rgba(20,20,20,.55)) drop-shadow(0 1px 4px rgba(20,20,20,.5));
-}
+/* el lockup del hero va entero en blanco. Se probo en oliva claro y no
+   convencio: contra el video un verde medio se apaga, y ademas el verde
+   ya aparece en el nav, en las cifras y en las palabras resaltadas.
+   Aca alcanza con una sombra abierta para despegarlo del fondo. */
+.hero-logo{width:min(430px, 80vw); margin:0 auto 28px; filter:drop-shadow(0 3px 20px rgba(20,20,20,.5))}
 /* OJO: cualquier <p> del hero se come la regla global p{max-width:58ch},
    que le achica la caja a unos 365px pegada a la izquierda. El texto
    queda corrido aunque todo lo demas este centrado: por eso la pregunta
