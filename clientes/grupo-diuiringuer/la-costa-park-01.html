@@ -59,6 +59,9 @@
      aclarados y oscurecidos de los anteriores */
   --taupe-osc:#6F665B;
   --oliva-osc:#66714D;
+  /* el mismo oliva subido de tono, para las palabras que caen
+     sobre foto: el oliva a secas se apaga contra el velo */
+  --oliva-claro:#A6B587;
   --hueso:#F1EFEC;
   --papel:#FAF9F7;
 
@@ -137,6 +140,12 @@ p{margin:0 0 20px; max-width:58ch}
    proyecto y tres frases sueltas. Va el oliva oscurecido en el
    texto corrido porque el oliva a secas no llega al 4,5:1. */
 .destaca{color:var(--oliva-osc); font-weight:500}
+/* la misma idea sobre foto: ahi el oliva se apaga contra el velo y
+   hay que subirlo de tono, el mismo que lleva "costa" en el hero */
+.destaca-claro{color:var(--oliva-claro); font-weight:400}
+/* de los tres sellos de la ficha, el del jardin es el unico que se
+   pinta: si se pintaran los tres dejaria de destacar ninguno */
+.casa-tiene li.verde{color:var(--oliva-osc); border-color:rgba(121,133,92,.45)}
 
 /* ---------- botones ---------- */
 .btn{
@@ -595,7 +604,7 @@ footer img{height:44px; width:auto; margin-bottom:14px}
 
   <div class="capa-in">
     <div class="hero-inner">
-      <p class="hero-pregunta">&iquest;Busc&aacute;s tu casa en un barrio seguro, con naturaleza y conectado con todo?</p>
+      <p class="hero-pregunta">&iquest;Busc&aacute;s tu casa en un barrio seguro, con <b class="destaca-claro">naturaleza</b> y conectado con todo?</p>
       <h1 class="hero-titulo">
         <img class="hero-logo" src="img/lcp01-lockup-hero.svg" alt="La Costa Park">
       </h1>
@@ -637,7 +646,7 @@ footer img{height:44px; width:auto; margin-bottom:14px}
   <img src="img/calle.jpg" srcset="img/calle-m.jpg 900w, img/calle.jpg 1920w" sizes="100vw"
        alt="Calle interna del complejo al atardecer, con las viviendas y el paisajismo" loading="lazy">
   <div class="capa-in">
-    <p class="capa-frase">Calles internas, verde entre las casas.</p>
+    <p class="capa-frase">Calles internas, <b class="destaca-claro">verde entre las casas</b>.</p>
     <p class="capa-dato">Vol&uacute;menes simples en hormig&oacute;n y madera, a escala de barrio.</p>
   </div>
 </div>
@@ -648,7 +657,7 @@ footer img{height:44px; width:auto; margin-bottom:14px}
     <div class="rv">
       <p class="eyebrow">Una forma distinta de vivir</p>
       <h2>M&aacute;s espacio para disfrutar todos los d&iacute;as</h2>
-      <p class="lead">La Costa Park fue pensado para quienes valoran la tranquilidad, el contacto con la naturaleza y los espacios para compartir. Sus calles internas, &aacute;reas verdes y espacios comunes generan un entorno agradable para vivir, mientras que cada casa cuenta con <b class="destaca">jard&iacute;n y parrillero propio</b> para disfrutar m&aacute;s tiempo al aire libre junto a la familia y amigos.</p>
+      <p class="lead">La Costa Park fue pensado para quienes valoran la tranquilidad, el <b class="destaca">contacto con la naturaleza</b> y los espacios para compartir. Sus calles internas, &aacute;reas verdes y espacios comunes generan un entorno agradable para vivir, mientras que cada casa cuenta con <b class="destaca">jard&iacute;n y parrillero propio</b> para disfrutar m&aacute;s tiempo al aire libre junto a la familia y amigos.</p>
     </div>
 
     <div class="beneficios rv">
@@ -823,7 +832,7 @@ footer img{height:44px; width:auto; margin-bottom:14px}
           <dt>Unidades</dt><dd>14</dd>
         </dl>
         <ul class="casa-tiene">
-          <li>Jard&iacute;n privado</li>
+          <li class="verde">Jard&iacute;n privado</li>
           <li>Cochera</li>
           <li>Parrillero</li>
         </ul>
@@ -843,7 +852,7 @@ footer img{height:44px; width:auto; margin-bottom:14px}
           <dt>Unidades</dt><dd>14</dd>
         </dl>
         <ul class="casa-tiene">
-          <li>Jard&iacute;n privado</li>
+          <li class="verde">Jard&iacute;n privado</li>
           <li>Cochera</li>
           <li>Parrillero</li>
         </ul>
