@@ -432,13 +432,58 @@ if (PAR.get('mira')){
 var rigYaw = 0;                 // giro que agrega el dedo con el sensor prendido
 var sensorOn = false;
 
-/* control propio: mas predecible que attachControl para un 360 */
+/* control propio: mas predecible que attachControl para un 360.
+   Se llevan TODOS los punteros activos y no solo el ultimo. Hacen falta
+   los dos para el pellizco, y ademas al levantar uno de los dos dedos
+   hay que volver a anclar el arrastre en el que queda: si no, la vista
+   pega un salto del tamano de la separacion entre los dedos. */
+var FOV_MIN = 0.45, FOV_MAX = 1.5;
+function ponerFov(v){ cam.fov = Math.max(FOV_MIN, Math.min(FOV_MAX, v)); }
+
 var arrastrando = false, lx = 0, ly = 0, movido = 0;
+var dedos = [];            // {id, x, y}, en orden de aparicion
+var pellizco = 0;          // separacion entre los dos dedos al empezar
+var fovPellizco = 0;       // el fov que habia en ese momento
+
+function indiceDedo(id){
+  for (var i = 0; i < dedos.length; i++) if (dedos[i].id === id) return i;
+  return -1;
+}
+function separacion(){
+  var dx = dedos[0].x - dedos[1].x, dy = dedos[0].y - dedos[1].y;
+  return Math.sqrt(dx * dx + dy * dy);
+}
+
 canvas.addEventListener('pointerdown', function(e){
-  arrastrando = true; movido = 0; lx = e.clientX; ly = e.clientY;
+  if (indiceDedo(e.pointerId) < 0) dedos.push({id:e.pointerId, x:e.clientX, y:e.clientY});
   canvas.setPointerCapture(e.pointerId);
+
+  if (dedos.length === 1){
+    arrastrando = true; movido = 0; lx = e.clientX; ly = e.clientY;
+  } else if (dedos.length === 2){
+    /* el segundo dedo corta el arrastre y abre el pellizco */
+    arrastrando = false;
+    pellizco = separacion();
+    fovPellizco = cam.fov;
+  }
 });
+
 canvas.addEventListener('pointermove', function(e){
+  var i = indiceDedo(e.pointerId);
+  if (i < 0) return;
+  dedos[i].x = e.clientX; dedos[i].y = e.clientY;
+
+  if (dedos.length >= 2){
+    if (!pellizco) return;
+    var d = separacion();
+    if (!d) return;
+    /* separar los dedos achica el campo de vision, o sea acerca */
+    ponerFov(fovPellizco * (pellizco / d));
+    /* un pellizco no es un toque: que no dispare hotspots al soltar */
+    movido = 999;
+    return;
+  }
+
   if (!arrastrando) return;
   var dx = e.clientX - lx, dy = e.clientY - ly;
   lx = e.clientX; ly = e.clientY;
@@ -453,13 +498,31 @@ canvas.addEventListener('pointermove', function(e){
     pitch = Math.max(-1.45, Math.min(1.45, pitch));
   }
 });
-canvas.addEventListener('pointerup', function(e){
-  arrastrando = false;
-  canvas.releasePointerCapture(e.pointerId);
-});
+
+function soltarDedo(e){
+  var i = indiceDedo(e.pointerId);
+  if (i >= 0) dedos.splice(i, 1);
+  try { canvas.releasePointerCapture(e.pointerId); } catch(_){}
+
+  if (dedos.length < 2) pellizco = 0;
+
+  if (dedos.length === 1){
+    /* queda uno: se reancla el arrastre donde esta ahora */
+    lx = dedos[0].x; ly = dedos[0].y;
+    arrastrando = true;
+  } else if (dedos.length === 0){
+    arrastrando = false;
+  }
+}
+canvas.addEventListener('pointerup', soltarDedo);
+/* pointercancel es el que llega cuando el navegador se queda con el
+   gesto: sin esto el dedo queda pegado en la lista y el visor se
+   trababa creyendo que todavia hay dos */
+canvas.addEventListener('pointercancel', soltarDedo);
+
 canvas.addEventListener('wheel', function(e){
   e.preventDefault();
-  cam.fov = Math.max(0.45, Math.min(1.5, cam.fov + (e.deltaY > 0 ? 0.06 : -0.06)));
+  ponerFov(cam.fov + (e.deltaY > 0 ? 0.06 : -0.06));
 }, { passive:false });
 
 /* ---------- la tele ---------- */
