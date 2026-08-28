@@ -619,6 +619,20 @@ select:focus{outline:0; border-color:var(--oliva)}
   form{grid-template-columns:1fr}
   .foot-legal{text-align:left}
 }
+/* la volanta del hero es un flex de tres piezas (raya, texto, raya) y
+   no puede envolver: cuando el texto no entra se parte adentro y la
+   ultima palabra cae sola, con las dos rayas centradas contra un
+   bloque de dos lineas. Abajo de 600px van las rayas afuera y baja el
+   cuerpo, y asi entra en un renglon hasta en pantallas de 320px. */
+@media (max-width:600px){
+  .hero-pregunta{
+    display:block;
+    font-size:.62rem; letter-spacing:.16em; line-height:1.8;
+    margin-bottom:20px;
+    text-wrap:balance;
+  }
+  .hero-pregunta::before, .hero-pregunta::after{content:none}
+}
 @media (max-width:520px){
   .cifras{grid-template-columns:1fr}
   .casa{padding:26px 24px}
