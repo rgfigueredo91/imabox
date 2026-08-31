@@ -213,17 +213,15 @@ header .btn:hover{background:var(--oliva-osc); border-color:var(--oliva-osc)}
 .capa::after{content:''; position:absolute; inset:0; z-index:1}
 .capa-in{position:relative; z-index:2; width:100%; max-width:1240px; margin:0 auto; color:#fff}
 
-/* un velo por capa, segun donde cae el texto. Gris neutro y no
-   verdoso: esta identidad no tiene el verde como color de fondo */
+/* Un velo por capa, segun donde cae el texto. Gris neutro y no
+   verdoso: esta identidad no tiene el verde como color de fondo. Las
+   capas que van sin texto no llevan ninguna de estas clases: la foto
+   se ve tal cual. */
 .capa.v-centro::after{background:linear-gradient(180deg, rgba(26,26,26,.6) 0%, rgba(26,26,26,.4) 34%, rgba(26,26,26,.5) 64%, rgba(26,26,26,.72) 100%)}
 .capa.v-izq::after{background:linear-gradient(90deg, rgba(26,26,26,.76) 0%, rgba(26,26,26,.46) 52%, rgba(26,26,26,.12) 100%)}
 /* la de ubicacion lleva una lista larga que se mete en la zona clara
    del cielo: ahi el velo de la izquierda tiene que aguantar mas */
 .capa.v-fuerte::after{background:linear-gradient(90deg, rgba(26,26,26,.88) 0%, rgba(26,26,26,.74) 44%, rgba(26,26,26,.34) 74%, rgba(26,26,26,.1) 100%)}
-/* la nocturna tiene la ventana encendida justo en el medio: el texto
-   baja al pie, que es donde el velo lo sostiene */
-.capa.v-abajo{align-items:flex-end; padding-bottom:clamp(58px, 9vh, 108px)}
-.capa.v-abajo::after{background:linear-gradient(180deg, rgba(26,26,26,.1) 0%, rgba(26,26,26,.2) 38%, rgba(26,26,26,.84) 100%)}
 
 /* bloques opacos que tapan la capa al subir */
 .sobre{position:relative; z-index:1; padding:clamp(78px, 9vw, 140px) var(--pad)}
@@ -407,22 +405,35 @@ footer img{height:44px; width:auto; margin-bottom:14px}
    que casa -> la oferta -> contacto.
    ============================================================ */
 
-/* ---------- hero: volanta, marca, promesa, una sola accion ----------
-   La volanta dice de que va el proyecto en tres palabras. Al ser corta
-   vuelve a ser una volanta de verdad, en versalitas espaciadas y con
-   las dos rayas de acento; con la pregunta larga que habia antes eso
-   no se podia leer. Ojo con el max-width:none: es un <p> y la regla
-   global p{max-width:58ch} le arma una caja angosta pegada a la
-   izquierda, y el centrado pasa a ser dentro de ESA caja. */
-.hero-pregunta{
+/* ---------- hero: volanta, pregunta, marca, promesa, una sola accion ----------
+   Arriba van dos lineas y no una: la volanta dice de que va el
+   proyecto en tres palabras, y abajo la pregunta plantea el problema.
+   Son dos tratamientos distintos a proposito. La volanta, al ser
+   corta, aguanta las versalitas espaciadas entre las dos rayas de
+   acento; la pregunta no las aguantaria (a ese cuerpo y con ese
+   interletrado un renglon largo no se lee), asi que va en caja baja y
+   con cuerpo de texto normal. El verde va una sola vez, en la volanta:
+   repetirlo dos renglones seguidos lo gasta.
+   Ojo con el max-width: son <p> y la regla global p{max-width:58ch}
+   les arma una caja angosta pegada a la izquierda, asi que cada uno
+   lleva el suyo con margin auto. */
+.hero-volanta{
   display:flex; align-items:center; justify-content:center; gap:14px;
   font-size:.72rem; font-weight:500;
   letter-spacing:.22em; text-transform:uppercase;
   color:rgba(255,255,255,.82);
-  margin:0 auto 24px; max-width:none;
+  margin:0 auto 16px; max-width:none;
 }
-.hero-pregunta::before, .hero-pregunta::after{
+.hero-volanta::before, .hero-volanta::after{
   content:''; width:26px; height:1px; background:var(--oliva-claro); flex:none;
+}
+.hero-pregunta{
+  display:block;
+  font-size:clamp(.95rem, 1.35vw, 1.08rem); font-weight:400;
+  letter-spacing:0; text-transform:none; line-height:1.5;
+  color:rgba(255,255,255,.88);
+  margin:0 auto 26px; max-width:36ch;
+  text-wrap:balance;
 }
 .hero-titulo{margin:0}
 
@@ -619,19 +630,25 @@ select:focus{outline:0; border-color:var(--oliva)}
   form{grid-template-columns:1fr}
   .foot-legal{text-align:left}
 }
-/* la volanta del hero es un flex de tres piezas (raya, texto, raya) y
-   no puede envolver: cuando el texto no entra se parte adentro y la
-   ultima palabra cae sola, con las dos rayas centradas contra un
-   bloque de dos lineas. Abajo de 600px van las rayas afuera y baja el
-   cuerpo, y asi entra en un renglon hasta en pantallas de 320px. */
+/* La volanta es un flex de tres piezas (raya, texto, raya) y no puede
+   envolver: cuando el texto no entra se parte adentro y la ultima
+   palabra cae sola, con las dos rayas centradas contra un bloque de
+   dos lineas. Abajo de 600px van las rayas afuera y baja el cuerpo, y
+   asi entra en un renglon hasta en pantallas de 320px. La pregunta
+   baja un punto y se le acorta la caja, para que las dos juntas no se
+   coman el aire que necesita el logotipo abajo. */
 @media (max-width:600px){
-  .hero-pregunta{
+  .hero-volanta{
     display:block;
     font-size:.62rem; letter-spacing:.16em; line-height:1.8;
-    margin-bottom:20px;
+    margin-bottom:10px;
     text-wrap:balance;
   }
-  .hero-pregunta::before, .hero-pregunta::after{content:none}
+  .hero-volanta::before, .hero-volanta::after{content:none}
+  .hero-pregunta{
+    font-size:.94rem; line-height:1.5;
+    margin-bottom:22px; max-width:26ch;
+  }
 }
 @media (max-width:520px){
   .cifras{grid-template-columns:1fr}
@@ -669,7 +686,8 @@ select:focus{outline:0; border-color:var(--oliva)}
 
   <div class="capa-in">
     <div class="hero-inner">
-      <p class="hero-pregunta">Seguridad, <b class="destaca-claro">naturaleza</b> y cercan&iacute;a</p>
+      <p class="hero-volanta">Seguridad, <b class="destaca-claro">naturaleza</b> y cercan&iacute;a</p>
+      <p class="hero-pregunta">&iquest;Busc&aacute;s tu casa en un barrio seguro, con naturaleza y conectado con todo?</p>
       <h1 class="hero-titulo">
         <img class="hero-logo" src="img/lcp01-lockup-hero.svg" alt="La Costa Park">
       </h1>
@@ -694,6 +712,7 @@ select:focus{outline:0; border-color:var(--oliva)}
       <div>
         <p class="lead">Casas de una y dos plantas dentro de un <b class="destaca">barrio con seguridad</b>, ubicadas en Lagomar.</p>
         <p>La Costa Park combina tranquilidad, buena ubicaci&oacute;n y cercan&iacute;a a los principales servicios de Ciudad de la Costa.</p>
+        <p>El barrio cuenta con SUM, jard&iacute;n comunitario y espacios recreativos, pensados para el uso de todos los vecinos.</p>
       </div>
     </div>
 
@@ -706,14 +725,12 @@ select:focus{outline:0; border-color:var(--oliva)}
   </div>
 </section>
 
-<!-- ============== CAPA: la calle interna ============== -->
-<div class="capa v-izq">
+<!-- ============== CAPA: la calle interna ==============
+     Va sin texto y sin velo, a pedido de Rodrigo: la imagen sola, tal
+     cual, sin nada que apagarla. -->
+<div class="capa">
   <img src="img/calle.jpg" srcset="img/calle-m.jpg 900w, img/calle.jpg 1920w" sizes="100vw"
        alt="Calle interna del complejo al atardecer, con las viviendas y el paisajismo" loading="lazy">
-  <div class="capa-in">
-    <p class="capa-frase">Calles internas, <b class="destaca-claro">verde entre las casas</b>.</p>
-    <p class="capa-dato">Vol&uacute;menes simples en hormig&oacute;n y madera, a escala de barrio.</p>
-  </div>
 </div>
 
 <!-- ============== 03 VIDA EN LA COSTA PARK ============== -->
@@ -722,7 +739,7 @@ select:focus{outline:0; border-color:var(--oliva)}
     <div class="rv">
       <p class="eyebrow">Una forma distinta de vivir</p>
       <h2>M&aacute;s espacio para disfrutar todos los d&iacute;as</h2>
-      <p class="lead">La Costa Park fue pensado para quienes valoran la tranquilidad, el <b class="destaca">contacto con la naturaleza</b> y los espacios para compartir. Sus calles internas, &aacute;reas verdes y espacios comunes generan un entorno agradable para vivir, mientras que cada casa cuenta con <b class="destaca">jard&iacute;n y parrillero propio</b> para disfrutar m&aacute;s tiempo al aire libre junto a la familia y amigos.</p>
+      <p class="lead">La Costa Park fue pensado para quienes valoran la tranquilidad, el <b class="destaca">contacto con la naturaleza</b> y el v&iacute;nculo con el entorno. No es solo una casa, es un barrio pensado para que la rutina tenga otro ritmo, con <b class="destaca">m&aacute;s aire libre y m&aacute;s vida entre vecinos</b>.</p>
     </div>
 
     <div class="beneficios rv">
@@ -780,13 +797,11 @@ select:focus{outline:0; border-color:var(--oliva)}
   </div>
 </section>
 
-<!-- ============== CAPA: la vida de barrio ============== -->
-<div class="capa v-abajo">
+<!-- ============== CAPA: la vida de barrio ==============
+     Igual que la de la calle: la imagen sola, sin texto y sin velo. -->
+<div class="capa">
   <img src="img/comunidad.jpg" srcset="img/comunidad-m.jpg 900w, img/comunidad.jpg 1800w" sizes="100vw"
        alt="Vecinos conversando en un banco entre las viviendas" loading="lazy">
-  <div class="capa-in">
-    <p class="capa-frase">Un barrio para estar afuera.</p>
-  </div>
 </div>
 
 <!-- ============== 04 UBICACION ============== -->
