@@ -65,6 +65,23 @@
   /* la salida: el último cuadro se corta en franjas verticales (como los paneles de la
      fachada) que suben escalonadas desde el centro, cada una con su filo amarillo */
   .strips { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+
+  /* aviso de sonido: el navegador no deja arrancar con audio sin un toque, así que el
+     teaser corre mudo y este aviso invita a tocar; al tocar vuelve al principio con sonido */
+  .tocar {
+    position: absolute; left: 50%; bottom: 12%; z-index: 3; transform: translateX(-50%);
+    display: flex; align-items: center; gap: 12px; pointer-events: none;
+    padding: 12px 20px 12px 14px; border-radius: 999px;
+    background: rgba(0,0,0,0.55); border: 1px solid rgba(247,198,0,0.45);
+    color: #fff; opacity: 0; visibility: hidden; transition: opacity .5s ease, visibility .5s;
+  }
+  #intro.mudo .tocar { opacity: 1; visibility: visible; }
+  .tocar-ico { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center;
+    color: var(--acc); border: 1.5px solid var(--acc); animation: latir 1.4s ease-in-out infinite; }
+  .tocar-ico svg { width: 18px; height: 18px; fill: currentColor; }
+  .tocar-txt { font-family: var(--font-cond); font-weight: 500; font-size: 0.9rem; letter-spacing: 0.24em; text-transform: uppercase; }
+  @keyframes latir { 0%, 45%, 100% { transform: scale(1); } 14% { transform: scale(1.12); } 28% { transform: scale(1.04); } 36% { transform: scale(1.1); } }
+  @media (prefers-reduced-motion: reduce) { .tocar-ico { animation: none; } }
   .strip {
     position: absolute; top: 0; height: 100%; overflow: visible;
     will-change: transform;
@@ -302,6 +319,10 @@
 
 <!-- ═══ INTRO ═══ -->
 <div id="intro">
+  <div class="tocar" aria-hidden="true">
+    <span class="tocar-ico"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+    <span class="tocar-txt">Tocá para escuchar</span>
+  </div>
   <video src="estadio-penarol/teaser.mp4" playsinline preload="auto"></video>
   <div class="strips" aria-hidden="true"></div>
 </div>
@@ -479,7 +500,7 @@
   // y el sonido entra con el primer toque, clic o tecla en cualquier parte
   function play(gesture) {
     leaving = false;
-    intro.classList.remove('gone', 'leaving');
+    intro.classList.remove('gone', 'leaving', 'mudo');
     strips.innerHTML = '';
     root.classList.add('intro-lock');
     if (gesture && !document.fullscreenElement && root.requestFullscreen) {
@@ -490,17 +511,27 @@
     video.currentTime = 0;
     var p = video.play();
     if (p && p.catch) p.catch(function () {
+      // sin sonido permitido: corre mudo, con el aviso, hasta el primer toque
       video.muted = true;
       video.play().catch(function () {});
+      intro.classList.add('mudo');
       ['pointerdown', 'keydown', 'touchstart'].forEach(function (ev) {
-        addEventListener(ev, unmute, { once: true, passive: true });
+        addEventListener(ev, conSonido, { once: true, passive: true });
       });
     });
     intro.classList.add('playing');
   }
 
-  function unmute() {
-    if (!leaving && video.muted) { video.muted = false; video.volume = 1; }
+  // el primer toque: vuelve al principio, con sonido y a pantalla completa
+  function conSonido() {
+    ['pointerdown', 'keydown', 'touchstart'].forEach(function (ev) { removeEventListener(ev, conSonido); });
+    if (leaving || !video.muted) return;
+    intro.classList.remove('mudo');
+    if (!document.fullscreenElement && root.requestFullscreen) root.requestFullscreen().catch(function () {});
+    video.currentTime = 0;
+    video.muted = false;
+    video.volume = 1;
+    video.play().catch(function () {});
   }
 
   function fadeAudio() {
@@ -560,7 +591,7 @@
     }
 
     // las franjas ya tapan el video: se lo saca de abajo y se deja ver la propuesta
-    intro.classList.remove('playing');
+    intro.classList.remove('playing', 'mudo');
     intro.classList.add('leaving');
     if (!video.ended) fadeAudio();
     setTimeout(function () { root.classList.add('revealed'); }, 220);
