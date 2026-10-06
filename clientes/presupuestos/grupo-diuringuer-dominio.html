@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<title>Propuesta Imabox — Grupo Diuringuer · Dominio, correo y alojamiento</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #121a2b;
+    --surface:   rgba(255,255,255,0.03);
+    --ink:       rgba(255,255,255,0.94);
+    --ink-soft:  rgba(255,255,255,0.66);
+    --ink-faint: rgba(255,255,255,0.42);
+    --line:      rgba(255,255,255,0.10);
+    --line-soft: rgba(255,255,255,0.06);
+    --acc:       #82b3f8;
+    --acc-dim:   rgba(130,179,248,0.10);
+    --acc-line:  rgba(130,179,248,0.36);
+    --font: 'Inter Tight', 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
+    --maxw: 900px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: var(--font); font-weight: 300; font-size: 17px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 30px; }
+  h1, h2, h3 { margin: 0; text-wrap: balance; font-weight: 500; }
+  .eyebrow { font-size: 0.74rem; font-weight: 500; letter-spacing: 0.24em; text-transform: uppercase; color: var(--acc); margin: 0; }
+  em { font-style: normal; color: var(--acc); }
+  b { font-weight: 500; color: var(--ink); }
+
+  .topbar { position: sticky; top: 0; z-index: 6; border-bottom: 1px solid var(--line);
+    background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); }
+  .topbar .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+  .logo { font-size: 1.1rem; font-weight: 400; }
+  .logo b { color: var(--acc); font-weight: 400; }
+  .topbar .tag { font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-faint); }
+  @media (max-width: 520px) { .topbar .tag { display: none; } }
+
+  .hero { padding: 92px 0 46px; animation: rise .9s ease both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .hero { animation: none; } }
+  .hero h1 { font-size: clamp(2.2rem, 5.6vw, 3.6rem); line-height: 1.04; letter-spacing: -0.03em; margin: 22px 0 26px; max-width: 16ch; }
+  .hero .lead { font-size: clamp(1rem, 1.4vw, 1.12rem); line-height: 1.78; color: var(--ink-soft); max-width: 62ch; margin: 0; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px 30px; margin-top: 38px; padding-top: 22px; border-top: 1px solid var(--line); font-size: 0.86rem; color: var(--ink-faint); }
+  .meta b { color: var(--ink-soft); font-weight: 400; }
+
+  section { padding: 54px 0; }
+  .sec-head h2 { font-size: clamp(1.6rem, 2.8vw, 2.1rem); letter-spacing: -0.02em; margin-top: 12px; }
+  .sec-head p { color: var(--ink-soft); max-width: 60ch; margin: 15px 0 0; font-size: 0.98rem; line-height: 1.75; }
+
+  /* cómo queda armado */
+  .stack { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 30px; }
+  .piece { border: 1px solid var(--line); border-radius: 8px; padding: 22px 22px 24px; background: var(--surface); }
+  .piece .k { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--acc); }
+  .piece h3 { margin-top: 10px; font-size: 1.12rem; }
+  .piece .who { margin: 6px 0 0; font-size: 0.86rem; color: var(--ink-faint); }
+  .piece p { margin: 12px 0 0; color: var(--ink-soft); font-size: 0.92rem; line-height: 1.65; }
+
+  /* filas */
+  .rows { margin-top: 34px; border-top: 1px solid var(--line); }
+  .row { border-bottom: 1px solid var(--line); padding: 30px 0; }
+  .row-head { display: flex; align-items: flex-start; gap: 22px; }
+  .row .n { font-size: 0.8rem; font-weight: 500; color: var(--acc); padding-top: 6px; min-width: 26px; flex-shrink: 0; }
+  .row-title { flex: 1; min-width: 0; }
+  .row-title h3 { font-size: 1.4rem; letter-spacing: -0.015em; }
+  .row-title .sub { margin: 9px 0 0; color: var(--ink-soft); font-size: 0.96rem; line-height: 1.7; max-width: 54ch; }
+  .amount { flex-shrink: 0; text-align: right; padding-top: 2px; }
+  .a { display: inline-block; font-size: 0.95rem; font-weight: 500; letter-spacing: 0.04em; color: var(--acc);
+    border: 1px solid var(--acc-line); border-radius: 5px; background: var(--acc-dim); padding: 7px 14px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .a.inc { color: var(--bg); background: var(--acc); border-color: var(--acc); }
+  .u { display: block; margin-top: 8px; font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-faint); white-space: nowrap; }
+  .spec { list-style: none; margin: 22px 0 0 48px; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+  .spec li { position: relative; padding-left: 19px; color: var(--ink-soft); font-size: 0.93rem; line-height: 1.65; max-width: 66ch; }
+  .spec li::before { content: ''; position: absolute; left: 0; top: 0.68em; width: 9px; height: 2px; background: var(--acc); }
+
+  .total { display: flex; align-items: center; justify-content: space-between; gap: 26px; margin-top: 26px; padding: 26px 30px;
+    border: 1px solid var(--acc-line); border-radius: 8px; background: linear-gradient(180deg, var(--acc-dim), transparent 75%), var(--surface); }
+  .total .lbl { font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--acc); }
+  .total p { margin: 10px 0 0; color: var(--ink-soft); font-size: 0.94rem; line-height: 1.7; max-width: 56ch; }
+  .total .a { font-size: 1.15rem; padding: 11px 18px; color: var(--bg); background: var(--acc); border-color: var(--acc); }
+  .total .u { text-align: right; }
+
+  /* costos de terceros */
+  table { width: 100%; border-collapse: collapse; margin-top: 28px; font-size: 0.93rem; }
+  th, td { text-align: left; padding: 14px 12px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+  th { font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-faint); font-weight: 500; }
+  td { color: var(--ink-soft); }
+  td:first-child { color: var(--ink); }
+  td.p { white-space: nowrap; color: var(--acc); font-variant-numeric: tabular-nums; }
+  .ej { margin: 16px 0 0; padding: 14px 18px; border-left: 2px solid var(--acc-line); background: var(--surface); border-radius: 0 6px 6px 0; color: var(--ink-soft); font-size: 0.92rem; }
+
+  .steps { margin-top: 30px; border-top: 1px solid var(--line-soft); }
+  .step { display: flex; gap: 20px; align-items: baseline; padding: 18px 0; border-bottom: 1px solid var(--line-soft); }
+  .step .sn { font-size: 0.8rem; font-weight: 500; color: var(--acc); min-width: 26px; flex-shrink: 0; }
+  .step .st { color: var(--ink); font-size: 1rem; font-weight: 400; }
+  .step .st span { display: block; margin-top: 5px; color: var(--ink-soft); font-size: 0.92rem; font-weight: 300; line-height: 1.65; max-width: 62ch; }
+
+  .notes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 30px; }
+  .note { border: 1px solid var(--line); border-radius: 8px; padding: 22px; background: var(--surface); }
+  .note h4 { margin: 0 0 10px; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--acc); font-weight: 500; }
+  .note p { margin: 0; color: var(--ink-soft); font-size: 0.9rem; line-height: 1.68; }
+
+  footer { border-top: 1px solid var(--line); padding: 30px 0 62px; }
+  footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 20px; justify-content: space-between; font-size: 0.8rem; color: var(--ink-faint); }
+
+  @media (max-width: 820px) { .stack, .notes { grid-template-columns: 1fr; } }
+  @media (max-width: 640px) {
+    body { font-size: 16px; }
+    .wrap { padding: 0 18px; }
+    section { padding: 40px 0; }
+    .hero { padding: 60px 0 30px; }
+    .row-head { flex-wrap: wrap; gap: 14px; }
+    .amount { width: 100%; text-align: left; padding-left: 40px; }
+    .amount .u { text-align: left; }
+    .spec { margin-left: 0; }
+    .total { flex-direction: column; align-items: flex-start; padding: 22px; }
+    .total .u { text-align: left; }
+    th, td { padding: 12px 6px; }
+    td.p { white-space: normal; }
+  }
+  @media print {
+    @page { size: A4; margin: 12mm; }
+    body { font-size: 10pt; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .topbar { position: static; backdrop-filter: none; }
+    .hero { padding: 16px 0 0; animation: none; }
+    section { padding: 18px 0 0; }
+    .row, .step, .note, .piece, .total, table { break-inside: avoid; }
+  }
+  .aside { margin: 22px 0 0 48px; padding: 15px 18px; border-left: 2px solid var(--acc-line); background: var(--surface); border-radius: 0 6px 6px 0; color: var(--ink-soft); font-size: 0.9rem; line-height: 1.65; max-width: 62ch; }
+  @media (max-width: 640px) { .aside { margin-left: 0; } }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <div class="logo">imabox<b>.</b></div>
+    <span class="tag">Propuesta de servicios</span>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="hero">
+    <p class="eyebrow">Propuesta · Grupo Diuringuer</p>
+    <h1>La web y los correos del grupo, con <em>dominio propio.</em></h1>
+    <p class="lead">Dejamos funcionando <b>grupodiuringuer.com</b> con la web del grupo y los correos <b>@grupodiuringuer.com</b>. Todo queda a nombre de Grupo Diuringuer desde el primer día: ustedes son los dueños de las cuentas y nosotros entramos como administradores para configurarlas. La Costa Park pasa al mismo lugar con su dominio, <b>lacostapark.uy</b>, sin costo.</p>
+    <div class="meta">
+      <span><b>Dominios</b> · grupodiuringuer.com · lacostapark.uy</span>
+      <span><b>Alojamiento</b> · Cloudflare</span>
+      <span><b>Correo</b> · Google Workspace</span>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">Cómo queda armado</p>
+      <h2>Tres piezas, todas a su nombre</h2>
+      <p>Son los mismos servicios que usan la mayoría de las desarrolladoras de Montevideo. Cada uno lo paga el grupo directo al proveedor, sin intermediarios.</p>
+    </div>
+    <div class="stack">
+      <div class="piece">
+        <div class="k">Dominio</div>
+        <h3>grupodiuringuer.com</h3>
+        <p class="who">Cloudflare</p>
+        <p>La dirección de la web y de los correos. Se renueva sola una vez por año.</p>
+      </div>
+      <div class="piece">
+        <div class="k">Alojamiento</div>
+        <h3>Las dos webs juntas</h3>
+        <p class="who">Cloudflare Pages</p>
+        <p>La web del grupo y la de La Costa Park, con sus videos, recorridos 360 y brochures. Sin costo y sin límite de visitas.</p>
+      </div>
+      <div class="piece">
+        <div class="k">Correo</div>
+        <h3>nombre@grupodiuringuer.com</h3>
+        <p class="who">Google Workspace</p>
+        <p>Gmail con su dominio: se usa desde el celular o la computadora como un Gmail común, con calendario y Drive.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">El alcance</p>
+      <h2>Qué hacemos</h2>
+    </div>
+    <div class="rows">
+
+      <div class="row">
+        <div class="row-head">
+          <div class="n">01</div>
+          <div class="row-title">
+            <h3>Sitio web del grupo</h3>
+            <p class="sub">Una web institucional: quiénes son, qué hacen y cómo contactarlos. Es el destino del link en bio y el lugar al que mandar a alguien que pide información.</p>
+          </div>
+          <div class="amount"><span class="a">USD 1.000</span><span class="u">pago único</span></div>
+        </div>
+        <ul class="spec">
+          <li><b>Hasta 4 secciones</b> — inicio, el grupo, desarrollos y contacto, en una sola página larga o separadas</li>
+          <li><b>Video e imágenes</b> — el material del grupo integrado al sitio y optimizado para que cargue rápido también desde el celular</li>
+          <li><b>Logo animado</b> — la marca del grupo en movimiento, en la entrada del sitio</li>
+          <li><b>Animaciones de interfaz</b> — transiciones entre secciones y aparición del contenido al bajar</li>
+          <li><b>Contacto directo</b> — formulario y botón a WhatsApp</li>
+          <li>Dos rondas de cambios sobre la propuesta de diseño</li>
+        </ul>
+        <div class="aside">El contenido lo pone el grupo: textos, fotos y videos. <b>El dominio, el alojamiento y los correos se configuran en la puesta en marcha (punto 02) y quedan a nombre del grupo.</b> En la sección de desarrollos se muestra <b>uno solo</b> con sus imágenes y videos; sumar los demás se cotiza aparte según cuántos sean. Los desarrollos que ya tengan su propia web se enlazan desde el sitio sin costo.</div>
+      </div>
+
+      <div class="row">
+        <div class="row-head">
+          <div class="n">02</div>
+          <div class="row-title">
+            <h3>Puesta en marcha</h3>
+            <p class="sub">Dominio, correos y web funcionando, y el traspaso para que lo manejen ustedes. No incluye el diseño de la web (punto 01).</p>
+          </div>
+          <div class="amount"><span class="a">USD 250</span><span class="u">pago único</span></div>
+        </div>
+        <ul class="spec">
+          <li>Registro de <b>grupodiuringuer.com</b> a nombre del grupo</li>
+          <li>Cuenta de Cloudflare del grupo: alojamiento, conexión segura (https) y la dirección con y sin www</li>
+          <li>Publicación de la web del grupo en grupodiuringuer.com</li>
+          <li>Correos en Google Workspace: alta de <b>hasta 3 casillas</b> y la configuración para que los mails no caigan en spam</li>
+          <li><b>Traspaso:</b> un documento con cada cuenta, para qué sirve y cuánto se paga; y las contraseñas en un gestor compartido, nunca por WhatsApp</li>
+        </ul>
+      </div>
+
+      <div class="row">
+        <div class="row-head">
+          <div class="n">03</div>
+          <div class="row-title">
+            <h3>La Costa Park en el mismo lugar</h3>
+            <p class="sub">La web del emprendimiento pasa a la cuenta del grupo, con su propio dominio.</p>
+          </div>
+          <div class="amount"><span class="a inc">Incluido</span><span class="u">sin costo</span></div>
+        </div>
+        <ul class="spec">
+          <li>La web, el showroom interactivo, los recorridos 360 y los brochures pasan a la cuenta de Cloudflare del grupo</li>
+          <li>Configuración de <b>lacostapark.uy</b>, con y sin www</li>
+          <li>Se habilita para que aparezca en las búsquedas de Google (hoy está en modo prueba)</li>
+        </ul>
+      </div>
+
+      <div class="row">
+        <div class="row-head">
+          <div class="n">04</div>
+          <div class="row-title">
+            <h3>Mantenimiento de las webs</h3>
+            <p class="sub">Opcional. Para que no tengan que tocar nada técnico.</p>
+          </div>
+          <div class="amount"><span class="a">USD 60</span><span class="u">por mes</span></div>
+        </div>
+        <ul class="spec">
+          <li><b>Contrato mínimo de 12 meses</b>, que se paga mes a mes</li>
+          <li><b>Hasta 4 cambios por mes</b> en las dos webs; los que no se usan no se acumulan</li>
+          <li>Un cambio es una cosa puntual: un texto, una foto, un precio, marcar una unidad como vendida, o dar de alta o baja una casilla de correo</li>
+          <li>Respuesta en 48 horas hábiles, por WhatsApp o correo</li>
+          <li>No incluye secciones nuevas, rediseños ni proyectos nuevos: eso se presupuesta aparte. Cada cambio extra del mes: USD 20</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="total">
+      <div>
+        <div class="lbl">Lo que se presupuesta</div>
+        <p><b>Web del grupo + puesta en marcha de dominio, correos y alojamiento</b>, con La Costa Park incluida. El mantenimiento es aparte y opcional: USD 60 por mes, mínimo 12 meses.</p>
+      </div>
+      <div><span class="a">USD 1.250</span><span class="u">pago único</span></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">Costos de los proveedores</p>
+      <h2>Lo que pagan ustedes directo</h2>
+      <p>No pasan por nosotros: se cargan a la tarjeta del grupo en cada cuenta. Precios de referencia a hoy.</p>
+    </div>
+    <table>
+      <thead><tr><th>Qué</th><th>Proveedor</th><th>Costo</th></tr></thead>
+      <tbody>
+        <tr><td>Dominio grupodiuringuer.com</td><td>Cloudflare</td><td class="p">≈ USD 11 por año</td></tr>
+        <tr><td>Alojamiento de las dos webs</td><td>Cloudflare Pages</td><td class="p">Gratis</td></tr>
+        <tr><td>Correo, por cada casilla</td><td>Google Workspace</td><td class="p">USD 7 por mes (plan anual) · USD 8,40 (mes a mes)</td></tr>
+      </tbody>
+    </table>
+    <p class="ej">Por ejemplo, con 3 casillas el gasto fijo es de unos <b>USD 21 por mes</b> en correo, más el dominio una vez por año.</p>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">El proceso</p>
+      <h2>El orden de las cosas</h2>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="sn">01</div><div class="st">Cuentas<span>El grupo crea la cuenta de Cloudflare y la de Google Workspace con un correo propio y su tarjeta, y nos invita como administradores.</span></div></div>
+      <div class="step"><div class="sn">02</div><div class="st">Dominios<span>Registramos grupodiuringuer.com y conectamos lacostapark.uy.</span></div></div>
+      <div class="step"><div class="sn">03</div><div class="st">Correos<span>Creamos las casillas y probamos que los mails salgan y lleguen bien.</span></div></div>
+      <div class="step"><div class="sn">04</div><div class="st">Webs<span>Publicamos las dos webs en sus dominios.</span></div></div>
+      <div class="step"><div class="sn">05</div><div class="st">Traspaso<span>Les entregamos el documento con las cuentas y las contraseñas. Desde ahí todo queda a su nombre.</span></div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">Para tener claro</p>
+      <h2>Qué queda fuera</h2>
+    </div>
+    <div class="notes">
+      <div class="note"><h4>Proyectos nuevos</h4><p>Sumar a la web un proyecto nuevo o una sección más se presupuesta aparte.</p></div>
+      <div class="note"><h4>Correos anteriores</h4><p>Si ya usan correos en otro lado, pasar el historial a las casillas nuevas se cotiza aparte.</p></div>
+      <div class="note"><h4>Proveedores</h4><p>Los costos de dominios y correo los cobra cada proveedor directo al grupo.</p></div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>imabox.uy</span>
+    <span>Propuesta de servicios · Grupo Diuringuer</span>
+  </div>
+</footer>
+</body>
+</html>
